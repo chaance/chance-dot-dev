@@ -1,0 +1,25 @@
+@import "mixins";
+
+.abbr {
+	@include abbr-styles;
+}
+
+.blockquote {
+	@include blockquote-styles;
+}
+
+.cite {
+	@include cite-styles;
+}
+
+.hr {
+	@include hr-styles;
+}
+
+.legend {
+	@include legend-styles;
+}
+
+.p {
+	@include p-styles;
+}

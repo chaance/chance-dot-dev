@@ -1,0 +1,9 @@
+/// @see https://developer.mozilla.org/en-US/docs/Web/CSS/min
+@function css-min($vals...) {
+	@return m#{i}n($vals...);
+}
+
+/// @see https://developer.mozilla.org/en-US/docs/Web/CSS/max
+@function css-max($vals...) {
+	@return m#{a}x($vals...);
+}

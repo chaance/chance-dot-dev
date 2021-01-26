@@ -1,0 +1,15 @@
+.box {
+	box-sizing: border-box;
+	margin: 0;
+	min-width: 0;
+
+	@at-root {
+		ul#{&} {
+			padding-left: 0;
+		}
+
+		li#{&} {
+			list-style-type: none;
+		}
+	}
+}

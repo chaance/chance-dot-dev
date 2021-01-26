@@ -1,0 +1,97 @@
+@import "mixins";
+
+.switch {
+	--switch-border-width: 2px;
+	--switch-height: 1rem;
+	--switch-width: 2rem;
+	--switch-transition-time: 0.13s;
+	--switch-transition-timing-func: ease-in-out;
+	height: var(--switch-width);
+	width: var(--switch-width);
+	display: flex;
+	align-items: center;
+}
+
+.thumb {
+	display: inline-block;
+	position: relative;
+	background-color: transparent;
+	left: 0;
+	right: 0;
+	height: var(--switch-height);
+	width: var(--switch-width);
+	border: var(--switch-border-width) solid transparent;
+
+	&::before,
+	&::after {
+		position: absolute;
+		content: "";
+		display: block;
+	}
+
+	&::before {
+		background-color: var(--color-gray-20);
+		left: calc(-1 * var(--switch-border-width));
+		top: calc(-1 * var(--switch-border-width));
+		width: inherit;
+		height: inherit;
+		border: inherit;
+		border-color: var(--color-gray-20);
+		border-radius: 999999px;
+		z-index: 0;
+	}
+
+	&::after {
+		background-color: var(--color-body-text-100);
+		border-color: var(--color-link);
+		left: calc(-1 * var(--switch-border-width));
+		top: calc(-1 * var(--switch-border-width));
+		transition: transform var(--switch-transition-time)
+			var(--switch-transition-timing-func);
+		width: calc(var(--switch-width) / 2);
+		height: inherit;
+		border: inherit;
+		border-radius: 999999px;
+		transform: translateX(0);
+		z-index: 1;
+		box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.3),
+			0px 2px 2px 0px rgba(0, 0, 0, 0.2), 0px 1px 5px 0px rgba(0, 0, 0, 0.15);
+	}
+}
+
+.checked {
+	&::before {
+		background-color: var(--color-link-hover);
+		border-color: var(--color-link-hover);
+	}
+
+	&::after {
+		transform: translateX(calc(var(--switch-width) / 2));
+	}
+}
+
+.inner {
+	display: flex;
+	align-items: inherit;
+	height: inherit;
+	width: inherit;
+}
+
+.focusRing {
+	--pos: calc(
+		(var(--size-focus-ring-offset) + (var(--size-focus-ring-width) * 2)) * -1
+	);
+	display: block;
+	position: absolute;
+	top: var(--pos);
+	right: var(--pos);
+	bottom: var(--pos);
+	left: var(--pos);
+	border-radius: 999999px;
+	background: transparent;
+	border: var(--size-focus-ring-width) var(--style-focus-ring-style) transparent;
+
+	.switch:focus-within & {
+		border-color: var(--color-focus-ring);
+	}
+}

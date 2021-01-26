@@ -1,0 +1,43 @@
+@import "mixins";
+
+.list {
+	@include list-common-styles;
+
+	&[data-list-type="unordered"][data-level="1"] {
+		@include list-styles(unordered, 1);
+	}
+
+	&[data-list-type="unordered"][data-level="2"] {
+		@include list-styles(unordered, 2);
+	}
+
+	&[data-list-type="unordered"][data-level="3"] {
+		@include list-styles(unordered, 3);
+	}
+
+	&[data-list-type="ordered"][data-level="1"] {
+		@include list-styles(ordered, 1);
+	}
+
+	&[data-list-type="ordered"][data-level="2"] {
+		@include list-styles(ordered, 2);
+	}
+
+	&[data-list-type="ordered"][data-level="3"] {
+		@include list-styles(ordered, 3);
+	}
+}
+
+.listItem {
+	&[data-level="1"] {
+		@include list-item-styles($level: 1);
+	}
+
+	&[data-level="2"] {
+		@include list-item-styles($level: 2);
+	}
+
+	&[data-level="3"] {
+		@include list-item-styles($level: 3);
+	}
+}

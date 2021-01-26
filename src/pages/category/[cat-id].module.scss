@@ -1,0 +1,20 @@
+@import "mixins";
+
+.wrapper {
+	@include make-container;
+	@include make-vertically-spaced-main;
+}
+
+.post {
+	&:not(:last-of-type) {
+		margin-bottom: calc(var(--size-block-space) * 2);
+	}
+
+	&:not(:first-of-type) {
+		margin-top: calc(var(--size-block-space) * 2);
+	}
+}
+
+.title {
+	margin-bottom: calc(var(--size-block-space) * 2);
+}

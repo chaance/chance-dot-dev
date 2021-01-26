@@ -1,0 +1,60 @@
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+.decorTop,
+.decorRight,
+.decorBottom,
+.decorLeft {
+	--thickness: 3px;
+	user-select: none;
+	position: fixed;
+	display: block;
+	z-index: 1;
+
+	@media (--bp-medium) {
+		--thickness: 6px;
+	}
+}
+
+.decorTop,
+.decorBottom {
+	width: 100%;
+	height: var(--thickness);
+}
+
+.decorRight,
+.decorLeft {
+	width: var(--thickness);
+	height: 100%;
+}
+
+.decorTop,
+.decorLeft {
+	top: 0;
+	left: 0;
+	background-image: linear-gradient(
+		130deg,
+		var(--color-red-50) 0%,
+		var(--color-orange-50) 70%,
+		var(--color-yellow-50) 100%
+	);
+}
+
+.decorBottom,
+.decorRight {
+	bottom: 0;
+	right: 0;
+	background-image: linear-gradient(
+		130deg,
+		var(--color-yellow-50) 0%,
+		var(--color-orange-50) 70%,
+		var(--color-red-50) 100%
+	);
+}
+
+.contentWrapper {
+	flex: 1 0 100%;
+}

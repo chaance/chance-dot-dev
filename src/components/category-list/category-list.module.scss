@@ -1,0 +1,26 @@
+.category {
+	display: inline-block;
+	font-family: var(--font-family-body);
+	font-weight: var(--font-weight-body-bold);
+	font-size: 85%;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+
+	&:not(:last-child) {
+		margin-right: 1em;
+	}
+}
+
+.categoryText,
+.categoryLink {
+	color: var(--color-gray-50);
+}
+
+.categoryLink {
+	text-decoration: none;
+	border-bottom: 2px dotted var(--color-gray-30);
+
+	&:hover {
+		border-bottom-color: transparent;
+	}
+}

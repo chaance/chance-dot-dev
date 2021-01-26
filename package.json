@@ -1,0 +1,115 @@
+{
+	"name": "chance-dot-dev",
+	"version": "0.1.0",
+	"private": true,
+	"author": "Chance Strickland <hi@chancedigital.io> (https://chancedigital.io/)",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/chaance/chance-dot-dev"
+	},
+	"bugs": {
+		"url": "https://github.com/chaance/chance-dot-dev"
+	},
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"postbuild": "next-on-netlify",
+		"lint": "eslint .",
+		"clean:next": "rm -rf .next",
+		"clean:node": "rm -rf node_modules",
+		"clean": "yarn clean:next && yarn clean:node"
+	},
+	"dependencies": {
+		"@chancestrickland/hooks": "^0.1.1",
+		"@mdx-js/react": "^1.6.21",
+		"@ngsctt/remark-smartypants": "^0.2.0",
+		"@reach/auto-id": "^0.11.2",
+		"@reach/skip-nav": "^0.11.2",
+		"@reach/tooltip": "^0.11.2",
+		"@reach/visually-hidden": "^0.11.1",
+		"clsx": "^1.1.1",
+		"fontfaceobserver": "^2.1.0",
+		"lodash": "^4.17.20",
+		"luxon": "^1.25.0",
+		"next": "10.0.1",
+		"next-mdx-enhanced": "5.0.0",
+		"next-on-netlify": "^2.6.0",
+		"next-seo": "^4.15.1",
+		"postcss-flexbugs-fixes": "^5.0.0",
+		"postcss-preset-env": "^6.7.0",
+		"react": "16.13.1",
+		"react-dom": "16.13.1",
+		"rehype": "^11.0.0",
+		"remark-capitalize": "^1.1.0",
+		"remark-images": "^2.0.0",
+		"remark-slug": "^6.0.0",
+		"sass": "^1.29.0",
+		"sprintf-js": "^1.1.2",
+		"use-dark-mode": "^2.3.1"
+	},
+	"devDependencies": {
+		"@chancedigital/browserslist-config": "^1.0.4",
+		"@chancedigital/eslint-config": "^8.0.0",
+		"@types/lodash": "^4.14.165",
+		"@types/luxon": "^1.25.0",
+		"@types/mdx-js__react": "^1.5.3",
+		"@types/node": "^14.14.6",
+		"@types/react": "^16.9.49",
+		"@types/react-dom": "^16.9.8",
+		"@types/sprintf-js": "^1.1.2",
+		"@typescript-eslint/eslint-plugin": "^4.6.1",
+		"@typescript-eslint/parser": "^4.6.1",
+		"babel-eslint": "^10.1.0",
+		"eslint": "^7.13.0",
+		"eslint-plugin-import": "^2.22.1",
+		"eslint-plugin-jest": "^24.1.0",
+		"eslint-plugin-jsx-a11y": "^6.4.1",
+		"eslint-plugin-react": "^7.21.5",
+		"eslint-plugin-react-hooks": "^4.2.0",
+		"eslint-plugin-testing-library": "^3.10.0",
+		"glob": "^7.1.6",
+		"is-glob": "^4.0.1",
+		"prettier": "^2.1.2",
+		"typescript": "^4.0.5"
+	},
+	"prettier": {
+		"semi": true,
+		"trailingComma": "es5",
+		"useTabs": true
+	},
+	"browserslist": [
+		"extends @chancedigital/browserslist-config"
+	],
+	"eslintConfig": {
+		"extends": [
+			"@chancedigital",
+			"@chancedigital/eslint-config/react",
+			"@chancedigital/eslint-config/typescript"
+		],
+		"rules": {
+			"require-await": 0
+		}
+	},
+	"eslintIgnore": [
+		"public/**/*"
+	],
+	"postcss": {
+		"plugins": [
+			"postcss-flexbugs-fixes",
+			[
+				"postcss-preset-env",
+				{
+					"autoprefixer": {
+						"flexbox": "no-2009"
+					},
+					"stage": 1,
+					"features": {
+						"custom-media-queries": true,
+						"custom-properties": false
+					}
+				}
+			]
+		]
+	}
+}

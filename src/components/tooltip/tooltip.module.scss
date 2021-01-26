@@ -1,0 +1,25 @@
+.tooltip {
+	--reach-tooltip: 1;
+	z-index: 1;
+	pointer-events: none;
+	position: absolute;
+	padding: 0.25em 0.75em;
+	box-shadow: 0 4px 4px -2px hsla(0, 0%, 0%, 0.25);
+	white-space: nowrap;
+	font-size: 85%;
+	background: var(--color-body-text-100);
+	color: var(--color-body-bg);
+	font-family: var(--font-family-sans);
+	font-weight: var(--font-weight-sans-bold);
+	font-size: 0.85rem;
+	animation: fadeIn ease 200ms;
+}
+
+@keyframes fadeIn {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}

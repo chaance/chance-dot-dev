@@ -1,0 +1,251 @@
+@import "functions";
+
+$block-elements: address, article, aside, audio, video, blockquote, dd, details,
+	dialog, div, dl, dt, fieldset, figcaption, figure, footer, form, h1, h2, h3,
+	h4, h5, h6, header, hgroup, hgroup, hr, iframe, img, li, main, nav, noscript,
+	ol, p, pre, section, table, ul;
+
+@mixin make-container($max-width: calc(var(--size-block-space) * 19)) {
+	width: calc(100% - (var(--size-block-space) * 2));
+	max-width: $max-width;
+	margin-left: auto;
+	margin-right: auto;
+
+	@media screen and (--bp-medium) {
+		width: calc(100% - (var(--size-block-space) * 4));
+	}
+}
+
+@mixin make-vertically-spaced-main {
+	margin: calc(var(--size-block-space) * 4) auto;
+
+	@media screen and (--bp-medium) and (max-width: 700px) {
+		margin: calc(var(--size-block-space) * 5) auto;
+	}
+
+	@media screen and (--bp-medium) and (max-width: 800px) {
+		margin: calc(var(--size-block-space) * 6) auto;
+	}
+
+	@media screen and (--bp-medium) and (max-width: 900px) {
+		margin: calc(var(--size-block-space) * 8) auto;
+	}
+}
+
+@mixin button-like-elements {
+	button,
+	[type="button"],
+	[type="reset"],
+	[type="submit"] {
+		@content;
+	}
+}
+
+@mixin font-style(
+	$variant,
+	$weight: null,
+	$line-height: null,
+	$letter-spacing: null,
+	$all: false
+) {
+	font-family: var(--font-family-#{unquote($variant)});
+	@if $weight or $all {
+		$wt: if($weight, $weight, normal);
+		font-weight: var(--font-weight-#{unquote($variant)}-#{unquote($wt)});
+	}
+	@if $line-height or $all {
+		line-height: var(--line-height-#{unquote($variant)});
+	}
+	@if $letter-spacing or $all {
+		line-height: var(--letter-spacing-#{unquote($variant)});
+	}
+}
+
+@mixin global-focus-style {
+	box-shadow: none;
+	outline: none;
+	outline: var(--size-focus-ring-width) var(--style-focus-ring-style)
+		var(--color-focus-ring);
+	outline-offset: var(--size-focus-ring-offset);
+}
+
+@mixin all-block-elements {
+	#{$block-elements} {
+		@content;
+	}
+}
+
+@mixin meta-text-styles {
+	@include font-style(sans, $weight: bold);
+	// text-transform: uppercase;
+	font-size: clamp(0.5rem, 14px, 18px);
+	font-style: normal;
+	line-height: 1.1;
+}
+
+@mixin link-styles {
+	color: var(--color-link);
+	text-decoration: underline;
+	text-decoration-color: currentColor;
+	text-decoration-style: dotted;
+	text-decoration-thickness: #{css-max(1px, 0.025em)};
+
+	svg {
+		transition: inherit;
+	}
+
+	&:hover {
+		color: var(--color-link-hover);
+		text-decoration-color: var(--color-red);
+
+		@supports (-webkit-background-clip: text) {
+			background: var(--gradient-link-hover);
+			background-clip: border-box;
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+		}
+	}
+
+	&:hover::selection {
+		background-clip: none;
+		-webkit-background-clip: none;
+		-webkit-text-fill-color: initial;
+	}
+}
+
+@mixin heading-styles {
+	letter-spacing: var(--letter-spacing-heading);
+	line-height: var(--line-height-heading);
+}
+
+@mixin list-common-styles {
+	list-style-position: outside;
+	list-style-image: none;
+}
+
+@mixin list-styles($variant: null, $level: 1) {
+	$variant: if($variant, unquote($variant), null);
+	@if $level > 1 {
+		margin-left: 1em;
+	}
+
+	@if $variant == unordered {
+		@if $level == 1 {
+			list-style-type: disc;
+		}
+		@if $level == 2 {
+			list-style-type: circle;
+		}
+		@if $level == 3 {
+			list-style-type: square;
+		}
+	}
+
+	@if $variant == ordered {
+		@if $level == 1 {
+			list-style-type: decimal;
+		}
+		@if $level == 2 {
+			list-style-type: lower-alpha;
+		}
+		@if $level == 3 {
+			list-style-type: lower-roman;
+		}
+	}
+}
+
+@mixin list-item-styles($level: 1) {
+	@if $level == 1 {
+		margin-left: 1.125em;
+	}
+	padding: 0;
+	font-size: var(--font-size-body);
+	letter-spacing: var(--letter-spacing-body);
+}
+
+// Style definitions for HTML elements
+
+@mixin abbr-styles {
+	&[title] {
+		border-bottom: none;
+		text-decoration: dotted;
+	}
+}
+
+@mixin blockquote-styles {
+	font-size: calc(var(--font-size-body) * 1.25);
+	letter-spacing: var(--letter-spacing-body);
+	font-style: italic;
+	margin: 0;
+	padding-left: var(--size-block-space);
+	border-left: 3px solid var(--color-gray-30);
+
+	p {
+		font-size: inherit;
+		letter-spacing: inherit;
+		font-style: inherit;
+		margin: inherit;
+	}
+
+	> * + * {
+		margin-top: calc(var(--size-block-space) / 2);
+	}
+
+	cite {
+		display: block;
+	}
+}
+
+@mixin cite-styles {
+	display: inline-block;
+	color: var(--color-body-text-50);
+	@include meta-text-styles;
+}
+
+@mixin hr-styles {
+	$hr-height: 1;
+	$hr-btm-offset: if($hr-height % 2 == 0, 0, 1);
+	$hr-top-offset: 0;
+
+	--hr-height: 1px;
+	overflow: visible;
+	margin-top: if(
+		$hr-top-offset > 0,
+		calc(var(--size-block-space) - #{$hr-top-offset}px),
+		var(--size-block-space)
+	);
+	margin-bottom: if(
+		$hr-btm-offset > 0,
+		calc(var(--size-block-space) - #{$hr-btm-offset}px),
+		var(--size-block-space)
+	);
+	background: var(--color-border, currentColor);
+	border: none;
+	height: var(--hr-height);
+}
+
+@mixin legend-styles {
+	display: block;
+	color: inherit;
+	padding: 0;
+	border: 0;
+	max-width: 100%;
+	white-space: normal;
+}
+
+@mixin li-styles {
+	@include list-item-styles;
+}
+
+@mixin ol-styles($level: 1) {
+	@include list-styles(ordered, $level);
+}
+
+@mixin p-styles {
+	font-size: var(--font-size-body);
+	letter-spacing: var(--letter-spacing-body);
+}
+
+@mixin ul-styles($level: 1) {
+	@include list-styles(unordered, $level);
+}
