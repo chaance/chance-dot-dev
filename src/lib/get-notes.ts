@@ -1,35 +1,107 @@
-import * as path from "path";
+import { resolve, join, basename, dirname, sep as pathSeparator } from "path";
+import { readdir, lstat, readFileSync } from "fs-extra";
+import matter from "gray-matter";
 import uniqBy from "lodash/uniqBy";
 import kebabCase from "lodash/kebabCase";
-import { frontMatter } from "../pages/notes/**/*.mdx";
-import { Category, categories } from "$src/categories";
+import { Category, categories as categoryCache } from "$src/categories";
 
-export function getNotes(
-	filter: (post: FrontMatter) => boolean = () => true
-): FrontMatter[] {
-	if (!frontMatter) return [];
-	const notes: FrontMatter[] = [];
-	for (const post of frontMatter) {
-		if (post.published && filter(post)) {
-			notes.push({
-				...post,
-				slug: path.basename(post.__resourcePath).startsWith("index")
-					? path.dirname(post.__resourcePath).split(path.sep).pop()
-					: path.basename(post.__resourcePath).split(".").shift(),
-			});
-		}
+export const NOTES_PATH = resolve(process.cwd(), "src/notes");
+
+export async function getNoteFilePathFromSlug(slug: string) {
+	const fullPath = join(NOTES_PATH, slug);
+	if (await isDirectory(fullPath)) {
+		return join(fullPath, "index.mdx");
 	}
-	return notes;
+	return fullPath + ".mdx";
 }
 
-export function getCategories(): Category[] {
-	return getNotes().reduce<Category[]>((allCats, fm) => {
-		const cat = fm.categories.map((c) => {
-			if (categories.has(c)) {
-				return categories.get(c);
+export async function getNotesFilePaths(): Promise<string[]> {
+	let paths: string[] = [];
+	for (let filename of await readdir(NOTES_PATH)) {
+		let filePath = join(NOTES_PATH, filename);
+		if (isMdxFile(filename)) {
+			paths.push(filePath);
+		} else if ((await isDirectory(filePath)) && (await hasIndexMdx(filePath))) {
+			paths.push(join(filePath, "index.mdx"));
+		}
+	}
+	return paths;
+}
+
+export async function getNotes(
+	filter?: (post: MDXMatter) => boolean
+): Promise<MDXMatter[]> {
+	let allNotes: MDXMatter[] = [];
+	for (let filename of await getNotesFilePaths()) {
+		allNotes.push(await getMdx(filename));
+	}
+	return filter ? allNotes.filter(filter) : allNotes;
+}
+
+export async function getCategories(): Promise<Category[]> {
+	let allCategories: Category[] = [];
+	for (let note of await getNotes()) {
+		for (let category of note.frontMatter.categories || []) {
+			if (categoryCache.has(category)) {
+				allCategories.push(categoryCache.get(category)!);
+			} else {
+				allCategories.push({ slug: kebabCase(category), label: category });
 			}
-			return { slug: kebabCase(c), label: c };
-		});
-		return uniqBy([...allCats, ...cat], ({ slug }) => slug);
-	}, []);
+		}
+	}
+	return uniqBy(allCategories, ({ slug }) => slug);
+}
+
+async function isDirectory(path: string): Promise<boolean> {
+	return (await lstat(path)).isDirectory();
+}
+
+function isMdxFile(filename: string): boolean {
+	return /\.mdx?$/.test(filename);
+}
+
+export function isIndexMdx(path: string): boolean {
+	return /^index\.mdx?$/.test(basename(path));
+}
+
+async function hasIndexMdx(path: string) {
+	try {
+		return !!(await readdir(path)).find((resourcePath) =>
+			isIndexMdx(resourcePath)
+		);
+	} catch (err) {
+		return false;
+	}
+}
+
+export function getSlugFromFilePath(path: string): string | null | undefined {
+	try {
+		return isIndexMdx(path)
+			? dirname(path).split(pathSeparator).pop()
+			: basename(path).split(".").shift();
+	} catch (err) {
+		return null;
+	}
+}
+
+async function getMdx(filePath: string): Promise<MDXMatter> {
+	let { content, data: frontMatter } = matter(readFileSync(filePath));
+	let linkPath = getSlugFromFilePath(filePath);
+	if (!linkPath) {
+		throw Error("asdfghjkl");
+	}
+
+	return {
+		content,
+		frontMatter: frontMatter as any,
+		filePath,
+		linkPath,
+	};
+}
+
+export interface MDXMatter {
+	content: string;
+	frontMatter: FrontMatter;
+	filePath: string;
+	linkPath: string;
 }

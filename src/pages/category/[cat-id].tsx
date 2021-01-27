@@ -7,18 +7,19 @@ import VH from "@reach/visually-hidden";
 import { Excerpt } from "$components/excerpt";
 import { Section, HT } from "$components/heading";
 import { categories } from "$src/categories";
-import { getNotes, getCategories } from "$lib/get-notes";
+import { getNotes, getCategories, MDXMatter } from "$lib/get-notes";
 import { config } from "$src/site-config";
-import { useIsomorphicLayoutEffect as useLayoutEffect } from "$lib/utils";
+import {
+	fromArray,
+	useIsomorphicLayoutEffect as useLayoutEffect,
+} from "$lib/utils";
 const styles = require("./[cat-id].module.scss");
 
 function Notes({ notes }: InferGetStaticPropsType<typeof getStaticProps>) {
 	const router = useRouter();
-	const catId: string = Array.isArray(router.query["cat-id"])
-		? router.query["cat-id"][0]
-		: router.query["cat-id"];
+	const catId = fromArray(router.query["cat-id"])!;
 	const category = categories.has(catId)
-		? categories.get(catId)
+		? categories.get(catId)!
 		: { slug: catId, label: startCase(catId) };
 
 	const pageTitle = `Category: ${category.label} | ${config.siteTitle}`;
@@ -40,18 +41,18 @@ function Notes({ notes }: InferGetStaticPropsType<typeof getStaticProps>) {
 					{category.label}
 				</HT>
 				<Section>
-					{notes.map((post) => {
+					{notes.map(({ frontMatter, linkPath }) => {
 						return (
-							post.published && (
+							frontMatter.published && (
 								<Excerpt
-									categories={post.categories}
+									categories={frontMatter.categories}
 									className={styles.post}
-									key={post.slug}
-									title={post.title}
-									date={post.date}
-									slug={post.slug}
+									key={linkPath}
+									title={frontMatter.title}
+									date={frontMatter.date}
+									slug={linkPath}
 									contentType="notes"
-									excerpt={post.description}
+									excerpt={frontMatter.description}
 								/>
 							)
 						);
@@ -63,7 +64,7 @@ function Notes({ notes }: InferGetStaticPropsType<typeof getStaticProps>) {
 }
 
 export const getStaticPaths: GetStaticPaths = async function getStaticPaths() {
-	const paths = getCategories().map((cat) => ({
+	const paths = (await getCategories()).map((cat) => ({
 		params: {
 			"cat-id": cat.slug,
 		},
@@ -75,16 +76,14 @@ export const getStaticPaths: GetStaticPaths = async function getStaticPaths() {
 };
 
 export const getStaticProps: GetStaticProps<{
-	notes: FrontMatter[];
-}> = async ({ params }) => {
-	const notes = getNotes((post) => {
-		const catId = Array.isArray(params["cat-id"])
-			? params["cat-id"][0]
-			: params["cat-id"];
+	notes: MDXMatter[];
+}> = async ({ params = {} }) => {
+	const notes = await getNotes((post) => {
+		const catId = fromArray(params["cat-id"])!;
 		const catLabel = categories.has(catId)
-			? categories.get(catId).label
+			? categories.get(catId)!.label
 			: startCase(catId);
-		return (post.categories || []).includes(catLabel);
+		return (post.frontMatter.categories || []).includes(catLabel);
 	});
 	return {
 		props: {

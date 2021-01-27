@@ -6,7 +6,7 @@ import { PostMeta } from "$components/post-meta";
 import { CategoryList } from "$components/category-list";
 import { P } from "$components/html";
 import { forwardRef, cx, unSlashIt } from "$lib/utils";
-import { sprintf } from "sprintf-js";
+import { sprintf } from "$lib/sprintf";
 const styles = require("./excerpt.module.scss");
 
 const languageMap: LanguageMap = {
@@ -14,7 +14,19 @@ const languageMap: LanguageMap = {
 		plural: "notes",
 		time: "%s to read",
 		linkLabel: 'Read "%s"',
-		allLinkLabel: "See All %s",
+		allLinkLabel: "See all %s",
+	},
+	talks: {
+		plural: "talks",
+		time: "%s to watch",
+		linkLabel: 'Watch "%s"',
+		allLinkLabel: "See all %s",
+	},
+	workshops: {
+		plural: "workshops",
+		time: "%s to complete",
+		linkLabel: 'Learn more about "%s"',
+		allLinkLabel: "See all %s",
 	},
 };
 
@@ -39,7 +51,7 @@ const Excerpt = forwardRef<"article", ExcerptProps>(function Excerpt(
 	},
 	ref
 ) {
-	let langMap = languageMap[contentType] || languageMap.notes;
+	let langMap = languageMap[contentType];
 	let time = timeToRead;
 	let permalink = `/${contentType}/${unSlashIt(slug)}`;
 
@@ -83,7 +95,7 @@ const Excerpt = forwardRef<"article", ExcerptProps>(function Excerpt(
 
 						{includeAllLink && (
 							<Link className={styles.moreLink} href={`/${contentType}`}>
-								{sprintf(langMap.allLinkLabel, langMap.plural)}
+								{sprintf(langMap!.allLinkLabel, langMap!.plural)}
 							</Link>
 						)}
 					</span>
@@ -109,7 +121,7 @@ function Categories({ categories }: { categories: string[] }) {
 export { Excerpt };
 
 type LanguageMap = {
-	[key in ContentType]?: {
+	[key in ContentType]: {
 		plural: string;
 		time: string;
 		linkLabel: string;

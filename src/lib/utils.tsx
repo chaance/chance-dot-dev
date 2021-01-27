@@ -3,6 +3,10 @@ import { Box } from "$components/primitives/box";
 // import kebabCase from "lodash/kebabCase";
 import clsx from "clsx";
 
+export function fromArray<T>(value: T | T[]): T {
+	return Array.isArray(value) ? value[0] : value;
+}
+
 export function canUseDOM() {
 	return (
 		typeof window !== "undefined" &&

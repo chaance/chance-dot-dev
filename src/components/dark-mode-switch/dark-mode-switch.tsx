@@ -18,10 +18,13 @@ const DarkModeSwitch = forwardRef<"input", DarkModeSwitchProps>(
 		const toggleThemeMode = useThemeModeToggle();
 		const id = useId(props.id);
 		const checked = themeMode === "dark";
-		const bleep = React.useRef(undefined);
-		if (typeof window !== "undefined" && bleep.current === undefined) {
-			bleep.current = bleeeeep();
-		}
+		const bleep = React.useRef<HTMLAudioElement | undefined>();
+
+		React.useEffect(() => {
+			if (bleep.current === undefined) {
+				bleep.current = bleeeeep();
+			}
+		});
 
 		return (
 			<ClientOnly>
@@ -38,7 +41,7 @@ const DarkModeSwitch = forwardRef<"input", DarkModeSwitchProps>(
 									bleep.current.pause();
 									bleep.current = bleeeeep();
 								}
-								bleep.current.play();
+								bleep.current!.play();
 							}
 							toggleThemeMode();
 						}}

@@ -9,13 +9,6 @@ import { CategoryList } from "$components/category-list";
 import { config } from "$src/site-config";
 const styles = require("./blog-layout.module.scss");
 
-// Currently `getLayout` doesn't work as expected for MDX layouts using our mdx
-// plugin. Haven't dug deep into it yet but I suspect the actual component
-// resolved by our app is a wrapper without the static property. Probably not a
-// problem but leaving this here in case I ever need to create an MDX page with
-// an alterate server-rendered layout.
-// https://github.com/hashicorp/next-mdx-enhanced
-
 const MdxSiteLayout = function MdxSiteLayout({
 	children: content,
 	frontMatter,

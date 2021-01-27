@@ -3,7 +3,7 @@ import { GetStaticProps, InferGetStaticPropsType } from "next";
 import Head from "next/head";
 import { Excerpt } from "$components/excerpt";
 import { Section, HT } from "$components/heading";
-import { getNotes } from "$lib/get-notes";
+import { getNotes, MDXMatter } from "$lib/get-notes";
 import { config } from "$src/site-config";
 const styles = require("./notes.module.scss");
 
@@ -27,18 +27,18 @@ function Notes({
 				<HT className={styles.title}>Notes</HT>
 
 				<Section>
-					{notes.map((post) => {
+					{notes.map(({ frontMatter, linkPath }) => {
 						return (
-							post.published && (
+							frontMatter.published && (
 								<Excerpt
-									categories={post.categories}
+									categories={frontMatter.categories}
 									className={styles.post}
-									key={post.slug}
-									title={post.title}
-									date={post.date}
-									slug={post.slug}
+									key={linkPath}
+									title={frontMatter.title}
+									date={frontMatter.date}
+									slug={linkPath}
 									contentType="notes"
-									excerpt={post.description}
+									excerpt={frontMatter.description}
 								/>
 							)
 						);
@@ -50,7 +50,7 @@ function Notes({
 }
 
 export const getStaticProps: GetStaticProps<{
-	notes: FrontMatter[];
+	notes: MDXMatter[];
 }> = async () => {
 	const notes = await getNotes();
 	return {

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
-import { getNotes } from "$lib/get-notes";
+import { getNotes, MDXMatter } from "$lib/get-notes";
 import { config } from "$src/site-config";
 import Notes from "$pages/notes";
 
@@ -9,7 +9,7 @@ function Home({ notes }: InferGetStaticPropsType<typeof getStaticProps>) {
 }
 
 export const getStaticProps: GetStaticProps<{
-	notes: FrontMatter[];
+	notes: MDXMatter[];
 }> = async () => {
 	const notes = await getNotes();
 	return {
