@@ -43,14 +43,13 @@
 
 	&::after {
 		background-color: var(--color-body-text-100);
-		border-color: var(--color-link);
+		border: inherit;
 		left: calc(-1 * var(--switch-border-width));
 		top: calc(-1 * var(--switch-border-width));
 		transition: transform var(--switch-transition-time)
 			var(--switch-transition-timing-func);
 		width: calc(var(--switch-width) / 2);
 		height: inherit;
-		border: inherit;
 		border-radius: 999999px;
 		transform: translateX(0);
 		z-index: 1;
@@ -60,10 +59,6 @@
 }
 
 .checked {
-	&::before {
-		background-color: var(--color-link-hover);
-		border-color: var(--color-link-hover);
-	}
 
 	&::after {
 		transform: translateX(calc(var(--switch-width) / 2));

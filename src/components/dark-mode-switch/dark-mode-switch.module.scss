@@ -1,5 +1,4 @@
-.icon {
-	fill: transparent;
+.iconWrapper {
 	display: block;
 	position: absolute;
 	left: calc(-1 * var(--switch-border-width) + var(--switch-border-width) / 2);
@@ -9,10 +8,18 @@
 	width: calc(var(--switch-width) / 2 - var(--switch-border-width));
 	height: calc(var(--switch-width) / 2 - var(--switch-border-width));
 	transform: translateX(0);
+	z-index: 2;
 }
 
-.iconChecked {
-	fill: var(--color-gray-70);
+.iconWrapperChecked {
 	transform: translateX(calc(var(--switch-width) / 2));
 	z-index: 2;
+}
+
+.icon {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 }

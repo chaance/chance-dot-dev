@@ -1,0 +1,14 @@
+<svg id="be0d26e3-dd0f-415f-a9f9-88c86b1a84d3" data-name="Layer 1"
+	xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 136 136">
+	<defs>
+		<radialGradient id="e50ed4ad-ecc3-47b8-9595-45ab5b9e4f94" cx="-58.1476" cy="59.6947" r="90.1215" gradientTransform="matrix(-1, 0, 0, 1, 23.1522, 0)" gradientUnits="userSpaceOnUse">
+			<stop offset="0" stop-color="#b3b3b3"/>
+			<stop offset="1" stop-color="#4d4d4d"/>
+		</radialGradient>
+	</defs>
+	<circle cx="68" cy="68" r="68" style="fill: url(#e50ed4ad-ecc3-47b8-9595-45ab5b9e4f94)"/>
+	<circle cx="102.7263" cy="58.6311" r="5.7411"/>
+	<circle cx="66.9198" cy="58.6311" r="5.7411"/>
+	<path d="M84.8231,98.853c-10.0371,0-17.6909-3.7754-22.1338-10.9184a4.5,4.5,0,1,1,7.6426-4.753c2.792,4.4893,7.5322,6.6714,14.4912,6.6714s11.6992-2.1821,14.4912-6.6714a4.5,4.5,0,0,1,7.6426,4.753C102.514,95.0776,94.86,98.853,84.8231,98.853Z"/>
+</svg>

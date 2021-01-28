@@ -6,7 +6,8 @@ import { ClientOnly } from "$components/primitives/client-only";
 import { Switch, SwitchProps } from "$components/switch";
 import { useThemeMode, useThemeModeToggle } from "$lib/theme";
 import { forwardRef, cx } from "$lib/utils";
-import { MoonIcon } from "$components/icons";
+import { makeIconComponent } from "$components/icons";
+import { useAudio } from "$lib/use-audio";
 const styles = require("./dark-mode-switch.module.scss");
 
 const DarkModeSwitch = forwardRef<"input", DarkModeSwitchProps>(
@@ -18,13 +19,7 @@ const DarkModeSwitch = forwardRef<"input", DarkModeSwitchProps>(
 		const toggleThemeMode = useThemeModeToggle();
 		const id = useId(props.id);
 		const checked = themeMode === "dark";
-		const bleep = React.useRef<HTMLAudioElement | undefined>();
-
-		React.useEffect(() => {
-			if (bleep.current === undefined) {
-				bleep.current = bleeeeep();
-			}
-		});
+		const bleep = useAudio("/bleep.mp3");
 
 		return (
 			<ClientOnly>
@@ -36,19 +31,24 @@ const DarkModeSwitch = forwardRef<"input", DarkModeSwitchProps>(
 						id={id}
 						className={cx(props.className, styles.switch)}
 						onChange={() => {
-							if (bleep.current) {
-								if (!bleep.current.paused) {
-									bleep.current.pause();
-									bleep.current = bleeeeep();
-								}
-								bleep.current!.play();
-							}
+							bleep.play({ interrupt: true });
 							toggleThemeMode();
 						}}
 					>
-						<MoonIcon
+						<span
+							className={cx(styles.iconWrapper, {
+								[styles.iconWrapperChecked]: checked,
+							})}
+						>
+							{checked ? (
+								<DarkIcon className={styles.icon} />
+							) : (
+								<LightIcon className={styles.icon} />
+							)}
+						</span>
+						{/* <MoonIcon
 							className={cx(styles.icon, checked && styles.iconChecked)}
-						/>
+						/> */}
 					</Switch>
 				</Tooltip>
 				<label htmlFor={id}>
@@ -61,13 +61,86 @@ const DarkModeSwitch = forwardRef<"input", DarkModeSwitchProps>(
 
 export { DarkModeSwitch };
 
-function bleeeeep() {
-	if (typeof window !== "undefined" && "Audio" in window) {
-		return new Audio("/bleep.mp3");
-	}
-	return undefined;
-}
-
-export type DarkModeSwitchProps = Omit<SwitchProps, "onChange" | "id"> & {
+export type DarkModeSwitchProps = Omit<
+	SwitchProps,
+	"onChange" | "id" | "children"
+> & {
 	label?: string;
 };
+
+const LIGHTGRAY = "var(--color-static-gray-30)";
+const DARKGRAY = "var(--color-static-gray-60)";
+const BLACK = "var(--color-static-gray-100)";
+const YELLOW = "var(--color-static-yellow-30)";
+const ORANGE = "var(--color-static-orange-40)";
+
+const LightIcon = makeIconComponent(
+	{
+		size: 20,
+		title: "Light theme character",
+		displayName: "LightIcon",
+		viewBox: "0 0 136 136",
+	},
+	<>
+		<defs>
+			<radialGradient
+				id="ad7af374-30b2-4a50-94fa-201160a4a604"
+				cx="54.7002"
+				cy="59.6947"
+				r="90.1215"
+				gradientUnits="userSpaceOnUse"
+			>
+				<stop offset="0" stop-color={YELLOW} />
+				<stop offset="1" stop-color={ORANGE} />
+			</radialGradient>
+		</defs>
+		<circle
+			cx="68"
+			cy="68"
+			r="68"
+			fill="url(#ad7af374-30b2-4a50-94fa-201160a4a604)"
+		/>
+		<circle cx="33.2737" cy="38.6311" r="5.7411" fill={BLACK} />
+		<circle cx="69.0802" cy="38.6311" r="5.7411" fill={BLACK} />
+		<path
+			d="M51.1772,78.8525c-10.038,0-17.6914-3.7754-22.1337-10.9179a4.5,4.5,0,1,1,7.6425-4.753c2.7915,4.4888,7.5318,6.6709,14.4912,6.6709S62.8765,67.67,65.668,63.1816a4.5,4.5,0,1,1,7.6425,4.753C68.8682,75.0771,61.2148,78.8525,51.1772,78.8525Z"
+			fill={BLACK}
+		/>
+	</>
+);
+
+const DarkIcon = makeIconComponent(
+	{
+		size: 20,
+		title: "Dark theme character",
+		displayName: "DarkIcon",
+		viewBox: "0 0 136 136",
+	},
+	<>
+		<defs>
+			<radialGradient
+				id="e50ed4ad-ecc3-47b8-9595-45ab5b9e4f94"
+				cx="-58.1476"
+				cy="59.6947"
+				r="90.1215"
+				gradientTransform="matrix(-1, 0, 0, 1, 23.1522, 0)"
+				gradientUnits="userSpaceOnUse"
+			>
+				<stop offset="0" stop-color={LIGHTGRAY} />
+				<stop offset="1" stop-color={DARKGRAY} />
+			</radialGradient>
+		</defs>
+		<circle
+			cx="68"
+			cy="68"
+			r="68"
+			fill="url(#e50ed4ad-ecc3-47b8-9595-45ab5b9e4f94)"
+		/>
+		<circle cx="102.7263" cy="58.6311" r="5.7411" fill={BLACK} />
+		<circle cx="66.9198" cy="58.6311" r="5.7411" fill={BLACK} />
+		<path
+			d="M84.8231,98.853c-10.0371,0-17.6909-3.7754-22.1338-10.9184a4.5,4.5,0,1,1,7.6426-4.753c2.792,4.4893,7.5322,6.6714,14.4912,6.6714s11.6992-2.1821,14.4912-6.6714a4.5,4.5,0,0,1,7.6426,4.753C102.514,95.0776,94.86,98.853,84.8231,98.853Z"
+			fill={BLACK}
+		/>
+	</>
+);
