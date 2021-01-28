@@ -33,13 +33,14 @@ const Section = forwardRef<"section", SectionProps>(function Section(
 	);
 });
 
-const Heading = forwardRef<"h2", HeadingProps & BoxOwnProps>(
-	function Heading({ level: levelProp, ...props }, ref) {
-		const level = useHeadingLevelContext();
-		const as = `h${levelProp ? levelProp : level}` as "h2";
-		return <Box as={as} ref={ref} {...props} />;
-	}
-);
+const Heading = forwardRef<"h2", HeadingProps & BoxOwnProps>(function Heading(
+	{ level: levelProp, as: asProp, ...props },
+	ref
+) {
+	const level = useHeadingLevelContext();
+	const as = asProp || (`h${levelProp ? levelProp : level}` as "h2");
+	return <Box as={as} ref={ref} {...props} />;
+});
 
 type HeadingProps = {
 	level?: HeadingLevel;

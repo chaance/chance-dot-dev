@@ -20,7 +20,7 @@ const INPUT_PROPS = [
 	"value",
 ] as const;
 
-const SwitchContext = React.createContext(null);
+const SwitchContext = React.createContext({ checked: false });
 const useSwitchContext = () => React.useContext(SwitchContext);
 SwitchContext.displayName = "SwitchContext";
 
@@ -37,12 +37,12 @@ const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(function Switch(
 ) {
 	const isControlled = checkedProp != null;
 	const [_checked, _setChecked] = React.useState(defaultChecked || false);
-	const checked = isControlled ? checkedProp : _checked;
+	const checked = isControlled ? checkedProp! : _checked;
 	const setChecked = isControlled ? () => void null : _setChecked;
 	const wrapperProps = omit(props, INPUT_PROPS);
 	const inputProps = pick(props, INPUT_PROPS);
 
-	function handleChange(event) {
+	function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
 		onChange && onChange(event);
 		if (event.defaultPrevented) {
 			return;
@@ -81,6 +81,9 @@ type SwitchDOMProps = React.ComponentPropsWithoutRef<"span"> &
 type SwitchOwnProps = {
 	checked?: boolean;
 	defaultChecked?: boolean;
+	children:
+		| React.ReactNode
+		| ((props: { checked: boolean }) => React.ReactNode);
 };
 type SwitchProps = SwitchDOMProps & SwitchOwnProps;
 

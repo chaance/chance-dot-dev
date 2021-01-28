@@ -43,9 +43,12 @@ const ListOrdered = forwardRef<"ol">(function ListOrdered(props, ref) {
 	return <List ref={ref as any} {...(props as any)} type="ordered" />;
 });
 
-const ListItem = forwardRef<"li">(function List({ ...props }, ref) {
+const ListItem = forwardRef<"li">(function ListItem(
+	{ as = "li", ...props },
+	ref
+) {
 	const level = useListLevelContext();
-	return <Box as="li" ref={ref} {...props} data-level={level - 1} />;
+	return <Box as={as} ref={ref} {...props} data-level={level - 1} />;
 });
 
 export { List, ListUnordered, ListOrdered, ListItem };
