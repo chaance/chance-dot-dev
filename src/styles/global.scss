@@ -192,13 +192,13 @@
 	--color-success-70: var(--color-seafoam-70);
 
 	/* - contextual tokens - */
-	--color-body-bg: var(--color-gray-00);
+	--color-body-background: var(--color-gray-00);
 	--color-body-text-100: var(--color-gray-80);
 	--color-body-text-50: var(--color-gray-40);
 	--color-body-text-30: var(--color-gray-30);
 
 	.dark-mode {
-		--color-body-bg: var(--color-gray-00);
+		--color-body-background: var(--color-gray-00);
 		--color-body-text-100: var(--color-gray-100);
 		--color-body-text-50: var(--color-gray-60);
 		--color-body-text-30: var(--color-gray-30);
@@ -220,7 +220,7 @@
 
 	--color-border: var(--color-gray-20);
 	--color-selection-background: var(--color-primary-60);
-	--color-selection-foreground: var(--color-body-bg);
+	--color-selection-foreground: var(--color-body-background);
 
 	/* Typography */
 	/* - primitive tokens - */
@@ -350,7 +350,7 @@ html,
 body {
 	margin: 0;
 	padding: 0;
-	background-color: var(--color-body-bg);
+	background-color: var(--color-body-background);
 	color: var(--color-body-text-100);
 	font-family: var(--font-family-body);
 	line-height: var(--line-height-body);
@@ -393,7 +393,7 @@ body {
 	position: fixed;
 	top: var(--size-block-space);
 	left: var(--size-block-space);
-	background: var(--color-body-bg);
+	background: var(--color-body-background);
 	color: var(--color-primary-50);
 	border: 2px solid currentColor;
 	font-weight: var(--font-weight-sans-bold);
