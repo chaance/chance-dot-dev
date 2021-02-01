@@ -4,6 +4,7 @@ interface FrontMatter {
 	slug?: string;
 	subtitle?: string;
 	date: string;
+	formattedDate: string;
 	title: string;
 	description?: string;
 	langs?: string[];
