@@ -49,7 +49,7 @@ const config: Config = (function ({
 		// SEO
 		seo: {
 			title: siteTitle,
-			titleTemplate: "%s | cs.run",
+			titleTemplate: "%s | chance.dev",
 			description: "Musings on things that interest me",
 			openGraph: {
 				type: "website",
@@ -80,11 +80,11 @@ const config: Config = (function ({
 	};
 })({
 	twitterUserName: "chancethedev",
-	siteTitle: "cs.run",
+	siteTitle: "chance.dev",
 	siteUrl:
 		process.env.NODE_ENV === "development"
-			? "http://localhost:8000"
-			: "https://cs.run",
+			? "http://localhost:3000"
+			: "https://chance.dev",
 });
 
 type Config = {
