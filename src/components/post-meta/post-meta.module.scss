@@ -31,13 +31,24 @@ $metaFlexBp: 400px;
 }
 
 .postInfo {
+	@include meta-text-styles;
+	display: flex;
+	flex-direction: column;
+
+	@media screen and (--bp-medium) {
+		flex-direction: row;
+		align-items: center;
+	}
+}
+
+.postInfoList {
 	display: flex;
 	flex-direction: column;
 	flex-wrap: wrap;
 	margin: 0;
 	padding: 0;
 	list-style: none;
-	color: var(--color-body-text-50);
+	color: var(--color-body-text-100);
 
 	@media screen and (min-width: #{$metaFlexBp}) {
 		flex-direction: row;
@@ -66,7 +77,6 @@ $metaFlexBp: 400px;
 }
 
 .infoItem {
-	@include meta-text-styles;
 	display: flex;
 	margin: 0;
 	position: relative;
@@ -93,5 +103,12 @@ $metaFlexBp: 400px;
 		&::after {
 			display: none;
 		}
+	}
+}
+
+.categories {
+	color: var(--color-body-text-50);
+	@media screen and (--bp-medium) {
+		margin-left: 0.5em;
 	}
 }

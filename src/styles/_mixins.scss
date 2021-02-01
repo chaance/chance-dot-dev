@@ -5,6 +5,16 @@ $block-elements: address, article, aside, audio, video, blockquote, dd, details,
 	h4, h5, h6, header, hgroup, hgroup, hr, iframe, img, li, main, nav, noscript,
 	ol, p, pre, section, table, ul;
 
+@mixin block-space($side, $multiplier: 1, $type: margin) {
+	$type: if($type == margin or $type == padding, $type, margin);
+	$space: if(
+		$multiplier == 1,
+		var(--size-block-space),
+		calc(var(--size-block-space) * #{$multiplier})
+	);
+	#{$type}-#{$side}: #{$space};
+}
+
 @mixin make-container($max-width: calc(var(--size-block-space) * 19)) {
 	width: calc(100% - (var(--size-block-space) * 2));
 	max-width: $max-width;
@@ -76,18 +86,19 @@ $block-elements: address, article, aside, audio, video, blockquote, dd, details,
 }
 
 @mixin meta-text-styles {
-	@include font-style(sans, $weight: bold);
+	@include font-style(tag, $weight: bold);
 	// text-transform: uppercase;
 	font-size: clamp(0.5rem, 14px, 18px);
 	font-style: normal;
 	line-height: 1.1;
+	text-transform: uppercase;
 }
 
 @mixin link-styles {
 	color: var(--color-link);
 	text-decoration: underline;
 	text-decoration-color: currentColor;
-	text-decoration-style: dotted;
+	text-decoration-style: solid;
 	text-decoration-thickness: #{css-max(1px, 0.025em)};
 
 	svg {
@@ -97,23 +108,30 @@ $block-elements: address, article, aside, audio, video, blockquote, dd, details,
 	&:hover {
 		color: var(--color-link-hover);
 		text-decoration-color: var(--color-red);
+	}
 
-		@supports (-webkit-background-clip: text) {
+	@supports (-webkit-background-clip: text) {
+		/* hack fix for multi-line gradient text in safari */
+		/* https://forum.webflow.com/t/multi-line-gradient-text-safari-ios-fix-i-e-prevent-disappearing-text/135029 */
+		-webkit-box-decoration-break: clone;
+
+		&:hover {
 			background: var(--gradient-link-hover);
 			background-clip: border-box;
 			-webkit-background-clip: text;
 			-webkit-text-fill-color: transparent;
 		}
-	}
 
-	&:hover::selection {
-		background-clip: none;
-		-webkit-background-clip: none;
-		-webkit-text-fill-color: initial;
+		&:hover::selection {
+			background-clip: none;
+			-webkit-background-clip: none;
+			-webkit-text-fill-color: initial;
+		}
 	}
 }
 
 @mixin heading-styles {
+	font-family: var(--font-family-heading);
 	letter-spacing: var(--letter-spacing-heading);
 	line-height: var(--line-height-heading);
 }
@@ -202,12 +220,11 @@ $block-elements: address, article, aside, audio, video, blockquote, dd, details,
 	@include meta-text-styles;
 }
 
-@mixin hr-styles {
-	$hr-height: 1;
+@mixin hr-styles($hr-height: 1) {
 	$hr-btm-offset: if($hr-height % 2 == 0, 0, 1);
 	$hr-top-offset: 0;
 
-	--hr-height: 1px;
+	--hr-height: #{$hr-height}px;
 	overflow: visible;
 	margin-top: if(
 		$hr-top-offset > 0,

@@ -1,11 +1,65 @@
 import * as React from "react";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { getNotes, MDXMatter } from "$lib/get-notes";
+import Head from "next/head";
+import { Excerpt } from "$components/excerpt";
+import { Section, HT, H1 } from "$components/heading";
+import { SubscribeForm } from "$components/subscribe-form";
 import { config } from "$src/site-config";
-import Notes from "$pages/notes";
+import { Hr, P } from "$components/html";
+const notesStyles = require("./notes/notes.module.scss");
+const styles = require("./index.module.scss");
 
 function Home({ notes }: InferGetStaticPropsType<typeof getStaticProps>) {
-	return <Notes pageTitle={config.siteTitle} notes={notes} />;
+	return (
+		<React.Fragment>
+			<div className={notesStyles.wrapper}>
+				<Head>
+					<title>{config.siteTitle}</title>
+				</Head>
+				<main role="main">
+					<section className={styles.intro}>
+						<HT className={styles.title}>Welcome!</HT>
+						<P>Whoa, you came to my website. That's sick, I appreciate it!</P>
+						<P>
+							My name is Chance. I'm a front-end developer here on the World
+							Wide Web. I enjoy teaching, building high-quality user interfaces,
+							and far too many non-computer activities to list.
+						</P>
+						<P>
+							Take a look at some of my thoughts or sign up for the occasional
+							email below. I'll be adding more to this space soon, so check back
+							and see my little corner of the internet grow 🌱.
+						</P>
+					</section>
+					<Hr lineStyle="gradient" lineThickness={2} />
+					<H1 className={styles.notesTitle}>Notes</H1>
+					<Section>
+						{notes.map(({ frontMatter, linkPath }) => {
+							return (
+								frontMatter.published && (
+									<Excerpt
+										categories={frontMatter.categories}
+										className={notesStyles.post}
+										key={linkPath}
+										title={frontMatter.title}
+										formattedDate={frontMatter.formattedDate}
+										slug={linkPath}
+										contentType="notes"
+										excerpt={frontMatter.description}
+										headingStyle={2}
+									/>
+								)
+							);
+						})}
+					</Section>
+				</main>
+			</div>
+			<aside>
+				<SubscribeForm className={notesStyles.subscribeForm} />
+			</aside>
+		</React.Fragment>
+	);
 }
 
 export const getStaticProps: GetStaticProps<{

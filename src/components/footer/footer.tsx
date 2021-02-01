@@ -2,18 +2,18 @@ import * as React from "react";
 import VisuallyHidden from "@reach/visually-hidden";
 import { NavMenu, NavMenuItem, NavMenuLink } from "$components/nav-menu";
 import { P } from "$components/html";
-import { forwardRef, cx } from "$lib/utils";
+import { cx } from "$lib/utils";
 const styles = require("./footer.module.scss");
 
-const StyledMenuItem = forwardRef<
-	"li",
+const StyledMenuItem = React.forwardRef<
+	HTMLLIElement,
 	React.ComponentProps<typeof NavMenuItem>
 >((props, ref) => (
 	<NavMenuItem {...props} ref={ref} className={styles.navMenuItem} />
 ));
-const StyledMenuLink = forwardRef<
-	"a",
-	React.ComponentProps<typeof NavMenuLink>
+const StyledMenuLink = React.forwardRef<
+	HTMLAnchorElement,
+	React.ComponentPropsWithRef<typeof NavMenuLink>
 >((props, ref) => (
 	<NavMenuLink {...props} ref={ref} className={styles.menuLink} />
 ));

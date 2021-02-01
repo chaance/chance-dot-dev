@@ -4,37 +4,44 @@ import kebabCase from "lodash/kebabCase";
 import { usePromise } from "@chancestrickland/hooks";
 import { canUseDOM } from "$lib/utils";
 
-const adobeStylesheet = `https://use.typekit.net/isw6kyj.css`;
+const adobeStylesheet = `https://use.typekit.net/dxb2ypa.css`;
+const localStylesheet = `/fonts/style.css`;
 
 // const ffSans = "Inter";
-const ffSans = "neue-haas-grotesk-display";
-const ffSerif = "skolar-latin";
+const ffSans = "nunito";
+const ffSansCaps = "brandon-grotesque";
+const ffSerif = "cooper";
 const ffMono = "ibm-plex-mono";
 // const ffMono = "IBM Plex Mono";
 
-export { ffSans, ffSerif, ffMono };
+export { ffSans, ffSansCaps, ffSerif, ffMono };
 
 const __DEV__ = process.env.NODE_ENV === "development";
 
 // Map of font names to each font's corresponding stylesheet
 export const webFonts = {
 	[ffSans]: adobeStylesheet,
-	[ffSerif]: adobeStylesheet,
+	[ffSansCaps]: adobeStylesheet,
+	[ffSerif]: localStylesheet,
 	[ffMono]: adobeStylesheet,
 };
 
+const SANS_SERIF_FALLBACKS = [
+	"-apple-system",
+	"BlinkMacSystemFont",
+	'"Helvetica Neue"',
+	"helvetica",
+	"arial",
+	"sans-serif",
+];
+
+const MONO_FALLBACKS = ['"Consolas"', '"Menlo"', '"Monaco"', "monospace"];
+
 export const fontLists = {
-	sans: [quoteString(ffSans), "helvetica", "arial", "sans-serif"],
-	serif: [quoteString(ffSerif), "times", "serif"],
-	mono: [
-		quoteString(ffMono),
-		'"Consolas"',
-		'"Menlo"',
-		'"Monaco"',
-		'"Andale Mono"',
-		'"Ubuntu Mono"',
-		"monospace",
-	],
+	sans: [quoteString(ffSans), ...SANS_SERIF_FALLBACKS],
+	sansCaps: [quoteString(ffSansCaps), ...SANS_SERIF_FALLBACKS],
+	serif: [quoteString(ffSerif), ...SANS_SERIF_FALLBACKS],
+	mono: [quoteString(ffMono), ...MONO_FALLBACKS],
 };
 
 export const fonts = Object.entries(fontLists)

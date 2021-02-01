@@ -1,12 +1,11 @@
 import * as React from "react";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
-import * as fs from "fs-extra";
-import matter from "gray-matter";
 import hydrate from "next-mdx-remote/hydrate";
 import renderToString from "next-mdx-remote/render-to-string";
 import Layout from "src/layouts/blog-layout";
 import { MDXComponents } from "$components/mdx";
 import {
+	getGrayMatter,
 	getNoteFilePathFromSlug,
 	getNotesFilePaths,
 	getSlugFromFilePath,
@@ -32,8 +31,7 @@ export const getStaticProps: GetStaticProps<{
 		throw Error("skfjaksddfgnkdasfkdsfksdf");
 	}
 
-	let source = await fs.readFile(postFilePath);
-	let { content, data: frontMatter } = matter(source);
+	let { content, frontMatter } = await getGrayMatter(postFilePath);
 
 	let mdxSource: MdxRemote.Source = await renderToString(content, {
 		components: MDXComponents,
@@ -45,7 +43,7 @@ export const getStaticProps: GetStaticProps<{
 			],
 			rehypePlugins: [],
 		},
-		scope: frontMatter,
+		scope: frontMatter as any,
 	});
 
 	return {

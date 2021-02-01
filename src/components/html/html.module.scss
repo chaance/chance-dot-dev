@@ -14,6 +14,18 @@
 
 .hr {
 	@include hr-styles;
+
+	&[data-thickness="2"] {
+		@include hr-styles(3)
+	}
+
+	&[data-thickness="3"] {
+		@include hr-styles(6)
+	}
+
+	&.gradient {
+		background: var(--gradient-link-hover);
+	}
 }
 
 .legend {

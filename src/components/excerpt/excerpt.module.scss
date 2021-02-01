@@ -9,52 +9,8 @@
 	}
 }
 
-.moreWrapper {
-	display: block;
-	line-height: 1;
-}
-
-.moreLink {
-	display: inline-block;
-	font-weight: var(--font-weight-sans-bold);
-	color: inherit;
-	margin-top: calc(var(--size-block-space) * 0.5);
-	color: var(--color-white);
-	text-decoration: none;
-	border-bottom: 2px dotted var(--color-gray-30);
-
-	&:hover {
-		border-bottom-color: transparent;
-	}
-}
-
 .postMeta {
 	margin-top: 0.5em;
-
-	@supports (writing-mode: tb-rl) {
-		@media screen and (min-width: 740px) {
-			--top: 0.5em;
-			--dist: var(--size-block-space);
-			display: block;
-			height: calc(100% - var(--top));
-			margin-top: 0;
-			writing-mode: tb-rl;
-			position: absolute;
-			left: calc(var(--dist) * -2);
-			top: var(--top);
-
-			&::before {
-				position: absolute;
-				content: "";
-				display: block;
-				height: 100%;
-				width: 1px;
-				border-left: 2px dotted var(--color-gray-30);
-				top: 0;
-				right: -1em;
-			}
-		}
-	}
 }
 
 .header {

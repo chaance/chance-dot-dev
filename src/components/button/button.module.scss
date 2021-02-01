@@ -1,0 +1,30 @@
+@import "mixins";
+
+// TODO: Complete for design system
+
+.button {
+	appearance: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 3px;
+	min-height: 3rem;
+	text-align: center;
+	line-height: 1;
+	padding: 1rem;
+	@include font-style(tag, $weight: bold);
+	// font-size: 1rem;
+	font-size: clamp(14px, 1rem, 16px);
+	font-style: normal;
+	text-transform: uppercase;
+	border: 0;
+	background-image: var(--gradient-link-hover);
+	background-size: 400% 100%;
+	background-position-x: 0%;
+	color: var(--color-gray-00);
+	transition: background 500ms ease-out;
+
+	&:not(:disabled):hover {
+		background-position-x: 100%;
+	}
+}

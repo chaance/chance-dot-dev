@@ -1,11 +1,10 @@
 import * as React from "react";
 import { Link } from "$components/link";
-import VH from "@reach/visually-hidden";
-import { H1 } from "$components/heading";
+import { H1, H2, H3 } from "$components/heading";
 import { PostMeta } from "$components/post-meta";
-import { CategoryList } from "$components/category-list";
+// import { CategoryList } from "$components/category-list";
 import { P } from "$components/html";
-import { forwardRef, cx, unSlashIt } from "$lib/utils";
+import { cx, unSlashIt } from "$lib/utils";
 import { sprintf } from "$lib/sprintf";
 const styles = require("./excerpt.module.scss");
 
@@ -30,23 +29,19 @@ const languageMap: LanguageMap = {
 	},
 };
 
-const defaultMore = (title: string) => (
-	<React.Fragment>
-		Read More<VH> from {`"${title}"`}</VH>
-	</React.Fragment>
-);
-
-const Excerpt = forwardRef<"article", ExcerptProps>(function Excerpt(
+const Excerpt = React.forwardRef<
+	HTMLElement,
+	ExcerptOwnProps & React.ComponentPropsWithRef<"article">
+>(function Excerpt(
 	{
 		categories = [],
 		contentType = "notes",
-		date,
+		formattedDate,
 		excerpt,
-		includeAllLink,
-		renderReadMore = defaultMore,
 		slug,
 		timeToRead,
 		title,
+		headingStyle = 1,
 		...props
 	},
 	ref
@@ -54,6 +49,8 @@ const Excerpt = forwardRef<"article", ExcerptProps>(function Excerpt(
 	let langMap = languageMap[contentType];
 	let time = timeToRead;
 	let permalink = `/${contentType}/${unSlashIt(slug)}`;
+
+	let H = headingStyle === 3 ? H3 : headingStyle === 2 ? H2 : H1;
 
 	return (
 		<article
@@ -63,20 +60,18 @@ const Excerpt = forwardRef<"article", ExcerptProps>(function Excerpt(
 		>
 			<div>
 				<header className={styles.header}>
-					<H1 className={styles.title}>
-						<Link className={styles.titleLink} href={permalink}>
+					<H className={styles.title}>
+						<Link className={styles.titleLink} href={permalink} rel="bookmark">
 							{title}
 						</Link>
-					</H1>
-					{categories.length > 0 ? (
-						<Categories categories={categories} />
-					) : null}
+					</H>
 					<PostMeta
 						className={styles.postMeta}
-						date={date}
+						formattedDate={formattedDate}
 						append={[
 							time != null ? sprintf(langMap.time, `${time} minutes`) : false,
 						]}
+						categories={categories}
 					/>
 				</header>
 				<div>
@@ -87,36 +82,11 @@ const Excerpt = forwardRef<"article", ExcerptProps>(function Excerpt(
 							dangerouslySetInnerHTML={{ __html: excerpt }}
 						/>
 					)}
-
-					<span className={styles.moreWrapper}>
-						<Link className={styles.moreLink} href={permalink} rel="bookmark">
-							{renderReadMore(title)}
-						</Link>
-
-						{includeAllLink && (
-							<Link className={styles.moreLink} href={`/${contentType}`}>
-								{sprintf(langMap!.allLinkLabel, langMap!.plural)}
-							</Link>
-						)}
-					</span>
 				</div>
 			</div>
 		</article>
 	);
 });
-
-function Categories({ categories }: { categories: string[] }) {
-	return (
-		<div className={styles.categories}>
-			<VH>Categories</VH>
-			<CategoryList
-				linkCategories={false}
-				categories={categories}
-				className={styles.categoryList}
-			/>
-		</div>
-	);
-}
 
 export { Excerpt };
 
@@ -129,14 +99,13 @@ type LanguageMap = {
 	};
 };
 type ContentType = "notes" | "talks" | "workshops";
-type ExcerptProps = {
+interface ExcerptOwnProps {
 	contentType?: ContentType;
-	date: string;
+	formattedDate?: string;
 	excerpt?: string;
-	includeAllLink?: boolean;
 	slug: string;
 	timeToRead?: string;
 	title: string;
 	categories?: string[];
-	renderReadMore?(title: string): React.ReactNode;
-};
+	headingStyle?: 1 | 2 | 3;
+}

@@ -1,0 +1,72 @@
+.wrapper {
+	background: var(--color-body-background-contrast);
+	border-radius: 6px;
+	padding: calc(var(--size-block-space));
+
+	@media screen and (--bp-medium) {
+		padding: calc(var(--size-block-space) * 2);
+	}
+}
+
+.heading {
+	margin-bottom: calc(var(--size-block-space) / 2);
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	margin-top: var(--size-block-space);
+
+	@media screen and (--bp-large) {
+		flex-direction: row;
+		align-items: flex-end;
+	}
+}
+
+.submitButton {
+	text-align: center;
+	margin-top: var(--size-block-space);
+
+	@media screen and (--bp-large) {
+		flex-grow: 1;
+		margin-top: 0;
+		margin-left: calc(var(--size-block-space) / 2);
+	}
+}
+
+.input {
+}
+
+.inputWrapper {
+	@media screen and (--bp-large) {
+		flex-basis: 33%;
+	}
+
+	&:not(:first-child) {
+		margin-top: calc(var(--size-block-space) / 2);
+
+		@media screen and (--bp-large) {
+			margin-top: 0;
+			margin-left: calc(var(--size-block-space) / 2);
+		}
+	}
+}
+
+.required {
+	color: var(--color-red-50);
+}
+
+.alertWrapper {
+	position: relative;
+	background: var(--gradient-link-hover);
+	padding: 3px;
+	border-radius: 3px;
+}
+
+.alert {
+	display: block;
+	padding: calc(var(--size-block-space) / 4) calc(var(--size-block-space) / 2);
+	background-color: var(--color-body-background-contrast);
+	border-radius: 1.5px;
+	color: inherit;
+}

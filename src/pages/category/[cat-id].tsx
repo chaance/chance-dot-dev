@@ -3,9 +3,10 @@ import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
 import Head from "next/head";
 import startCase from "lodash/startCase";
 import { useRouter } from "next/router";
-import VH from "@reach/visually-hidden";
+import { VisuallyHidden } from "@reach/visually-hidden";
 import { Excerpt } from "$components/excerpt";
 import { Section, HT } from "$components/heading";
+import { SubscribeForm } from "$components/subscribe-form";
 import { categories } from "$src/categories";
 import { getNotes, getCategories, MDXMatter } from "$lib/get-notes";
 import { config } from "$src/site-config";
@@ -31,35 +32,40 @@ function Notes({ notes }: InferGetStaticPropsType<typeof getStaticProps>) {
 	}, [notes, router]);
 
 	return (
-		<div className={styles.wrapper}>
-			<Head>
-				<title>{pageTitle}</title>
-			</Head>
-			<main role="main">
-				<HT className={styles.title}>
-					<VH>Category: </VH>
-					{category.label}
-				</HT>
-				<Section>
-					{notes.map(({ frontMatter, linkPath }) => {
-						return (
-							frontMatter.published && (
-								<Excerpt
-									categories={frontMatter.categories}
-									className={styles.post}
-									key={linkPath}
-									title={frontMatter.title}
-									date={frontMatter.date}
-									slug={linkPath}
-									contentType="notes"
-									excerpt={frontMatter.description}
-								/>
-							)
-						);
-					})}
-				</Section>
-			</main>
-		</div>
+		<React.Fragment>
+			<div className={styles.wrapper}>
+				<Head>
+					<title>{pageTitle}</title>
+				</Head>
+				<main role="main">
+					<HT className={styles.title}>
+						<VisuallyHidden>Category: </VisuallyHidden>
+						{category.label}
+					</HT>
+					<Section>
+						{notes.map(({ frontMatter, linkPath }) => {
+							return (
+								frontMatter.published && (
+									<Excerpt
+										categories={frontMatter.categories}
+										className={styles.post}
+										key={linkPath}
+										title={frontMatter.title}
+										formattedDate={frontMatter.formattedDate}
+										slug={linkPath}
+										contentType="notes"
+										excerpt={frontMatter.description}
+									/>
+								)
+							);
+						})}
+					</Section>
+				</main>
+			</div>
+			<aside>
+				<SubscribeForm className={styles.subscribeForm} />
+			</aside>
+		</React.Fragment>
 	);
 }
 

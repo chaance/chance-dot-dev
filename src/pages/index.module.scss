@@ -1,0 +1,17 @@
+@import "mixins";
+
+.intro {
+	@include block-space(bottom);
+
+	p:not(:last-child) {
+		@include block-space(bottom);
+	}
+}
+
+.title {
+	@include block-space(bottom, $multiplier: 0.5);
+}
+
+.notesTitle {
+	@include block-space(bottom);
+}

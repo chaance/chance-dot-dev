@@ -34,7 +34,6 @@ export function useAudio(src: string): UseAudioValue {
 				resetAudio(src);
 			},
 			pause() {
-				console.log("pausing");
 				audio.current?.pause();
 			},
 			play({ interrupt } = {}) {

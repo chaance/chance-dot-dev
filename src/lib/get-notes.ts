@@ -4,6 +4,7 @@ import matter from "gray-matter";
 import uniqBy from "lodash/uniqBy";
 import kebabCase from "lodash/kebabCase";
 import { Category, categories as categoryCache } from "$src/categories";
+import { getFormattedDate } from "$lib/get-formatted-date";
 
 export const NOTES_PATH = resolve(process.cwd(), "src/notes");
 
@@ -84,8 +85,33 @@ export function getSlugFromFilePath(path: string): string | null | undefined {
 	}
 }
 
+export async function getGrayMatter<
+	Opts extends matter.GrayMatterOption<Buffer, Opts>
+>(
+	filePath: string,
+	options?: Opts
+): Promise<{
+	frontMatter: FrontMatter;
+	content: string;
+	excerpt?: string | undefined;
+	orig: Buffer;
+	language: string;
+	matter: string;
+	stringify(lang: string): string;
+}> {
+	let { data: frontMatter, ...rest } = matter(readFileSync(filePath), options);
+
+	return {
+		...rest,
+		frontMatter: {
+			...frontMatter,
+			formattedDate: getFormattedDate(frontMatter.date),
+		} as FrontMatter,
+	};
+}
+
 async function getMdx(filePath: string): Promise<MDXMatter> {
-	let { content, data: frontMatter } = matter(readFileSync(filePath));
+	let { content, frontMatter } = await getGrayMatter(filePath);
 	let linkPath = getSlugFromFilePath(filePath);
 	if (!linkPath) {
 		throw Error("asdfghjkl");
@@ -93,7 +119,7 @@ async function getMdx(filePath: string): Promise<MDXMatter> {
 
 	return {
 		content,
-		frontMatter: frontMatter as any,
+		frontMatter,
 		filePath,
 		linkPath,
 	};

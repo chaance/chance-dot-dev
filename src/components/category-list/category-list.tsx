@@ -1,37 +1,73 @@
 import * as React from "react";
+import type {
+	PolymorphicForwardRefExoticComponent,
+	PolymorphicPropsWithoutRef,
+} from "react-polymorphic-types";
+import { VisuallyHidden } from "@reach/visually-hidden";
 import { Link } from "$components/link";
 import kebabCase from "lodash/kebabCase";
-import { cx } from "$lib/utils";
-const styles = require("./category-list.module.scss");
+import { Box, BoxOwnProps } from "$components/primitives/box";
 
-const CategoryList: React.FC<{
-	categories: string[];
-	className?: import("clsx").ClassValue;
-	linkCategories?: boolean;
-}> = function CategoryList({ categories, className, linkCategories = true }) {
-	const CatWrapper = ({ category, ...props }: any) =>
-		linkCategories ? (
-			<Link
-				{...props}
-				rel="category"
-				href={`/category/${kebabCase(category)}`}
-				className={styles.categoryLink}
-			/>
-		) : (
-			<span {...props} className={styles.categoryText} />
+const CategoryList: PolymorphicForwardRefExoticComponent<
+	BoxOwnProps,
+	"div"
+> = React.forwardRef(
+	<T extends React.ElementType = "div">(
+		{ as, ...props }: PolymorphicPropsWithoutRef<BoxOwnProps, T>,
+		ref: React.ForwardedRef<React.ElementRef<T>>
+	) => {
+		const comp: React.ElementType = as || "div";
+		return <Box ref={ref} as={comp} {...props} />;
+	}
+);
+
+const CategoryItemContext = React.createContext<CategoryItemContextValue>(
+	null!
+);
+
+const CategoryListItem: PolymorphicForwardRefExoticComponent<
+	CategoryItemOwnProps,
+	"span"
+> = React.forwardRef(
+	<T extends React.ElementType = "span">(
+		{
+			as,
+			value,
+			children,
+			...props
+		}: PolymorphicPropsWithoutRef<CategoryItemOwnProps, T>,
+		ref: React.ForwardedRef<React.ElementRef<T>>
+	) => {
+		const comp: React.ElementType = as || "span";
+		return (
+			<CategoryItemContext.Provider value={{ category: value }}>
+				<VisuallyHidden>Categories: </VisuallyHidden>
+				<Box ref={ref} as={comp} {...props}>
+					{children || value}
+				</Box>
+			</CategoryItemContext.Provider>
 		);
+	}
+);
 
+const CategoryLink: React.FC<
+	Omit<React.ComponentProps<typeof Link>, "href">
+> = ({ children, ...props }) => {
+	const { category } = React.useContext(CategoryItemContext);
 	return (
-		<div className={cx(styles.categoryList, className)}>
-			{categories.map((category, i, src) => (
-				<span key={category} className={styles.category}>
-					<CatWrapper category={category}>{category}</CatWrapper>
-					{i === src.length - 1 ? "" : " "}
-				</span>
-			))}
-		</div>
+		<Link {...props} rel="category" href={`/category/${kebabCase(category)}`}>
+			{children || category}
+		</Link>
 	);
 };
 
-export { CategoryList };
+interface CategoryItemOwnProps extends BoxOwnProps {
+	value: string;
+}
+
+interface CategoryItemContextValue {
+	category: string;
+}
+
+export { CategoryList, CategoryListItem, CategoryLink };
 export default CategoryList;

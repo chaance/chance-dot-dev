@@ -1,19 +1,18 @@
 import * as React from "react";
 import { NextSeo } from "next-seo";
 import Head from "next/head";
-import VH from "@reach/visually-hidden";
 import { useRouter } from "next/router";
 import { HT, Section } from "$components/heading";
 import { PostMeta } from "$components/post-meta";
-import { CategoryList } from "$components/category-list";
 import { config } from "$src/site-config";
+import { SubscribeForm } from "$components/subscribe-form";
 const styles = require("./blog-layout.module.scss");
 
 const MdxSiteLayout = function MdxSiteLayout({
 	children: content,
 	frontMatter,
 }) {
-	const { date, title, description, categories = [] } = frontMatter;
+	const { formattedDate, title, description, categories = [] } = frontMatter;
 	const router = useRouter();
 	const url = config.siteUrl + router.pathname;
 	const images = frontMatter.card
@@ -36,11 +35,13 @@ const MdxSiteLayout = function MdxSiteLayout({
 				<main role="main">
 					<article className={styles.article}>
 						<header>
-							{categories.length > 0 ? (
-								<Categories categories={categories} />
-							) : null}
 							<HT className={styles.title}>{title}</HT>
-							<PostMeta className={styles.postMeta} date={date} />
+							<PostMeta
+								categories={categories}
+								className={styles.postMeta}
+								formattedDate={formattedDate}
+								linkCategories
+							/>
 						</header>
 						<Section wrap="div" className={styles.content}>
 							{content}
@@ -48,17 +49,11 @@ const MdxSiteLayout = function MdxSiteLayout({
 					</article>
 				</main>
 			</div>
+			<aside>
+				<SubscribeForm className={styles.subscribeForm} />
+			</aside>
 		</React.Fragment>
 	);
 };
-
-function Categories({ categories }) {
-	return (
-		<div className={styles.categories}>
-			<VH>Categories</VH>
-			<CategoryList categories={categories} />
-		</div>
-	);
-}
 
 export default MdxSiteLayout;

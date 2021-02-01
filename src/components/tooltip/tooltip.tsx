@@ -1,25 +1,26 @@
 import * as React from "react";
-import { forwardRef, cx } from "$lib/utils";
+import { cx } from "$lib/utils";
 import {
 	Tooltip as ReachTooltip,
 	TooltipProps as ReachTooltipProps,
 } from "@reach/tooltip";
 const styles = require("./tooltip.module.scss");
 
-const Tooltip = forwardRef<"div", TooltipProps>(function Tooltip(
-	props,
-	forwardedRef
-) {
+const Tooltip = React.forwardRef<
+	HTMLDivElement,
+	React.ComponentPropsWithRef<"div"> & TooltipOwnProps
+>(function Tooltip(props, forwardedRef) {
 	return (
 		<ReachTooltip
 			ref={forwardedRef}
 			{...props}
+			as="div"
 			className={cx(props.className, styles.tooltip)}
 		/>
 	);
 });
 
-type TooltipProps = ReachTooltipProps;
+type TooltipOwnProps = ReachTooltipProps;
 
-export type { TooltipProps };
+export type { TooltipOwnProps as TooltipProps };
 export { Tooltip };

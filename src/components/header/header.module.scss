@@ -17,6 +17,7 @@
 }
 
 .homeLink {
+	display: flex;
 	text-decoration: none !important;
 
 	&:not(:hover) {
@@ -25,6 +26,29 @@
 
 	span {
 		font-weight: var(--font-weight-sans-normal);
+	}
+}
+
+.homeLogo {
+	width: 100px;
+	height: 41px;
+	fill: var(--color-body-text-100);
+
+	&:global(.large) {
+		display: none;
+	}
+
+	@media screen and (--bp-medium) {
+		width: 160px;
+		height: 66px;
+
+		&:global(.large) {
+			display: block;
+		}
+
+		&:global(.small) {
+			display: none;
+		}
 	}
 }
 

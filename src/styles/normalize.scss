@@ -60,7 +60,7 @@ select {
 	-webkit-appearance: button;
 
 	&:-moz-focusring {
-		outline: 1px dotted ButtonText;
+		outline: 1px solid ButtonText;
 	}
 
 	&::-moz-focus-inner {

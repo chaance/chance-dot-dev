@@ -1,43 +1,34 @@
 import * as React from "react";
-import { cx, forwardRef } from "$lib/utils";
+import type {
+	PolymorphicForwardRefExoticComponent,
+	PolymorphicPropsWithoutRef,
+	PolymorphicPropsWithRef,
+} from "react-polymorphic-types";
+import { cx } from "$lib/utils";
 import styles from "./box.module.scss";
 
-const defaultElement = "div";
+const BOX_DEFAULT_ELEMENT = "div";
 
-const Box: <Elem extends React.ElementType = typeof defaultElement>(
-	props: BoxProps<Elem>
-) => React.ReactElement | null = forwardRef(function Box(
-	props: BoxOwnProps,
-	ref: React.Ref<Element>
-) {
-	const { as: Comp = defaultElement, ...rest } = props;
-	return (
-		<Comp ref={ref} {...rest} className={cx(styles.box, props.className)} />
-	);
-});
-
-type BoxOwnProps<Elem extends React.ElementType = React.ElementType> = {
-	as?: Elem;
+interface BoxOwnProps {
 	className?: import("clsx").ClassValue;
-};
+}
 
-type BoxProps<E extends React.ElementType> = BoxOwnProps<E> &
-	Omit<React.ComponentProps<E>, keyof BoxOwnProps>;
-
-type PolymorphicComponentProps<Elem extends React.ElementType, Props> = Props &
-	BoxProps<Elem>;
-
-type PolymorphicComponent<
-	Elem extends React.ElementType = "div",
-	Props = {}
-> = <E extends React.ElementType = Elem>(
-	props: PolymorphicComponentProps<E, Props>
-) => React.ReactElement | null;
-
-export type {
+const Box: PolymorphicForwardRefExoticComponent<
 	BoxOwnProps,
-	BoxProps,
-	PolymorphicComponentProps,
-	PolymorphicComponent,
-};
+	typeof BOX_DEFAULT_ELEMENT
+> = React.forwardRef(
+	<T extends React.ElementType = typeof BOX_DEFAULT_ELEMENT>(
+		{ as, className, ...props }: PolymorphicPropsWithoutRef<BoxOwnProps, T>,
+		ref: React.ForwardedRef<React.ElementRef<T>>
+	) => {
+		const Comp: React.ElementType = as || BOX_DEFAULT_ELEMENT;
+		return <Comp ref={ref} {...props} className={cx(styles.box, className)} />;
+	}
+);
+
+type BoxProps<
+	T extends React.ElementType = typeof BOX_DEFAULT_ELEMENT
+> = PolymorphicPropsWithRef<BoxOwnProps, T>;
+
+export type { BoxProps, BoxOwnProps };
 export { Box };

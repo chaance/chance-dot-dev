@@ -1,6 +1,9 @@
 import * as React from "react";
+import type {
+	PolymorphicForwardRefExoticComponent,
+	PolymorphicPropsWithoutRef,
+} from "react-polymorphic-types";
 import { Box, BoxOwnProps } from "$components/primitives/box";
-import { forwardRef } from "$lib/utils";
 
 const LevelContext: React.Context<HeadingLevel> = React.createContext(
 	1 as HeadingLevel
@@ -10,47 +13,67 @@ function useHeadingLevelContext() {
 	return React.useContext(LevelContext);
 }
 
-const Section = forwardRef<"section", SectionProps>(function Section(
-	{ as, wrap = false, children, ...props },
-	ref
+const Section: PolymorphicForwardRefExoticComponent<
+	SectionOwnProps,
+	"section"
+> = React.forwardRef(function Section<T extends React.ElementType = "section">(
+	{ as, wrap = false, children, ...props }: PolymorphicPropsWithoutRef<{}, T>,
+	ref: React.ForwardedRef<React.ElementRef<T>>
 ) {
 	const shouldWrap = Boolean(as || wrap);
-	const Wrapper = shouldWrap
-		? (props: any) => <Box ref={ref} as={as || "section"} {...props} />
-		: React.Fragment;
-
+	const Wrapper = shouldWrap ? SectionWrapper : React.Fragment;
 	const level = useHeadingLevelContext();
+	const ctx = React.useMemo(() => Math.min(level + 1, 6), [
+		level,
+	]) as HeadingLevel;
+
 	return (
-		<Wrapper {...(shouldWrap ? props : null)}>
-			<LevelContext.Provider
-				value={
-					React.useMemo(() => Math.min(level + 1, 6), [level]) as HeadingLevel
-				}
-			>
-				{children}
-			</LevelContext.Provider>
+		<Wrapper {...(shouldWrap ? ({ ref, as, ...props } as any) : null)}>
+			<LevelContext.Provider value={ctx}>{children}</LevelContext.Provider>
 		</Wrapper>
 	);
 });
 
-const Heading = forwardRef<"h2", HeadingProps & BoxOwnProps>(function Heading(
-	{ level: levelProp, as: asProp, ...props },
-	ref
+const SectionWrapper: PolymorphicForwardRefExoticComponent<
+	{},
+	"section"
+> = React.forwardRef(function SectionWrapper<
+	T extends React.ElementType = "section"
+>(
+	{ as, ...props }: PolymorphicPropsWithoutRef<{}, T>,
+	ref: React.ForwardedRef<React.ElementRef<T>>
 ) {
-	const level = useHeadingLevelContext();
-	const as = asProp || (`h${levelProp ? levelProp : level}` as "h2");
-	return <Box as={as} ref={ref} {...props} />;
+	const comp: React.ElementType = as || "section";
+	return <Box ref={ref} as={comp} {...props} />;
 });
 
-type HeadingProps = {
+const Heading: PolymorphicForwardRefExoticComponent<
+	HeadingOwnProps,
+	"h2"
+> = React.forwardRef(function Heading<T extends React.ElementType = "h2">(
+	{
+		as,
+		level: levelProp,
+		...props
+	}: PolymorphicPropsWithoutRef<HeadingOwnProps, T>,
+	ref: React.ForwardedRef<React.ElementRef<T>>
+) {
+	const level = useHeadingLevelContext();
+	const comp: React.ElementType =
+		as || (`h${levelProp ? levelProp : level}` as "h2");
+
+	return <Box ref={ref} as={comp} {...props} data-level={level} />;
+});
+
+interface HeadingOwnProps extends BoxOwnProps {
 	level?: HeadingLevel;
-};
+}
+
+interface SectionOwnProps extends BoxOwnProps {
+	wrap?: boolean;
+}
 
 type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
-type SectionProps = {
-	wrap?: boolean;
-};
-
-export type { SectionProps, HeadingProps };
+export type { SectionOwnProps, HeadingOwnProps };
 export { Section, Heading, useHeadingLevelContext };

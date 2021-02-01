@@ -6,6 +6,8 @@ import { ClientOnly } from "$components/primitives/client-only";
 import { cx } from "$lib/utils";
 import { useRouter } from "next/router";
 import { Heading } from "$components/heading";
+import { LogoLarge, LogoSmall } from "$components/logo";
+import { VisuallyHidden } from "@reach/visually-hidden";
 const styles = require("./header.module.scss");
 
 // const StyledMenuItem = forwardRef((props, ref) => (
@@ -29,21 +31,18 @@ const Header = React.forwardRef<HTMLElement, React.ComponentProps<"header">>(
 				<nav className={styles.nav}>
 					<div className={styles.homeLinkWrapper}>
 						<LinkWrapper className={styles.homeLinkWrapperInner}>
-							<Link
-								className={styles.homeLink}
-								href="/"
-								aria-describedby="site-desc"
-							>
-								cs<span>.run</span>
+							<Link className={styles.homeLink} href="/">
+								<LogoSmall
+									aria-hidden
+									className={cx(styles.homeLogo, "small")}
+								/>
+								<LogoLarge
+									aria-hidden
+									className={cx(styles.homeLogo, "large")}
+								/>
+								<VisuallyHidden>Chance the Developer</VisuallyHidden>
 							</Link>{" "}
 						</LinkWrapper>
-						<span className={styles.siteDesc} id="site-desc">
-							<span aria-hidden className={styles.siteDescSep}>
-								{" "}
-								|{" "}
-							</span>
-							musings on things that interest me
-						</span>
 					</div>
 					{/* <NavMenu className={styles.menu}>
 					<StyledMenuItem>

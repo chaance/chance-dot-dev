@@ -4,6 +4,5 @@ export type Category = {
 };
 
 export const categories = new Map<string, Category>([
-	// Politics
-	["politics", { slug: "politics", label: "Politics" }],
+	//
 ]);

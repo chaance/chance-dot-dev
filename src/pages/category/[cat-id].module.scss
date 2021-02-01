@@ -18,3 +18,8 @@
 .title {
 	margin-bottom: calc(var(--size-block-space) * 2);
 }
+
+.subscribeForm {
+	@include make-container(calc(var(--size-block-space) * 23));
+	margin-top: calc(var(--size-block-space) * 4);
+}

@@ -5,12 +5,12 @@ import { Tooltip } from "$components/tooltip";
 import { ClientOnly } from "$components/primitives/client-only";
 import { Switch, SwitchProps } from "$components/switch";
 import { useThemeMode, useThemeModeToggle } from "$lib/theme";
-import { forwardRef, cx } from "$lib/utils";
+import { cx } from "$lib/utils";
 import { makeIconComponent } from "$components/icons";
 import { useAudio } from "$lib/use-audio";
 const styles = require("./dark-mode-switch.module.scss");
 
-const DarkModeSwitch = forwardRef<"input", DarkModeSwitchProps>(
+const DarkModeSwitch = React.forwardRef<HTMLInputElement, DarkModeSwitchProps>(
 	function DarkModeSwitch(
 		{ label = "Toggle dark mode", ...props },
 		forwardedRef
@@ -61,10 +61,7 @@ const DarkModeSwitch = forwardRef<"input", DarkModeSwitchProps>(
 
 export { DarkModeSwitch };
 
-export type DarkModeSwitchProps = Omit<
-	SwitchProps,
-	"onChange" | "id" | "children"
-> & {
+export type DarkModeSwitchProps = Omit<SwitchProps, "onChange" | "children"> & {
 	label?: string;
 };
 
@@ -90,8 +87,8 @@ const LightIcon = makeIconComponent(
 				r="90.1215"
 				gradientUnits="userSpaceOnUse"
 			>
-				<stop offset="0" stop-color={YELLOW} />
-				<stop offset="1" stop-color={ORANGE} />
+				<stop offset="0" stopColor={YELLOW} />
+				<stop offset="1" stopColor={ORANGE} />
 			</radialGradient>
 		</defs>
 		<circle
@@ -126,8 +123,8 @@ const DarkIcon = makeIconComponent(
 				gradientTransform="matrix(-1, 0, 0, 1, 23.1522, 0)"
 				gradientUnits="userSpaceOnUse"
 			>
-				<stop offset="0" stop-color={LIGHTGRAY} />
-				<stop offset="1" stop-color={DARKGRAY} />
+				<stop offset="0" stopColor={LIGHTGRAY} />
+				<stop offset="1" stopColor={DARKGRAY} />
 			</radialGradient>
 		</defs>
 		<circle

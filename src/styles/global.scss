@@ -1,6 +1,9 @@
 @import "functions";
 @import "mixins";
 
+$size-base-scale: 10;
+$size-base-scale-md: 8;
+
 @custom-media --bp-small (min-width: 330px);
 @custom-media --bp-medium (min-width: 600px);
 @custom-media --bp-large (min-width: 1100px);
@@ -193,14 +196,16 @@
 
 	/* - contextual tokens - */
 	--color-body-background: var(--color-gray-00);
+	--color-body-background-contrast: var(--color-gray-10);
 	--color-body-text-100: var(--color-gray-80);
-	--color-body-text-50: var(--color-gray-40);
+	--color-body-text-50: var(--color-gray-50);
 	--color-body-text-30: var(--color-gray-30);
 
 	.dark-mode {
 		--color-body-background: var(--color-gray-00);
+		--color-body-background-contrast: var(--color-gray-10);
 		--color-body-text-100: var(--color-gray-100);
-		--color-body-text-50: var(--color-gray-60);
+		--color-body-text-50: var(--color-gray-70);
 		--color-body-text-30: var(--color-gray-30);
 	}
 
@@ -222,21 +227,36 @@
 	--color-selection-background: var(--color-primary-60);
 	--color-selection-foreground: var(--color-body-background);
 
+	--color-form-field-background: var(--color-gray-00);
+	--color-form-field-border: var(--color-gray-30);
+	--color-form-field-foreground: var(--color-gray-100);
+	--color-form-field-placeholder: var(--color-gray-40);
+
+	.dark-mode {
+		--color-form-field-background: var(--color-gray-00);
+		--color-form-field-border: var(--color-gray-30);
+		--color-form-field-foreground: var(--color-gray-100);
+		--color-form-field-placeholder: var(--color-gray-30);
+	}
+
 	/* Typography */
 	/* - primitive tokens - */
 	/* -- static typography -- */
-	--font-family-sans: "neue-haas-grotesk-display", -apple-system,
+	--font-family-sans: "nunito", -apple-system, BlinkMacSystemFont,
+		"Helvetica Neue", helvetica, arial, sans-serif;
+	--font-family-sans-caps: "brandon-grotesque", -apple-system,
 		BlinkMacSystemFont, "Helvetica Neue", helvetica, arial, sans-serif;
-	--font-family-serif: "skolar-latin", Garamond, "Hoefler Text",
-		"Times New Roman", times, serif;
-	--font-family-mono: "ibm-plex-mono", "Consolas", "Menlo", "Monaco",
-		"Ubuntu Mono", monospace;
+	--font-family-serif: "cooper", -apple-system, BlinkMacSystemFont,
+		"Helvetica Neue", helvetica, arial, sans-serif;
+	--font-family-mono: "ibm-plex-mono", "Consolas", "Menlo", "Monaco", monospace;
 	--font-weight-sans-normal: 400;
 	--font-weight-sans-bold: 700;
-	--font-weight-serif-normal: 300;
-	--font-weight-serif-bold: 600;
-	--font-weight-mono-normal: 300;
-	--font-weight-mono-bold: 300;
+	--font-weight-sans-caps-normal: 700;
+	--font-weight-sans-caps-bold: 700;
+	--font-weight-serif-normal: 400;
+	--font-weight-serif-bold: 400;
+	--font-weight-mono-normal: 400;
+	--font-weight-mono-bold: 600;
 
 	/* - contextual tokens - */
 	--font-family-article: var(--font-family-serif);
@@ -255,19 +275,41 @@
 		--line-height-body: 1.8;
 	}
 
-	--font-family-heading: var(--font-family-sans);
+	--font-family-tag: var(--font-family-sans-caps);
+	--font-weight-tag-normal: var(--font-weight-sans-caps-normal);
+	--font-weight-tag-bold: var(--font-weight-sans-caps-bold);
+	--line-height-tag: 1.25;
+	--letter-spacing-tag: auto;
+
+	--font-family-heading: var(--font-family-serif);
 	--font-weight-heading-normal: var(--font-weight-sans-normal);
 	--font-weight-heading-bold: var(--font-weight-sans-bold);
 	--line-height-heading: 1.25;
-	--letter-spacing-heading: -0.02em;
+	--letter-spacing-heading: auto;
 
-	--font-family-title: var(--font-family-sans);
-	--font-weight-title-normal: var(--font-weight-sans-normal);
-	--font-weight-title-bold: var(--font-weight-sans-bold);
+	--font-family-title: var(--font-family-heading);
+	--font-weight-title-normal: var(--font-weight-heading-normal);
+	--font-weight-title-bold: var(--font-weight-heading-bold);
 	--line-height-title: 1.1;
-	--letter-spacing-title: -0.02em;
+	--letter-spacing-title: var(--letter-spacing-heading);
 
 	/* Size and space */
+	/* - scale base - */
+	--size-base-scale: $size-base-scale;
+	@media screen and (--bp-medium) {
+		--size-base-scale: $size-base-scale-md;
+	}
+
+	/* - global tokens - */
+	--size-block-space: 1rem;
+	@media screen and (--bp-medium) {
+		--size-block-space: 1.5rem;
+	}
+
+	@media screen and (--bp-large) {
+		--size-block-space: 2rem;
+	}
+
 	/* - font sizes - */
 	--font-size-title: 1.69rem;
 	--font-size-h1: 1.3rem;
@@ -308,7 +350,7 @@
 		--font-size-h6: 0.81rem;
 	}
 
-	--style-focus-ring-style: dotted;
+	--style-focus-ring-style: solid;
 
 	--size-focus-ring-offset: 2px;
 	--size-focus-ring-width: 2px;
@@ -326,17 +368,13 @@
 html {
 	box-sizing: border-box;
 	overflow-y: scroll;
-	font-size: 96.5%;
+	font-size: #{$size-base-scale * 2}px;
 	-moz-osx-font-smoothing: grayscale;
 	-ms-text-size-adjust: 100%;
 	-webkit-text-size-adjust: 100%;
 
-	@media screen and (--bp-small) {
-		font-size: 100%;
-	}
-
-	@media screen and (--bp-large) {
-		font-size: 112.5%;
+	@media screen and (--bp-medium) {
+		font-size: #{$size-base-scale-md * 2}px;
 	}
 }
 
@@ -354,7 +392,7 @@ body {
 	color: var(--color-body-text-100);
 	font-family: var(--font-family-body);
 	line-height: var(--line-height-body);
-	font-feature-settings: "kern", "calt", "liga", "clig", "frac";
+	font-feature-settings: "kern", "calt", "liga", "clig";
 	font-kerning: normal;
 	font-display: block;
 	word-wrap: break-word;
