@@ -103,10 +103,10 @@ export async function getGrayMatter<
 
 	return {
 		...rest,
-		frontMatter: {
+		frontMatter: ({
 			...frontMatter,
 			formattedDate: getFormattedDate(frontMatter.date),
-		} as FrontMatter,
+		} as unknown) as FrontMatter,
 	};
 }
 
