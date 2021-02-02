@@ -1,6 +1,7 @@
 import * as React from "react";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { getNotes, MDXMatter } from "$lib/get-notes";
+import { NextSeo } from "next-seo";
 import Head from "next/head";
 import { Excerpt } from "$components/excerpt";
 import { Section, HT, H1 } from "$components/heading";
@@ -13,10 +14,11 @@ const styles = require("./index.module.scss");
 function Home({ notes }: InferGetStaticPropsType<typeof getStaticProps>) {
 	return (
 		<React.Fragment>
+			<NextSeo openGraph={{ title: config.siteTitle }} />
+			<Head>
+				<title>{config.siteTitle}</title>
+			</Head>
 			<div className={notesStyles.wrapper}>
-				<Head>
-					<title>{config.siteTitle}</title>
-				</Head>
 				<main role="main">
 					<section className={styles.intro}>
 						<HT className={styles.title}>Welcome!</HT>
