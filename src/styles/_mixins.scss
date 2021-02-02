@@ -132,8 +132,16 @@ $block-elements: address, article, aside, audio, video, blockquote, dd, details,
 
 @mixin heading-styles {
 	font-family: var(--font-family-heading);
+	font-weight: var(--font-weight-heading-bold);
 	letter-spacing: var(--letter-spacing-heading);
 	line-height: var(--line-height-heading);
+}
+
+@mixin title-styles {
+	font-family: var(--font-family-title);
+	font-weight: var(--font-weight-title-bold);
+	letter-spacing: var(--letter-spacing-title);
+	line-height: var(--line-height-title);
 }
 
 @mixin list-common-styles {

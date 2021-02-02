@@ -14,7 +14,20 @@ const styles = require("./index.module.scss");
 function Home({ notes }: InferGetStaticPropsType<typeof getStaticProps>) {
 	return (
 		<React.Fragment>
-			<NextSeo openGraph={{ title: config.siteTitle }} />
+			<NextSeo
+				openGraph={{
+					title: config.siteTitle,
+					images: [
+						{
+							url:
+								"https://res.cloudinary.com/chancedigital/image/upload/v1612287816/cs.run/og-image.jpg",
+							alt: "Welcome to chance.dev!",
+							width: 1200,
+							height: 630,
+						},
+					],
+				}}
+			/>
 			<Head>
 				<title>{config.siteTitle}</title>
 			</Head>

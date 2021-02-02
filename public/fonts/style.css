@@ -6,6 +6,14 @@
 	font-style: normal;
 }
 
+@font-face {
+	font-family: "cooper";
+	src: url("/fonts/cooper-md.woff2") format("woff2"),
+		url("/fonts/cooper-md.woff") format("woff");
+	font-weight: 700;
+	font-style: normal;
+}
+
 /* @font-face {
 	font-family: "basier";
 	src: url("/fonts/basier-rg.woff2") format("woff2"),

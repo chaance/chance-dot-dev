@@ -57,6 +57,13 @@ const config: Config = (function ({
 				url: siteUrl,
 				site_name: siteTitle,
 				images: [
+					{
+						url:
+							"https://res.cloudinary.com/chancedigital/image/upload/v1612287816/cs.run/og-image.jpg",
+						alt: "Welcome to chance.dev!",
+						width: 1200,
+						height: 630,
+					},
 					// {
 					// 	url: 'https://www.example.ie/og-image.jpg',
 					// 	width: 800,

@@ -5,8 +5,7 @@
 }
 
 .ht {
-	letter-spacing: var(--letter-spacing-heading);
-	line-height: var(--line-height-title);
+	@include title-styles;
 	font-size: var(--font-size-title);
 }
 
