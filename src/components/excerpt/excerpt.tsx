@@ -6,6 +6,7 @@ import { PostMeta } from "$components/post-meta";
 import { P } from "$components/html";
 import { cx, unSlashIt } from "$lib/utils";
 import { sprintf } from "$lib/sprintf";
+import { Category } from "$src/categories";
 const styles = require("./excerpt.module.scss");
 
 const languageMap: LanguageMap = {
@@ -106,6 +107,6 @@ interface ExcerptOwnProps {
 	slug: string;
 	timeToRead?: string;
 	title: string;
-	categories?: string[];
+	categories?: Category[];
 	headingStyle?: 1 | 2 | 3;
 }

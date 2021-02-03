@@ -2,6 +2,7 @@ import React from "react";
 import { H4 } from "$components/heading";
 import { ListUnordered, ListItem } from "$components/primitives/list";
 import { cx, leadingSlashIt } from "$lib/utils";
+import { Category } from "$src/categories";
 import {
 	CategoryList,
 	CategoryListItem,
@@ -51,7 +52,7 @@ type PostMetaOwnProps = {
 	author?: Author;
 	formattedDate?: string;
 	append?: any[];
-	categories?: string[];
+	categories?: Category[];
 	linkCategories?: boolean;
 };
 
@@ -64,7 +65,7 @@ function Categories({
 	categories,
 	linkCategories,
 }: {
-	categories: string[];
+	categories: Category[];
 	linkCategories?: boolean;
 }) {
 	return (
@@ -72,14 +73,14 @@ function Categories({
 			<CategoryList className={styles.categoryList}>
 				{categories.map((category, i, src) => (
 					<CategoryListItem
-						key={category}
+						key={category.label}
 						value={category}
 						className={styles.category}
 					>
 						{linkCategories ? (
 							<CategoryLink className={styles.categoryText} />
 						) : (
-							<span className={styles.categoryText}>{category}</span>
+							<span className={styles.categoryText}>{category.label}</span>
 						)}
 						{i === src.length - 1 ? "" : ", "}
 					</CategoryListItem>

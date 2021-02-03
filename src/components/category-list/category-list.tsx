@@ -5,8 +5,8 @@ import type {
 } from "react-polymorphic-types";
 import { VisuallyHidden } from "@reach/visually-hidden";
 import { Link } from "$components/link";
-import kebabCase from "lodash/kebabCase";
 import { Box, BoxOwnProps } from "$components/primitives/box";
+import { Category } from "$src/categories";
 
 const CategoryList: PolymorphicForwardRefExoticComponent<
 	BoxOwnProps,
@@ -43,7 +43,7 @@ const CategoryListItem: PolymorphicForwardRefExoticComponent<
 			<CategoryItemContext.Provider value={{ category: value }}>
 				<VisuallyHidden>Categories: </VisuallyHidden>
 				<Box ref={ref} as={comp} {...props}>
-					{children || value}
+					{children || value.label}
 				</Box>
 			</CategoryItemContext.Provider>
 		);
@@ -55,18 +55,18 @@ const CategoryLink: React.FC<
 > = ({ children, ...props }) => {
 	const { category } = React.useContext(CategoryItemContext);
 	return (
-		<Link {...props} rel="category" href={`/category/${kebabCase(category)}`}>
-			{children || category}
+		<Link {...props} rel="category" href={`/category/${category.slug}`}>
+			{children || category.label}
 		</Link>
 	);
 };
 
 interface CategoryItemOwnProps extends BoxOwnProps {
-	value: string;
+	value: Category;
 }
 
 interface CategoryItemContextValue {
-	category: string;
+	category: Category;
 }
 
 export { CategoryList, CategoryListItem, CategoryLink };

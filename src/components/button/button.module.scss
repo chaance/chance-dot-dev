@@ -23,8 +23,14 @@
 	background-position-x: 0%;
 	color: var(--color-gray-00);
 	transition: background 500ms ease-out;
+	user-select: none;
 
 	&:not(:disabled):hover {
 		background-position-x: 100%;
+	}
+
+	&:disabled {
+		opacity: 0.8;
+		cursor: not-allowed;
 	}
 }

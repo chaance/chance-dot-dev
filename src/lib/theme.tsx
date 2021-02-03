@@ -4,14 +4,17 @@ import useDarkMode from "use-dark-mode";
 
 const THEME_LOCAL_STORAGE_KEY = "_chancethedev_theme_key";
 
-const BREAKPOINTS = {
+const BREAKPOINTS: Breakpoints = {
 	base: 0,
 	small: 330,
 	medium: 600,
 	large: 1100,
 };
 
-function breakpoint(bp, maxBp) {
+function breakpoint(
+	bp: keyof Breakpoints | number,
+	maxBp?: keyof Breakpoints | number
+): string {
 	let bpVal = typeof bp === "number" ? bp : BREAKPOINTS[bp];
 	let maxBpVal = maxBp
 		? typeof maxBp === "number"
@@ -31,15 +34,21 @@ function breakpoint(bp, maxBp) {
 	return bpStr;
 }
 
-export const ThemeContext = React.createContext(null);
+export const ThemeContext = React.createContext<ThemeContextValue>(null!);
 
-const ThemeProviderImpl = ({ children }) => {
+const ThemeProviderImpl: React.FC<ThemeProviderProps> = ({
+	children,
+	forceTheme: forceMode,
+}) => {
 	let { value, toggle } = useDarkMode(false, {
 		storageKey: THEME_LOCAL_STORAGE_KEY,
 	});
 	return (
 		<ThemeContext.Provider
-			value={{ mode: value ? "dark" : "light", toggleMode: toggle }}
+			value={{
+				mode: forceMode || value ? "dark" : "light",
+				toggleMode: toggle,
+			}}
 		>
 			{children}
 		</ThemeContext.Provider>
@@ -50,8 +59,11 @@ const ThemeProviderInner = React.memo(({ children }) => (
 	<React.Fragment>{children}</React.Fragment>
 ));
 
-const ThemeProvider = ({ children }) => (
-	<ThemeProviderImpl>
+const ThemeProvider: React.FC<ThemeProviderProps> = ({
+	children,
+	...props
+}) => (
+	<ThemeProviderImpl {...props}>
 		<ThemeProviderInner>{children}</ThemeProviderInner>
 	</ThemeProviderImpl>
 );
@@ -64,18 +76,24 @@ export function useThemeModeToggle() {
 	return React.useContext(ThemeContext).toggleMode;
 }
 
-export function useBreakpoint() {
-	let [breakpoint, setBreakpoint] = React.useState(null);
+export function useBreakpoint(): null | keyof Breakpoints {
+	let [breakpoint, setBreakpoint] = React.useState<keyof Breakpoints | null>(
+		null
+	);
 
 	React.useEffect(() => {
 		let mounted = true;
-		let queries = new Set();
+		let queries = new Set<{
+			queryList: MediaQueryList;
+			listener: (event: MediaQueryListEvent) => void;
+		}>();
 
-		Object.keys(BREAKPOINTS).forEach((bp, index, src) => {
-			let nextBp =
-				index === src.length - 1 ? null : BREAKPOINTS[src[index + 1]];
+		Object.keys(BREAKPOINTS).forEach((_bp, index, src) => {
+			let currBpKey = _bp as keyof Breakpoints;
+			let nextBpKey = src[index + 1] as keyof Breakpoints;
+			let nextBp = index === src.length - 1 ? null : BREAKPOINTS[nextBpKey];
 			let maxScreenSize = nextBp && nextBp - 1;
-			let minScreenSize = index ? BREAKPOINTS[bp] : null;
+			let minScreenSize = index ? BREAKPOINTS[currBpKey] : null;
 			let query = [
 				minScreenSize && `(min-width: ${minScreenSize}px)`,
 				maxScreenSize && `(max-width: ${maxScreenSize}px)`,
@@ -83,17 +101,17 @@ export function useBreakpoint() {
 				.filter(Boolean)
 				.join(" and ");
 			let queryList = window.matchMedia(query);
-			queryList.addListener(listener);
+			queryList.addEventListener("change", listener);
 			queries.add({ queryList, listener });
 
 			if (queryList.matches) {
-				setBreakpoint(bp);
+				setBreakpoint(currBpKey);
 			}
 
-			function listener(event) {
+			function listener(event: MediaQueryListEvent): void {
 				if (!mounted) return;
 				if (event.matches) {
-					setBreakpoint(bp);
+					setBreakpoint(currBpKey);
 				}
 			}
 		});
@@ -101,7 +119,7 @@ export function useBreakpoint() {
 		return () => {
 			mounted = false;
 			queries.forEach((query) =>
-				query.queryList.removeListener(query.listener)
+				query.queryList.removeEventListener("change", query.listener)
 			);
 		};
 	}, []);
@@ -115,3 +133,19 @@ export {
 	breakpoint,
 	ThemeProvider,
 };
+
+interface Breakpoints {
+	base: number;
+	small: number;
+	medium: number;
+	large: number;
+}
+
+interface ThemeContextValue {
+	mode: "dark" | "light";
+	toggleMode(): void;
+}
+
+interface ThemeProviderProps {
+	forceTheme?: "light" | "dark";
+}

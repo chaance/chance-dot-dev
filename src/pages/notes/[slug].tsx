@@ -12,6 +12,7 @@ import {
 } from "$lib/get-notes";
 import { MdxRemote } from "next-mdx-remote/types";
 import { fromArray } from "$lib/utils";
+import { FrontMatter } from "types/mdx";
 
 export default function PostPage({
 	source,

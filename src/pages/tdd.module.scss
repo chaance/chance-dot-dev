@@ -1,0 +1,47 @@
+@import "mixins";
+
+.layoutWrapper {
+	// background-color: #19193a;
+	// color: #fff;
+}
+
+.wrapper {
+	@include make-container;
+	@include make-vertically-spaced-main;
+}
+
+.subscribeForm {
+	@include make-container(calc(var(--size-block-space) * 23));
+	@include block-space(top, 4);
+}
+
+.intro {
+	text-align: center;
+}
+
+.title {
+	@include block-space(bottom, 0.5);
+}
+
+.codeSection {
+	@include block-space(top);
+}
+
+.preOuter {
+	--p: 4px;
+	--br: 16px;
+	padding: var(--p);
+	background: var(--gradient-link-hover);
+	border-radius: var(--br);
+}
+
+.pre {
+	background: var(--color-body-background);
+	box-shadow: 0 30px 40px -30px rgba(0, 0, 0, 0.5);
+	padding: var(--size-block-space);
+	padding-left: calc(var(--size-block-space) * 1.5);
+	border-radius: calc(var(--br) - var(--p));
+	font-size: 1rem;
+	overflow-x: auto;
+	font-family: var(--font-family-mono);
+}

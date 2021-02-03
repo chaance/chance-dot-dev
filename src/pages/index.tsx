@@ -44,7 +44,7 @@ function Home({ notes }: InferGetStaticPropsType<typeof getStaticProps>) {
 						<P>
 							Take a look at some of my thoughts or sign up for the occasional
 							email below. I'll be adding more to this space soon, so check back
-							and see my little corner of the internet grow 🌱.
+							and see my little corner of the internet grow. 🌱
 						</P>
 					</section>
 					<Hr lineStyle="gradient" lineThickness={2} />

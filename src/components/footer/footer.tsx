@@ -40,6 +40,11 @@ const Footer = React.forwardRef<HTMLElement, React.ComponentProps<"footer">>(
 									<VisuallyHidden>Follow Chance on </VisuallyHidden>LinkedIn
 								</StyledMenuLink>
 							</StyledMenuItem>
+							<StyledMenuItem>
+								<StyledMenuLink href="https://www.github.com/chaance/">
+									<VisuallyHidden>Follow Chance on </VisuallyHidden>GitHub
+								</StyledMenuLink>
+							</StyledMenuItem>
 						</NavMenu>
 					</nav>
 					<div>

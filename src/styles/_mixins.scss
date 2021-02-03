@@ -184,6 +184,7 @@ $block-elements: address, article, aside, audio, video, blockquote, dd, details,
 	@if $level == 1 {
 		margin-left: 1.125em;
 	}
+	list-style-type: inherit;
 	padding: 0;
 	font-size: var(--font-size-body);
 	letter-spacing: var(--letter-spacing-body);

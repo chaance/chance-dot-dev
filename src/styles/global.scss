@@ -198,7 +198,7 @@ $size-base-scale-md: 8;
 	--color-body-background: var(--color-gray-00);
 	--color-body-background-contrast: var(--color-gray-10);
 	--color-body-text-100: var(--color-gray-80);
-	--color-body-text-50: var(--color-gray-50);
+	--color-body-text-50: var(--color-gray-60);
 	--color-body-text-30: var(--color-gray-30);
 
 	.dark-mode {
@@ -318,7 +318,7 @@ $size-base-scale-md: 8;
 	--font-size-h4: 1rem;
 	--font-size-h5: 0.95rem;
 	--font-size-h6: 0.92rem;
-	--font-size-body: 1rem;
+	--font-size-body: 0.85rem;
 
 	@media screen and (--bp-small) {
 		--font-size-title: 2.25rem;
@@ -328,6 +328,7 @@ $size-base-scale-md: 8;
 		--font-size-h4: 1rem;
 		--font-size-h5: 0.92rem;
 		--font-size-h6: 0.89rem;
+		--font-size-body: 0.94rem;
 	}
 
 	@media screen and (--bp-medium) {
@@ -338,6 +339,7 @@ $size-base-scale-md: 8;
 		--font-size-h4: 1rem;
 		--font-size-h5: 0.89rem;
 		--font-size-h6: 0.84rem;
+		--font-size-body: 1rem;
 	}
 
 	@media screen and (--bp-large) {
@@ -348,6 +350,7 @@ $size-base-scale-md: 8;
 		--font-size-h4: 1rem;
 		--font-size-h5: 0.87rem;
 		--font-size-h6: 0.81rem;
+		--font-size-body: 1rem;
 	}
 
 	--style-focus-ring-style: solid;
@@ -368,7 +371,7 @@ $size-base-scale-md: 8;
 html {
 	box-sizing: border-box;
 	overflow-y: scroll;
-	font-size: #{$size-base-scale * 2}px;
+	font-size: #{$size-base-scale * 1.7}px;
 	-moz-osx-font-smoothing: grayscale;
 	-ms-text-size-adjust: 100%;
 	-webkit-text-size-adjust: 100%;

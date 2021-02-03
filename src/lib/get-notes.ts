@@ -2,9 +2,9 @@ import { resolve, join, basename, dirname, sep as pathSeparator } from "path";
 import { readdir, lstat, readFileSync } from "fs-extra";
 import matter from "gray-matter";
 import uniqBy from "lodash/uniqBy";
-import kebabCase from "lodash/kebabCase";
-import { Category, categories as categoryCache } from "$src/categories";
+import { Category, getCategoryFromLabel } from "$src/categories";
 import { getFormattedDate } from "$lib/get-formatted-date";
+import { FrontMatter } from "types/mdx";
 
 export const NOTES_PATH = resolve(process.cwd(), "src/notes");
 
@@ -43,11 +43,7 @@ export async function getCategories(): Promise<Category[]> {
 	let allCategories: Category[] = [];
 	for (let note of await getNotes()) {
 		for (let category of note.frontMatter.categories || []) {
-			if (categoryCache.has(category)) {
-				allCategories.push(categoryCache.get(category)!);
-			} else {
-				allCategories.push({ slug: kebabCase(category), label: category });
-			}
+			allCategories.push(category);
 		}
 	}
 	return uniqBy(allCategories, ({ slug }) => slug);
@@ -100,11 +96,15 @@ export async function getGrayMatter<
 	stringify(lang: string): string;
 }> {
 	let { data: frontMatter, ...rest } = matter(readFileSync(filePath), options);
+	getCategories();
+	let categories: Category[] =
+		(frontMatter as any).categories?.map(getCategoryFromLabel) || [];
 
 	return {
 		...rest,
 		frontMatter: ({
 			...frontMatter,
+			categories,
 			formattedDate: getFormattedDate(frontMatter.date),
 		} as unknown) as FrontMatter,
 	};

@@ -16,12 +16,15 @@ import {
 } from "$lib/utils";
 const styles = require("./[cat-id].module.scss");
 
-function Notes({ notes }: InferGetStaticPropsType<typeof getStaticProps>) {
+function Notes({
+	notes,
+	categoryLabel,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
 	const router = useRouter();
 	const catId = fromArray(router.query["cat-id"])!;
 	const category = categories.has(catId)
 		? categories.get(catId)!
-		: { slug: catId, label: startCase(catId) };
+		: { slug: catId, label: categoryLabel };
 
 	const pageTitle = `Category: ${category.label} | ${config.siteTitle}`;
 
@@ -83,17 +86,22 @@ export const getStaticPaths: GetStaticPaths = async function getStaticPaths() {
 
 export const getStaticProps: GetStaticProps<{
 	notes: MDXMatter[];
+	categoryLabel: string;
 }> = async ({ params = {} }) => {
+	const catId = fromArray(params["cat-id"])!;
+	const categoryLabel = categories.has(catId)
+		? categories.get(catId)!.label
+		: startCase(catId);
 	const notes = await getNotes((post) => {
-		const catId = fromArray(params["cat-id"])!;
-		const catLabel = categories.has(catId)
-			? categories.get(catId)!.label
-			: startCase(catId);
-		return (post.frontMatter.categories || []).includes(catLabel);
+		return !!(post.frontMatter.categories || []).find(
+			(cat) => cat.label === categoryLabel
+		);
 	});
+
 	return {
 		props: {
 			notes,
+			categoryLabel,
 		},
 	};
 };

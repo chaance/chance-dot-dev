@@ -9,19 +9,20 @@ import SiteLayout from "src/layouts/site-layout";
 import { config } from "$src/site-config";
 import "src/styles/global.scss";
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }: CustomAppProps) {
 	// For persistent layouts. Stole this idea from Adam Wathan.
 	// https://adamwathan.me/2019/10/17/persistent-layout-patterns-in-nextjs/
-	const getLayout: (page: React.ReactElement) => React.ReactElement =
-		(Component as any).getLayout || ((page) => <SiteLayout>{page}</SiteLayout>);
+	const Layout = Component.Layout ? Component.Layout : SiteLayout;
 
 	return (
 		<React.Fragment>
 			<DefaultSeo {...config.seo} />
 			<FontProvider>
-				<ThemeProvider>
+				<ThemeProvider forceTheme={pageProps.forceTheme}>
 					<MDXProvider components={MDXComponents}>
-						{getLayout(<Component {...pageProps} />)}
+						<Layout>
+							<Component {...pageProps} />
+						</Layout>
 					</MDXProvider>
 				</ThemeProvider>
 			</FontProvider>
@@ -30,3 +31,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 }
 
 export default MyApp;
+
+type CustomAppProps = AppProps & {
+	Component: AppProps["Component"] & { Layout?: React.ComponentType<any> };
+};

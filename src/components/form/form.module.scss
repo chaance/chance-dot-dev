@@ -4,7 +4,7 @@
 	height: 3rem;
 	padding: 1rem;
 	line-height: 1;
-	font-size: 1rem;
+	font-size: var(--font-size-body);
 	font-family: var(--font-family-body);
 	color: var(--color-form-field-foreground);
 	background-color: var(--color-form-field-background);
