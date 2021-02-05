@@ -17,7 +17,7 @@ class MyDocument extends Document {
 
 	render() {
 		return (
-			<Html>
+			<Html lang="en">
 				<Head>
 					{uniq(Object.values(webFonts)).map((val) => (
 						<link key={val} rel="stylesheet" href={val} />
