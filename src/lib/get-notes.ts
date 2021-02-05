@@ -4,6 +4,7 @@ import matter from "gray-matter";
 import uniqBy from "lodash/uniqBy";
 import { Category, getCategoryFromLabel } from "$src/categories";
 import { getFormattedDate } from "$lib/get-formatted-date";
+import { sortByLatestDate } from "$lib/sort-by-date";
 import { FrontMatter } from "types/mdx";
 
 export const NOTES_PATH = resolve(process.cwd(), "src/notes");
@@ -36,7 +37,9 @@ export async function getNotes(
 	for (let filename of await getNotesFilePaths()) {
 		allNotes.push(await getMdx(filename));
 	}
-	return filter ? allNotes.filter(filter) : allNotes;
+	return (filter ? allNotes.filter(filter) : allNotes).sort((noteA, noteB) =>
+		sortByLatestDate(noteA.frontMatter.date, noteB.frontMatter.date)
+	);
 }
 
 export async function getCategories(): Promise<Category[]> {
