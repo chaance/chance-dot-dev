@@ -27,18 +27,19 @@ $block-elements: address, article, aside, audio, video, blockquote, dd, details,
 }
 
 @mixin make-vertically-spaced-main {
-	margin: calc(var(--size-block-space) * 4) auto;
+	--mm: calc(var(--size-block-space) * 4);
+	margin: var(--mm) auto;
 
 	@media screen and (--bp-medium) and (max-width: 700px) {
-		margin: calc(var(--size-block-space) * 5) auto;
+		--mm: calc(var(--size-block-space) * 5);
 	}
 
 	@media screen and (--bp-medium) and (max-width: 800px) {
-		margin: calc(var(--size-block-space) * 6) auto;
+		--mm: calc(var(--size-block-space) * 6);
 	}
 
 	@media screen and (--bp-medium) and (max-width: 900px) {
-		margin: calc(var(--size-block-space) * 8) auto;
+		--mm: calc(var(--size-block-space) * 8);
 	}
 }
 

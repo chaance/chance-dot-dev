@@ -1,0 +1,9 @@
+@import "mixins";
+
+.container {
+	@include make-container;
+
+	&--wide {
+		@include make-container(calc(var(--size-block-space) * 23));
+	}
+}

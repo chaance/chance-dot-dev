@@ -1,0 +1,88 @@
+@import "mixins";
+
+$modes: block, inline, "block-overlap", "inline-overlap";
+$breakpoints: medium, large;
+
+@function startsWith($string, $find) {
+	@return str-index($string, $find) == 1;
+}
+
+@function endsWith($string, $find) {
+	@return str-index($string, $find) ==
+		(str-length($string) - str-length($find) + 1);
+}
+
+.spacer {
+	display: block;
+
+	&--vertical-main {
+		--mm: calc(var(--size-block-space) * 4);
+		margin-top: var(--mm);
+
+		@media screen and (--bp-medium) and (max-width: 700px) {
+			--mm: calc(var(--size-block-space) * 5);
+		}
+
+		@media screen and (--bp-medium) and (max-width: 800px) {
+			--mm: calc(var(--size-block-space) * 6);
+		}
+
+		@media screen and (--bp-medium) and (max-width: 900px) {
+			--mm: calc(var(--size-block-space) * 8);
+		}
+	}
+
+	@each $mode in $modes {
+		$mode: unquote($mode);
+		$safd: endsWith($mode, overlap);
+		@debug $safd;
+		$prop: if(
+			endsWith($mode, overlap),
+			if(startsWith($mode, block), height, width),
+			if(startsWith($mode, block), margin-top, margin-left)
+		);
+
+		&--mode-#{$mode} {
+			@for $i from 1 through 10 {
+				$half: $i - 0.5;
+				$half-str: unquote("#{$i - 1}-5");
+
+				&.spacer--spaces-#{$half-str} {
+					#{$prop}: calc(var(--size-block-space) * #{$half});
+				}
+
+				&.spacer--spaces-#{$i} {
+					#{$prop}: calc(var(--size-block-space) * #{$i});
+				}
+			}
+		}
+	}
+
+	@each $breakpoint in $breakpoints {
+		@media screen and (--bp-#{$breakpoint}) {
+			@each $mode in $modes {
+				$mode: unquote($mode);
+				$prop: if(
+					endsWith($mode, overlap),
+					if(startsWith($mode, block), height, width),
+					if(startsWith($mode, block), margin-top, margin-left)
+				);
+
+				&--#{$breakpoint}-mode-#{$mode} {
+					@for $i from 1 through 10 {
+						$half: $i - 0.5;
+						$half-str: unquote("#{$i - 1}-5");
+
+						&.spacer--spaces-#{$half-str} {
+							#{$prop}: calc(var(--size-block-space) * #{$half});
+						}
+
+						&.spacer--#{$breakpoint}-spaces-#{$i} {
+							#{$prop}: calc(var(--size-block-space) * #{$i});
+						}
+					}
+				}
+			}
+		}
+	}
+}
