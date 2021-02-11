@@ -99,7 +99,6 @@ export async function getGrayMatter<
 	stringify(lang: string): string;
 }> {
 	let { data: frontMatter, ...rest } = matter(readFileSync(filePath), options);
-	getCategories();
 	let categories: Category[] =
 		(frontMatter as any).categories?.map(getCategoryFromLabel) || [];
 

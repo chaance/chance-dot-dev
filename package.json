@@ -72,8 +72,6 @@
 		"eslint-plugin-react": "^7.22.0",
 		"eslint-plugin-react-hooks": "^4.2.0",
 		"eslint-plugin-testing-library": "^3.10.1",
-		"glob": "^7.1.6",
-		"is-glob": "^4.0.1",
 		"prettier": "^2.2.1",
 		"typescript": "^4.1.3"
 	},
