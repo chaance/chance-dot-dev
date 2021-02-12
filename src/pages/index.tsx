@@ -4,6 +4,7 @@ import { getNotes, MDXMatter } from "$lib/get-notes";
 import { NextSeo } from "next-seo";
 import Head from "next/head";
 import { Excerpt } from "$components/excerpt";
+import { Container } from "$components/container";
 import { Section, HT, H1 } from "$components/heading";
 import { SubscribeForm } from "$components/subscribe-form";
 import { config } from "$src/site-config";
@@ -31,7 +32,7 @@ function Home({ notes }: InferGetStaticPropsType<typeof getStaticProps>) {
 			<Head>
 				<title>{config.siteTitle}</title>
 			</Head>
-			<div className={notesStyles.wrapper}>
+			<Container className={notesStyles.wrapper}>
 				<main role="main">
 					<section className={styles.intro}>
 						<HT className={styles.title}>Welcome!</HT>
@@ -69,9 +70,11 @@ function Home({ notes }: InferGetStaticPropsType<typeof getStaticProps>) {
 						})}
 					</Section>
 				</main>
-			</div>
+			</Container>
 			<aside>
-				<SubscribeForm className={notesStyles.subscribeForm} />
+				<Container size="wide">
+					<SubscribeForm className={notesStyles.subscribeForm} />
+				</Container>
 			</aside>
 		</React.Fragment>
 	);

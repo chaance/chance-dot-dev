@@ -3,6 +3,7 @@ import { GetStaticProps, InferGetStaticPropsType } from "next";
 import Head from "next/head";
 import { Excerpt } from "$components/excerpt";
 import { Section, HT } from "$components/heading";
+import { Container } from "$components/container";
 import { SubscribeForm } from "$components/subscribe-form";
 import { getNotes, MDXMatter } from "$lib/get-notes";
 import { config } from "$src/site-config";
@@ -18,7 +19,7 @@ function Notes({
 	//pageTitle =
 	return (
 		<React.Fragment>
-			<div className={styles.wrapper}>
+			<Container className={styles.wrapper}>
 				<Head>
 					<title>
 						{pageTitle === config.siteTitle
@@ -48,9 +49,11 @@ function Notes({
 						})}
 					</Section>
 				</main>
-			</div>
+			</Container>
 			<aside>
-				<SubscribeForm className={styles.subscribeForm} />
+				<Container size="wide">
+					<SubscribeForm className={styles.subscribeForm} />
+				</Container>
 			</aside>
 		</React.Fragment>
 	);

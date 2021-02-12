@@ -1,7 +1,6 @@
 @import "mixins";
 
 .wrapper {
-	@include make-container;
 	@include make-vertically-spaced-main;
 }
 
@@ -18,7 +17,6 @@
 		box-shadow: 0 30px 40px -30px rgba(0, 0, 0, 0.5);
 	}
 
-
 	&:not(:last-of-type) {
 		margin-bottom: calc(var(--size-block-space) * 2);
 	}
@@ -33,6 +31,5 @@
 }
 
 .subscribeForm {
-	@include make-container(calc(var(--size-block-space) * 23));
 	margin-top: calc(var(--size-block-space) * 4);
 }

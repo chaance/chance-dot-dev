@@ -27,7 +27,7 @@ const RULES = [
 	"Don't refactor with failing tests",
 ];
 
-const PAGE_TITLE = "The 13 habits for good TDD programming";
+const PAGE_TITLE = "The 13 habits for good TDD programming | chance.dev";
 
 function Tdd() {
 	return (
