@@ -1,0 +1,50 @@
+import { MdxPage } from "../layouts/mdx-page";
+import { Section } from "$components/heading";
+
+export const meta = {
+	description:
+		"A non-comprehensive list of the various tools I use to do my job.",
+	images: [
+		{
+			url:
+				"https://res.cloudinary.com/chancedigital/image/upload/v1613099275/cs.run/uses/og-image.jpg",
+			alt: "Uses by @chancethedev",
+			width: 1200,
+			height: 630,
+		},
+	],
+};
+
+Hi! From time to time someone will ask me about a particular piece of gear, software, or some custom editor setting I use. Because I like jumping on trends, I created this page to answer those questions and keep a log of all my stuff.
+
+---
+
+## Workspace
+
+![Image of workspace](/workspace.jpg)
+
+- **Desk:** [Uplift standing desk](https://www.upliftdesk.com/adjustable-height-desks/) with the [wooden top in acacia](https://www.upliftdesk.com/solid-wood-desktops-by-uplift-desk/).
+- **Laptop:** Macbook Pro 15-inch, 2018. Thankfully I've never had any keyboard issues, but the battery has gotten pretty lousy. Otherwise she still does the job. I'm looking forward to a new machine after the MagSafe returns!
+- **Desktop PC:** I run a dual setup between my laptop and [a PC I use for [very] occasional gaming and cross-platform testing](https://www.amazon.com/gp/product/B07W8B2WP8/).
+- **Monitor:** [Samsung 591 Series C27F591 27"](https://www.bhphotovideo.com/c/product/1237295-REG/samsung_591_series_c27f591_27.html/). This monitor is ok, decent quality but nothing to write home about. Looking to upgrade to something a little more HD at some point but it gets the job done.
+- **Hubs and such:** The [CalDigit TS3 Plus](https://www.caldigit.com/ts3-plus/) is a solid little workstation with most of the ports I need, but I like to have a few extra USB ports so I have an [Anker Data Hub](https://www.amazon.com/gp/product/B00VDVCQ84/) for backup.
+- **Other:** Apple Magic Mouse 2 and Magic Keyboard with the numpad in space gray. [This fancy leather mousepad](https://www.amazon.com/gp/product/B07CZR2RPY/) is nice.
+
+Did you notice how I don't have a bunch of messy cables under my desk despite it being loaded with electronics? [That's all thanks to this video which tells you everything you need to know about getting the rat's nest in order.](https://www.youtube.com/watch?v=Tpk0GIpq5JM)
+
+<Section>
+
+### Audio/Video
+
+- **Camera+:** I use the Sony a6400 with the Sigma C 16mm lens. For mounting it to the desk and lighting, I basically stole [this guy's entire setup](https://www.youtube.com/watch?v=WedG8LKO6ks), so watch that video and get the gear he recommends if you want this look.
+- **Microphone:** [Shure SM7B](https://www.shure.com/en-US/products/microphones/sm7b) is my daily driver, though I also have the [Heil PR-40](https://heilsound.com/products/pr-40/) that desperately needs some electrical work. The mic mounts to my desk via the [Yellowtec Mika boom arm](https://www.yellowtec.com/mika.html).
+- **Sound:** The mic runs into a [DBX 286s](https://dbxpro.com/en/products/286s), into the [Focusrite Scarlett 18i20](https://focusrite.com/en/usb-audio-interface/scarlett/scarlett-18i20) which gets the signal to my computer. This gear is tucked away nicely in a Gator rack mount that also houses a large pull-out drawer and a [Furman M-8X2](https://www.furmanpower.com/product/15a-standard-power-conditioner/) to power it all.
+- **Other:** The camera connects to my computer for streaming and webcam use via the [Elgato Cam Link 4K](https://www.elgato.com/en/gaming/cam-link-4k). I use the [Elgato Stream Deck](https://www.elgato.com/en/gaming/stream-deck) for programming different scenes and shortcuts while I'm on camera. I've got these nice [white soundproofing panels](https://www.amazon.com/gp/product/B07R96B7CZ/) hanging on the wall.
+
+</Section>
+
+export default ({ children }) => (
+	<MdxPage title="Uses" meta={meta}>
+		{children}
+	</MdxPage>
+);
