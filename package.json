@@ -22,6 +22,7 @@
 	},
 	"dependencies": {
 		"@chancestrickland/hooks": "^0.1.1",
+		"@mdx-js/loader": "^1.6.22",
 		"@mdx-js/react": "^1.6.22",
 		"@ngsctt/remark-smartypants": "^0.2.0",
 		"@reach/alert": "^0.13.0",
