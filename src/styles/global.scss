@@ -379,6 +379,10 @@ html {
 	@media screen and (--bp-medium) {
 		font-size: #{$size-base-scale-md * 2}px;
 	}
+
+	@media screen and (--bp-large) {
+		font-size: #{$size-base-scale-md * 2.25}px;
+	}
 }
 
 *,
