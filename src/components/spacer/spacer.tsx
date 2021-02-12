@@ -18,36 +18,49 @@ const Spacer: PolymorphicForwardRefExoticComponent<
 	{
 		as,
 		className,
-		mode = "block",
+		direction = "block",
 		spaces = 1,
+		collapse = "collapse",
 		medium = {},
 		large = {},
+		preset,
 		...props
 	}: PolymorphicPropsWithoutRef<SpacerOwnProps, T>,
 	ref: React.ForwardedRef<React.ElementRef<T>>
 ) {
 	let comp: React.ElementType = as || SPACER_DEFAULT_TAG;
+	let baseStyles = [styles.spacer, className];
 
-	if (mode === "vertical-main") {
+	if (preset === "vertical-main") {
 		return (
 			<Box
 				ref={ref}
 				as={comp}
-				className={[styles.spacer, styles[`spacer--vertical-main`], className]}
+				className={[...baseStyles, styles[`spacer--vertical-main`]]}
 				{...props}
 			/>
 		);
 	}
 
-	let mediumMode = medium.mode || mode;
-	let largeMode = large.mode || mediumMode;
+	let mediumMode = medium.direction || direction;
+	let largeMode = large.direction || mediumMode;
 	let mediumSpaces: string | number = medium.spaces || spaces;
 	let largeSpaces: string | number = large.spaces || mediumSpaces;
+	let mediumCollapse = medium.collapse || collapse;
+	let largeCollapse = large.collapse || mediumCollapse;
 
-	let mediumChanged = mediumSpaces !== spaces || mediumMode !== mode;
+	let mediumChanged =
+		mediumSpaces !== spaces ||
+		mediumMode !== direction ||
+		mediumCollapse !== collapse;
+
 	let largeChanged = mediumChanged
-		? largeSpaces !== mediumSpaces || largeMode !== mediumMode
-		: largeSpaces !== spaces || largeMode !== mode;
+		? largeSpaces !== mediumSpaces ||
+		  largeMode !== mediumMode ||
+		  largeCollapse !== mediumCollapse
+		: largeSpaces !== spaces ||
+		  largeMode !== direction ||
+		  largeCollapse !== collapse;
 
 	let smallSpaces = spaceStr(spaces);
 	mediumSpaces = spaceStr(mediumSpaces);
@@ -58,14 +71,16 @@ const Spacer: PolymorphicForwardRefExoticComponent<
 			ref={ref}
 			as={comp}
 			className={[
-				styles.spacer,
-				styles[`spacer--mode-${mode}`],
+				...baseStyles,
+				styles[`spacer--direction-${direction}`],
+				styles[`spacer--collapse-${collapse}`],
 				styles[`spacer--spaces-${smallSpaces}`],
-				className,
 				{
-					[styles[`spacer--medium-mode-${mediumMode}`]]: mediumChanged,
+					[styles[`spacer--medium-direction-${mediumMode}`]]: mediumChanged,
+					[styles[`spacer--medium-collapse-${mediumCollapse}`]]: mediumChanged,
 					[styles[`spacer--medium-spaces-${mediumSpaces}`]]: mediumChanged,
-					[styles[`spacer--large-mode-${largeMode}`]]: largeChanged,
+					[styles[`spacer--large-direction-${largeMode}`]]: largeChanged,
+					[styles[`spacer--large-collapse-${largeCollapse}`]]: largeChanged,
 					[styles[`spacer--large-spaces-${largeSpaces}`]]: largeChanged,
 				},
 			]}
@@ -75,11 +90,13 @@ const Spacer: PolymorphicForwardRefExoticComponent<
 });
 
 interface SpacerBaseProps {
-	mode?: SpacerMode;
+	collapse?: SpacerCollapse;
+	direction?: SpacerDirection;
 	spaces?: Spaces;
 }
 
 interface SpacerOwnProps extends BoxOwnProps, SpacerBaseProps {
+	preset?: SpacerPreset;
 	medium?: SpacerBaseProps;
 	large?: SpacerBaseProps;
 }
@@ -91,12 +108,10 @@ type SpacerProps<
 export { Spacer };
 export type { SpacerOwnProps, SpacerProps };
 
-type SpacerMode =
-	| "inline"
-	| "block"
-	| "inline-overlap"
-	| "block-overlap"
-	| "vertical-main";
+type SpacerCollapse = "collapse" | "separate";
+type SpacerPreset = "vertical-main";
+type SpacerDirection = "inline" | "block";
+
 type Spaces = number;
 
 function spaceStr(spaces: number) {

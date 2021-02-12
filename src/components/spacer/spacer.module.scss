@@ -1,7 +1,8 @@
 @import "mixins";
 
-$modes: block, inline, "block-overlap", "inline-overlap";
+$directions: block, inline;
 $breakpoints: medium, large;
+$collapses: collapse, separate;
 
 @function startsWith($string, $find) {
 	@return str-index($string, $find) == 1;
@@ -32,27 +33,28 @@ $breakpoints: medium, large;
 		}
 	}
 
-	@each $mode in $modes {
-		$mode: unquote($mode);
-		$safd: endsWith($mode, overlap);
-		@debug $safd;
-		$prop: if(
-			endsWith($mode, overlap),
-			if(startsWith($mode, block), height, width),
-			if(startsWith($mode, block), margin-top, margin-left)
-		);
+	@each $direction in $directions {
+		$direction: unquote($direction);
 
-		&--mode-#{$mode} {
+		&--direction-#{$direction} {
 			@for $i from 1 through 10 {
 				$half: $i - 0.5;
 				$half-str: unquote("#{$i - 1}-5");
 
-				&.spacer--spaces-#{$half-str} {
-					#{$prop}: calc(var(--size-block-space) * #{$half});
-				}
+				@each $collapse in $collapses {
+					$prop: if(
+						$collapse == separate,
+						if($direction == block, height, width),
+						if($direction == block, margin-top, margin-left)
+					);
 
-				&.spacer--spaces-#{$i} {
-					#{$prop}: calc(var(--size-block-space) * #{$i});
+					&.spacer--spaces-#{$half-str}.spacer--collapse-#{$collapse} {
+						#{$prop}: calc(var(--size-block-space) * #{$half});
+					}
+
+					&.spacer--spaces-#{$i}.spacer--collapse-#{$collapse} {
+						#{$prop}: calc(var(--size-block-space) * #{$i});
+					}
 				}
 			}
 		}
@@ -60,25 +62,28 @@ $breakpoints: medium, large;
 
 	@each $breakpoint in $breakpoints {
 		@media screen and (--bp-#{$breakpoint}) {
-			@each $mode in $modes {
-				$mode: unquote($mode);
-				$prop: if(
-					endsWith($mode, overlap),
-					if(startsWith($mode, block), height, width),
-					if(startsWith($mode, block), margin-top, margin-left)
-				);
+			@each $direction in $directions {
+				$direction: unquote($direction);
 
-				&--#{$breakpoint}-mode-#{$mode} {
+				&--#{$breakpoint}-direction-#{$direction} {
 					@for $i from 1 through 10 {
 						$half: $i - 0.5;
 						$half-str: unquote("#{$i - 1}-5");
 
-						&.spacer--spaces-#{$half-str} {
-							#{$prop}: calc(var(--size-block-space) * #{$half});
-						}
+						@each $collapse in $collapses {
+							$prop: if(
+								$collapse == separate,
+								if($direction == block, height, width),
+								if($direction == block, margin-top, margin-left)
+							);
 
-						&.spacer--#{$breakpoint}-spaces-#{$i} {
-							#{$prop}: calc(var(--size-block-space) * #{$i});
+							&.spacer--#{$breakpoint}-spaces-#{$half-str}.spacer--#{$breakpoint}-collapse-#{$collapse} {
+								#{$prop}: calc(var(--size-block-space) * #{$half});
+							}
+
+							&.spacer--#{$breakpoint}-spaces-#{$i}.spacer--#{$breakpoint}-collapse-#{$collapse} {
+								#{$prop}: calc(var(--size-block-space) * #{$i});
+							}
 						}
 					}
 				}
