@@ -1,24 +1,7 @@
 import * as React from "react";
 import { cx } from "src/lib/utils";
 import isFunction from "lodash/isFunction";
-import pick from "lodash/pick";
-import omit from "lodash/omit";
 const styles = require("./switch.module.scss");
-
-const INPUT_PROPS = [
-	"autoComplete",
-	"autoCorrect",
-	"autoFocus",
-	"checked",
-	"disabled",
-	"onChange",
-	"form",
-	"id",
-	"name",
-	"readOnly",
-	"required",
-	"value",
-] as const;
 
 const SwitchContext = React.createContext({ checked: false });
 const useSwitchContext = () => React.useContext(SwitchContext);
@@ -39,8 +22,20 @@ const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(function Switch(
 	const [_checked, _setChecked] = React.useState(defaultChecked || false);
 	const checked = isControlled ? checkedProp! : _checked;
 	const setChecked = isControlled ? () => void null : _setChecked;
-	const wrapperProps = omit(props, INPUT_PROPS);
-	const inputProps = pick(props, INPUT_PROPS);
+
+	const {
+		autoComplete,
+		autoCorrect,
+		autoFocus,
+		disabled,
+		form,
+		id,
+		name,
+		readOnly,
+		required,
+		value,
+		...wrapperProps
+	} = props;
 
 	function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
 		onChange && onChange(event);
@@ -57,7 +52,18 @@ const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(function Switch(
 				aria-checked={checked}
 				aria-label={props["aria-labelledby"] ? undefined : ariaLabel}
 				role="switch"
-				{...inputProps}
+				{...{
+					autoComplete,
+					autoCorrect,
+					autoFocus,
+					disabled,
+					form,
+					id,
+					name,
+					readOnly,
+					required,
+					value,
+				}}
 				data-state={checked ? "on" : "off"}
 				checked={checked}
 				className={cx(styles.input)}
@@ -73,11 +79,11 @@ const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(function Switch(
 
 Switch.displayName = "Switch";
 
+export type { SwitchDOMProps, SwitchOwnProps, SwitchProps };
+export { Switch, useSwitchContext };
+
 type SwitchDOMProps = React.ComponentPropsWithoutRef<"span"> &
-	Pick<
-		React.ComponentPropsWithRef<"input">,
-		typeof INPUT_PROPS[number] | "ref"
-	>;
+	Pick<React.ComponentPropsWithRef<"input">, InputPropNames | "ref">;
 type SwitchOwnProps = {
 	checked?: boolean;
 	defaultChecked?: boolean;
@@ -87,5 +93,16 @@ type SwitchOwnProps = {
 };
 type SwitchProps = SwitchDOMProps & SwitchOwnProps;
 
-export type { SwitchDOMProps, SwitchOwnProps, SwitchProps };
-export { Switch, useSwitchContext };
+type InputPropNames =
+	| "autoComplete"
+	| "autoCorrect"
+	| "autoFocus"
+	| "checked"
+	| "disabled"
+	| "onChange"
+	| "form"
+	| "id"
+	| "name"
+	| "readOnly"
+	| "required"
+	| "value";

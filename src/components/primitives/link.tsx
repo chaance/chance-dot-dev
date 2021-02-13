@@ -1,50 +1,54 @@
-/* eslint-disable jsx-a11y/anchor-has-content */
+/* eslint-disable react/jsx-no-target-blank, jsx-a11y/anchor-has-content */
 import React from "react";
 import NextLink, { LinkProps as NextLinkProps } from "next/link";
-import pick from "lodash/pick";
-import omit from "lodash/omit";
-
-let nextPropNames = [
-	"href",
-	"as",
-	"replace",
-	"scroll",
-	"shallow",
-	"prefetch",
-] as const;
+import { isLocalURL } from "next/dist/next-server/lib/router/router";
 
 const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(function Link(
-	props,
+	{ as, href: hrefProp, replace, scroll, shallow, prefetch, ...props },
 	ref
 ) {
-	let isExternalLink =
-		typeof props.href === "string" && props.href.startsWith("http");
-	let rel = props.rel || isExternalLink ? "nofollow noreferrer" : undefined;
-	let target = props.target || isExternalLink ? "_blank" : undefined;
+	// next/link already does something like this, but it also does a lot more in
+	// render we can avoid by checking first and using a plain anchor for external
+	// links.
+	let isExternalLink = typeof hrefProp === "string" && !isLocalURL(hrefProp);
+
 	return isExternalLink ? (
 		<a
-			{...omit(props, nextPropNames)}
+			// rel={isExternalLink ? "nofollow noreferrer" : undefined}
+			// target={isExternalLink ? "_blank" : undefined}
+			{...props}
 			ref={ref}
-			href={props.href as string}
-			rel={rel}
-			target={target}
+			href={hrefProp as string}
 		/>
 	) : (
-		<NextLink passHref {...pick(props, nextPropNames)}>
-			<a {...omit(props, nextPropNames)} ref={ref} />
+		<NextLink
+			passHref
+			as={as}
+			replace={replace}
+			scroll={scroll}
+			shallow={shallow}
+			prefetch={prefetch}
+			href={hrefProp}
+		>
+			<a {...props} ref={ref} />
 		</NextLink>
 	);
 });
 
 Link.displayName = "Link";
 
-type LinkDOMProps = Omit<
-	React.ComponentPropsWithRef<"a">,
-	typeof nextPropNames[number]
-> &
-	Pick<NextLinkProps, typeof nextPropNames[number]>;
-type LinkOwnProps = {};
-type LinkProps = LinkDOMProps & LinkOwnProps;
+type NextPropNames =
+	| "href"
+	| "as"
+	| "replace"
+	| "scroll"
+	| "shallow"
+	| "prefetch";
 
 export type { LinkDOMProps, LinkOwnProps, LinkProps };
 export { Link };
+
+type LinkDOMProps = Omit<React.ComponentPropsWithRef<"a">, NextPropNames> &
+	Pick<NextLinkProps, NextPropNames>;
+type LinkOwnProps = {};
+type LinkProps = LinkDOMProps & LinkOwnProps;
