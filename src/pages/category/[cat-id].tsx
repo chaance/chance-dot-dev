@@ -1,15 +1,14 @@
 import * as React from "react";
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
-import Head from "next/head";
 import startCase from "lodash/startCase";
 import { useRouter } from "next/router";
 import { VisuallyHidden } from "@reach/visually-hidden";
 import { Excerpt } from "src/components/excerpt";
 import { Section, HT } from "src/components/heading";
+import { Title } from "src/components/title";
 import { SubscribeForm } from "src/components/subscribe-form";
 import { categories } from "src/categories";
 import { getNotes, getCategories, MDXMatter } from "src/lib/get-notes";
-import { config } from "src/site-config";
 import {
 	fromArray,
 	useIsomorphicLayoutEffect as useLayoutEffect,
@@ -26,8 +25,6 @@ function Notes({
 		? categories.get(catId)!
 		: { slug: catId, label: categoryLabel };
 
-	const pageTitle = `Category: ${category.label} | ${config.siteTitle}`;
-
 	useLayoutEffect(() => {
 		if (notes.length < 1) {
 			router.push("/");
@@ -37,9 +34,7 @@ function Notes({
 	return (
 		<React.Fragment>
 			<div className={styles.wrapper}>
-				<Head>
-					<title>{pageTitle}</title>
-				</Head>
+				<Title>{`Category: ${category.label}`}</Title>
 				<main>
 					<HT className={styles.title}>
 						<VisuallyHidden>Category: </VisuallyHidden>

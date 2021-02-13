@@ -3,7 +3,7 @@ import { SkipNavLink, SkipNavContent } from "@reach/skip-nav";
 import { Header } from "src/components/header";
 import { Footer } from "src/components/footer";
 import { NextSeo } from "next-seo";
-import Head from "next/head";
+import { Title } from "src/components/title";
 import { H1 } from "src/components/heading";
 import { SubscribeForm } from "src/components/subscribe-form";
 import { P } from "src/components/html";
@@ -34,7 +34,6 @@ function Tdd() {
 		<React.Fragment>
 			<NextSeo
 				openGraph={{
-					title: PAGE_TITLE,
 					description: `A process for test-driven development in 13 brief points. Unsure where the credit for this list belongs, but if you stumble into this and know the source, please let me know! This is here as a personal reference, not really an endorsement.`,
 					images: [
 						{
@@ -47,9 +46,7 @@ function Tdd() {
 					],
 				}}
 			/>
-			<Head>
-				<title>{PAGE_TITLE}</title>
-			</Head>
+			<Title>{PAGE_TITLE}</Title>
 			<div className={styles.wrapper}>
 				<main>
 					<div className={styles.intro}>

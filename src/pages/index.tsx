@@ -2,7 +2,7 @@ import * as React from "react";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { getNotes, MDXMatter } from "src/lib/get-notes";
 import { NextSeo } from "next-seo";
-import Head from "next/head";
+import { Title } from "src/components/title";
 import { Excerpt } from "src/components/excerpt";
 import { Container } from "src/components/container";
 import { Section, HT, H1 } from "src/components/heading";
@@ -29,9 +29,9 @@ function Home({ notes }: InferGetStaticPropsType<typeof getStaticProps>) {
 					],
 				}}
 			/>
-			<Head>
-				<title>{config.siteTitle}</title>
-			</Head>
+			<Title suffix={null} omitMeta>
+				{config.siteTitle}
+			</Title>
 			<Container className={notesStyles.wrapper}>
 				<main>
 					<section className={styles.intro}>

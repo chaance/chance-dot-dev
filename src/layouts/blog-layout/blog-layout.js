@@ -6,6 +6,7 @@ import { HT, Section } from "src/components/heading";
 import { PostMeta } from "src/components/post-meta";
 import { config } from "src/site-config";
 import { SubscribeForm } from "src/components/subscribe-form";
+import { Title } from "src/components/title";
 const styles = require("./blog-layout.module.scss");
 
 const BlogLayout = function BlogLayout({ children: content, frontMatter }) {
@@ -25,9 +26,7 @@ const BlogLayout = function BlogLayout({ children: content, frontMatter }) {
 					images,
 				}}
 			/>
-			<Head>
-				<title>{`${title} | ${config.siteTitle}`}</title>
-			</Head>
+			<Title omitMeta>{title}</Title>
 			<div className={styles.wrapper}>
 				<main>
 					<article className={styles.article}>

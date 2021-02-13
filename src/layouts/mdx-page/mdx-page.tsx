@@ -1,12 +1,13 @@
 import * as React from "react";
 import { NextSeo, NextSeoProps } from "next-seo";
-import Head from "next/head";
 import { useRouter } from "next/router";
+import Head from "next/head";
 import { HT, Section } from "src/components/heading";
 import { config } from "src/site-config";
 import { Container } from "src/components/container";
 import { SubscribeForm } from "src/components/subscribe-form";
 import { Spacer } from "src/components/spacer";
+import { getPageTitle } from "src/components/title";
 const styles = require("./mdx-page.module.scss");
 
 const MdxPage = function MdxPage({
@@ -17,17 +18,21 @@ const MdxPage = function MdxPage({
 	// const { formattedDate, title, description, categories = [] } = frontMatter;
 	const router = useRouter();
 	const url = config.siteUrl + router.pathname;
+	const pageTitle = getPageTitle({
+		pageName: title,
+		suffix: router.pathname === "/" ? null : config.siteTitle,
+	});
 	return (
 		<React.Fragment>
 			<NextSeo
 				openGraph={{
 					url,
 					...meta,
-					title: meta?.title || `${title} | ${config.siteTitle}`,
+					title: meta?.title || pageTitle,
 				}}
 			/>
 			<Head>
-				<title>{`${title} | ${config.siteTitle}`}</title>
+				<title>{pageTitle}</title>
 			</Head>
 			<Container>
 				<Spacer preset="vertical-main" />
