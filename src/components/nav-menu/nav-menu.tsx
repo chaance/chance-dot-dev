@@ -1,7 +1,7 @@
 import * as React from "react";
-import { Link, LinkProps } from "$components/link";
-import { ListUnordered, ListItem } from "$components/primitives/list";
-import { cx } from "$lib/utils";
+import { Link, LinkProps } from "src/components/link";
+import { ListUnordered, ListItem } from "src/components/primitives/list";
+import { cx } from "src/lib/utils";
 const styles = require("./nav-menu.module.scss");
 
 const NavMenu = React.forwardRef<

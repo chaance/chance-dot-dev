@@ -4,16 +4,16 @@ import Head from "next/head";
 import startCase from "lodash/startCase";
 import { useRouter } from "next/router";
 import { VisuallyHidden } from "@reach/visually-hidden";
-import { Excerpt } from "$components/excerpt";
-import { Section, HT } from "$components/heading";
-import { SubscribeForm } from "$components/subscribe-form";
-import { categories } from "$src/categories";
-import { getNotes, getCategories, MDXMatter } from "$lib/get-notes";
-import { config } from "$src/site-config";
+import { Excerpt } from "src/components/excerpt";
+import { Section, HT } from "src/components/heading";
+import { SubscribeForm } from "src/components/subscribe-form";
+import { categories } from "src/categories";
+import { getNotes, getCategories, MDXMatter } from "src/lib/get-notes";
+import { config } from "src/site-config";
 import {
 	fromArray,
 	useIsomorphicLayoutEffect as useLayoutEffect,
-} from "$lib/utils";
+} from "src/lib/utils";
 const styles = require("./[cat-id].module.scss");
 
 function Notes({
@@ -40,7 +40,7 @@ function Notes({
 				<Head>
 					<title>{pageTitle}</title>
 				</Head>
-				<main role="main">
+				<main>
 					<HT className={styles.title}>
 						<VisuallyHidden>Category: </VisuallyHidden>
 						{category.label}

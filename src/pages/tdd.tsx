@@ -1,14 +1,14 @@
 import * as React from "react";
 import { SkipNavLink, SkipNavContent } from "@reach/skip-nav";
-import { Header } from "$components/header";
-import { Footer } from "$components/footer";
+import { Header } from "src/components/header";
+import { Footer } from "src/components/footer";
 import { NextSeo } from "next-seo";
 import Head from "next/head";
-import { H1 } from "$components/heading";
-import { SubscribeForm } from "$components/subscribe-form";
-import { P } from "$components/html";
+import { H1 } from "src/components/heading";
+import { SubscribeForm } from "src/components/subscribe-form";
+import { P } from "src/components/html";
 // import { GetStaticProps } from "next";
-import { ListOrdered, ListItem } from "$components/list";
+import { ListOrdered, ListItem } from "src/components/list";
 const styles = require("./tdd.module.scss");
 
 const RULES = [
@@ -51,7 +51,7 @@ function Tdd() {
 				<title>{PAGE_TITLE}</title>
 			</Head>
 			<div className={styles.wrapper}>
-				<main role="main">
+				<main>
 					<div className={styles.intro}>
 						<H1 className={styles.title}>{PAGE_TITLE}</H1>
 						<P>

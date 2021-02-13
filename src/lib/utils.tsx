@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Box, BoxProps } from "$components/primitives/box";
+import { Box, BoxProps } from "src/components/primitives/box";
 
 // import kebabCase from "lodash/kebabCase";
 import clsx from "clsx";

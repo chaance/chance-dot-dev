@@ -1,5 +1,5 @@
 import * as React from "react";
-import { SVG } from "$components/icons";
+import { SVG } from "src/components/icons";
 
 const LogoSmall = React.forwardRef<
 	SVGSVGElement,

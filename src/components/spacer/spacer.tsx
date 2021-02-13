@@ -4,7 +4,7 @@ import type {
 	PolymorphicPropsWithoutRef,
 	PolymorphicPropsWithRef,
 } from "react-polymorphic-types";
-import { Box, BoxOwnProps } from "$components/primitives/box";
+import { Box, BoxOwnProps } from "src/components/primitives/box";
 const styles = require("./spacer.module.scss");
 
 const SPACER_DEFAULT_TAG = "div";

@@ -1,8 +1,8 @@
 import * as React from "react";
 import VisuallyHidden from "@reach/visually-hidden";
-import { NavMenu, NavMenuItem, NavMenuLink } from "$components/nav-menu";
-import { P } from "$components/html";
-import { cx } from "$lib/utils";
+import { NavMenu, NavMenuItem, NavMenuLink } from "src/components/nav-menu";
+import { P } from "src/components/html";
+import { cx } from "src/lib/utils";
 const styles = require("./footer.module.scss");
 
 const StyledMenuItem = React.forwardRef<

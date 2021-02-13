@@ -4,7 +4,7 @@ import type {
 	PolymorphicPropsWithoutRef,
 	PolymorphicPropsWithRef,
 } from "react-polymorphic-types";
-import { cx } from "$lib/utils";
+import { cx } from "src/lib/utils";
 import styles from "./box.module.scss";
 
 const BOX_DEFAULT_ELEMENT = "div";

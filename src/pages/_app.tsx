@@ -2,11 +2,11 @@ import * as React from "react";
 import { AppProps } from "next/app";
 import { MDXProvider } from "@mdx-js/react";
 import { DefaultSeo } from "next-seo";
-import { FontProvider } from "$lib/fonts";
-import { ThemeProvider } from "$lib/theme";
-import { MDXComponents } from "$components/mdx";
+import { FontProvider } from "src/lib/fonts";
+import { ThemeProvider } from "src/lib/theme";
+import { MDXComponents } from "src/components/mdx";
 import SiteLayout from "src/layouts/site-layout";
-import { config } from "$src/site-config";
+import { config } from "src/site-config";
 import "src/styles/global.scss";
 
 function MyApp({ Component, pageProps }: CustomAppProps) {

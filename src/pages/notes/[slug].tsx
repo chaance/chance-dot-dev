@@ -3,15 +3,15 @@ import { GetStaticProps, InferGetStaticPropsType } from "next";
 import hydrate from "next-mdx-remote/hydrate";
 import renderToString from "next-mdx-remote/render-to-string";
 import Layout from "src/layouts/blog-layout";
-import { MDXComponents } from "$components/mdx";
+import { MDXComponents } from "src/components/mdx";
 import {
 	getGrayMatter,
 	getNoteFilePathFromSlug,
 	getNotesFilePaths,
 	getSlugFromFilePath,
-} from "$lib/get-notes";
+} from "src/lib/get-notes";
 import { MdxRemote } from "next-mdx-remote/types";
-import { fromArray } from "$lib/utils";
+import { fromArray } from "src/lib/utils";
 import { FrontMatter } from "types/mdx";
 
 export default function PostPage({

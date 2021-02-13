@@ -1,8 +1,8 @@
 import * as React from "react";
 import { SkipNavLink, SkipNavContent } from "@reach/skip-nav";
-import { Header } from "$components/header";
-import { Footer } from "$components/footer";
-import { Section } from "$components/heading";
+import { Header } from "src/components/header";
+import { Footer } from "src/components/footer";
+import { Section } from "src/components/heading";
 import { useRouter } from "next/router";
 const styles = require("./site-layout.module.scss");
 

@@ -6,7 +6,7 @@ import type {
 } from "react-polymorphic-types";
 import isFunction from "lodash/isFunction";
 import { useId } from "@reach/auto-id";
-import { Box, BoxOwnProps } from "$components/primitives/box";
+import { Box, BoxOwnProps } from "src/components/primitives/box";
 const styles = require("./form.module.scss");
 
 const FormContext = React.createContext<FormContextValue | null>(null);

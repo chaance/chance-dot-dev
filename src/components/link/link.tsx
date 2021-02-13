@@ -3,8 +3,8 @@ import React from "react";
 import {
 	Link as LinkPrim,
 	LinkProps as LinkPrimProps,
-} from "$components/primitives/link";
-import { cx } from "$lib/utils";
+} from "src/components/primitives/link";
+import { cx } from "src/lib/utils";
 const styles = require("./link.module.scss");
 
 const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(function Link(

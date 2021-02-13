@@ -1,12 +1,12 @@
 import * as React from "react";
-import { Link } from "$components/link";
-// import { NavMenu, NavMenuItem, NavMenuLink } from "$components/nav-menu";
-import { DarkModeSwitch } from "$components/dark-mode-switch";
-import { ClientOnly } from "$components/primitives/client-only";
-import { cx } from "$lib/utils";
+import { Link } from "src/components/link";
+// import { NavMenu, NavMenuItem, NavMenuLink } from "src/components/nav-menu";
+import { DarkModeSwitch } from "src/components/dark-mode-switch";
+import { ClientOnly } from "src/components/primitives/client-only";
+import { cx } from "src/lib/utils";
 import { useRouter } from "next/router";
-import { Heading } from "$components/heading";
-import { LogoLarge, LogoSmall } from "$components/logo";
+import { Heading } from "src/components/heading";
+import { LogoLarge, LogoSmall } from "src/components/logo";
 import { VisuallyHidden } from "@reach/visually-hidden";
 const styles = require("./header.module.scss");
 

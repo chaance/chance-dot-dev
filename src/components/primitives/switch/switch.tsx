@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cx } from "$lib/utils";
+import { cx } from "src/lib/utils";
 import isFunction from "lodash/isFunction";
 import pick from "lodash/pick";
 import omit from "lodash/omit";

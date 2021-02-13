@@ -5,8 +5,8 @@ import {
 	Switch as SwitchPrim,
 	SwitchProps as SwitchPrimProps,
 	useSwitchContext,
-} from "$components/primitives/switch";
-import { cx } from "$lib/utils";
+} from "src/components/primitives/switch";
+import { cx } from "src/lib/utils";
 const styles = require("./switch.module.scss");
 
 const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(function Switch(

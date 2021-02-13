@@ -4,9 +4,9 @@ import type {
 	PolymorphicPropsWithoutRef,
 } from "react-polymorphic-types";
 import { VisuallyHidden } from "@reach/visually-hidden";
-import { Link } from "$components/link";
-import { Box, BoxOwnProps } from "$components/primitives/box";
-import { Category } from "$src/categories";
+import { Link } from "src/components/link";
+import { Box, BoxOwnProps } from "src/components/primitives/box";
+import { Category } from "src/categories";
 
 const CategoryList: PolymorphicForwardRefExoticComponent<
 	BoxOwnProps,

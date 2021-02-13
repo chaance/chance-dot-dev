@@ -1,14 +1,14 @@
 import * as React from "react";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
-import { getNotes, MDXMatter } from "$lib/get-notes";
+import { getNotes, MDXMatter } from "src/lib/get-notes";
 import { NextSeo } from "next-seo";
 import Head from "next/head";
-import { Excerpt } from "$components/excerpt";
-import { Container } from "$components/container";
-import { Section, HT, H1 } from "$components/heading";
-import { SubscribeForm } from "$components/subscribe-form";
-import { config } from "$src/site-config";
-import { Hr, P } from "$components/html";
+import { Excerpt } from "src/components/excerpt";
+import { Container } from "src/components/container";
+import { Section, HT, H1 } from "src/components/heading";
+import { SubscribeForm } from "src/components/subscribe-form";
+import { config } from "src/site-config";
+import { Hr, P } from "src/components/html";
 const notesStyles = require("./notes/notes.module.scss");
 const styles = require("./index.module.scss");
 
@@ -33,7 +33,7 @@ function Home({ notes }: InferGetStaticPropsType<typeof getStaticProps>) {
 				<title>{config.siteTitle}</title>
 			</Head>
 			<Container className={notesStyles.wrapper}>
-				<main role="main">
+				<main>
 					<section className={styles.intro}>
 						<HT className={styles.title}>Welcome!</HT>
 						<P>Whoa, you came to my website. That's sick, I appreciate it!</P>

@@ -7,7 +7,7 @@ import Document, {
 	NextScript,
 	DocumentContext,
 } from "next/document";
-import { webFonts } from "$lib/fonts";
+import { webFonts } from "src/lib/fonts";
 
 class MyDocument extends Document {
 	static async getInitialProps(ctx: DocumentContext) {

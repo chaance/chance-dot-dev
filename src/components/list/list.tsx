@@ -7,7 +7,7 @@ import {
 	ListOrdered as ListOrderedPrimitive,
 	ListUnordered as ListUnorderedPrimitive,
 	ListItem as ListItemPrimitive,
-} from "$components/primitives/list";
+} from "src/components/primitives/list";
 const styles = require("./list.module.scss");
 
 const ListOrdered: PolymorphicForwardRefExoticComponent<

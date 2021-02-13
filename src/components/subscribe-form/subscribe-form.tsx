@@ -2,11 +2,11 @@ import React from "react";
 // import * as Yup from "yup";
 import { VisuallyHidden } from "@reach/visually-hidden";
 import { Alert as ReachAlert } from "@reach/alert";
-import { Button } from "$components/button";
-import { Box, BoxProps } from "$components/primitives/box";
-import { H2 } from "$components/heading";
-import { P } from "$components/html";
-import { FormFieldInput, FormFieldLabel } from "$components/form";
+import { Button } from "src/components/button";
+import { Box, BoxProps } from "src/components/primitives/box";
+import { H2 } from "src/components/heading";
+import { P } from "src/components/html";
+import { FormFieldInput, FormFieldLabel } from "src/components/form";
 const styles = require("./subscribe-form.module.scss");
 
 // const SubscribeSchema = Yup.object().shape({

@@ -1,13 +1,13 @@
 import React from "react";
-import { H4 } from "$components/heading";
-import { ListUnordered, ListItem } from "$components/primitives/list";
-import { cx, leadingSlashIt } from "$lib/utils";
-import { Category } from "$src/categories";
+import { H4 } from "src/components/heading";
+import { ListUnordered, ListItem } from "src/components/primitives/list";
+import { cx, leadingSlashIt } from "src/lib/utils";
+import { Category } from "src/categories";
 import {
 	CategoryList,
 	CategoryListItem,
 	CategoryLink,
-} from "$components/category-list";
+} from "src/components/category-list";
 const styles = require("./post-meta.module.scss");
 
 const PostMeta = React.forwardRef<

@@ -1,13 +1,13 @@
 import * as React from "react";
 import VisuallyHidden from "@reach/visually-hidden";
 import { useId } from "@reach/auto-id";
-import { Tooltip } from "$components/tooltip";
-import { ClientOnly } from "$components/primitives/client-only";
-import { Switch, SwitchProps } from "$components/switch";
-import { useThemeMode, useThemeModeToggle } from "$lib/theme";
-import { cx } from "$lib/utils";
-import { makeIconComponent } from "$components/icons";
-import { useAudio } from "$lib/use-audio";
+import { Tooltip } from "src/components/tooltip";
+import { ClientOnly } from "src/components/primitives/client-only";
+import { Switch, SwitchProps } from "src/components/switch";
+import { useThemeMode, useThemeModeToggle } from "src/lib/theme";
+import { cx } from "src/lib/utils";
+import { makeIconComponent } from "src/components/icons";
+import { useAudio } from "src/lib/use-audio";
 const styles = require("./dark-mode-switch.module.scss");
 
 const DarkModeSwitch = React.forwardRef<HTMLInputElement, DarkModeSwitchProps>(

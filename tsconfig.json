@@ -20,7 +20,7 @@
 			"$lib/*": ["src/lib/*"],
 			"$pages/*": ["src/pages/*"],
 			"$src/*": ["src/*"]
-		},
+		}
 	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
 	"exclude": ["node_modules"]

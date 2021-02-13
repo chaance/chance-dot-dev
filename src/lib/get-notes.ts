@@ -2,9 +2,9 @@ import { resolve, join, basename, dirname, sep as pathSeparator } from "path";
 import { readdir, lstat, readFileSync } from "fs-extra";
 import matter from "gray-matter";
 import uniqBy from "lodash/uniqBy";
-import { Category, getCategoryFromLabel } from "$src/categories";
-import { getFormattedDate } from "$lib/get-formatted-date";
-import { sortByLatestDate } from "$lib/sort-by-date";
+import { Category, getCategoryFromLabel } from "src/categories";
+import { getFormattedDate } from "src/lib/get-formatted-date";
+import { sortByLatestDate } from "src/lib/sort-by-date";
 import { FrontMatter } from "types/mdx";
 
 export const NOTES_PATH = resolve(process.cwd(), "src/notes");

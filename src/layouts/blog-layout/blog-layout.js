@@ -2,10 +2,10 @@ import * as React from "react";
 import { NextSeo } from "next-seo";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { HT, Section } from "$components/heading";
-import { PostMeta } from "$components/post-meta";
-import { config } from "$src/site-config";
-import { SubscribeForm } from "$components/subscribe-form";
+import { HT, Section } from "src/components/heading";
+import { PostMeta } from "src/components/post-meta";
+import { config } from "src/site-config";
+import { SubscribeForm } from "src/components/subscribe-form";
 const styles = require("./blog-layout.module.scss");
 
 const BlogLayout = function BlogLayout({ children: content, frontMatter }) {
@@ -29,7 +29,7 @@ const BlogLayout = function BlogLayout({ children: content, frontMatter }) {
 				<title>{`${title} | ${config.siteTitle}`}</title>
 			</Head>
 			<div className={styles.wrapper}>
-				<main role="main">
+				<main>
 					<article className={styles.article}>
 						<header>
 							<HT className={styles.title}>{title}</HT>

@@ -2,7 +2,7 @@ import React, { createContext } from "react";
 import FontFaceObserver from "fontfaceobserver";
 import kebabCase from "lodash/kebabCase";
 import { usePromise } from "@chancestrickland/hooks";
-import { canUseDOM } from "$lib/utils";
+import { canUseDOM } from "src/lib/utils";
 
 const adobeStylesheet = `https://use.typekit.net/dxb2ypa.css`;
 const localStylesheet = `/fonts/style.css`;

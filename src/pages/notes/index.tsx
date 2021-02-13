@@ -1,12 +1,13 @@
 import * as React from "react";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import Head from "next/head";
-import { Excerpt } from "$components/excerpt";
-import { Section, HT } from "$components/heading";
-import { Container } from "$components/container";
-import { SubscribeForm } from "$components/subscribe-form";
-import { getNotes, MDXMatter } from "$lib/get-notes";
-import { config } from "$src/site-config";
+import { Excerpt } from "src/components/excerpt";
+import { Section, HT } from "src/components/heading";
+import { Container } from "src/components/container";
+import { SubscribeForm } from "src/components/subscribe-form";
+import { getNotes, MDXMatter } from "src/lib/get-notes";
+import { config } from "src/site-config";
+import { Spacer } from "src/components/spacer";
 
 const styles = require("./notes.module.scss");
 
@@ -27,7 +28,8 @@ function Notes({
 							: `${pageTitle} | ${config.siteTitle}`}
 					</title>
 				</Head>
-				<main role="main">
+				<Spacer preset="vertical-main" />
+				<main>
 					<HT className={styles.title}>Notes</HT>
 
 					<Section>

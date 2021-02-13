@@ -1,6 +1,6 @@
 import * as React from "react";
-import { Box, BoxProps } from "$components/primitives/box";
-import { extendComponent } from "$lib/utils";
+import { Box, BoxProps } from "src/components/primitives/box";
+import { extendComponent } from "src/lib/utils";
 const styles = require("./html.module.scss");
 
 const Abbr = html("abbr");

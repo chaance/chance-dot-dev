@@ -1,12 +1,12 @@
 import * as React from "react";
-import { Link } from "$components/link";
-import { H1, H2, H3 } from "$components/heading";
-import { PostMeta } from "$components/post-meta";
-// import { CategoryList } from "$components/category-list";
-import { P } from "$components/html";
-import { cx, unSlashIt } from "$lib/utils";
-import { sprintf } from "$lib/sprintf";
-import { Category } from "$src/categories";
+import { Link } from "src/components/link";
+import { H1, H2, H3 } from "src/components/heading";
+import { PostMeta } from "src/components/post-meta";
+// import { CategoryList } from "src/components/category-list";
+import { P } from "src/components/html";
+import { cx, unSlashIt } from "src/lib/utils";
+import { sprintf } from "src/lib/sprintf";
+import { Category } from "src/categories";
 const styles = require("./excerpt.module.scss");
 
 const languageMap: LanguageMap = {

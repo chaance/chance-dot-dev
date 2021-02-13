@@ -1,4 +1,4 @@
-import { Category } from "$src/categories";
+import { Category } from "src/categories";
 // https://github.com/jescalan/babel-plugin-import-glob-array/issues/7#issuecomment-626936433
 interface FrontMatter {
 	__resourcePath: string;

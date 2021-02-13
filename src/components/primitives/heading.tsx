@@ -3,7 +3,7 @@ import type {
 	PolymorphicForwardRefExoticComponent,
 	PolymorphicPropsWithoutRef,
 } from "react-polymorphic-types";
-import { Box, BoxOwnProps } from "$components/primitives/box";
+import { Box, BoxOwnProps } from "src/components/primitives/box";
 
 const LevelContext: React.Context<HeadingLevel> = React.createContext(
 	1 as HeadingLevel

@@ -2,7 +2,7 @@ import * as React from "react";
 import {
 	Heading as HeadingPrimitive,
 	Section,
-} from "$components/primitives/heading";
+} from "src/components/primitives/heading";
 const styles = require("./heading.module.scss");
 
 function makeHeading(

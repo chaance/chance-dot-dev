@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cx } from "$lib/utils";
+import { cx } from "src/lib/utils";
 
 const PictureContext = React.createContext<PictureContextValue | null>(null);
 PictureContext.displayName = "PictureContext";
