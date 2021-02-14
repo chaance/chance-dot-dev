@@ -1,11 +1,10 @@
 import { resolve, join, basename, dirname, sep as pathSeparator } from "path";
 import { readdir, readFile } from "fs-extra";
 import uniqBy from "lodash/uniqBy";
-import { Category } from "src/categories";
 import { sortByLatestDate } from "src/lib/sort-by-date";
-import { FrontMatter } from "types/mdx";
 import { getGrayMatter } from "src/lib/mdx";
 import { isDirectory } from "src/lib/fs";
+import { FrontMatter, Category } from "src/types";
 
 // NOTE: These utils should generally be used for server-side work.
 

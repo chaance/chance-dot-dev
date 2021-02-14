@@ -6,7 +6,7 @@ import { PostMeta } from "src/components/post-meta";
 import { P } from "src/components/html";
 import { cx, unSlashIt } from "src/lib/utils";
 import { sprintf } from "src/lib/sprintf";
-import { Category } from "src/categories";
+import { Category } from "src/types";
 const styles = require("./excerpt.module.scss");
 
 const languageMap: LanguageMap = {

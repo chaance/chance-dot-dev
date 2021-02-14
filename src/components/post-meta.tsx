@@ -2,7 +2,7 @@ import React from "react";
 import { H4 } from "src/components/heading";
 import { ListUnordered, ListItem } from "src/components/primitives/list";
 import { cx, leadingSlashIt } from "src/lib/utils";
-import { Category } from "src/categories";
+import { Category } from "src/types";
 import {
 	CategoryList,
 	CategoryListItem,

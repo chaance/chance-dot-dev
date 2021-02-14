@@ -1,9 +1,9 @@
 import matter from "gray-matter";
 import renderToString from "next-mdx-remote/render-to-string";
 import { MdxRemote } from "next-mdx-remote/types";
-import { Category, getCategoryFromLabel } from "src/categories";
+import { getCategoryFromLabel } from "src/categories";
 import { getFormattedDate } from "src/lib/get-formatted-date";
-import { FrontMatter } from "types/mdx";
+import { FrontMatter, Category } from "src/types";
 
 // NOTE: These utils should generally be used for server-side work. Client-side
 // mdx is handled by next-mdx-remote/hydrate.

@@ -10,7 +10,7 @@ import {
 } from "src/lib/get-notes";
 import { MdxSource, renderToString } from "src/lib/mdx";
 import { fromArray } from "src/lib/utils";
-import { FrontMatter } from "types/mdx";
+import { FrontMatter } from "src/types";
 import { MDXComponents } from "src/components/mdx";
 
 export default function PostPage({

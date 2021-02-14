@@ -6,7 +6,7 @@ import type {
 import { VisuallyHidden } from "@reach/visually-hidden";
 import { Link } from "src/components/link";
 import { Box, BoxOwnProps } from "src/components/primitives/box";
-import { Category } from "src/categories";
+import { Category } from "src/types";
 
 const CategoryList: PolymorphicForwardRefExoticComponent<
 	BoxOwnProps,

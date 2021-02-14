@@ -1,9 +1,5 @@
 import kebabCase from "lodash/kebabCase";
-
-export type Category = {
-	slug: string;
-	label: string;
-};
+import { Category } from "src/types";
 
 export const categories = new Map<string, Category>([
 	//

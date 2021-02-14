@@ -1,6 +1,4 @@
-import { Category } from "src/categories";
-// https://github.com/jescalan/babel-plugin-import-glob-array/issues/7#issuecomment-626936433
-interface FrontMatter {
+export interface FrontMatter {
 	slug?: string;
 	subtitle?: string;
 	date?: string;
@@ -14,4 +12,9 @@ interface FrontMatter {
 	bannerAlt?: string;
 	published?: boolean;
 	author?: string;
+}
+
+export interface Category {
+	slug: string;
+	label: string;
 }
