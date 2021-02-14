@@ -1,7 +1,7 @@
 import matter from "gray-matter";
 import renderToString from "next-mdx-remote/render-to-string";
 import { MdxRemote } from "next-mdx-remote/types";
-import { getCategoryFromLabel } from "src/categories";
+import { getCategoryFromLabel } from "src/lib/categories";
 import { getFormattedDate } from "src/lib/get-formatted-date";
 import { FrontMatter, Category } from "src/types";
 

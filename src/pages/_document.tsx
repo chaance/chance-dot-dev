@@ -16,12 +16,17 @@ class MyDocument extends Document {
 	}
 
 	render() {
+		const fontStyleSheets = uniq(Object.values(webFonts));
 		return (
 			<Html lang="en">
 				<Head>
-					{uniq(Object.values(webFonts)).map((val) => (
-						<link key={val} rel="stylesheet" href={val} />
+					{fontStyleSheets.map((val) => (
+						<React.Fragment key={val}>
+							<link rel="preload" as="style" href={val} />
+							<link rel="stylesheet" href={val} />
+						</React.Fragment>
 					))}
+
 					<link rel="icon" href="/favicon.ico" />
 					<link
 						rel="apple-touch-icon"

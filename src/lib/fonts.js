@@ -1,6 +1,6 @@
 import React, { createContext } from "react";
 import FontFaceObserver from "fontfaceobserver";
-import kebabCase from "lodash/kebabCase";
+// import kebabCase from "lodash/kebabCase";
 import { usePromise } from "@chancestrickland/hooks";
 import { canUseDOM } from "src/lib/utils";
 
@@ -67,7 +67,8 @@ async function loadFonts() {
 
 	const _fonts = Object.keys(webFonts).map(async (key) => {
 		const font = new FontFaceObserver(key);
-		const fontName = kebabCase(key);
+		//const fontName = kebabCase(key);
+		const fontName = key;
 		try {
 			await font.load();
 			return { font: fontName, loaded: true };
