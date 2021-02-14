@@ -1,16 +1,16 @@
 import * as React from "react";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
-import { getNotes, MDXMatter } from "src/lib/get-notes";
+import { getNotes, NotesMdx } from "src/lib/get-notes";
 import { NextSeo } from "next-seo";
 import { Title } from "src/components/title";
 import { Excerpt } from "src/components/excerpt";
 import { Container } from "src/components/container";
 import { Section, HT, H1 } from "src/components/heading";
 import { SubscribeForm } from "src/components/subscribe-form";
+import { Spacer } from "src/components/spacer";
 import { config } from "src/site-config";
 import { Hr, P } from "src/components/html";
 const notesStyles = require("./notes/notes.module.scss");
-const styles = require("./index.module.scss");
 
 function Home({ notes }: InferGetStaticPropsType<typeof getStaticProps>) {
 	return (
@@ -29,31 +29,36 @@ function Home({ notes }: InferGetStaticPropsType<typeof getStaticProps>) {
 					],
 				}}
 			/>
-			<Title suffix={null} omitMeta>
-				{config.siteTitle}
-			</Title>
-			<Container className={notesStyles.wrapper}>
+			<Title suffix={null}>{config.siteTitle}</Title>
+			<Container>
+				<Spacer preset="vertical-main" />
 				<main>
-					<section className={styles.intro}>
-						<HT className={styles.title}>Welcome!</HT>
-						<P>Whoa, you came to my website. That's sick, I appreciate it!</P>
-						<P>
-							My name is Chance. I'm a front-end developer here on the World
-							Wide Web. I enjoy teaching, building high-quality user interfaces,
-							and far too many non-computer activities to list.
-						</P>
-						<P>
-							Take a look at some of my thoughts or sign up for the occasional
-							email below. I'll be adding more to this space soon, so check back
-							and see my little corner of the internet grow. 🌱
-						</P>
+					<section>
+						<HT>Welcome!</HT>
+						<Spacer spaces={1 / 2} />
+						<div className="prose">
+							<P>Whoa, you came to my website. That's sick, I appreciate it!</P>
+							<P>
+								My name is Chance. I'm a front-end developer here on the World
+								Wide Web. I enjoy teaching, building high-quality user
+								interfaces, and far too many non-computer activities to list.
+							</P>
+							<P>
+								Take a look at some of my thoughts or sign up for the occasional
+								email below. I'll be adding more to this space soon, so check
+								back and see my little corner of the internet grow. 🌱
+							</P>
+						</div>
 					</section>
+					<Spacer />
 					<Hr lineStyle="gradient" lineThickness={2} />
-					<H1 className={styles.notesTitle}>Notes</H1>
+					<H1>Notes</H1>
+					<Spacer />
 					<Section>
 						{notes.map(({ frontMatter, linkPath }) => {
 							return (
-								frontMatter.published && (
+								frontMatter.published &&
+								frontMatter.title && (
 									<Excerpt
 										categories={frontMatter.categories}
 										className={notesStyles.post}
@@ -69,11 +74,13 @@ function Home({ notes }: InferGetStaticPropsType<typeof getStaticProps>) {
 							);
 						})}
 					</Section>
+					<Spacer preset="vertical-main" />
 				</main>
 			</Container>
 			<aside>
+				<Spacer spaces={4} />
 				<Container size="wide">
-					<SubscribeForm className={notesStyles.subscribeForm} />
+					<SubscribeForm />
 				</Container>
 			</aside>
 		</React.Fragment>
@@ -81,7 +88,7 @@ function Home({ notes }: InferGetStaticPropsType<typeof getStaticProps>) {
 }
 
 export const getStaticProps: GetStaticProps<{
-	notes: MDXMatter[];
+	notes: NotesMdx[];
 }> = async () => {
 	const notes = await getNotes();
 	return {

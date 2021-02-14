@@ -1,11 +1,13 @@
 import { resolve, join, basename, dirname, sep as pathSeparator } from "path";
-import { readdir, lstat, readFileSync } from "fs-extra";
-import matter from "gray-matter";
+import { readdir, readFile } from "fs-extra";
 import uniqBy from "lodash/uniqBy";
-import { Category, getCategoryFromLabel } from "src/categories";
-import { getFormattedDate } from "src/lib/get-formatted-date";
+import { Category } from "src/categories";
 import { sortByLatestDate } from "src/lib/sort-by-date";
 import { FrontMatter } from "types/mdx";
+import { getGrayMatter } from "src/lib/mdx";
+import { isDirectory } from "src/lib/fs";
+
+// NOTE: These utils should generally be used for server-side work.
 
 export const NOTES_PATH = resolve(process.cwd(), "src/notes");
 
@@ -18,27 +20,40 @@ export async function getNoteFilePathFromSlug(slug: string) {
 }
 
 export async function getNotesFilePaths(): Promise<string[]> {
-	let paths: string[] = [];
+	let filePaths: string[] = [];
 	for (let filename of await readdir(NOTES_PATH)) {
 		let filePath = join(NOTES_PATH, filename);
 		if (isMdxFile(filename)) {
-			paths.push(filePath);
+			filePaths.push(filePath);
 		} else if ((await isDirectory(filePath)) && (await hasIndexMdx(filePath))) {
-			paths.push(join(filePath, "index.mdx"));
+			filePaths.push(join(filePath, "index.mdx"));
 		}
 	}
-	return paths;
+	return filePaths;
 }
 
 export async function getNotes(
-	filter?: (post: MDXMatter) => boolean
-): Promise<MDXMatter[]> {
-	let allNotes: MDXMatter[] = [];
-	for (let filename of await getNotesFilePaths()) {
-		allNotes.push(await getMdx(filename));
+	filter?: (post: NotesMdx) => boolean
+): Promise<NotesMdx[]> {
+	let allNotes: NotesMdx[] = [];
+	for (let filePath of await getNotesFilePaths()) {
+		let { content, frontMatter } = await getGrayMatter(
+			await readFile(filePath)
+		);
+		let linkPath = getSlugFromFilePath(filePath);
+		if (!linkPath) {
+			throw Error("asdfghjkl");
+		}
+
+		allNotes.push({
+			content,
+			frontMatter,
+			filePath,
+			linkPath,
+		});
 	}
 	return (filter ? allNotes.filter(filter) : allNotes).sort((noteA, noteB) =>
-		sortByLatestDate(noteA.frontMatter.date, noteB.frontMatter.date)
+		sortByLatestDate(noteA.frontMatter.date!, noteB.frontMatter.date!)
 	);
 }
 
@@ -52,21 +67,17 @@ export async function getCategories(): Promise<Category[]> {
 	return uniqBy(allCategories, ({ slug }) => slug);
 }
 
-async function isDirectory(path: string): Promise<boolean> {
-	return (await lstat(path)).isDirectory();
-}
-
 function isMdxFile(filename: string): boolean {
 	return /\.mdx?$/.test(filename);
 }
 
-export function isIndexMdx(path: string): boolean {
-	return /^index\.mdx?$/.test(basename(path));
+export function isIndexMdx(filePath: string): boolean {
+	return /^index\.mdx?$/.test(basename(filePath));
 }
 
-async function hasIndexMdx(path: string) {
+async function hasIndexMdx(filePath: string) {
 	try {
-		return !!(await readdir(path)).find((resourcePath) =>
+		return !!(await readdir(filePath)).find((resourcePath) =>
 			isIndexMdx(resourcePath)
 		);
 	} catch (err) {
@@ -74,60 +85,19 @@ async function hasIndexMdx(path: string) {
 	}
 }
 
-export function getSlugFromFilePath(path: string): string | null | undefined {
+export function getSlugFromFilePath(
+	filePath: string
+): string | null | undefined {
 	try {
-		return isIndexMdx(path)
-			? dirname(path).split(pathSeparator).pop()
-			: basename(path).split(".").shift();
+		return isIndexMdx(filePath)
+			? dirname(filePath).split(pathSeparator).pop()
+			: basename(filePath).split(".").shift();
 	} catch (err) {
 		return null;
 	}
 }
 
-export async function getGrayMatter<
-	Opts extends matter.GrayMatterOption<Buffer, Opts>
->(
-	filePath: string,
-	options?: Opts
-): Promise<{
-	frontMatter: FrontMatter;
-	content: string;
-	excerpt?: string | undefined;
-	orig: Buffer;
-	language: string;
-	matter: string;
-	stringify(lang: string): string;
-}> {
-	let { data: frontMatter, ...rest } = matter(readFileSync(filePath), options);
-	let categories: Category[] =
-		(frontMatter as any).categories?.map(getCategoryFromLabel) || [];
-
-	return {
-		...rest,
-		frontMatter: ({
-			...frontMatter,
-			categories,
-			formattedDate: getFormattedDate(frontMatter.date),
-		} as unknown) as FrontMatter,
-	};
-}
-
-async function getMdx(filePath: string): Promise<MDXMatter> {
-	let { content, frontMatter } = await getGrayMatter(filePath);
-	let linkPath = getSlugFromFilePath(filePath);
-	if (!linkPath) {
-		throw Error("asdfghjkl");
-	}
-
-	return {
-		content,
-		frontMatter,
-		filePath,
-		linkPath,
-	};
-}
-
-export interface MDXMatter {
+export interface NotesMdx {
 	content: string;
 	frontMatter: FrontMatter;
 	filePath: string;

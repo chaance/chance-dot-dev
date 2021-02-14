@@ -1,29 +1,28 @@
 import * as React from "react";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
+import { readFile } from "fs-extra";
 import hydrate from "next-mdx-remote/hydrate";
-import renderToString from "next-mdx-remote/render-to-string";
 import Layout from "src/layouts/blog-layout";
-import { MDXComponents } from "src/components/mdx";
 import {
-	getGrayMatter,
 	getNoteFilePathFromSlug,
 	getNotesFilePaths,
 	getSlugFromFilePath,
 } from "src/lib/get-notes";
-import { MdxRemote } from "next-mdx-remote/types";
+import { MdxSource, renderToString } from "src/lib/mdx";
 import { fromArray } from "src/lib/utils";
 import { FrontMatter } from "types/mdx";
+import { MDXComponents } from "src/components/mdx";
 
 export default function PostPage({
 	source,
 	frontMatter,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-	const content = hydrate(source, { components: MDXComponents });
+	const content = hydrate(source as any, { components: MDXComponents });
 	return <Layout frontMatter={frontMatter}>{content}</Layout>;
 }
 
 export const getStaticProps: GetStaticProps<{
-	source: MdxRemote.Source;
+	source: MdxSource;
 	frontMatter: FrontMatter;
 }> = async ({ params = {} }) => {
 	let slug = fromArray(params.slug);
@@ -32,25 +31,13 @@ export const getStaticProps: GetStaticProps<{
 		throw Error("skfjaksddfgnkdasfkdsfksdf");
 	}
 
-	let { content, frontMatter } = await getGrayMatter(postFilePath);
-
-	let mdxSource: MdxRemote.Source = await renderToString(content, {
-		components: MDXComponents,
-		mdxOptions: {
-			remarkPlugins: [
-				require("remark-images"),
-				require("remark-slug"),
-				require("@ngsctt/remark-smartypants"),
-			],
-			rehypePlugins: [],
-		},
-		scope: frontMatter as any,
-	});
+	let mdx = await readFile(postFilePath);
+	let source = await renderToString(mdx, { components: MDXComponents });
 
 	return {
 		props: {
-			source: mdxSource,
-			frontMatter: frontMatter as any,
+			source,
+			frontMatter: source.scope,
 		},
 	};
 };
@@ -60,6 +47,7 @@ export const getStaticPaths = async () => {
 	const paths = notesFilePaths
 		.map(getSlugFromFilePath)
 		.map((slug) => ({ params: { slug } }));
+
 	return {
 		paths,
 		fallback: false,

@@ -452,14 +452,14 @@ body {
 
 // resets for block element spacing
 @include all-block-elements {
-	margin-left: 0;
-	margin-right: 0;
 	margin-top: 0;
+	margin-right: 0;
+	margin-bottom: 0;
+	margin-left: 0;
+	padding-top: 0;
+	padding-right: 0;
 	padding-bottom: 0;
 	padding-left: 0;
-	padding-right: 0;
-	padding-top: 0;
-	margin-bottom: 0;
 }
 
 img {
@@ -529,4 +529,20 @@ th:first-child {
 td:last-child,
 th:last-child {
 	padding-right: 0;
+}
+
+.prose > :first-child {
+	margin-top: 0;
+}
+
+.prose > :last-child {
+	margin-bottom: 0;
+}
+
+.prose:first-child > :first-child {
+	margin-top: 0;
+}
+
+.prose:last-child > :last-child {
+	margin-bottom: 0;
 }

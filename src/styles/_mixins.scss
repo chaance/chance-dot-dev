@@ -1,5 +1,11 @@
 @import "functions";
 
+@mixin prose {
+	:global(.prose) & {
+		@content;
+	}
+}
+
 $block-elements: address, article, aside, audio, video, blockquote, dd, details,
 	dialog, div, dl, dt, fieldset, figcaption, figure, footer, form, h1, h2, h3,
 	h4, h5, h6, header, hgroup, hgroup, hr, iframe, img, li, main, nav, noscript,
@@ -179,6 +185,10 @@ $block-elements: address, article, aside, audio, video, blockquote, dd, details,
 			list-style-type: lower-roman;
 		}
 	}
+
+	@include prose {
+		@include block-space(bottom);
+	}
 }
 
 @mixin list-item-styles($level: 1) {
@@ -271,6 +281,10 @@ $block-elements: address, article, aside, audio, video, blockquote, dd, details,
 @mixin p-styles {
 	font-size: var(--font-size-body);
 	letter-spacing: var(--letter-spacing-body);
+
+	@include prose {
+		@include block-space(bottom);
+	}
 }
 
 @mixin ul-styles($level: 1) {

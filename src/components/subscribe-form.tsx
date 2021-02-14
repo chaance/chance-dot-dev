@@ -372,8 +372,6 @@ function useFormEffects(state: FormState, dispatch: React.Dispatch<FormEvent>) {
 			})
 				.then((response) => {
 					if (response.status === 200) {
-						console.log(response);
-						response.headers.forEach(console.log);
 						return response.json();
 					}
 					switch (response.status) {

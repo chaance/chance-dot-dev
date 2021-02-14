@@ -4,7 +4,7 @@ import { Excerpt } from "src/components/excerpt";
 import { Section, HT } from "src/components/heading";
 import { Container } from "src/components/container";
 import { SubscribeForm } from "src/components/subscribe-form";
-import { getNotes, MDXMatter } from "src/lib/get-notes";
+import { getNotes, NotesMdx } from "src/lib/get-notes";
 import { Title } from "src/components/title";
 import { Spacer } from "src/components/spacer";
 
@@ -22,7 +22,8 @@ function Notes({ notes = [] }: InferGetStaticPropsType<typeof getStaticProps>) {
 					<Section>
 						{notes.map(({ frontMatter, linkPath }) => {
 							return (
-								frontMatter.published && (
+								frontMatter.published &&
+								frontMatter.title && (
 									<Excerpt
 										categories={frontMatter.categories}
 										className={styles.post}
@@ -49,7 +50,7 @@ function Notes({ notes = [] }: InferGetStaticPropsType<typeof getStaticProps>) {
 }
 
 export const getStaticProps: GetStaticProps<{
-	notes: MDXMatter[];
+	notes: NotesMdx[];
 }> = async () => {
 	const notes = await getNotes();
 	return {

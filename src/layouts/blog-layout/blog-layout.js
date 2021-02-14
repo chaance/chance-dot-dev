@@ -1,6 +1,5 @@
 import * as React from "react";
 import { NextSeo } from "next-seo";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import { HT, Section } from "src/components/heading";
 import { PostMeta } from "src/components/post-meta";
@@ -21,12 +20,11 @@ const BlogLayout = function BlogLayout({ children: content, frontMatter }) {
 			<NextSeo
 				openGraph={{
 					url,
-					title,
 					description,
 					images,
 				}}
 			/>
-			<Title omitMeta>{title}</Title>
+			<Title>{title}</Title>
 			<div className={styles.wrapper}>
 				<main>
 					<article className={styles.article}>

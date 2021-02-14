@@ -8,7 +8,7 @@ import { Section, HT } from "src/components/heading";
 import { Title } from "src/components/title";
 import { SubscribeForm } from "src/components/subscribe-form";
 import { categories } from "src/categories";
-import { getNotes, getCategories, MDXMatter } from "src/lib/get-notes";
+import { getNotes, getCategories, NotesMdx } from "src/lib/get-notes";
 import {
 	fromArray,
 	useIsomorphicLayoutEffect as useLayoutEffect,
@@ -43,7 +43,8 @@ function Notes({
 					<Section>
 						{notes.map(({ frontMatter, linkPath }) => {
 							return (
-								frontMatter.published && (
+								frontMatter.published &&
+								frontMatter.title && (
 									<Excerpt
 										categories={frontMatter.categories}
 										className={styles.post}
@@ -80,7 +81,7 @@ export const getStaticPaths: GetStaticPaths = async function getStaticPaths() {
 };
 
 export const getStaticProps: GetStaticProps<{
-	notes: MDXMatter[];
+	notes: NotesMdx[];
 	categoryLabel: string;
 }> = async ({ params = {} }) => {
 	const catId = fromArray(params["cat-id"])!;
