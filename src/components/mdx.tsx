@@ -2,9 +2,11 @@
 import { Section, H1, H2, H3, H4, H5, H6 } from "src/components/heading";
 import { Link } from "src/components/link";
 import { ListOrdered, ListUnordered, ListItem } from "src/components/list";
-import { Abbr, Blockquote, Cite, Hr, Legend, P } from "src/components/html";
-import { Container } from "src/components/container";
+import { Abbr, Blockquote, Cite, Hr, Legend,
+	P } from "src/components/html";
+import { Box } from "src/components/primitives/box";
 import { Image } from "src/components/image";
+const styles = require("./mdx.module.scss");
 
 export const MDXComponents = {
 	a: Link,
@@ -19,9 +21,9 @@ export const MDXComponents = {
 	h6: H6,
 	hr: Hr,
 	img: (props: any) => (
-		<Container size="wide">
+		<Box className={styles.imgWrapper}>
 			<Image {...props} />
-		</Container>
+		</Box>
 	),
 	legend: Legend,
 	li: ListItem,

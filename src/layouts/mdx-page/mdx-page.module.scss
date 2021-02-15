@@ -1,9 +1,3 @@
 @import "mixins";
 
-.content {
-	@each $selector in $block-elements {
-		> * + #{$selector} {
-			margin-top: var(--size-block-space);
-		}
-	}
-}
+.content {}

@@ -43,7 +43,7 @@ const MdxPage = function MdxPage({
 							<Spacer spaces={2} />
 						</header>
 						<Spacer spaces={1} />
-						<Section wrap className={styles.content}>
+						<Section wrap className={[styles.content, 'prose']}>
 							{content}
 						</Section>
 					</article>

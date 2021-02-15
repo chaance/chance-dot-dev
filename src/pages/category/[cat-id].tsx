@@ -4,7 +4,7 @@ import startCase from "lodash/startCase";
 import { useRouter } from "next/router";
 import { VisuallyHidden } from "@reach/visually-hidden";
 import { Container } from "src/components/container";
-import { Excerpt } from "src/components/excerpt";
+import { Excerpt, ExcerptBox } from "src/components/excerpt";
 import { Section, HT } from "src/components/heading";
 import { Title } from "src/components/title";
 import { SubscribeForm } from "src/components/subscribe-form";
@@ -48,14 +48,16 @@ function Notes({
 						{notes.map(({ frontMatter, linkPath }, i, src) => {
 							return (
 								<React.Fragment key={linkPath}>
-									<Excerpt
-										categories={frontMatter.categories}
-										title={frontMatter.title}
-										formattedDate={frontMatter.formattedDate}
-										slug={linkPath}
-										contentType="notes"
-										excerpt={frontMatter.description}
-									/>
+									<ExcerptBox>
+										<Excerpt
+											categories={frontMatter.categories}
+											title={frontMatter.title}
+											formattedDate={frontMatter.formattedDate}
+											slug={linkPath}
+											contentType="notes"
+											excerpt={frontMatter.description}
+										/>
+									</ExcerptBox>
 									{i !== src.length - 1 && <Spacer spaces={2} />}
 								</React.Fragment>
 							);

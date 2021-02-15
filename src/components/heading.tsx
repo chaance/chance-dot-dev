@@ -16,11 +16,7 @@ function makeHeading(
 			<HeadingPrimitive
 				{...props}
 				ref={ref}
-				className={[
-					props.className,
-					styles.heading,
-					which !== "heading" && styles[which],
-				]}
+				className={[props.className, styles[which]]}
 			/>
 		);
 	});

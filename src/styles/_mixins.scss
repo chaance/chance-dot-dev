@@ -146,9 +146,58 @@ $block-elements: address, article, aside, audio, video, blockquote, dd, details,
 
 @mixin title-styles {
 	font-family: var(--font-family-title);
+	font-size: var(--font-size-title);
 	font-weight: var(--font-weight-title-bold);
 	letter-spacing: var(--letter-spacing-title);
 	line-height: var(--line-height-title);
+}
+
+@mixin h1-styles {
+	@include heading-styles;
+	font-size: var(--font-size-h1);
+	@include prose {
+		@include block-space(bottom, 1);
+	}
+}
+
+@mixin h2-styles {
+	@include heading-styles;
+	font-size: var(--font-size-h2);
+	@include prose {
+		@include block-space(bottom, 1);
+	}
+}
+
+@mixin h3-styles {
+	@include heading-styles;
+	font-size: var(--font-size-h3);
+	@include prose {
+		@include block-space(bottom, 2 / 3);
+	}
+}
+
+@mixin h4-styles {
+	@include heading-styles;
+	font-size: var(--font-size-h4);
+	@include prose {
+		@include block-space(bottom, 1 / 2);
+	}
+}
+
+@mixin h5-styles {
+	@include heading-styles;
+	font-size: var(--font-size-h5);
+	@include prose {
+		@include block-space(bottom, 1 / 2);
+	}
+}
+
+@mixin h6-styles {
+	@include heading-styles;
+	font-size: var(--font-size-h6);
+	@include prose {
+		@include block-space(bottom, 1 / 3);
+	}
 }
 
 @mixin list-common-styles {
@@ -199,6 +248,12 @@ $block-elements: address, article, aside, audio, video, blockquote, dd, details,
 	padding: 0;
 	font-size: var(--font-size-body);
 	letter-spacing: var(--letter-spacing-body);
+
+	&:not(:last-child) {
+		@include prose {
+			@include block-space(bottom, 0.5);
+		}
+	}
 }
 
 // Style definitions for HTML elements

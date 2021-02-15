@@ -9,12 +9,6 @@ $metaFlexBp: 400px;
 
 .content {
 	margin-top: var(--size-block-space);
-
-	@each $selector in $block-elements {
-		> * + #{$selector} {
-			margin-top: var(--size-block-space);
-		}
-	}
 }
 
 .title {
@@ -105,7 +99,8 @@ $metaFlexBp: 400px;
 	margin-top: 0.5em;
 }
 
-.categories {}
+.categories {
+}
 
 .category {
 	// text-transform: uppercase;

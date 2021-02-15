@@ -3,7 +3,7 @@ import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { NextSeo } from "next-seo";
 import { getPublishedNotes } from "src/lib/notes-server";
 import { Title } from "src/components/title";
-import { Excerpt } from "src/components/excerpt";
+import { Excerpt, ExcerptBox } from "src/components/excerpt";
 import { Container } from "src/components/container";
 import { Section, HT, H1 } from "src/components/heading";
 import { SubscribeForm } from "src/components/subscribe-form";
@@ -11,7 +11,6 @@ import { Spacer } from "src/components/spacer";
 import { config } from "src/site-config";
 import { Hr, P } from "src/components/html";
 import { PublishedNoteMdx } from "src/types";
-const notesStyles = require("./notes/notes.module.scss");
 
 function Home({ notes }: InferGetStaticPropsType<typeof getStaticProps>) {
 	return (
@@ -59,16 +58,17 @@ function Home({ notes }: InferGetStaticPropsType<typeof getStaticProps>) {
 						{notes.map(({ frontMatter, linkPath }, i, src) => {
 							return (
 								<React.Fragment key={linkPath}>
-									<Excerpt
-										categories={frontMatter.categories}
-										className={notesStyles.post}
-										title={frontMatter.title}
-										formattedDate={frontMatter.formattedDate}
-										slug={linkPath}
-										contentType="notes"
-										excerpt={frontMatter.description}
-										headingStyle={2}
-									/>
+									<ExcerptBox>
+										<Excerpt
+											categories={frontMatter.categories}
+											title={frontMatter.title}
+											formattedDate={frontMatter.formattedDate}
+											slug={linkPath}
+											contentType="notes"
+											excerpt={frontMatter.description}
+											headingStyle={2}
+										/>
+									</ExcerptBox>
 									{i !== src.length - 1 && <Spacer spaces={2} />}
 								</React.Fragment>
 							);

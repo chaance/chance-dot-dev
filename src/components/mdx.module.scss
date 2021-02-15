@@ -1,0 +1,19 @@
+@import "mixins";
+
+.imgWrapper {
+	@include block-space(bottom, 1);
+	display: flex;
+	box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.5);
+
+	@media screen and (--bp-medium) {
+		margin-left: calc(var(--size-block-space) * -1);
+		margin-right: calc(var(--size-block-space) * -1);
+		box-shadow: 0 20px 30px -20px rgba(0, 0, 0, 0.5);
+	}
+
+	@media screen and (--bp-large) {
+		margin-left: calc(var(--size-block-space) * -2);
+		margin-right: calc(var(--size-block-space) * -2);
+		box-shadow: 0 30px 40px -30px rgba(0, 0, 0, 0.5);
+	}
+}

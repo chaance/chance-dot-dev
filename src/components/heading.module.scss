@@ -2,33 +2,35 @@
 
 .heading {
 	@include heading-styles;
+	@include prose {
+		@include block-space(bottom);
+	}
 }
 
 .ht {
 	@include title-styles;
-	font-size: var(--font-size-title);
 }
 
 .h1 {
-	font-size: var(--font-size-h1);
+	@include h1-styles;
 }
 
 .h2 {
-	font-size: var(--font-size-h2);
+	@include h2-styles;
 }
 
 .h3 {
-	font-size: var(--font-size-h3);
+	@include h3-styles;
 }
 
 .h4 {
-	font-size: var(--font-size-h4);
+	@include h4-styles;
 }
 
 .h5 {
-	font-size: var(--font-size-h5);
+	@include h5-styles;
 }
 
 .h6 {
-	font-size: var(--font-size-h6);
+	@include h6-styles;
 }

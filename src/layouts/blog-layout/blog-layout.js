@@ -37,7 +37,7 @@ const BlogLayout = function BlogLayout({ children: content, frontMatter }) {
 								linkCategories
 							/>
 						</header>
-						<Section wrap="div" className={styles.content}>
+						<Section wrap="div" className={[styles.content, "prose"]}>
 							{content}
 						</Section>
 					</article>

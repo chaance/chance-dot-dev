@@ -95,9 +95,9 @@ class MyDocument extends Document {
 						href="/favicon-16x16.png"
 					/>
 					<link rel="manifest" href="/manifest.json" />
-					<meta name="msapplication-TileColor" content="#ffffff" />
+					<meta name="msapplication-TileColor" content="#222223" />
 					<meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
-					<meta name="theme-color" content="#ffffff" />
+					<meta name="theme-color" content="#e51574" />
 
 					{fontStyleSheets.map((val) => (
 						<link rel="stylesheet" key={val} href={val} />

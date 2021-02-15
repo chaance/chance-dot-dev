@@ -474,20 +474,10 @@ table {
 	line-height: var(--line-height-body);
 }
 
-blockquote {
-	margin-left: var(--size-block-space);
-	margin-right: var(--size-block-space);
-}
-
-blockquote *:last-child,
-li *:last-child,
-p *:last-child {
-	margin-bottom: 0;
-}
-
-li > p {
-	margin-bottom: calc(var(--size-block-space) / 2);
-}
+// blockquote {
+// 	margin-left: var(--size-block-space);
+// 	margin-right: var(--size-block-space);
+// }
 
 pre,
 code,
@@ -532,17 +522,17 @@ th:last-child {
 }
 
 .prose > :first-child {
-	margin-top: 0;
+	margin-top: 0 !important;
 }
 
 .prose > :last-child {
-	margin-bottom: 0;
+	margin-bottom: 0 !important;
 }
 
 .prose:first-child > :first-child {
-	margin-top: 0;
+	margin-top: 0 !important;
 }
 
 .prose:last-child > :last-child {
-	margin-bottom: 0;
+	margin-bottom: 0 !important;
 }
