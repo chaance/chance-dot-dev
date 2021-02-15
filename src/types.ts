@@ -18,3 +18,10 @@ export interface Category {
 	slug: string;
 	label: string;
 }
+
+export interface NotesMdx {
+	content: string;
+	frontMatter: FrontMatter;
+	filePath: string;
+	linkPath: string;
+}

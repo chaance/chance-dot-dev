@@ -1,7 +1,8 @@
 import * as React from "react";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
-import { getNotes, NotesMdx } from "src/lib/get-notes";
 import { NextSeo } from "next-seo";
+import { getNotes, NotesMdx } from "src/lib/notes-server";
+import { isPublished } from "src/lib/notes";
 import { Title } from "src/components/title";
 import { Excerpt } from "src/components/excerpt";
 import { Container } from "src/components/container";
@@ -55,24 +56,25 @@ function Home({ notes }: InferGetStaticPropsType<typeof getStaticProps>) {
 					<H1>Notes</H1>
 					<Spacer />
 					<Section>
-						{notes.map(({ frontMatter, linkPath }) => {
-							return (
-								frontMatter.published &&
-								frontMatter.title && (
-									<Excerpt
-										categories={frontMatter.categories}
-										className={notesStyles.post}
-										key={linkPath}
-										title={frontMatter.title}
-										formattedDate={frontMatter.formattedDate}
-										slug={linkPath}
-										contentType="notes"
-										excerpt={frontMatter.description}
-										headingStyle={2}
-									/>
-								)
-							);
-						})}
+						{notes
+							.filter(isPublished)
+							.map(({ frontMatter, linkPath }, i, src) => {
+								return (
+									<React.Fragment key={linkPath}>
+										<Excerpt
+											categories={frontMatter.categories}
+											className={notesStyles.post}
+											title={frontMatter.title!}
+											formattedDate={frontMatter.formattedDate}
+											slug={linkPath}
+											contentType="notes"
+											excerpt={frontMatter.description}
+											headingStyle={2}
+										/>
+										{i !== src.length - 1 && <Spacer spaces={2} />}
+									</React.Fragment>
+								);
+							})}
 					</Section>
 					<Spacer preset="vertical-main" />
 				</main>

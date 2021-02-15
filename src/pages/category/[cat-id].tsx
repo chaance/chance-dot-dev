@@ -7,8 +7,8 @@ import { Excerpt } from "src/components/excerpt";
 import { Section, HT } from "src/components/heading";
 import { Title } from "src/components/title";
 import { SubscribeForm } from "src/components/subscribe-form";
-import { categories } from "src/lib/categories";
-import { getNotes, getCategories, NotesMdx } from "src/lib/get-notes";
+import { categories } from "src/lib/notes";
+import { getNotes, getCategories, NotesMdx } from "src/lib/notes-server";
 import {
 	fromArray,
 	useIsomorphicLayoutEffect as useLayoutEffect,

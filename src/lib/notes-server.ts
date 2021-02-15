@@ -1,16 +1,15 @@
 import { resolve, join, basename, dirname, sep as pathSeparator } from "path";
 import { readdir, readFile } from "fs-extra";
+import kebabCase from "lodash/kebabCase";
 import uniqBy from "lodash/uniqBy";
-import { sortByLatestDate } from "src/lib/sort-by-date";
-import { getGrayMatter } from "src/lib/mdx";
+import { getGrayMatter } from "src/lib/mdx-server";
 import { isDirectory } from "src/lib/fs";
-import { FrontMatter, Category } from "src/types";
+import { categories } from "src/lib/notes";
+import { NotesMdx, Category } from "src/types";
 
-// NOTE: These utils should generally be used for server-side work.
+const NOTES_PATH = resolve(process.cwd(), "src/notes");
 
-export const NOTES_PATH = resolve(process.cwd(), "src/notes");
-
-export async function getNoteFilePathFromSlug(slug: string) {
+async function getNoteFilePathFromSlug(slug: string) {
 	const fullPath = join(NOTES_PATH, slug);
 	if (await isDirectory(fullPath)) {
 		return join(fullPath, "index.mdx");
@@ -18,7 +17,7 @@ export async function getNoteFilePathFromSlug(slug: string) {
 	return fullPath + ".mdx";
 }
 
-export async function getNotesFilePaths(): Promise<string[]> {
+async function getNotesFilePaths(): Promise<string[]> {
 	let filePaths: string[] = [];
 	for (let filename of await readdir(NOTES_PATH)) {
 		let filePath = join(NOTES_PATH, filename);
@@ -31,7 +30,7 @@ export async function getNotesFilePaths(): Promise<string[]> {
 	return filePaths;
 }
 
-export async function getNotes(
+async function getNotes(
 	filter?: (post: NotesMdx) => boolean
 ): Promise<NotesMdx[]> {
 	let allNotes: NotesMdx[] = [];
@@ -56,7 +55,7 @@ export async function getNotes(
 	);
 }
 
-export async function getCategories(): Promise<Category[]> {
+async function getCategories(): Promise<Category[]> {
 	let allCategories: Category[] = [];
 	for (let note of await getNotes()) {
 		for (let category of note.frontMatter.categories || []) {
@@ -66,11 +65,11 @@ export async function getCategories(): Promise<Category[]> {
 	return uniqBy(allCategories, ({ slug }) => slug);
 }
 
-function isMdxFile(filename: string): boolean {
-	return /\.mdx?$/.test(filename);
+function isMdxFile(filePath: string): boolean {
+	return /\.mdx?$/.test(filePath);
 }
 
-export function isIndexMdx(filePath: string): boolean {
+function isIndexMdx(filePath: string): boolean {
 	return /^index\.mdx?$/.test(basename(filePath));
 }
 
@@ -84,9 +83,7 @@ async function hasIndexMdx(filePath: string) {
 	}
 }
 
-export function getSlugFromFilePath(
-	filePath: string
-): string | null | undefined {
+function getSlugFromFilePath(filePath: string): string | null | undefined {
 	try {
 		return isIndexMdx(filePath)
 			? dirname(filePath).split(pathSeparator).pop()
@@ -96,9 +93,25 @@ export function getSlugFromFilePath(
 	}
 }
 
-export interface NotesMdx {
-	content: string;
-	frontMatter: FrontMatter;
-	filePath: string;
-	linkPath: string;
+function getCategoryFromLabel(categoryLabel: string) {
+	if (categories.has(categoryLabel)) {
+		return categories.get(categoryLabel)!;
+	}
+	return { slug: kebabCase(categoryLabel), label: categoryLabel };
 }
+
+function sortByLatestDate(dateA: Date | string, dateB: Date | string): number {
+	// @ts-ignore
+	return new Date(dateB) - new Date(dateA);
+}
+
+export {
+	getCategories,
+	getCategoryFromLabel,
+	getNoteFilePathFromSlug,
+	getNotes,
+	getNotesFilePaths,
+	getSlugFromFilePath,
+	isIndexMdx,
+};
+export type { NotesMdx };

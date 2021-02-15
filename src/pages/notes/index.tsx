@@ -4,7 +4,7 @@ import { Excerpt } from "src/components/excerpt";
 import { Section, HT } from "src/components/heading";
 import { Container } from "src/components/container";
 import { SubscribeForm } from "src/components/subscribe-form";
-import { getNotes, NotesMdx } from "src/lib/get-notes";
+import { getNotes, NotesMdx } from "src/lib/notes-server";
 import { Title } from "src/components/title";
 import { Spacer } from "src/components/spacer";
 

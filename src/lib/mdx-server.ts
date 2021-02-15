@@ -1,12 +1,9 @@
+import { DateTime } from "luxon";
 import matter from "gray-matter";
 import renderToString from "next-mdx-remote/render-to-string";
 import { MdxRemote } from "next-mdx-remote/types";
-import { getCategoryFromLabel } from "src/lib/categories";
-import { getFormattedDate } from "src/lib/get-formatted-date";
+import { getCategoryFromLabel } from "src/lib/notes-server";
 import { FrontMatter, Category } from "src/types";
-
-// NOTE: These utils should generally be used for server-side work. Client-side
-// mdx is handled by next-mdx-remote/hydrate.
 
 async function getGrayMatter<
 	Input extends matter.Input,
@@ -59,13 +56,13 @@ async function mdxRenderToString<Input extends matter.Input>(
 	})) as any;
 }
 
-export { getGrayMatter, mdxRenderToString as renderToString };
-export type { MdxData, MdxSource };
-
-interface MdxData {
-	content: string;
-	frontMatter: FrontMatter;
+function getFormattedDate(date: string, options?: { format?: string }) {
+	const { format = "MMMM d, yyyy" } = options || {};
+	return DateTime.fromISO(date).toFormat(format);
 }
+
+export { getGrayMatter, mdxRenderToString as renderToString };
+export type { MdxSource };
 
 interface MdxSource {
 	compiledSource: string;

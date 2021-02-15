@@ -1,7 +1,7 @@
 import React, { createContext } from "react";
 import FontFaceObserver from "fontfaceobserver";
 // import kebabCase from "lodash/kebabCase";
-import { usePromise } from "@chancestrickland/hooks";
+import { usePromise } from "@chance/hooks";
 import { canUseDOM } from "src/lib/utils";
 
 const adobeStylesheet = `https://use.typekit.net/dxb2ypa.css`;
@@ -14,12 +14,10 @@ const ffSerif = "cooper";
 const ffMono = "ibm-plex-mono";
 // const ffMono = "IBM Plex Mono";
 
-export { ffSans, ffSansCaps, ffSerif, ffMono };
-
 const __DEV__ = process.env.NODE_ENV === "development";
 
 // Map of font names to each font's corresponding stylesheet
-export const webFonts = {
+const webFonts: Record<string, string> = {
 	[ffSans]: adobeStylesheet,
 	[ffSansCaps]: adobeStylesheet,
 	[ffSerif]: localStylesheet,
@@ -37,14 +35,14 @@ const SANS_SERIF_FALLBACKS = [
 
 const MONO_FALLBACKS = ['"Consolas"', '"Menlo"', '"Monaco"', "monospace"];
 
-export const fontLists = {
+const fontLists: Record<FontType, string[]> = {
 	sans: [quoteString(ffSans), ...SANS_SERIF_FALLBACKS],
 	sansCaps: [quoteString(ffSansCaps), ...SANS_SERIF_FALLBACKS],
 	serif: [quoteString(ffSerif), ...SANS_SERIF_FALLBACKS],
 	mono: [quoteString(ffMono), ...MONO_FALLBACKS],
 };
 
-export const fonts = Object.entries(fontLists)
+const fonts: Record<string, string> = Object.entries(fontLists)
 	.map(([key, family]) => [key, family.join(", ")])
 	.reduce(
 		(prev, [key, family]) => ({
@@ -98,15 +96,15 @@ async function loadFonts() {
 	}
 }
 
-export const fontsInitialState = {
+const fontsInitialState: FontContextValue = {
 	fonts: [],
 	loadingComplete: false,
 	error: undefined,
 };
 
-export const FontContext = createContext(fontsInitialState);
+const FontContext = createContext<FontContextValue>(fontsInitialState);
 
-export const FontProvider = ({ children }) => {
+const FontProvider: React.FC = ({ children }) => {
 	const [response, , error] = usePromise(loadFonts);
 	const {
 		loaded: loadingComplete = fontsInitialState.loadingComplete,
@@ -119,13 +117,30 @@ export const FontProvider = ({ children }) => {
 	);
 };
 
-export const useFonts = () => {
+const useFonts = () => {
 	return React.useContext(FontContext);
 };
 
-/**
- * @param {string} str
- */
-function quoteString(str) {
+function quoteString(str: string): string {
 	return `"${str}"`;
 }
+
+type FontType = "sans" | "sansCaps" | "serif" | "mono";
+
+interface FontContextValue {
+	fonts: string[];
+	loadingComplete: boolean;
+	error: any;
+}
+
+export {
+	ffMono,
+	ffSans,
+	ffSansCaps,
+	ffSerif,
+	fontLists,
+	FontProvider,
+	fonts,
+	useFonts,
+	webFonts,
+};

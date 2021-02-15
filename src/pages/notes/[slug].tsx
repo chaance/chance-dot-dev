@@ -7,8 +7,8 @@ import {
 	getNoteFilePathFromSlug,
 	getNotesFilePaths,
 	getSlugFromFilePath,
-} from "src/lib/get-notes";
-import { MdxSource, renderToString } from "src/lib/mdx";
+} from "src/lib/notes-server";
+import { MdxSource, renderToString } from "src/lib/mdx-server";
 import { fromArray } from "src/lib/utils";
 import { FrontMatter } from "src/types";
 import { MDXComponents } from "src/components/mdx";

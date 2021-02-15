@@ -21,7 +21,7 @@
 		"clean": "yarn clean:next && yarn clean:node"
 	},
 	"dependencies": {
-		"@chancestrickland/hooks": "^0.1.1",
+		"@chance/hooks": "^0.2.1",
 		"@mdx-js/loader": "^1.6.22",
 		"@mdx-js/react": "^1.6.22",
 		"@ngsctt/remark-smartypants": "^0.2.0",
@@ -50,12 +50,12 @@
 		"remark-images": "^2.0.0",
 		"remark-slug": "^6.0.0",
 		"sass": "^1.32.5",
-		"use-dark-mode": "^2.3.1",
 		"yup": "^0.32.8"
 	},
 	"devDependencies": {
 		"@chancedigital/browserslist-config": "^1.0.4",
 		"@chancedigital/eslint-config": "^8.0.0",
+		"@types/fontfaceobserver": "^0.0.6",
 		"@types/fs-extra": "^9.0.6",
 		"@types/lodash": "^4.14.168",
 		"@types/luxon": "^1.25.1",

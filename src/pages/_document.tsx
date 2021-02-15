@@ -21,10 +21,7 @@ class MyDocument extends Document {
 			<Html lang="en">
 				<Head>
 					{fontStyleSheets.map((val) => (
-						<React.Fragment key={val}>
-							<link rel="preload" as="style" href={val} />
-							<link rel="stylesheet" href={val} />
-						</React.Fragment>
+						<link key={val} rel="preload" as="style" href={val} />
 					))}
 
 					<link rel="icon" href="/favicon.ico" />
@@ -101,6 +98,10 @@ class MyDocument extends Document {
 					<meta name="msapplication-TileColor" content="#ffffff" />
 					<meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
 					<meta name="theme-color" content="#ffffff" />
+
+					{fontStyleSheets.map((val) => (
+						<link rel="stylesheet" key={val} href={val} />
+					))}
 				</Head>
 				<body>
 					<script src="/noflash.js" />
