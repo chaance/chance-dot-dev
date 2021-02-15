@@ -37,19 +37,39 @@ $collapses: collapse, separate;
 		$direction: unquote($direction);
 
 		&--direction-#{$direction} {
-			@for $i from 1 through 10 {
-				$half: $i - 0.5;
-				$half-str: unquote("#{$i - 1}-5");
+			@each $collapse in $collapses {
+				$prop: if(
+					$collapse == separate,
+					if($direction == block, height, width),
+					if($direction == block, margin-top, margin-left)
+				);
 
-				@each $collapse in $collapses {
-					$prop: if(
-						$collapse == separate,
-						if($direction == block, height, width),
-						if($direction == block, margin-top, margin-left)
-					);
+				&.spacer--spaces-0--1-3.spacer--collapse-#{$collapse} {
+					#{$prop}: calc(var(--size-block-space) * 0.333);
+				}
 
-					&.spacer--spaces-#{$half-str}.spacer--collapse-#{$collapse} {
-						#{$prop}: calc(var(--size-block-space) * #{$half});
+				&.spacer--spaces-0--2-3.spacer--collapse-#{$collapse} {
+					#{$prop}: calc(var(--size-block-space) * 0.667);
+				}
+
+				&.spacer--spaces-0--1-4.spacer--collapse-#{$collapse} {
+					#{$prop}: calc(var(--size-block-space) * 0.25);
+				}
+
+				&.spacer--spaces-0--3-4.spacer--collapse-#{$collapse} {
+					#{$prop}: calc(var(--size-block-space) * 0.75);
+				}
+
+				@for $i from 1 through 10 {
+					$less: $i - 1;
+					$f-1-2-str: unquote("#{$less}--1-2");
+					// $1-4-str: unquote("#{$less}--1-4");
+					// $3-4-str: unquote("#{$less}--3-4");
+					// $1-3-str: unquote("#{$less}--1-3");
+					// $2-3-str: unquote("#{$less}--2-3");
+
+					&.spacer--spaces-#{$f-1-2-str}.spacer--collapse-#{$collapse} {
+						#{$prop}: calc(var(--size-block-space) * #{$i - 0.5});
 					}
 
 					&.spacer--spaces-#{$i}.spacer--collapse-#{$collapse} {
@@ -66,16 +86,32 @@ $collapses: collapse, separate;
 				$direction: unquote($direction);
 
 				&--#{$breakpoint}-direction-#{$direction} {
-					@for $i from 1 through 10 {
-						$half: $i - 0.5;
-						$half-str: unquote("#{$i - 1}-5");
+					@each $collapse in $collapses {
+						$prop: if(
+							$collapse == separate,
+							if($direction == block, height, width),
+							if($direction == block, margin-top, margin-left)
+						);
 
-						@each $collapse in $collapses {
-							$prop: if(
-								$collapse == separate,
-								if($direction == block, height, width),
-								if($direction == block, margin-top, margin-left)
-							);
+						&.spacer--#{$breakpoint}-spaces-0--1-3.spacer--#{$breakpoint}-collapse-#{$collapse} {
+							#{$prop}: calc(var(--size-block-space) * 0.333);
+						}
+
+						&.spacer--#{$breakpoint}-spaces-0--2-3.spacer--#{$breakpoint}-collapse-#{$collapse} {
+							#{$prop}: calc(var(--size-block-space) * 0.667);
+						}
+
+						&.spacer--#{$breakpoint}-spaces-0--1-4.spacer--#{$breakpoint}-collapse-#{$collapse} {
+							#{$prop}: calc(var(--size-block-space) * 0.25);
+						}
+
+						&.spacer--#{$breakpoint}-spaces-0--3-4.spacer--#{$breakpoint}-collapse-#{$collapse} {
+							#{$prop}: calc(var(--size-block-space) * 0.75);
+						}
+
+						@for $i from 1 through 10 {
+							$half: $i - 0.5;
+							$half-str: unquote("#{$i - 1}-5");
 
 							&.spacer--#{$breakpoint}-spaces-#{$half-str}.spacer--#{$breakpoint}-collapse-#{$collapse} {
 								#{$prop}: calc(var(--size-block-space) * #{$half});

@@ -4,8 +4,8 @@ import kebabCase from "lodash/kebabCase";
 import uniqBy from "lodash/uniqBy";
 import { getGrayMatter } from "src/lib/mdx-server";
 import { isDirectory } from "src/lib/fs";
-import { categories } from "src/lib/notes";
-import { NotesMdx, Category } from "src/types";
+import { categories, isPublished } from "src/lib/notes";
+import { NoteMdx, PublishedNoteMdx, Category } from "src/types";
 
 const NOTES_PATH = resolve(process.cwd(), "src/notes");
 
@@ -30,10 +30,9 @@ async function getNotesFilePaths(): Promise<string[]> {
 	return filePaths;
 }
 
-async function getNotes(
-	filter?: (post: NotesMdx) => boolean
-): Promise<NotesMdx[]> {
-	let allNotes: NotesMdx[] = [];
+async function getNotes(opts?: GetNotesOptions): Promise<NoteMdx[]> {
+	let allNotes: NoteMdx[] = [];
+	let { sortBy = "date-latest" } = opts || {};
 	for (let filePath of await getNotesFilePaths()) {
 		let { content, frontMatter } = await getGrayMatter(
 			await readFile(filePath)
@@ -42,7 +41,6 @@ async function getNotes(
 		if (!linkPath) {
 			throw Error("asdfghjkl");
 		}
-
 		allNotes.push({
 			content,
 			frontMatter,
@@ -50,9 +48,27 @@ async function getNotes(
 			linkPath,
 		});
 	}
-	return (filter ? allNotes.filter(filter) : allNotes).sort((noteA, noteB) =>
-		sortByLatestDate(noteA.frontMatter.date!, noteB.frontMatter.date!)
-	);
+	return allNotes.sort((noteA, noteB) => {
+		switch (sortBy) {
+			case "date-earliest":
+				return sortByEarliestDate(
+					noteA.frontMatter.date!,
+					noteB.frontMatter.date!
+				);
+			case "date-latest":
+			default:
+				return sortByLatestDate(
+					noteA.frontMatter.date!,
+					noteB.frontMatter.date!
+				);
+		}
+	});
+}
+
+async function getPublishedNotes(
+	opts?: GetNotesOptions
+): Promise<PublishedNoteMdx[]> {
+	return (await getNotes(opts)).filter(isPublished);
 }
 
 async function getCategories(): Promise<Category[]> {
@@ -105,13 +121,26 @@ function sortByLatestDate(dateA: Date | string, dateB: Date | string): number {
 	return new Date(dateB) - new Date(dateA);
 }
 
+function sortByEarliestDate(
+	dateA: Date | string,
+	dateB: Date | string
+): number {
+	// @ts-ignore
+	return new Date(dateA) - new Date(dateB);
+}
+
+interface GetNotesOptions {
+	sortBy?: "date-latest" | "date-earliest";
+}
+
 export {
 	getCategories,
 	getCategoryFromLabel,
 	getNoteFilePathFromSlug,
 	getNotes,
+	getPublishedNotes,
 	getNotesFilePaths,
 	getSlugFromFilePath,
 	isIndexMdx,
 };
-export type { NotesMdx };
+export type { NoteMdx };

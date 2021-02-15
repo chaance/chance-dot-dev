@@ -3,6 +3,7 @@ import { Link } from "src/components/link";
 import { H1, H2, H3 } from "src/components/heading";
 import { PostMeta } from "src/components/post-meta";
 // import { CategoryList } from "src/components/category-list";
+import { Spacer } from "src/components/spacer";
 import { P } from "src/components/html";
 import { cx, unSlashIt } from "src/lib/utils";
 import { sprintf } from "src/lib/sprintf";
@@ -60,12 +61,13 @@ const Excerpt = React.forwardRef<
 			className={cx(props.className, styles.article)}
 		>
 			<div>
-				<header className={styles.header}>
-					<H className={styles.title}>
+				<header>
+					<H>
 						<Link className={styles.titleLink} href={permalink} rel="bookmark">
 							{title}
 						</Link>
 					</H>
+					<Spacer spaces={1 / 3} />
 					<PostMeta
 						className={styles.postMeta}
 						formattedDate={formattedDate}
@@ -75,10 +77,10 @@ const Excerpt = React.forwardRef<
 						categories={categories}
 					/>
 				</header>
-				<div>
+				<Spacer />
+				<div className="prose">
 					{excerpt && (
 						<P
-							className={styles.content}
 							// eslint-disable-next-line react/no-danger
 							dangerouslySetInnerHTML={{ __html: excerpt }}
 						/>

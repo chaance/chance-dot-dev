@@ -3,17 +3,19 @@ import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
 import startCase from "lodash/startCase";
 import { useRouter } from "next/router";
 import { VisuallyHidden } from "@reach/visually-hidden";
+import { Container } from "src/components/container";
 import { Excerpt } from "src/components/excerpt";
 import { Section, HT } from "src/components/heading";
 import { Title } from "src/components/title";
 import { SubscribeForm } from "src/components/subscribe-form";
 import { categories } from "src/lib/notes";
-import { getNotes, getCategories, NotesMdx } from "src/lib/notes-server";
+import { Spacer } from "src/components/spacer";
+import { getPublishedNotes, getCategories } from "src/lib/notes-server";
 import {
 	fromArray,
 	useIsomorphicLayoutEffect as useLayoutEffect,
 } from "src/lib/utils";
-const styles = require("./[cat-id].module.scss");
+import { PublishedNoteMdx } from "src/types";
 
 function Notes({
 	notes,
@@ -33,36 +35,40 @@ function Notes({
 
 	return (
 		<React.Fragment>
-			<div className={styles.wrapper}>
+			<Container>
 				<Title>{`Category: ${category.label}`}</Title>
+				<Spacer preset="vertical-main" />
 				<main>
-					<HT className={styles.title}>
+					<HT>
 						<VisuallyHidden>Category: </VisuallyHidden>
 						{category.label}
 					</HT>
+					<Spacer spaces={2} />
 					<Section>
-						{notes.map(({ frontMatter, linkPath }) => {
+						{notes.map(({ frontMatter, linkPath }, i, src) => {
 							return (
-								frontMatter.published &&
-								frontMatter.title && (
+								<React.Fragment key={linkPath}>
 									<Excerpt
 										categories={frontMatter.categories}
-										className={styles.post}
-										key={linkPath}
 										title={frontMatter.title}
 										formattedDate={frontMatter.formattedDate}
 										slug={linkPath}
 										contentType="notes"
 										excerpt={frontMatter.description}
 									/>
-								)
+									{i !== src.length - 1 && <Spacer spaces={2} />}
+								</React.Fragment>
 							);
 						})}
 					</Section>
+					<Spacer preset="vertical-main" />
 				</main>
-			</div>
+			</Container>
 			<aside>
-				<SubscribeForm className={styles.subscribeForm} />
+				<Spacer spaces={4} />
+				<Container size="wide">
+					<SubscribeForm />
+				</Container>
 			</aside>
 		</React.Fragment>
 	);
@@ -81,18 +87,15 @@ export const getStaticPaths: GetStaticPaths = async function getStaticPaths() {
 };
 
 export const getStaticProps: GetStaticProps<{
-	notes: NotesMdx[];
+	notes: PublishedNoteMdx[];
 	categoryLabel: string;
 }> = async ({ params = {} }) => {
-	const catId = fromArray(params["cat-id"])!;
-	const categoryLabel = categories.has(catId)
+	let catId = fromArray(params["cat-id"])!;
+	let categoryLabel = categories.has(catId)
 		? categories.get(catId)!.label
 		: startCase(catId);
-	const notes = await getNotes((post) => {
-		return !!(post.frontMatter.categories || []).find(
-			(cat) => cat.label === categoryLabel
-		);
-	});
+	let allNotes = await getPublishedNotes();
+	let notes = allNotes.filter(getCategoryFilter(categoryLabel));
 
 	return {
 		props: {
@@ -101,5 +104,12 @@ export const getStaticProps: GetStaticProps<{
 		},
 	};
 };
+
+function getCategoryFilter(categoryLabel: string) {
+	return function hasCategory(post: PublishedNoteMdx) {
+		let postCategories = post.frontMatter.categories || [];
+		return !!postCategories.find((cat) => cat.label === categoryLabel);
+	};
+}
 
 export default Notes;

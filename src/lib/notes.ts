@@ -1,6 +1,6 @@
-import { NotesMdx, Category } from "src/types";
+import { NoteMdx, PublishedNoteMdx, Category } from "src/types";
 
-function isPublished(note: NotesMdx) {
+function isPublished(note: NoteMdx): note is PublishedNoteMdx {
 	return !!(note.frontMatter.title && note.frontMatter.published);
 }
 

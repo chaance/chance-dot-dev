@@ -12,12 +12,4 @@
 	&:hover {
 		box-shadow: 0 30px 40px -30px rgba(0, 0, 0, 0.5);
 	}
-
-	&:not(:last-of-type) {
-		margin-bottom: calc(var(--size-block-space) * 2);
-	}
-
-	&:not(:first-of-type) {
-		margin-top: calc(var(--size-block-space) * 2);
-	}
 }

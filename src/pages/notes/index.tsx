@@ -4,9 +4,10 @@ import { Excerpt } from "src/components/excerpt";
 import { Section, HT } from "src/components/heading";
 import { Container } from "src/components/container";
 import { SubscribeForm } from "src/components/subscribe-form";
-import { getNotes, NotesMdx } from "src/lib/notes-server";
+import { getPublishedNotes } from "src/lib/notes-server";
 import { Title } from "src/components/title";
 import { Spacer } from "src/components/spacer";
+import { PublishedNoteMdx } from "src/types";
 
 const styles = require("./notes.module.scss");
 
@@ -20,27 +21,28 @@ function Notes({ notes = [] }: InferGetStaticPropsType<typeof getStaticProps>) {
 				<main>
 					<HT className={styles.title}>Notes</HT>
 					<Section>
-						{notes.map(({ frontMatter, linkPath }) => {
+						{notes.map(({ frontMatter, linkPath }, i, src) => {
 							return (
-								frontMatter.published &&
-								frontMatter.title && (
+								<React.Fragment key={linkPath}>
 									<Excerpt
 										categories={frontMatter.categories}
 										className={styles.post}
-										key={linkPath}
 										title={frontMatter.title}
 										formattedDate={frontMatter.formattedDate}
 										slug={linkPath}
 										contentType="notes"
 										excerpt={frontMatter.description}
 									/>
-								)
+									{i !== src.length - 1 && <Spacer spaces={2} />}
+								</React.Fragment>
 							);
 						})}
 					</Section>
+					<Spacer preset="vertical-main" />
 				</main>
 			</Container>
 			<aside>
+				<Spacer spaces={4} />
 				<Container size="wide">
 					<SubscribeForm className={styles.subscribeForm} />
 				</Container>
@@ -50,9 +52,9 @@ function Notes({ notes = [] }: InferGetStaticPropsType<typeof getStaticProps>) {
 }
 
 export const getStaticProps: GetStaticProps<{
-	notes: NotesMdx[];
+	notes: PublishedNoteMdx[];
 }> = async () => {
-	const notes = await getNotes();
+	const notes = await getPublishedNotes();
 	return {
 		props: {
 			notes,

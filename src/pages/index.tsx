@@ -1,8 +1,7 @@
 import * as React from "react";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { NextSeo } from "next-seo";
-import { getNotes, NotesMdx } from "src/lib/notes-server";
-import { isPublished } from "src/lib/notes";
+import { getPublishedNotes } from "src/lib/notes-server";
 import { Title } from "src/components/title";
 import { Excerpt } from "src/components/excerpt";
 import { Container } from "src/components/container";
@@ -11,6 +10,7 @@ import { SubscribeForm } from "src/components/subscribe-form";
 import { Spacer } from "src/components/spacer";
 import { config } from "src/site-config";
 import { Hr, P } from "src/components/html";
+import { PublishedNoteMdx } from "src/types";
 const notesStyles = require("./notes/notes.module.scss");
 
 function Home({ notes }: InferGetStaticPropsType<typeof getStaticProps>) {
@@ -56,25 +56,23 @@ function Home({ notes }: InferGetStaticPropsType<typeof getStaticProps>) {
 					<H1>Notes</H1>
 					<Spacer />
 					<Section>
-						{notes
-							.filter(isPublished)
-							.map(({ frontMatter, linkPath }, i, src) => {
-								return (
-									<React.Fragment key={linkPath}>
-										<Excerpt
-											categories={frontMatter.categories}
-											className={notesStyles.post}
-											title={frontMatter.title!}
-											formattedDate={frontMatter.formattedDate}
-											slug={linkPath}
-											contentType="notes"
-											excerpt={frontMatter.description}
-											headingStyle={2}
-										/>
-										{i !== src.length - 1 && <Spacer spaces={2} />}
-									</React.Fragment>
-								);
-							})}
+						{notes.map(({ frontMatter, linkPath }, i, src) => {
+							return (
+								<React.Fragment key={linkPath}>
+									<Excerpt
+										categories={frontMatter.categories}
+										className={notesStyles.post}
+										title={frontMatter.title}
+										formattedDate={frontMatter.formattedDate}
+										slug={linkPath}
+										contentType="notes"
+										excerpt={frontMatter.description}
+										headingStyle={2}
+									/>
+									{i !== src.length - 1 && <Spacer spaces={2} />}
+								</React.Fragment>
+							);
+						})}
 					</Section>
 					<Spacer preset="vertical-main" />
 				</main>
@@ -90,9 +88,9 @@ function Home({ notes }: InferGetStaticPropsType<typeof getStaticProps>) {
 }
 
 export const getStaticProps: GetStaticProps<{
-	notes: NotesMdx[];
+	notes: PublishedNoteMdx[];
 }> = async () => {
-	const notes = await getNotes();
+	const notes = await getPublishedNotes();
 	return {
 		props: {
 			notes,

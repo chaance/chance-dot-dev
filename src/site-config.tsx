@@ -20,14 +20,13 @@ export const authors: Author[] = [
 ];
 
 const config: Config = {
-	pathPrefix: "/",
 	siteTitle: SITE_TITLE,
 	siteUrl: SITE_URL,
 
 	// SEO
 	seo: {
 		title: SITE_TITLE,
-		titleTemplate: "%s | chance.dev",
+		titleTemplate: `%s | ${SITE_TITLE}`,
 		description: SITE_DESC,
 		openGraph: {
 			type: "website",
@@ -65,7 +64,6 @@ const config: Config = {
 };
 
 type Config = {
-	pathPrefix: string;
 	siteTitle: string;
 	siteUrl: string;
 	seo: NextSeoProps;

@@ -115,5 +115,10 @@ type SpacerDirection = "inline" | "block";
 type Spaces = number;
 
 function spaceStr(spaces: number) {
-	return String(spaces).replace(".", "-");
+	return String(spaces)
+		.replace(".5", "--1-2")
+		.replace(".25", "--1-4")
+		.replace(".75", "--3-4")
+		.replace(/\.3+$/g, "--1-3")
+		.replace(/\.6+7$/g, "--2-3");
 }

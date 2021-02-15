@@ -9,20 +9,6 @@
 	}
 }
 
-.postMeta {
-	margin-top: 0.5em;
-}
-
-.header {
-	margin-bottom: var(--size-block-space);
-}
-
-.content {
-	&:not(:first-of-type) {
-		margin-top: var(--size-block-space);
-	}
-}
-
 .categoryList {
 	a {
 		border-bottom: 0;
