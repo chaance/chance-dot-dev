@@ -462,7 +462,15 @@ body {
 	padding-left: 0;
 }
 
+ul,
+ol,
+li {
+	text-indent: 0;
+	list-style-type: none;
+}
+
 img {
+	display: block;
 	max-width: 100%;
 	height: auto;
 }
@@ -473,11 +481,6 @@ table {
 	font-size: 1rem;
 	line-height: var(--line-height-body);
 }
-
-// blockquote {
-// 	margin-left: var(--size-block-space);
-// 	margin-right: var(--size-block-space);
-// }
 
 pre,
 code,
