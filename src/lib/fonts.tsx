@@ -4,24 +4,25 @@ import FontFaceObserver from "fontfaceobserver";
 import { usePromise } from "@chance/hooks";
 import { canUseDOM } from "src/lib/utils";
 
-const adobeStylesheet = `https://use.typekit.net/dxb2ypa.css`;
-const localStylesheet = `/fonts/style.css`;
+const googleStylesheet =
+	"https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400;1,500&family=Nunito:ital,wght@0,400;0,700;1,400;1,700&display=swap";
+const localStylesheet = "/fonts/style.css";
 
 // const ffSans = "Inter";
-const ffSans = "nunito";
+const ffSans = "Nunito";
 const ffSansCaps = "brandon-grotesque";
 const ffSerif = "cooper";
-const ffMono = "ibm-plex-mono";
+const ffMono = "IBM Plex Mono";
 // const ffMono = "IBM Plex Mono";
 
 const __DEV__ = process.env.NODE_ENV === "development";
 
 // Map of font names to each font's corresponding stylesheet
 const webFonts: Record<string, string> = {
-	[ffSans]: adobeStylesheet,
-	[ffSansCaps]: adobeStylesheet,
+	[ffSans]: googleStylesheet,
+	[ffSansCaps]: localStylesheet,
 	[ffSerif]: localStylesheet,
-	[ffMono]: adobeStylesheet,
+	[ffMono]: googleStylesheet,
 };
 
 const SANS_SERIF_FALLBACKS = [

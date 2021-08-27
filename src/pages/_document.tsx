@@ -20,6 +20,8 @@ class MyDocument extends Document {
 		return (
 			<Html lang="en">
 				<Head>
+					<link rel="preconnect" href="https://fonts.googleapis.com" />
+					<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
 					{fontStyleSheets.map((val) => (
 						<link key={val} rel="preload" as="style" href={val} />
 					))}
