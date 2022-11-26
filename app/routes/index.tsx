@@ -1,7 +1,6 @@
 import type { LinksFunction } from "@remix-run/node";
 import { Form, Link } from "@remix-run/react";
-
-import { useOptionalUser } from "~/utils";
+import { useOptionalUser } from "~/lib/utils.react";
 import routeStylesUrl from "~/dist/styles/routes/index.css";
 
 export const links: LinksFunction = () => {

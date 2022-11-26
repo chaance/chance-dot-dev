@@ -1,24 +1,26 @@
+import * as React from "react";
 import type { ActionArgs, LoaderArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
-import * as React from "react";
-
-import { createUserSession, getUserId } from "~/session.server";
+import { createUserSession, getUserId } from "~/lib/session.server";
 import { verifyLogin } from "~/models/user.server";
-import { safeRedirect, validateEmail } from "~/utils";
+import { safeRedirect } from "~/lib/utils.server";
+import { validateEmail } from "~/lib/utils";
 
 export async function loader({ request }: LoaderArgs) {
-	const userId = await getUserId(request);
-	if (userId) return redirect("/");
+	let userId = await getUserId(request);
+	if (userId) {
+		return redirect("/");
+	}
 	return json({});
 }
 
 export async function action({ request }: ActionArgs) {
-	const formData = await request.formData();
-	const email = formData.get("email");
-	const password = formData.get("password");
-	const redirectTo = safeRedirect(formData.get("redirectTo"), "/notes");
-	const remember = formData.get("remember");
+	let formData = await request.formData();
+	let email = formData.get("email");
+	let password = formData.get("password");
+	let redirectTo = safeRedirect(formData.get("redirectTo"), "/notes");
+	let remember = formData.get("remember");
 
 	if (!validateEmail(email)) {
 		return json(
@@ -41,8 +43,7 @@ export async function action({ request }: ActionArgs) {
 		);
 	}
 
-	const user = await verifyLogin(email, password);
-
+	let user = await verifyLogin(email, password);
 	if (!user) {
 		return json(
 			{ errors: { email: "Invalid email or password", password: null } },
@@ -65,11 +66,11 @@ export const meta: MetaFunction = () => {
 };
 
 export default function LoginPage() {
-	const [searchParams] = useSearchParams();
-	const redirectTo = searchParams.get("redirectTo") || "/notes";
-	const actionData = useActionData<typeof action>();
-	const emailRef = React.useRef<HTMLInputElement>(null);
-	const passwordRef = React.useRef<HTMLInputElement>(null);
+	let [searchParams] = useSearchParams();
+	let redirectTo = searchParams.get("redirectTo") || "/notes";
+	let actionData = useActionData<typeof action>();
+	let emailRef = React.useRef<HTMLInputElement>(null);
+	let passwordRef = React.useRef<HTMLInputElement>(null);
 
 	React.useEffect(() => {
 		if (actionData?.errors?.email) {

@@ -8,10 +8,9 @@ import {
 	Scripts,
 	ScrollRestoration,
 } from "@remix-run/react";
-
 import resetsStylesUrl from "~/dist/styles/resets.css";
 import appStylesUrl from "~/dist/styles/app.css";
-import { getUser } from "~/session.server";
+import { getUser } from "~/lib/session.server";
 
 export const links: LinksFunction = () => {
 	return [

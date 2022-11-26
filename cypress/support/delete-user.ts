@@ -5,8 +5,7 @@
 
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { installGlobals } from "@remix-run/node";
-
-import { prisma } from "~/db.server";
+import { prisma } from "~/lib/db.server";
 
 installGlobals();
 

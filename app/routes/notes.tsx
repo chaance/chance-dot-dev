@@ -1,11 +1,9 @@
 import type { LinksFunction, LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
-
-import { requireUserId } from "~/session.server";
-import { useUser } from "~/utils";
+import { requireUserId } from "~/lib/session.server";
+import { useUser } from "~/lib/utils.react";
 import { getNoteListItems } from "~/models/note.server";
-
 import routeStylesUrl from "~/dist/styles/routes/notes.css";
 import cx from "clsx";
 

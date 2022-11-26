@@ -2,11 +2,10 @@ import * as React from "react";
 import type { ActionArgs, LoaderArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
-
-import { getUserId, createUserSession } from "~/session.server";
-
+import { getUserId, createUserSession } from "~/lib/session.server";
 import { createUser, getUserByEmail } from "~/models/user.server";
-import { safeRedirect, validateEmail } from "~/utils";
+import { validateEmail } from "~/lib/utils";
+import { safeRedirect } from "~/lib/utils.server";
 
 export async function loader({ request }: LoaderArgs) {
 	const userId = await getUserId(request);

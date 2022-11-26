@@ -2,8 +2,7 @@ import * as React from "react";
 import type { LoaderArgs, LinksFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
-import { getUserId } from "~/session.server";
-
+import { getUserId } from "~/lib/session.server";
 import routeStylesUrl from "~/dist/styles/routes/__auth.css";
 
 export const links: LinksFunction = () => {

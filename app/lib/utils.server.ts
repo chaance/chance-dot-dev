@@ -1,9 +1,6 @@
 import { useMatches } from "@remix-run/react";
 import { useMemo } from "react";
-
 import type { User } from "~/models/user.server";
-
-const DEFAULT_REDIRECT = "/";
 
 /**
  * This should be used any time the redirect path is user-provided
@@ -14,7 +11,7 @@ const DEFAULT_REDIRECT = "/";
  */
 export function safeRedirect(
 	to: FormDataEntryValue | string | null | undefined,
-	defaultRedirect: string = DEFAULT_REDIRECT
+	defaultRedirect: string = "/"
 ) {
 	if (!to || typeof to !== "string") {
 		return defaultRedirect;
@@ -64,8 +61,4 @@ export function useUser(): User {
 		);
 	}
 	return maybeUser;
-}
-
-export function validateEmail(email: unknown): email is string {
-	return typeof email === "string" && email.length > 3 && email.includes("@");
 }
