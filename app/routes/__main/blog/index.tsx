@@ -15,39 +15,44 @@ export function links() {
 const ROOT_CLASS = "page--blog-index";
 
 export let loader = async (args: LoaderArgs) => {
-	let headers = {
-		"Cache-Control": "private, max-age=3600",
-		// Vary: "Cookie",
-	};
-	let rawPosts = await getMarkdownBlogPosts();
+	try {
+		let headers = {
+			"Cache-Control": "private, max-age=3600",
+			// Vary: "Cookie",
+		};
+		let rawPosts = await getMarkdownBlogPosts();
 
-	if (!rawPosts) {
-		throw new Response("Not found", {
-			status: 404,
-			headers,
-		});
+		if (!rawPosts) {
+			throw new Response("Not found", {
+				status: 404,
+				headers,
+			});
+		}
+
+		return json(
+			{
+				posts: rawPosts.map((post) => {
+					let createdAt = new Date(post.createdAt);
+					return {
+						// temporary...
+						title: post.title.replace(/&colon;/g, ":"),
+						slug: post.slug,
+						createdAtFormatted: createdAt.toLocaleString("en-US", {
+							year: "numeric",
+							month: "long",
+							day: "numeric",
+							timeZone: "America/Los_Angeles",
+						}),
+						createdAtISO: createdAt.toISOString(),
+					};
+				}),
+			},
+			{ headers }
+		);
+	} catch (error) {
+		console.error(error);
+		throw error;
 	}
-
-	return json(
-		{
-			posts: rawPosts.map((post) => {
-				let createdAt = new Date(post.createdAt);
-				return {
-					// temporary...
-					title: post.title.replace(/&colon;/g, ":"),
-					slug: post.slug,
-					createdAtFormatted: createdAt.toLocaleString("en-US", {
-						year: "numeric",
-						month: "long",
-						day: "numeric",
-						timeZone: "America/Los_Angeles",
-					}),
-					createdAtISO: createdAt.toISOString(),
-				};
-			}),
-		},
-		{ headers }
-	);
 };
 
 export let headers: HeadersFunction = ({ loaderHeaders }) => {
