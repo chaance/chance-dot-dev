@@ -92,6 +92,7 @@ async function loadBase16Theme(): Promise<Shiki.IShikiTheme> {
 	}
 	// relative to the build path, not the source
 	const dataPath = path.join(__dirname, "..", "data");
+	console.log({ __dirname, dataPath });
 	return (_base16Theme = await loadTheme(
 		path.resolve(dataPath, "shiki-base16.json")
 	));
