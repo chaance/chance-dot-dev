@@ -20,13 +20,13 @@ export default function MainLayout() {
 
 function PrimaryLayout({ children }: React.PropsWithChildren<{}>) {
 	let location = useLocation();
-	let isFixed = location.pathname === "/";
+	let isAbsolute = location.pathname === "/";
 	return (
 		<div className={ROOT_CLASS}>
 			<div className={`${ROOT_CLASS}__header`}>
 				<SiteHeader
-					position={isFixed ? "fixed" : "sticky"}
-					includeBottomMargin={!isFixed}
+					position={isAbsolute ? "absolute" : "sticky"}
+					includeBottomMargin={!isAbsolute}
 				/>
 			</div>
 			<div className={`${ROOT_CLASS}__main`}>{children}</div>

@@ -108,10 +108,18 @@ export default function BlogPostRoute() {
 								<p _className="text-lg xl:text-xl" className={`${ROOT_CLASS}__desc`}>{post.description}</p>
 							) : null */}
 							<p className={`${ROOT_CLASS}__meta`}>
-								<span>{post.updatedAtISO ? "Updated on" : "Posted on"} </span>
-								<time dateTime={post.updatedAtISO || post.createdAtISO}>
-									{post.updatedAtFormatted || post.createdAtFormatted}
+								<span>Posted on </span>
+								<time dateTime={post.createdAtISO}>
+									{post.createdAtFormatted}
 								</time>
+								{post.updatedAtISO ? (
+									<>
+										; <span>Updated on </span>
+										<time dateTime={post.updatedAtISO}>
+											{post.updatedAtFormatted}
+										</time>
+									</>
+								) : null}
 							</p>
 						</header>
 					</Container>

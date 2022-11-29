@@ -64,7 +64,7 @@
 		background-color: var(--cs-color-background-translucent);
 	}
 
-	&:where([data-ui-is-past-scroll-threshold="false"]) {
+	&:where([data-ui-is-past-scroll-threshold="false"], :not([data-ui-is-past-scroll-threshold])) {
 		background-color: transparent;
 		border-color: transparent;
 	}

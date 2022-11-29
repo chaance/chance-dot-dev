@@ -26,6 +26,7 @@ export async function action({ request }: ActionArgs) {
 	let passwordConfirm = formData.get("passwordConfirm");
 	let redirectTo = getSafeRedirect(formData.get("redirectTo"), "/admin");
 
+	// disallow sign-ups for now
 	if (email !== process.env.AUTHENTICATED_EMAIL) {
 		return json(
 			{

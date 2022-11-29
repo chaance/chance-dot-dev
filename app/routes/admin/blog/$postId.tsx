@@ -10,6 +10,10 @@ import invariant from "tiny-invariant";
 const formFields = new Map<FormFieldName, FormFieldDescriptor>([
 	["title", { label: "Title", required: true, type: "text" }],
 	["slug", { label: "Slug", required: false, type: "text" }],
+	[
+		"createdAt",
+		{ label: "Created At", required: false, type: "datetime-local" },
+	],
 	["body", { label: "Content", required: true, type: "textarea", rows: 14 }],
 	["description", { label: "Description", required: false, type: "text" }],
 	["excerpt", { label: "Excerpt", required: false, type: "textarea", rows: 2 }],
@@ -43,7 +47,20 @@ export async function action({ request }: ActionArgs) {
 		if (desc.required && !fieldValue) {
 			errors[name] = `${desc.label} is required`;
 		}
-		values[name] = fieldValue;
+
+		if (desc.type === "datetime-local") {
+			let date: Date | null;
+			try {
+				date = fieldValue ? new Date(fieldValue) : null;
+			} catch (err) {
+				errors[name] = `${desc.label} is an invalid date`;
+				date = null;
+			}
+			// @ts-expect-error
+			values[name] = date;
+		} else {
+			values[name] = fieldValue;
+		}
 	}
 
 	if (hasFormErrors(errors)) {
@@ -67,13 +84,11 @@ export async function action({ request }: ActionArgs) {
 		slug: values.slug,
 		description: values.description,
 		excerpt: values.excerpt,
+		createdAt: (values.createdAt as any) || undefined,
 		seo: {
 			twitterCard: values.twitterCard,
 		},
-		// twitterCreator: values.twitterCreator,
-		// twitterSite: values.twitterSite,
 	});
-	console.log(post);
 	return json({ post, errors });
 }
 
@@ -144,6 +159,7 @@ type FormFieldName =
 	| "body"
 	| "description"
 	| "excerpt"
+	| "createdAt"
 	| "twitterCard";
 
 type InputType = "text" | "email" | "password" | "url" | "number" | "tel";
@@ -152,6 +168,9 @@ type FormFieldDescriptor = { required: boolean; label: string } & (
 	| {
 			type: InputType;
 			placeholder?: string;
+	  }
+	| {
+			type: "datetime-local";
 	  }
 	| {
 			type: "textarea";
@@ -166,13 +185,15 @@ type FormFieldValues = Record<FormFieldName, string | null>;
 type FormFieldProps = {
 	name: FormFieldName;
 	label: string;
-	type?: InputType | "textarea";
+	type?: InputType | "textarea" | "datetime-local";
 	required?: boolean;
 	placeholder?: string;
 	errorMessage?: string | null;
 	rows?: number;
 	id: string;
 	defaultValue?: string | null;
+	min?: string | number;
+	max?: string | number;
 };
 
 function FormField({
@@ -185,6 +206,8 @@ function FormField({
 	errorMessage,
 	rows,
 	defaultValue,
+	min,
+	max,
 }: FormFieldProps) {
 	let errorMessageId = `${id}-error`;
 	let ariaInvalid = errorMessage ? true : undefined;
@@ -215,6 +238,8 @@ function FormField({
 						aria-invalid={ariaInvalid}
 						aria-errormessage={ariaErrormessage}
 						defaultValue={defaultValue || undefined}
+						min={min}
+						max={max}
 					/>
 				)}
 			</div>
