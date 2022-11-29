@@ -17,11 +17,38 @@ export interface User extends UserProfile {
 }
 
 export async function getUser(id: string): Promise<User | null> {
-	let user = await prisma.user.findUnique({
-		where: { id },
-		include: { profile: true },
-	});
-	return user ? modelUser(user) : null;
+	try {
+		let user = await prisma.user.findUnique({
+			where: { id },
+			include: { profile: true },
+		});
+		return user ? modelUser(user) : null;
+	} catch (err) {
+		console.error('');
+		console.error('');
+		console.error('');
+		console.error('');
+		console.error('');
+		console.error('');
+		console.error('');
+		console.error('');
+		console.error('');
+		console.error('');
+		console.error('');
+		console.error('');
+		console.error('');
+		console.error('');
+		console.error(err);
+		console.error('');
+		console.error('');
+		console.error('');
+		console.error('');
+		console.error('');
+		console.error('');
+		console.error('');
+		console.error('');
+		return null;
+	}
 }
 
 export async function getUserByEmail(email: string): Promise<User | null> {

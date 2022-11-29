@@ -226,6 +226,25 @@ export function validatePassword(password: string): PasswordValidationError[] {
 	return errors;
 }
 
+export function getPasswordErrorMessage(error: PasswordValidationError) {
+	switch (error.type) {
+		case "tooShort":
+			return `Password must be at least ${error.minLength} characters`;
+		case "tooLong":
+			return `Password must be at most ${error.maxLength} characters`;
+		case "missingSpecialChar":
+			return `Password must contain at least one of the following special characters: ${error.specialChars}`;
+		case "missingUpperCase":
+			return `Password must contain at least one uppercase letter`;
+		case "missingLowerCase":
+			return `Password must contain at least one lowercase letter`;
+		case "missingNumber":
+			return `Password must contain at least one numbeer`;
+		default:
+			return "Invalid password";
+	}
+}
+
 export function isUser(user: any): user is User {
 	return user && typeof user === "object" && typeof user.email === "string";
 }
