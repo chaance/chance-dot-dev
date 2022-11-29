@@ -15,11 +15,7 @@ import { Container } from "~/ui/container";
 import { SiteHeader } from "~/ui/site-header";
 import { SiteFooter } from "~/ui/site-footer";
 import { canUseDOM } from "~/lib/utils";
-import {
-	getUserFromSession,
-	serverSessionStorage,
-	USER_SESSION_KEY,
-} from "~/lib/session.server";
+import { getUserFromSession, serverSessionStorage } from "~/lib/session.server";
 import { getSeo } from "~/lib/seo";
 import { RouteChangeAnnouncement } from "~/ui/primitives/route-change-announcement";
 import { RootProvider } from "~/lib/react/context";
