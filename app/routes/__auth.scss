@@ -1,5 +1,6 @@
 .auth-layout {
 	--container-width: 28rem;
+	min-height: 100%;
 	position: relative;
 	display: flex;
 	flex-direction: column;
@@ -10,21 +11,34 @@
 .auth-box {
 	--color-shadow: hsl(0 0% 0% / 0.125);
 	@media (min-width: 601px) {
-		background: var(--color-body-bg-raised);
+		background: var(--cs-color-background-raised);
 		// border: 1px solid var(--color-body-border);
 		border-radius: 6px;
 		flex: 1 0 auto;
 		padding: 3rem;
+		margin: 2em 0;
 		box-shadow: 0px 15px 25px -10px var(--color-shadow);
 	}
 
 	@media (prefers-color-scheme: dark) {
 		--color-shadow: hsl(0 0% 0% / 0.5);
 	}
+
+	.form {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.checkbox-field {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
 }
 
 .auth-postfix {
-	color: var(--color-body-fg-weak);
+	color: var(--cs-color-text-weaker);
 	font-size: 0.825em;
 	text-align: center;
 

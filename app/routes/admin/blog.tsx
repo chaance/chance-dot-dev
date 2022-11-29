@@ -23,7 +23,7 @@ export async function loader({ request }: LoaderArgs) {
 export default function AdminBlogLayout() {
 	return (
 		<div className="admin-blog-layout">
-			<div>
+			<div className="admin-blog-layout-outlet">
 				<Outlet />
 			</div>
 			<footer className="footer">

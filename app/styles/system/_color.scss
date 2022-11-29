@@ -293,6 +293,9 @@ $base_colors: (
 		$scale: 10;
 	}
 	$scale: cs_string.pad_start(#{$scale}, 2, "0");
+	@if $color == "white" or $color == "black" {
+		@return var(--#{constants.$namespace}-color-#{$color});
+	}
 	@return var(--#{constants.$namespace}-color-#{$color}-#{$scale});
 }
 
@@ -331,6 +334,22 @@ $color_tokens: (
 		"light": get_system_color_var("gray", 10),
 		"dark": get_system_color_var("gray", 10),
 	),
+	"text-inverted": (
+		"light": get_system_color_var("gray", 1),
+		"dark": get_system_color_var("gray", 18),
+	),
+	"text-inverted-weak": (
+		"light": get_system_color_var("gray", 4),
+		"dark": get_system_color_var("gray", 15),
+	),
+	"text-inverted-weaker": (
+		"light": get_system_color_var("gray", 7),
+		"dark": get_system_color_var("gray", 12),
+	),
+	"text-inverted-weakest": (
+		"light": get_system_color_var("gray", 10),
+		"dark": get_system_color_var("gray", 10),
+	),
 	"text-error": (
 		"light": get_system_color_var("red", 14),
 		"dark": get_system_color_var("red", 6),
@@ -360,8 +379,12 @@ $color_tokens: (
 		"dark": get_system_color_var("green", 7),
 	),
 	"background": (
-		"light": get_system_color_var("white"),
+		"light": get_system_color_var("gray", 1),
 		"dark": get_system_color_var("gray", 19),
+	),
+	"background-raised": (
+		"light": get_system_color_var("white"),
+		"dark": get_system_color_var("gray", 18),
 	),
 	"background-translucent": (
 		"light": get_system_base_color("white", 10, $alpha: 0.5),
@@ -371,6 +394,10 @@ $color_tokens: (
 		"light": get_system_color_var("gray", 5),
 		"dark": get_system_color_var("gray", 15),
 	),
+	"border-hover": (
+		"light": get_system_color_var("gray", 17),
+		"dark": get_system_color_var("gray", 3),
+	),
 	"border-strong": (
 		"light": get_system_color_var("gray", 12),
 		"dark": get_system_color_var("gray", 8),
@@ -378,6 +405,14 @@ $color_tokens: (
 	"text-code-block": (
 		"light": get_system_color_var("gray", 15),
 		"dark": get_system_color_var("gray", 4),
+	),
+	"button": (
+		"light": get_system_color_var("white"),
+		"dark": get_system_color_var("gray", 18),
+	),
+	"button-hover": (
+		"light": get_system_color_var("gray", 2),
+		"dark": get_system_color_var("gray", 16),
 	),
 );
 // #endregion

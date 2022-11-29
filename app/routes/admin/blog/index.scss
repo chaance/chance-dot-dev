@@ -30,7 +30,7 @@
 	.logout-form {
 		display: flex;
 		flex-direction: column;
-		color: var(--color-body-fg-weak);
+		color: var(--cs-color-text-weak);
 		@media (min-width: #{$container_width}) {
 			gap: 0.5rem;
 			flex-direction: row;
