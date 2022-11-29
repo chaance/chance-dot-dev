@@ -192,6 +192,7 @@ type BlogPostUpdateData = {
 	twitterCard?: string | null;
 	twitterSite?: string | null;
 	twitterCreator?: string | null;
+	createdAt?: Date;
 };
 
 export async function updateBlogPost(
@@ -205,6 +206,7 @@ export async function updateBlogPost(
 		description?: string | null;
 		excerpt?: string | null;
 		slug?: string | null;
+		createdAt?: Date;
 		seo?: {
 			twitterCard?: string | null;
 			twitterSite?: string | null;
@@ -220,25 +222,21 @@ export async function updateBlogPost(
 		slug = undefined;
 	}
 	let data: BlogPostUpdateData & { slug: string | undefined } = { slug };
-	for (let field of [
-		"body",
-		"title",
-		"description",
-		"excerpt",
-		"seo",
-	] as const) {
-		if (field === "seo") {
-			if (props.seo == null) continue;
-			for (let key of [
-				"twitterCard",
-				"twitterSite",
-				"twitterCreator",
-			] as const) {
-				if (props.seo[key] !== undefined) {
-					data[key] = props.seo[key];
-				}
+
+	if (props.seo != null) {
+		for (let key of ["twitterCard", "twitterSite", "twitterCreator"] as const) {
+			if (props.seo[key] !== undefined) {
+				data[key] = props.seo[key];
 			}
-		} else if (field === "body" || field === "title") {
+		}
+	}
+
+	if (props.createdAt != null) {
+		data.createdAt = props.createdAt;
+	}
+
+	for (let field of ["body", "title", "description", "excerpt"] as const) {
+		if (field === "body" || field === "title") {
 			if (props[field] != null) {
 				data[field] = props[field];
 			}
