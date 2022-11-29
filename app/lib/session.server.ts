@@ -1,13 +1,11 @@
+import type { Session } from "@remix-run/node";
 import { createCookieSessionStorage, redirect } from "@remix-run/node";
-import invariant from "tiny-invariant";
-
-import type { User } from "~/models/user.server";
-import { getUserById } from "~/models/user.server";
+import { getUser, type User } from "~/models/user.server";
 import { getRequiredServerEnvVar } from "~/lib/utils";
+import { safeRedirect } from "./utils.server";
 
-invariant(process.env.SESSION_SECRET, "SESSION_SECRET must be set");
-
-const sessionExpirationTime = 1000 * 60 * 60 * 24 * 365;
+const SESSION_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 365;
+export const USER_SESSION_KEY = "userId";
 
 export const serverSessionStorage = createCookieSessionStorage({
 	cookie: {
@@ -16,15 +14,13 @@ export const serverSessionStorage = createCookieSessionStorage({
 		secrets: [getRequiredServerEnvVar("SESSION_SECRET")],
 		sameSite: "lax",
 		path: "/",
-		maxAge: sessionExpirationTime / 1000,
+		maxAge: SESSION_EXPIRATION_TIME / 1000,
 		httpOnly: true,
 	},
 });
 
-const USER_SESSION_KEY = "userId";
-
 export async function getSession(request: Request) {
-	const cookie = request.headers.get("Cookie");
+	let cookie = request.headers.get("Cookie");
 	return serverSessionStorage.getSession(cookie);
 }
 
@@ -36,18 +32,29 @@ export async function getUserId(
 	return userId;
 }
 
-export async function getUser(request: Request) {
+export async function getUserIdFromSession(
+	session: Session
+): Promise<User["id"] | undefined> {
+	let userId = session.get(USER_SESSION_KEY);
+	return userId;
+}
+
+export async function getSessionUser(request: Request) {
 	let userId = await getUserId(request);
-	if (userId === undefined) {
+	if (userId == null) {
 		return null;
 	}
+	let user = await getUser(userId);
+	return user;
+}
 
-	let user = await getUserById(userId);
-	if (user) {
-		return user;
+export async function getUserFromSession(session: Session) {
+	let userId = await getUserIdFromSession(session);
+	if (userId == null) {
+		return null;
 	}
-
-	throw await logout(request);
+	let user = await getUser(userId);
+	return user;
 }
 
 export async function requireUserId(
@@ -62,14 +69,16 @@ export async function requireUserId(
 	return userId;
 }
 
-export async function requireUser(request: Request) {
-	let userId = await requireUserId(request);
-	let user = await getUserById(userId);
+export async function requireUser(
+	request: Request,
+	redirectTo: string = new URL(request.url).pathname
+) {
+	let userId = await requireUserId(request, redirectTo);
+	let user = await getUser(userId);
 	if (user) {
 		return user;
 	}
-
-	throw await logout(request);
+	throw await logout(request, redirectTo);
 }
 
 export async function createUserSession({
@@ -85,7 +94,7 @@ export async function createUserSession({
 }) {
 	let session = await getSession(request);
 	session.set(USER_SESSION_KEY, userId);
-	return redirect(redirectTo, {
+	return safeRedirect(redirectTo, "/", {
 		headers: {
 			"Set-Cookie": await serverSessionStorage.commitSession(session, {
 				maxAge: remember
@@ -96,9 +105,9 @@ export async function createUserSession({
 	});
 }
 
-export async function logout(request: Request) {
+export async function logout(request: Request, redirectTo: string = "/") {
 	let session = await getSession(request);
-	return redirect("/", {
+	return safeRedirect(redirectTo, "/", {
 		headers: {
 			"Set-Cookie": await serverSessionStorage.destroySession(session),
 		},

@@ -2,27 +2,27 @@ import * as React from "react";
 import type { ActionArgs, LoaderArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
-import { createUserSession, getUserId } from "~/lib/session.server";
+import { createUserSession, getSessionUser } from "~/lib/session.server";
 import { verifyLogin } from "~/models/user.server";
-import { safeRedirect } from "~/lib/utils.server";
-import { validateEmail } from "~/lib/utils";
+import { getSafeRedirect } from "~/lib/utils.server";
+import { isValidEmail } from "~/lib/utils";
 
 export async function loader({ request }: LoaderArgs) {
-	let userId = await getUserId(request);
-	if (userId) {
-		return redirect("/");
+	let user = await getSessionUser(request);
+	if (user) {
+		return redirect("/admin");
 	}
-	return json({});
+	return json(null);
 }
 
 export async function action({ request }: ActionArgs) {
 	let formData = await request.formData();
 	let email = formData.get("email");
 	let password = formData.get("password");
-	let redirectTo = safeRedirect(formData.get("redirectTo"), "/notes");
+	let redirectTo = getSafeRedirect(formData.get("redirectTo"), "/admin");
 	let remember = formData.get("remember");
 
-	if (!validateEmail(email)) {
+	if (!isValidEmail(email)) {
 		return json(
 			{ errors: { email: "Email is invalid", password: null } },
 			{ status: 400 }
@@ -67,7 +67,7 @@ export const meta: MetaFunction = () => {
 
 export default function LoginPage() {
 	let [searchParams] = useSearchParams();
-	let redirectTo = searchParams.get("redirectTo") || "/notes";
+	let redirectTo = searchParams.get("redirectTo") || "/admin";
 	let actionData = useActionData<typeof action>();
 	let emailRef = React.useRef<HTMLInputElement>(null);
 	let passwordRef = React.useRef<HTMLInputElement>(null);

@@ -1,10 +1,12 @@
 import type { LinksFunction, LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
+
 import { requireUserId } from "~/lib/session.server";
-import { useUser } from "~/lib/utils.react";
-import { getNoteListItems } from "~/models/note.server";
-import routeStylesUrl from "~/dist/styles/routes/notes.css";
+import { useUser } from "~/lib/react/use-user";
+import { getBlogPostListItems } from "~/models/blog-post.server";
+
+import routeStylesUrl from "~/dist/styles/routes/admin/blog.css";
 import cx from "clsx";
 
 export const links: LinksFunction = () => {
@@ -13,20 +15,23 @@ export const links: LinksFunction = () => {
 
 export async function loader({ request }: LoaderArgs) {
 	let userId = await requireUserId(request);
-	let noteListItems = await getNoteListItems({ userId });
+	let noteListItems = await getBlogPostListItems({
+		userId,
+		select: ["title", "id"],
+	});
 	return json({ noteListItems });
 }
 
-export default function NotesPage() {
+export default function AdminBlogLayout() {
 	let data = useLoaderData<typeof loader>();
 	let user = useUser();
 
 	return (
-		<div className="notes-layout">
+		<div className="blog-layout">
 			<div className="container inner">
 				<header className="header">
 					<Link to=".">
-						<h1>Notes</h1>
+						<h1>Blog Posts</h1>
 					</Link>
 					<Form action="/logout" method="post" className="logout-form">
 						<p>
@@ -39,22 +44,22 @@ export default function NotesPage() {
 				</header>
 
 				<main className="main">
-					<div className="notes">
+					<div className="posts">
 						{data.noteListItems.length === 0 ? (
-							<p>No notes yet!</p>
+							<p>No posts yet!</p>
 						) : (
-							<ol className="notes-list">
+							<ol className="posts-list">
 								{data.noteListItems.map((note) => (
-									<li key={note.id} className="notes-item">
+									<li key={note.id} className="posts-item">
 										<NavLink
 											className={({ isActive }) =>
-												cx("notes-item-link", {
+												cx("posts-item-link", {
 													active: isActive,
 												})
 											}
 											to={note.id}
 										>
-											<span className="notes-item-icon" aria-hidden>
+											<span className="posts-item-icon" aria-hidden>
 												📝{" "}
 											</span>
 											{note.title}

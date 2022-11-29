@@ -1,0 +1,75 @@
+@use "sass:map";
+@use "~/styles/system/media";
+
+$utilities: (
+	"sr-only": (
+		"position": "absolute",
+		"width": "1px",
+		"height": "1px",
+		"padding": "0",
+		"margin": "-1px",
+		"overflow": "hidden",
+		"clip": "rect(0, 0, 0, 0)",
+		"white-space": "nowrap",
+		"border-width": "0",
+	),
+	"block": (
+		display: block,
+	),
+	"inline": (
+		display: inline,
+	),
+	"inline-block": (
+		display: inline-block,
+	),
+	"flex": (
+		display: flex,
+	),
+	"inline-flex": (
+		display: inline-flex,
+	),
+	"hidden": (
+		display: hidden,
+	),
+);
+
+@mixin classes {
+	.container {
+		--container-width: 64rem;
+		--container-edge-space: 0.5rem;
+		margin: 0 auto;
+		width: var(--container-width);
+		max-width: calc(100% - 2 * var(--container-edge-space) * 2);
+		@media (media.get(xs)) {
+			--container-edge-space: 1rem;
+		}
+		@media (media.get(sm)) {
+			--container-edge-space: 1.75rem;
+		}
+	}
+
+	.container .container {
+		max-width: 100%;
+	}
+
+	$media_list: map.keys(media.$queries);
+	@each $selector, $props in $utilities {
+		.#{$selector} {
+			@each $prop, $value in $props {
+				#{$prop}: #{$value};
+			}
+		}
+	}
+
+	@each $query in $media_list {
+		@media (media.get($query)) {
+			@each $selector, $props in $utilities {
+				.#{$query}\:#{$selector} {
+					@each $prop, $value in $props {
+						#{$prop}: #{$value};
+					}
+				}
+			}
+		}
+	}
+}

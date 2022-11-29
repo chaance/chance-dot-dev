@@ -1,4 +1,4 @@
-.notes-layout {
+.blog-layout {
 	$container_width: 48rem;
 	display: flex;
 	flex-direction: column;
@@ -72,14 +72,14 @@
 		right: 1rem;
 	}
 
-	.notes,
+	.posts,
 	.outlet {
 		max-height: 100%;
 		overflow: auto;
 		padding: 1rem 0;
 	}
 
-	.notes-item-link {
+	.blog-item-link {
 		display: flex;
 		align-items: center;
 		padding: 0.25em 0.5em;
@@ -106,7 +106,7 @@
 		}
 	}
 
-	.notes-item-icon {
+	.blog-item-icon {
 		display: inline-block;
 		margin-right: 0.5em;
 	}

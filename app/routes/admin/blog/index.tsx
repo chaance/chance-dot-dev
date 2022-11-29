@@ -1,6 +1,6 @@
 import { Link } from "@remix-run/react";
 
-export default function NoteIndexPage() {
+export default function AdminBlogIndex() {
 	return (
 		<div className="note-index">
 			<p>

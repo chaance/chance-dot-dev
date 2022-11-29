@@ -1,25 +1,27 @@
-import * as React from "react";
+// import * as React from "react";
 import type { ActionArgs, LoaderArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
-import { getUserId, createUserSession } from "~/lib/session.server";
+// import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
+import { createUserSession, getSessionUser } from "~/lib/session.server";
 import { createUser, getUserByEmail } from "~/models/user.server";
-import { validateEmail } from "~/lib/utils";
-import { safeRedirect } from "~/lib/utils.server";
+import { isValidEmail } from "~/lib/utils";
+import { getSafeRedirect } from "~/lib/utils.server";
 
 export async function loader({ request }: LoaderArgs) {
-	const userId = await getUserId(request);
-	if (userId) return redirect("/");
-	return json({});
+	let user = await getSessionUser(request);
+	if (user) {
+		return redirect("/admin");
+	}
+	throw json(null, 404);
 }
 
-export async function action({ request }: ActionArgs) {
-	const formData = await request.formData();
-	const email = formData.get("email");
-	const password = formData.get("password");
-	const redirectTo = safeRedirect(formData.get("redirectTo"), "/");
+export async function __action({ request }: ActionArgs) {
+	let formData = await request.formData();
+	let email = formData.get("email");
+	let password = formData.get("password");
+	let redirectTo = getSafeRedirect(formData.get("redirectTo"), "/admin");
 
-	if (!validateEmail(email)) {
+	if (!isValidEmail(email)) {
 		return json(
 			{ errors: { email: "Email is invalid", password: null } },
 			{ status: 400 }
@@ -53,7 +55,11 @@ export async function action({ request }: ActionArgs) {
 		);
 	}
 
-	const user = await createUser(email, password);
+	const user = await createUser(email, password, {
+		nameLast: null,
+		nameFirst: null,
+		avatarUrl: null,
+	});
 
 	return createUserSession({
 		request,
@@ -70,100 +76,100 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Join() {
-	let [searchParams] = useSearchParams();
-	let redirectTo = searchParams.get("redirectTo") ?? undefined;
-	let actionData = useActionData<typeof action>();
-	let emailRef = React.useRef<HTMLInputElement>(null);
-	let passwordRef = React.useRef<HTMLInputElement>(null);
+	return null;
 
-	// actionData = { errors: { email: null, password: "You done fucked up" } };
+	// let [searchParams] = useSearchParams();
+	// let redirectTo = searchParams.get("redirectTo") ?? undefined;
+	// let actionData = useActionData<typeof action>();
+	// let emailRef = React.useRef<HTMLInputElement>(null);
+	// let passwordRef = React.useRef<HTMLInputElement>(null);
 
-	React.useEffect(() => {
-		if (actionData?.errors?.email) {
-			emailRef.current?.focus();
-		} else if (actionData?.errors?.password) {
-			passwordRef.current?.focus();
-		}
-	}, [actionData]);
+	// React.useEffect(() => {
+	// 	if (actionData?.errors?.email) {
+	// 		emailRef.current?.focus();
+	// 	} else if (actionData?.errors?.password) {
+	// 		passwordRef.current?.focus();
+	// 	}
+	// }, [actionData]);
 
-	return (
-		<div className="join-route">
-			<h1 className="sr-only">Join</h1>
-			<div className="auth-box">
-				<Form method="post" className="form">
-					<div className="text-field">
-						<label htmlFor="email" className="text-field-label">
-							Email address
-						</label>
-						<div className="text-field-input-wrap">
-							<input
-								ref={emailRef}
-								id="email"
-								required
-								autoFocus={true}
-								name="email"
-								type="email"
-								autoComplete="email"
-								aria-invalid={actionData?.errors?.email ? true : undefined}
-								aria-errormessage={
-									actionData?.errors?.email ? "email-error" : undefined
-								}
-								className="text-field-input"
-							/>
-							{actionData?.errors?.email && (
-								<div className="text-field-messages">
-									<div className="text-field-error" id="email-error">
-										{actionData.errors.email}
-									</div>
-								</div>
-							)}
-						</div>
-					</div>
+	// return (
+	// 	<div className="join-route">
+	// 		<h1 className="sr-only">Join</h1>
+	// 		<div className="auth-box">
+	// 			<Form method="post" className="form">
+	// 				<div className="text-field">
+	// 					<label htmlFor="email" className="text-field-label">
+	// 						Email address
+	// 					</label>
+	// 					<div className="text-field-input-wrap">
+	// 						<input
+	// 							ref={emailRef}
+	// 							id="email"
+	// 							required
+	// 							autoFocus={true}
+	// 							name="email"
+	// 							type="email"
+	// 							autoComplete="email"
+	// 							aria-invalid={actionData?.errors?.email ? true : undefined}
+	// 							aria-errormessage={
+	// 								actionData?.errors?.email ? "email-error" : undefined
+	// 							}
+	// 							className="text-field-input"
+	// 						/>
+	// 						{actionData?.errors?.email && (
+	// 							<div className="text-field-messages">
+	// 								<div className="text-field-error" id="email-error">
+	// 									{actionData.errors.email}
+	// 								</div>
+	// 							</div>
+	// 						)}
+	// 					</div>
+	// 				</div>
 
-					<div className="text-field">
-						<label htmlFor="password" className="text-field-label">
-							Password
-						</label>
-						<div className="text-field-input-wrap">
-							<input
-								id="password"
-								ref={passwordRef}
-								name="password"
-								type="password"
-								autoComplete="new-password"
-								aria-invalid={actionData?.errors?.password ? true : undefined}
-								aria-describedby={
-									actionData?.errors?.password ? "password-error" : undefined
-								}
-								className="text-field-input"
-							/>
-							{actionData?.errors?.password && (
-								<div className="text-field-messages">
-									<div className="text-field-error" id="password-error">
-										{actionData.errors.password}
-									</div>
-								</div>
-							)}
-						</div>
-					</div>
+	// 				<div className="text-field">
+	// 					<label htmlFor="password" className="text-field-label">
+	// 						Password
+	// 					</label>
+	// 					<div className="text-field-input-wrap">
+	// 						<input
+	// 							id="password"
+	// 							ref={passwordRef}
+	// 							name="password"
+	// 							type="password"
+	// 							autoComplete="new-password"
+	// 							aria-invalid={actionData?.errors?.password ? true : undefined}
+	// 							aria-describedby={
+	// 								actionData?.errors?.password ? "password-error" : undefined
+	// 							}
+	// 							className="text-field-input"
+	// 						/>
+	// 						{actionData?.errors?.password && (
+	// 							<div className="text-field-messages">
+	// 								<div className="text-field-error" id="password-error">
+	// 									{actionData.errors.password}
+	// 								</div>
+	// 							</div>
+	// 						)}
+	// 					</div>
+	// 				</div>
 
-					<input type="hidden" name="redirectTo" value={redirectTo} />
-					<button type="submit" className="button button-primary">
-						Create Account
-					</button>
-					<p className="auth-postfix">
-						Already have an account?{" "}
-						<Link
-							to={{
-								pathname: "/login",
-								search: searchParams.toString(),
-							}}
-						>
-							Log in
-						</Link>
-					</p>
-				</Form>
-			</div>
-		</div>
-	);
+	// 				<input type="hidden" name="redirectTo" value={redirectTo} />
+	// 				<button type="submit" className="button button-primary">
+	// 					Create Account
+	// 				</button>
+	// 				<p className="auth-postfix">
+	// 					Already have an account?{" "}
+	// 					<Link
+	// 						to={{
+	// 							pathname: "/login",
+	// 							search: searchParams.toString(),
+	// 						}}
+	// 					>
+	// 						Log in
+	// 					</Link>
+	// 				</p>
+	// 			</Form>
+	// 		</div>
+	// 	</div>
+	// );
 }

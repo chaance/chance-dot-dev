@@ -9,11 +9,13 @@ export const links: LinksFunction = () => {
 	return [{ rel: "stylesheet", href: routeStylesUrl }];
 };
 
-export async function loader({ request }: LoaderArgs) {
-	let userId = await getUserId(request);
-	if (userId) return redirect("/");
-	return json(null);
-}
+// export async function loader({ request }: LoaderArgs) {
+// 	let userId = await getUserId(request);
+// 	if (!userId) {
+// 		return redirect("/login");
+// 	}
+// 	return json(null);
+// }
 
 export default function AuthLayout() {
 	return (
