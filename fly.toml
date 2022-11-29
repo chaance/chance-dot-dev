@@ -1,4 +1,4 @@
-app = "chance-dot-dev-fly-b5ab"
+app = "chance-dot-dev-a71c"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = [ ]

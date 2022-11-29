@@ -2,7 +2,7 @@ import type {
 	// User,
 	BlogPost as DBBlogPost,
 	// SEO as DBSEO,
-} from "~/lib/prisma/client";
+} from "@prisma/client";
 import { prisma } from "~/lib/db.server";
 import { slugify } from "~/lib/utils";
 import type { ArrayOfKeys } from "~/types";
