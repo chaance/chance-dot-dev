@@ -159,11 +159,8 @@ function Layout({ children }: React.PropsWithChildren<{}>) {
 
 export function CatchBoundary() {
 	let caught = useCatch();
-
-	if (!canUseDOM) {
-		if (process.env.NODE_ENV === "development") {
-			console.error(caught);
-		}
+	if (process.env.NODE_ENV === "development") {
+		console.error("ROOT CATCH BOUNDARY: ", caught);
 	}
 
 	let message;
@@ -214,7 +211,7 @@ export function CatchBoundary() {
 
 export function ErrorBoundary({ error }: { error: Error }) {
 	if (process.env.NODE_ENV === "development") {
-		console.error("ROOT BOUNDARY ERROR: ", error);
+		console.error("ROOT ERROR BOUNDARY: ", error);
 	}
 
 	return (

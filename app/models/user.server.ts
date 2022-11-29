@@ -24,30 +24,8 @@ export async function getUser(id: string): Promise<User | null> {
 		});
 		return user ? modelUser(user) : null;
 	} catch (err) {
-		console.error('');
-		console.error('');
-		console.error('');
-		console.error('');
-		console.error('');
-		console.error('');
-		console.error('');
-		console.error('');
-		console.error('');
-		console.error('');
-		console.error('');
-		console.error('');
-		console.error('');
-		console.error('');
-		console.error(err);
-		console.error('');
-		console.error('');
-		console.error('');
-		console.error('');
-		console.error('');
-		console.error('');
-		console.error('');
-		console.error('');
-		return null;
+		// TODO: Handle prisma errors
+		throw err;
 	}
 }
 

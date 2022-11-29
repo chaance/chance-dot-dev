@@ -134,7 +134,6 @@ export async function action({ request }: ActionArgs) {
 			redirectTo,
 		});
 	} catch (err) {
-		console.error(err);
 		return json(
 			{
 				errors: {

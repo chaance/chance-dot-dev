@@ -50,7 +50,7 @@ export let loader = async (args: LoaderArgs) => {
 			{ headers }
 		);
 	} catch (error) {
-		console.error(error);
+		// TODO: handle query errors
 		throw error;
 	}
 };

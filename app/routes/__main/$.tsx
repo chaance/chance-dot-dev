@@ -19,11 +19,10 @@ export default function CatchAll() {
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
-	if (!canUseDOM) {
-		if (process.env.NODE_ENV === "development") {
-			console.error("MAIN LAYOUT BOUNDARY ERROR: ", error);
-		}
+	if (process.env.NODE_ENV === "development") {
+		console.error("MAIN LAYOUT ERROR BOUNDARY: ", error);
 	}
+
 	return (
 		<main className={ROOT_CLASS}>
 			<Container>
@@ -41,12 +40,8 @@ export function ErrorBoundary({ error }: { error: Error }) {
 
 export function CatchBoundary() {
 	let caught = useCatch();
-
-	if (!canUseDOM) {
-		if (process.env.NODE_ENV === "development") {
-			console.error(caught);
-			console.error("ROOT BOUNDARY CAUGHT: ", caught);
-		}
+	if (process.env.NODE_ENV === "development") {
+		console.error("MAIN LAYOUT CATCH BOUNDARY: ", caught);
 	}
 
 	let message;
