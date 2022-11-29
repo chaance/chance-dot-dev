@@ -11,3 +11,4 @@ node_modules
 /prisma/data.db-journal
 
 /app/dist
+/app/lib/prisma/client

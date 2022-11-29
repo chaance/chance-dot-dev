@@ -19,13 +19,11 @@ export default function handleRequest(
 
 	return new Promise((resolve, reject) => {
 		let didError = false;
-
-		const { pipe, abort } = renderToPipeableStream(
+		let { pipe, abort } = renderToPipeableStream(
 			<RemixServer context={remixContext} url={request.url} />,
 			{
 				[callbackName]: () => {
-					const body = new PassThrough();
-
+					let body = new PassThrough();
 					responseHeaders.set("Content-Type", "text/html");
 
 					resolve(
@@ -42,8 +40,7 @@ export default function handleRequest(
 				},
 				onError: (error: unknown) => {
 					didError = true;
-
-					console.error(error);
+					console.error("RENDER ERROR: ", error);
 				},
 			}
 		);

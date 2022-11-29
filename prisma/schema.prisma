@@ -5,34 +5,128 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  output   = "../app/lib/prisma/client"
 }
 
 model User {
-  id    String @id @default(cuid())
-  email String @unique
+  id        String     @id @default(cuid())
+  email     String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  password  Password?
+  profile   Profile?
+  blogPosts BlogPost[]
+}
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  password Password?
-  notes    Note[]
+model Profile {
+  id        String  @id @default(cuid())
+  user      User    @relation(fields: [userEmail], references: [email], onDelete: Cascade, onUpdate: Cascade)
+  userEmail String  @unique
+  nameFirst String?
+  nameLast  String?
+  avatarUrl String?
 }
 
 model Password {
-  hash String
-
+  hash   String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String @unique
 }
 
-model Note {
-  id    String @id @default(cuid())
-  title String
-  body  String
+model BlogPost {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String
+  description String?
+  body        String
+  excerpt     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId      String
+  // seo         SEO?
+  // seoId       String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  // robots          String?
+  // canonical       String?
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId String
+  // metaTitle       String?
+  // metaDescription String?
+  // metaImage       String?
+
+  twitterCard    String?
+  twitterSite    String?
+  twitterCreator String?
+
+  // ogTitle         String?
+  // ogDescription   String?
+
+  // ogImageUrl       String?
+  // ogImageSecureUrl String?
+  // ogImageWidth     Int?
+  // ogImageHeight    Int?
+  // ogImageAlt       String?
+
+  // ogAudioUrl       String?
+  // ogAudioSecureUrl String?
+  // ogAudioType      String?
+
+  // ogVideoUrl       String?
+  // ogVideoSecureUrl String?
+  // ogVideoType      String?
+  // ogVideoWidth     Int?
+  // ogVideoHeight    Int?
 }
+
+// model SEO {
+//   id              String    @id @default(cuid())
+//   metaTitle       String?
+//   metaDescription String?
+//   metaImage       String?
+//   robots          String?
+//   canonical       String?
+//   twitterCard     String?
+//   twitterSite     String?
+//   twitterCreator  String?
+//   ogTitle         String?
+//   ogDescription   String?
+//   ogImage         OGImage[]
+//   ogAudio         OGAudio[]
+//   ogVideo         OGVideo[]
+
+//   // Use if supporting multiple authors
+//   // metaAuthor      String?
+//   // ogAuthor
+//   // ogArticle
+
+//   blogPost   BlogPost? @relation(fields: [blogPostId], references: [id])
+//   blogPostId String?   @unique
+// }
+
+// model OGImage {
+//   id        String  @id @default(cuid())
+//   url       String
+//   secureUrl String?
+//   width     Int?
+//   height    Int?
+//   alt       String
+//   seo       SEO[]
+// }
+
+// model OGAudio {
+//   id        String  @id @default(cuid())
+//   url       String
+//   secureUrl String?
+//   type      String?
+//   seo       SEO[]
+// }
+
+// model OGVideo {
+//   id        String  @id @default(cuid())
+//   url       String
+//   secureUrl String?
+//   type      String?
+//   width     Int?
+//   height    Int?
+//   seo       SEO[]
+// }
