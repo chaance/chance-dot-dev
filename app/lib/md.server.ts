@@ -1,5 +1,5 @@
 import parseFrontMatter from "front-matter";
-import LRUCache from "lru-cache";
+// import LRUCache from "lru-cache";
 import rangeParser from "parse-numeric-range";
 import path from "path";
 import { getHighlighter, loadTheme } from "shiki";
@@ -29,13 +29,13 @@ interface AsyncMdModules {
 	unistUtilVisit: typeof unistUtilVisit;
 }
 
-const markdownCache = new LRUCache<string, MarkdownParsed>({
-	max: Math.round((1024 * 1024 * 12) / 10),
-	maxSize: 1024 * 1024 * 12, // 12mb
-	sizeCalculation(value, key) {
-		return JSON.stringify(value).length + (key ? key.length : 0);
-	},
-});
+// const markdownCache = new LRUCache<string, MarkdownParsed>({
+// 	max: Math.round((1024 * 1024 * 12) / 10),
+// 	maxSize: 1024 * 1024 * 12, // 12mb
+// 	sizeCalculation(value, key) {
+// 		return JSON.stringify(value).length + (key ? key.length : 0);
+// 	},
+// });
 
 let _highlighter: Shiki.Highlighter | null = null;
 let _base16Theme: Shiki.IShikiTheme | null = null;
@@ -107,17 +107,17 @@ export async function parseMarkdown(
 	contents: string
 	// debugKey?: string
 ): Promise<MarkdownParsed | null> {
-	let cached = markdownCache.get(key);
-	if (cached) {
-		return cached;
-	}
+	// let cached = markdownCache.get(key);
+	// if (cached) {
+	// 	return cached;
+	// }
 
 	let processor = await getProcessor();
 	let { body: markdown } = parseFrontMatter(contents);
 	let html = String(await processor.process(markdown));
 
 	let parsed = { markdown, html };
-	markdownCache.set(key, parsed);
+	// markdownCache.set(key, parsed);
 	return parsed;
 }
 
