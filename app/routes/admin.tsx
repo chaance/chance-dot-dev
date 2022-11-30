@@ -19,7 +19,6 @@ export async function loader({ request }: LoaderArgs) {
 export default function AdminBlogLayout() {
 	let user = useUser();
 	let matches = useMatches();
-	console.log(matches);
 
 	let blogRouteMatch = matches.find(
 		(match) => match.id === "routes/admin/blog"

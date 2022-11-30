@@ -1,4 +1,3 @@
-import LRUCache from "lru-cache";
 import path from "path";
 import { parseMarkdown } from "~/lib/md.server";
 import {
@@ -7,39 +6,9 @@ import {
 	getBlogPostBySlug as getBlogPostBySlugFromDB,
 	getBlogPostListItems as getBlogPostListItemsFromDB,
 } from "~/models/blog-post.server";
-import { getExcerpt, typedBoolean } from "~/lib/utils";
+import { getExcerpt } from "~/lib/utils";
 
-const postCache = new LRUCache<string, MarkdownBlogPost>({
-	max: Math.round((1024 * 1024 * 12) / 10),
-	maxSize: 1024 * 1024 * 12, // 12mb
-	sizeCalculation(value, key) {
-		return JSON.stringify(value).length + (key ? key.length : 0);
-	},
-});
-
-const postListCache = new LRUCache<string, MarkdownBlogPostWithExcerpt[]>({
-	max: Math.round((1024 * 1024 * 12) / 10),
-	maxSize: 1024 * 1024 * 12, // 12mb
-	sizeCalculation(value, key) {
-		return JSON.stringify(value).length + (key ? key.length : 0);
-	},
-});
-
-async function getCachedMarkdownBlogPost(slug: string) {
-	let cached = postCache.get(slug);
-	if (cached) {
-		return cached;
-	}
-
-	let post = await getMarkdownBlogPost(slug);
-	if (!post) {
-		return null;
-	}
-	postCache.set(slug, post);
-	return post;
-}
-
-async function getMarkdownBlogPost(slug: string) {
+export async function getMarkdownBlogPost(slug: string) {
 	let blogPost = await getBlogPostBySlugFromDB(slug);
 	if (!blogPost) {
 		return null;
@@ -61,9 +30,7 @@ async function getMarkdownBlogPost(slug: string) {
 	return post;
 }
 
-export { getCachedMarkdownBlogPost as getMarkdownBlogPost };
-
-async function getMarkdownBlogPostListItems({
+export async function getMarkdownBlogPostListItems({
 	limit = 10,
 	offset = 0,
 	userId = null,
@@ -107,44 +74,6 @@ async function getMarkdownBlogPostListItems({
 	}
 
 	return posts;
-}
-
-async function getMarkdownBlogPostListItemsCached({
-	limit = 10,
-	offset = 0,
-	userId = null,
-}: {
-	limit?: number;
-	offset?: number;
-	userId?: string | null;
-} = {}) {
-	let key = ["list", limit, offset, userId ?? "all"].join("-");
-	let cached = postListCache.get(key);
-	if (cached) {
-		return cached;
-	}
-
-	let posts = await getMarkdownBlogPostListItems();
-	postListCache.set(key, posts);
-	return posts;
-}
-
-export { getMarkdownBlogPostListItemsCached as getMarkdownBlogPostListItems };
-
-export async function getMarkdownBlogPosts() {
-	let blogPosts = await getBlogPostListItemsFromDB();
-	let listingPromises: Array<Promise<MarkdownBlogPost | null>> = [];
-	for (let post of blogPosts) {
-		listingPromises.push(getCachedMarkdownBlogPost(post.slug));
-	}
-
-	let listings = (await Promise.all(listingPromises)).filter(typedBoolean);
-
-	return listings.sort((a, b) => {
-		let bTime = new Date(b.createdAt).getTime();
-		let aTime = new Date(a.createdAt).getTime();
-		return bTime - aTime;
-	});
 }
 
 export function getSlugFromPath(filePath: string) {

@@ -4,7 +4,7 @@ import type { HeadersFunction, LoaderArgs } from "@remix-run/node";
 import { H1, HeadingLevelProvider } from "~/ui/primitives/heading";
 import { Link } from "~/ui/primitives/link";
 import { Container } from "~/ui/container";
-import { getMarkdownBlogPosts } from "~/lib/blog.server";
+import { getMarkdownBlogPostListItems } from "~/lib/blog.server";
 
 import routeStylesUrl from "~/dist/styles/routes/__main/blog/index.css";
 
@@ -16,12 +16,11 @@ const ROOT_CLASS = "page--blog-index";
 
 export let loader = async (args: LoaderArgs) => {
 	try {
+		// TODO: Implement CDN caching
 		let headers = {
-			"Cache-Control": "private, max-age=3600",
-			// Vary: "Cookie",
+			"Cache-Control": "public, s-maxage=3600",
 		};
-		let rawPosts = await getMarkdownBlogPosts();
-
+		let rawPosts = await getMarkdownBlogPostListItems();
 		if (!rawPosts) {
 			throw new Response("Not found", {
 				status: 404,
@@ -34,8 +33,7 @@ export let loader = async (args: LoaderArgs) => {
 				posts: rawPosts.map((post) => {
 					let createdAt = new Date(post.createdAt);
 					return {
-						// temporary...
-						title: post.title.replace(/&colon;/g, ":"),
+						title: post.title,
 						slug: post.slug,
 						createdAtFormatted: createdAt.toLocaleString("en-US", {
 							year: "numeric",

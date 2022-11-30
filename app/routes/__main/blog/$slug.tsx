@@ -11,6 +11,7 @@ import { isAbsoluteUrl, unSlashIt } from "~/lib/utils";
 
 import routeStylesUrl from "~/dist/styles/routes/__main/blog/_slug.css";
 import invariant from "tiny-invariant";
+import { getSessionUser } from "~/lib/session.server";
 
 export function links() {
 	return [{ rel: "stylesheet", href: routeStylesUrl }];
@@ -25,12 +26,17 @@ interface PostData extends MarkdownBlogPost {
 	updatedAtISO: string | null;
 }
 
-export async function loader({ params }: LoaderArgs) {
+export async function loader({ params, request }: LoaderArgs) {
 	invariant(params.slug, "Slug is required");
-	let post = await getMarkdownBlogPost(params.slug);
+	let [user, post] = await Promise.all([
+		getSessionUser(request),
+		getMarkdownBlogPost(params.slug),
+	]);
+
 	let headers = {
-		"Cache-Control": "private, max-age=3600",
-		Vary: "Cookie",
+		"Cache-Control": user
+			? "no-cache"
+			: "public, max-age=60, s-maxage=300, stale-while-revalidate=3600",
 	};
 
 	if (!post) {
