@@ -36,19 +36,19 @@ export async function parseMarkdown(
 	key: string,
 	contents: string
 ): Promise<MarkdownParsed | null> {
-	if (!NO_CACHE) {
-		let cached = markdownCache.get(key);
-		if (cached) {
-			return cached;
-		}
-	}
+	// if (!NO_CACHE) {
+	// 	let cached = markdownCache.get(key);
+	// 	if (cached) {
+	// 		return cached;
+	// 	}
+	// }
 
 	let { body: markdown } = parseFrontMatter(contents);
 	let html = await processMarkdown(markdown);
 	let parsed = { markdown, html };
-	if (!NO_CACHE) {
-		markdownCache.set(key, parsed);
-	}
+	// if (!NO_CACHE) {
+	// 	markdownCache.set(key, parsed);
+	// }
 	return parsed;
 }
 
