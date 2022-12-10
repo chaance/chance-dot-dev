@@ -1,5 +1,5 @@
 import { json } from "@remix-run/node";
-import { Link, useLoaderData, useMatches } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import { Container } from "~/ui/container";
 import { getMarkdownBlogPost, type MarkdownBlogPost } from "~/lib/blog.server";
 import type {
@@ -12,7 +12,6 @@ import { isAbsoluteUrl, unSlashIt } from "~/lib/utils";
 import routeStylesUrl from "~/dist/styles/routes/__main/blog/_slug.css";
 import invariant from "tiny-invariant";
 import { getSessionUser } from "~/lib/session.server";
-import { useOptionalUser } from "~/lib/react/use-user";
 
 export function links() {
 	return [{ rel: "stylesheet", href: routeStylesUrl }];
@@ -37,7 +36,7 @@ export async function loader({ params, request }: LoaderArgs) {
 	let headers = {
 		"Cache-Control": user
 			? "no-cache"
-			: "public, max-age=60, s-maxage=300, stale-while-revalidate=3600",
+			: "public, max-age=300, s-maxage=300, stale-while-revalidate=604800",
 	};
 
 	if (!post) {
@@ -69,7 +68,7 @@ export async function loader({ params, request }: LoaderArgs) {
 		updatedAtISO: updatedAt && updatedAt.toISOString(),
 	};
 
-	return json({ post: fullPost }, { headers });
+	return json({ post: fullPost, user }, { headers });
 }
 
 export let meta: MetaFunction<typeof loader> = (args) => {
@@ -98,12 +97,12 @@ export let meta: MetaFunction<typeof loader> = (args) => {
 export let headers: HeadersFunction = ({ loaderHeaders }) => {
 	return {
 		"Cache-Control": loaderHeaders.get("Cache-Control")!,
+		Vary: "Cookie",
 	};
 };
 
 export default function BlogPostRoute() {
-	let { post } = useLoaderData<typeof loader>();
-	let user = useOptionalUser("routes/__main/blog");
+	let { post, user } = useLoaderData<typeof loader>();
 
 	return (
 		<div className={ROOT_CLASS}>

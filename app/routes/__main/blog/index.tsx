@@ -7,6 +7,7 @@ import { Container } from "~/ui/container";
 import { getMarkdownBlogPostListItems } from "~/lib/blog.server";
 
 import routeStylesUrl from "~/dist/styles/routes/__main/blog/index.css";
+import { getSessionUser } from "~/lib/session.server";
 
 export function links() {
 	return [{ rel: "stylesheet", href: routeStylesUrl }];
@@ -14,12 +15,16 @@ export function links() {
 
 const ROOT_CLASS = "page--blog-index";
 
-export async function loader(args: LoaderArgs) {
+export async function loader({ request }: LoaderArgs) {
+	let user = await getSessionUser(request);
 	try {
 		// TODO: Implement CDN caching
 		let headers = {
-			"Cache-Control": "public, s-maxage=3600",
+			"Cache-Control": user
+				? "no-cache"
+				: "public, max-age=300, s-maxage=300, stale-while-revalidate=604800",
 		};
+
 		let rawPosts = await getMarkdownBlogPostListItems();
 		if (!rawPosts) {
 			throw new Response("Not found", {

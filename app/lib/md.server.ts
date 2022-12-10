@@ -1,19 +1,20 @@
 import parseFrontMatter from "front-matter";
-// import LRUCache from "lru-cache";
 import rangeParser from "parse-numeric-range";
 import { getHighlighter, /* loadTheme, */ toShikiTheme } from "shiki";
 import { vscodeColorTheme } from "~/lib/vscode-theme";
 import { isString } from "~/lib/utils";
+import LRUCache from "lru-cache";
 
 import type * as Unist from "unist";
 import type * as Hast from "hast";
 import type * as Shiki from "shiki";
-import LRUCache from "lru-cache";
 
 const NO_CACHE = process.env.NO_CACHE;
 
 export const markdownCache = new LRUCache<string, MarkdownParsed>({
-	max: Math.round((1024 * 1024 * 12) / 10),
+	max: 300,
+	ttl: 1000 * 60 * 5, // 5 minutes
+	allowStale: true,
 	maxSize: 1024 * 1024 * 12, // 12mb
 	sizeCalculation(value, key) {
 		return JSON.stringify(value).length + (key ? key.length : 0);
