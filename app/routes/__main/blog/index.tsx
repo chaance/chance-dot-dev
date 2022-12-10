@@ -14,7 +14,7 @@ export function links() {
 
 const ROOT_CLASS = "page--blog-index";
 
-export let loader = async (args: LoaderArgs) => {
+export async function loader(args: LoaderArgs) {
 	try {
 		// TODO: Implement CDN caching
 		let headers = {
@@ -51,7 +51,7 @@ export let loader = async (args: LoaderArgs) => {
 		// TODO: handle query errors
 		throw error;
 	}
-};
+}
 
 export let headers: HeadersFunction = ({ loaderHeaders }) => {
 	return {

@@ -1,5 +1,5 @@
 import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData, useMatches } from "@remix-run/react";
 import { Container } from "~/ui/container";
 import { getMarkdownBlogPost, type MarkdownBlogPost } from "~/lib/blog.server";
 import type {
@@ -12,6 +12,7 @@ import { isAbsoluteUrl, unSlashIt } from "~/lib/utils";
 import routeStylesUrl from "~/dist/styles/routes/__main/blog/_slug.css";
 import invariant from "tiny-invariant";
 import { getSessionUser } from "~/lib/session.server";
+import { useOptionalUser } from "~/lib/react/use-user";
 
 export function links() {
 	return [{ rel: "stylesheet", href: routeStylesUrl }];
@@ -102,6 +103,7 @@ export let headers: HeadersFunction = ({ loaderHeaders }) => {
 
 export default function BlogPostRoute() {
 	let { post } = useLoaderData<typeof loader>();
+	let user = useOptionalUser("routes/__main/blog");
 
 	return (
 		<div className={ROOT_CLASS}>
@@ -118,12 +120,19 @@ export default function BlogPostRoute() {
 								<time dateTime={post.createdAtISO}>
 									{post.createdAtFormatted}
 								</time>
-								{post.updatedAtISO ? (
+								{post.updatedAtISO &&
+								new Date(post.updatedAtISO) > new Date(post.createdAtISO) ? (
 									<>
 										; <span>Updated on </span>
 										<time dateTime={post.updatedAtISO}>
 											{post.updatedAtFormatted}
 										</time>
+									</>
+								) : null}
+
+								{user ? (
+									<>
+										; <Link to={`/admin/blog/${post.id}`}>Edit Post</Link>
 									</>
 								) : null}
 							</p>

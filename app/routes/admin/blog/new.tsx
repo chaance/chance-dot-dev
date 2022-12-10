@@ -1,16 +1,39 @@
-import type { ActionArgs } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
-import { Form, useActionData } from "@remix-run/react";
 import * as React from "react";
-
+import type { ActionArgs, LoaderArgs } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
+import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { createBlogPost } from "~/models/blog-post.server";
 import { requireUserId } from "~/lib/session.server";
 import { getFormFieldStringValue } from "~/lib/utils";
+import { MarkdownEditor, MarkdownEditorTextarea } from "~/ui/markdown-editor";
+
+export function links() {
+	return [
+		{
+			rel: "stylesheet",
+			href: "https://unpkg.com/easymde/dist/easymde.min.css",
+		},
+	];
+}
+
+export async function loader({ request, params }: LoaderArgs) {
+	let currentDate = new Date(
+		new Date().toLocaleString("en-US", {
+			timeZone: "America/Los_Angeles",
+		})
+	);
+	console.log(currentDate);
+	return json({ currentDate });
+}
 
 const formFields = new Map<FormFieldName, FormFieldDescriptor>([
 	["title", { label: "Title", required: true, type: "text" }],
 	["slug", { label: "Slug", required: false, type: "text" }],
-	["body", { label: "Content", required: true, type: "textarea", rows: 14 }],
+	[
+		"createdAt",
+		{ label: "Created At", required: false, type: "datetime-local" },
+	],
+	["body", { label: "Content", required: true, type: "markdown", rows: 14 }],
 	["description", { label: "Description", required: false, type: "text" }],
 	["excerpt", { label: "Excerpt", required: false, type: "textarea", rows: 2 }],
 	["twitterCard", { label: "Twitter Card URL", required: false, type: "text" }],
@@ -35,6 +58,9 @@ export async function action({ request }: ActionArgs) {
 		return json({ errors }, { status: 400 });
 	}
 
+	let createdAt = values.createdAt ? new Date(values.createdAt) : undefined;
+	let updatedAt = createdAt;
+
 	let post = await createBlogPost({
 		title: values.title!,
 		slug: values.slug,
@@ -42,6 +68,8 @@ export async function action({ request }: ActionArgs) {
 		userId,
 		description: values.description,
 		excerpt: values.excerpt,
+		createdAt,
+		updatedAt,
 		seo: {
 			twitterCard: values.twitterCard,
 		},
@@ -50,6 +78,7 @@ export async function action({ request }: ActionArgs) {
 }
 
 export default function NewNotePage() {
+	let { currentDate } = useLoaderData<typeof loader>();
 	let actionData = useActionData<typeof action>();
 	let formRef = React.useRef<HTMLFormElement>(null);
 	React.useEffect(() => {
@@ -81,12 +110,19 @@ export default function NewNotePage() {
 		>
 			{Array.from(formFields).map(([name, desc]) => {
 				let error = actionData?.errors?.[name];
+
+				let defaultValue: string | undefined = undefined;
+				if (desc.type === "datetime-local") {
+					defaultValue = toDateTimeInputValue(new Date(currentDate));
+				}
+
 				return (
 					<FormField
 						id={`form-field-${name}`}
 						key={name}
 						name={name}
 						errorMessage={error}
+						defaultValue={defaultValue}
 						{...desc}
 					/>
 				);
@@ -107,6 +143,7 @@ type FormFieldName =
 	| "body"
 	| "description"
 	| "excerpt"
+	| "createdAt"
 	| "twitterCard";
 
 type InputType = "text" | "email" | "password" | "url" | "number" | "tel";
@@ -117,7 +154,15 @@ type FormFieldDescriptor = { required: boolean; label: string } & (
 			placeholder?: string;
 	  }
 	| {
+			type: "datetime-local";
+	  }
+	| {
 			type: "textarea";
+			placeholder?: string;
+			rows: number;
+	  }
+	| {
+			type: "markdown";
 			placeholder?: string;
 			rows: number;
 	  }
@@ -126,16 +171,19 @@ type FormFieldDescriptor = { required: boolean; label: string } & (
 type FormFieldErrors = Record<FormFieldName, string | null>;
 type FormFieldValues = Record<FormFieldName, string | null>;
 
-type FormFieldProps = {
+interface FormFieldProps {
 	name: FormFieldName;
 	label: string;
-	type?: InputType | "textarea";
+	type?: InputType | "textarea" | "markdown" | "datetime-local";
 	required?: boolean;
 	placeholder?: string;
 	errorMessage?: string | null;
 	rows?: number;
 	id: string;
-};
+	defaultValue?: string | null;
+	min?: string | number;
+	max?: string | number;
+}
 
 function FormField({
 	name,
@@ -146,10 +194,20 @@ function FormField({
 	placeholder,
 	errorMessage,
 	rows,
+	defaultValue,
+	min,
+	max,
 }: FormFieldProps) {
 	let errorMessageId = `${id}-error`;
 	let ariaInvalid = errorMessage ? true : undefined;
 	let ariaErrormessage = errorMessage ? errorMessageId : undefined;
+
+	let mdOpts = React.useMemo(() => {
+		return {
+			forceSync: true,
+			maxHeight: "500px",
+		};
+	}, []);
 
 	return (
 		<div>
@@ -164,7 +222,23 @@ function FormField({
 						placeholder={placeholder}
 						aria-invalid={ariaInvalid}
 						aria-errormessage={ariaErrormessage}
+						defaultValue={defaultValue || undefined}
 					/>
+				) : type === "markdown" ? (
+					<MarkdownEditor
+						fieldId={id}
+						options={mdOpts}
+						defaultValue={defaultValue || undefined}
+					>
+						<MarkdownEditorTextarea
+							name={name}
+							rows={rows}
+							required={required || undefined}
+							placeholder={placeholder}
+							aria-invalid={ariaInvalid}
+							aria-errormessage={ariaErrormessage}
+						/>
+					</MarkdownEditor>
 				) : (
 					<input
 						name={name}
@@ -174,6 +248,9 @@ function FormField({
 						placeholder={placeholder}
 						aria-invalid={ariaInvalid}
 						aria-errormessage={ariaErrormessage}
+						defaultValue={defaultValue || undefined}
+						min={min}
+						max={max}
 					/>
 				)}
 			</div>
@@ -185,4 +262,13 @@ function FormField({
 function hasFormErrors(errors: FormFieldErrors) {
 	let values = Object.values(errors);
 	return values.length > 0 && values.some((error) => error != null);
+}
+
+function toDateTimeInputValue(date: Date) {
+	let year = String(date.getFullYear());
+	let month = String(date.getMonth() + 1).padStart(2, "0");
+	let day = String(date.getDay()).padStart(2, "0");
+	let hours = String(date.getHours()).padStart(2, "0");
+	let minutes = String(date.getMinutes()).padStart(2, "0");
+	return `${year}-${month}-${day}T${hours}:${minutes}`;
 }

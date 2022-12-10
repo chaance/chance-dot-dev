@@ -130,6 +130,8 @@ export async function createBlogPost({
 	userId,
 	slug,
 	seo,
+	createdAt,
+	updatedAt,
 }: {
 	body: string;
 	title: string;
@@ -138,6 +140,8 @@ export async function createBlogPost({
 	excerpt?: string | null;
 	slug?: string | null;
 	seo?: Partial<Omit<SEO, "id">> | null;
+	createdAt?: Date;
+	updatedAt?: Date;
 }): Promise<BlogPostWithSEO> {
 	slug = slugify(slug || title);
 	let twitterCard = seo?.twitterCard ?? null;
@@ -153,6 +157,8 @@ export async function createBlogPost({
 			twitterCard,
 			twitterCreator,
 			twitterSite,
+			createdAt,
+			updatedAt,
 			// seo: {
 			// 	create: {
 			// 		metaTitle: seo?.metaTitle,
@@ -193,6 +199,7 @@ type BlogPostUpdateData = {
 	twitterSite?: string | null;
 	twitterCreator?: string | null;
 	createdAt?: Date;
+	updatedAt?: Date;
 };
 
 export async function updateBlogPost(
@@ -207,6 +214,7 @@ export async function updateBlogPost(
 		excerpt?: string | null;
 		slug?: string | null;
 		createdAt?: Date;
+		updatedAt?: Date;
 		seo?: {
 			twitterCard?: string | null;
 			twitterSite?: string | null;
@@ -233,6 +241,10 @@ export async function updateBlogPost(
 
 	if (props.createdAt != null) {
 		data.createdAt = props.createdAt;
+	}
+
+	if (props.updatedAt != null) {
+		data.updatedAt = props.updatedAt;
 	}
 
 	for (let field of ["body", "title", "description", "excerpt"] as const) {

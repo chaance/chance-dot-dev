@@ -14,8 +14,7 @@ import type { MetaFunction, LoaderArgs } from "@remix-run/node";
 import { Container } from "~/ui/container";
 import { SiteHeader } from "~/ui/site-header";
 import { SiteFooter } from "~/ui/site-footer";
-import { canUseDOM } from "~/lib/utils";
-import { getUserFromSession, serverSessionStorage } from "~/lib/session.server";
+import { serverSessionStorage } from "~/lib/session.server";
 import { getSeo } from "~/lib/seo";
 import { RouteChangeAnnouncement } from "~/ui/primitives/route-change-announcement";
 import { RootProvider } from "~/lib/react/context";
@@ -85,25 +84,18 @@ export const meta: MetaFunction = () => {
 	};
 };
 
-export let loader = async ({ request, context }: LoaderArgs) => {
-	let session = await serverSessionStorage.getSession(
-		request.headers.get("Cookie")
-	);
-	let user = await getUserFromSession(session);
+export let loader = async ({ request }: LoaderArgs) => {
 	let data = {
-		user,
-		scripts: null as "enabled" | "disabled" | null,
 		requestInfo: {
 			origin: getDomainUrl(request),
 		},
 	};
-
-	let scripts = session.get("scripts");
-	if (scripts === "enabled" || scripts === "disabled") {
-		data.scripts = scripts;
-	}
 	return json(data);
 };
+
+export function unstable_shouldReload() {
+	return false;
+}
 
 export default function Root() {
 	return (
@@ -238,20 +230,13 @@ export function ErrorBoundary({ error }: { error: Error }) {
 	);
 }
 
-// function isValidLoaderData(data: any): data is LoaderData {
-// 	return (
-// 		isObject(data) &&
-// 		(data.scripts === "enabled" || data.scripts === "disabled")
-// 	);
-// }
-
 function getDomainUrl(request: Request) {
-	const host =
+	let host =
 		request.headers.get("X-Forwarded-Host") ?? request.headers.get("host");
 	if (!host) {
 		throw new Error("Could not determine domain URL.");
 	}
-	const protocol = host.includes("localhost") ? "http" : "https";
+	let protocol = host.includes("localhost") ? "http" : "https";
 	return `${protocol}://${host}`;
 }
 

@@ -1,11 +1,21 @@
 import * as React from "react";
-import type { ActionArgs } from "@remix-run/node";
+import type { LoaderArgs, ActionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Form, useActionData, useLoaderData } from "@remix-run/react";
+import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import { getBlogPost, updateBlogPost } from "~/models/blog-post.server";
 import { requireUserId } from "~/lib/session.server";
 import { getFormFieldStringValue } from "~/lib/utils";
 import invariant from "tiny-invariant";
+import { MarkdownEditor, MarkdownEditorTextarea } from "~/ui/markdown-editor";
+
+export function links() {
+	return [
+		{
+			rel: "stylesheet",
+			href: "https://unpkg.com/easymde/dist/easymde.min.css",
+		},
+	];
+}
 
 const formFields = new Map<FormFieldName, FormFieldDescriptor>([
 	["title", { label: "Title", required: true, type: "text" }],
@@ -14,13 +24,13 @@ const formFields = new Map<FormFieldName, FormFieldDescriptor>([
 		"createdAt",
 		{ label: "Created At", required: false, type: "datetime-local" },
 	],
-	["body", { label: "Content", required: true, type: "textarea", rows: 14 }],
+	["body", { label: "Content", required: true, type: "markdown", rows: 14 }],
 	["description", { label: "Description", required: false, type: "text" }],
 	["excerpt", { label: "Excerpt", required: false, type: "textarea", rows: 2 }],
 	["twitterCard", { label: "Twitter Card URL", required: false, type: "text" }],
 ]);
 
-export async function loader({ request, params }: ActionArgs) {
+export async function loader({ request, params }: LoaderArgs) {
 	let { postId } = params;
 	invariant(postId, "Post ID is required");
 	let userId = await requireUserId(request);
@@ -78,13 +88,21 @@ export async function action({ request }: ActionArgs) {
 		);
 	}
 
+	let _createdAt = formData.get("_createdAt");
+	let createdAt = values.createdAt ? new Date(values.createdAt) : undefined;
+	let updatedAt =
+		typeof _createdAt === "string" && createdAt !== new Date(_createdAt)
+			? createdAt
+			: undefined;
+
 	let post = await updateBlogPost(postId, {
 		title: values.title!,
 		body: values.body!,
 		slug: values.slug,
 		description: values.description,
 		excerpt: values.excerpt,
-		createdAt: (values.createdAt as any) || undefined,
+		createdAt,
+		updatedAt,
 		seo: {
 			twitterCard: values.twitterCard,
 		},
@@ -117,41 +135,57 @@ export default function UpdateNotePage() {
 	}, [actionData]);
 
 	return (
-		<Form
-			key={JSON.stringify(post)}
-			ref={formRef}
-			method="post"
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				gap: 8,
-				width: "100%",
-			}}
-		>
-			{Array.from(formFields).map(([name, desc]) => {
-				let error = actionData?.errors?.[name];
-				let defaultValue =
-					name === "twitterCard" ? post.seo?.twitterCard : post[name];
-				return (
-					<FormField
-						id={`form-field-${name}`}
-						key={name}
-						name={name}
-						errorMessage={error}
-						defaultValue={defaultValue}
-						{...desc}
-					/>
-				);
-			})}
+		<div>
+			<Link to={`/blog/${post.slug}`}>View Post</Link>
+			<Form
+				key={JSON.stringify(post)}
+				ref={formRef}
+				method="post"
+				style={{
+					display: "flex",
+					flexDirection: "column",
+					gap: 8,
+					width: "100%",
+				}}
+			>
+				{Array.from(formFields).map(([name, desc]) => {
+					let error = actionData?.errors?.[name];
+					let defaultValue =
+						name === "twitterCard" ? post.seo?.twitterCard : post[name];
 
-			<input type="hidden" name="id" value={loaderData.post.id} />
+					if (desc.type === "datetime-local") {
+						defaultValue =
+							typeof defaultValue === "string"
+								? toDateTimeInputValue(new Date(defaultValue))
+								: defaultValue;
+					}
 
-			<div>
-				<button type="submit" className="button">
-					Save
-				</button>
-			</div>
-		</Form>
+					return (
+						<FormField
+							id={`form-field-${name}`}
+							key={name}
+							name={name}
+							errorMessage={error}
+							defaultValue={defaultValue}
+							{...desc}
+						/>
+					);
+				})}
+
+				<input type="hidden" name="id" value={loaderData.post.id} />
+				<input
+					type="hidden"
+					name="_createdAt"
+					value={loaderData.post.createdAt}
+				/>
+
+				<div>
+					<button type="submit" className="button">
+						Save
+					</button>
+				</div>
+			</Form>
+		</div>
 	);
 }
 
@@ -179,15 +213,20 @@ type FormFieldDescriptor = { required: boolean; label: string } & (
 			placeholder?: string;
 			rows: number;
 	  }
+	| {
+			type: "markdown";
+			placeholder?: string;
+			rows: number;
+	  }
 );
 
 type FormFieldErrors = Record<FormFieldName, string | null>;
 type FormFieldValues = Record<FormFieldName, string | null>;
 
-type FormFieldProps = {
+interface FormFieldProps {
 	name: FormFieldName;
 	label: string;
-	type?: InputType | "textarea" | "datetime-local";
+	type?: InputType | "textarea" | "markdown" | "datetime-local";
 	required?: boolean;
 	placeholder?: string;
 	errorMessage?: string | null;
@@ -196,7 +235,7 @@ type FormFieldProps = {
 	defaultValue?: string | null;
 	min?: string | number;
 	max?: string | number;
-};
+}
 
 function FormField({
 	name,
@@ -215,6 +254,13 @@ function FormField({
 	let ariaInvalid = errorMessage ? true : undefined;
 	let ariaErrormessage = errorMessage ? errorMessageId : undefined;
 
+	let mdOpts = React.useMemo(() => {
+		return {
+			forceSync: true,
+			maxHeight: "500px",
+		};
+	}, []);
+
 	return (
 		<div>
 			<div>
@@ -230,6 +276,21 @@ function FormField({
 						aria-errormessage={ariaErrormessage}
 						defaultValue={defaultValue || undefined}
 					/>
+				) : type === "markdown" ? (
+					<MarkdownEditor
+						fieldId={id}
+						options={mdOpts}
+						defaultValue={defaultValue || undefined}
+					>
+						<MarkdownEditorTextarea
+							name={name}
+							rows={rows}
+							required={required || undefined}
+							placeholder={placeholder}
+							aria-invalid={ariaInvalid}
+							aria-errormessage={ariaErrormessage}
+						/>
+					</MarkdownEditor>
 				) : (
 					<input
 						name={name}
@@ -253,4 +314,13 @@ function FormField({
 function hasFormErrors(errors: FormFieldErrors) {
 	let values = Object.values(errors);
 	return values.length > 0 && values.some((error) => error != null);
+}
+
+function toDateTimeInputValue(date: Date) {
+	let year = String(date.getFullYear());
+	let month = String(date.getMonth() + 1).padStart(2, "0");
+	let day = String(date.getDay()).padStart(2, "0");
+	let hours = String(date.getHours()).padStart(2, "0");
+	let minutes = String(date.getMinutes()).padStart(2, "0");
+	return `${year}-${month}-${day}T${hours}:${minutes}`;
 }

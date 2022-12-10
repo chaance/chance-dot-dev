@@ -12,3 +12,5 @@ node_modules
 
 /app/dist
 /app/lib/prisma/client
+
+/NOTES.md

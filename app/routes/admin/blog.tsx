@@ -1,6 +1,6 @@
 import type { LinksFunction, LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Link, Outlet } from "@remix-run/react";
+import { Link, Outlet, ShouldReloadFunction } from "@remix-run/react";
 
 import { requireUserId } from "~/lib/session.server";
 import { getBlogPostListItems } from "~/models/blog-post.server";
@@ -19,6 +19,14 @@ export async function loader({ request }: LoaderArgs) {
 	});
 	return json({ blogListItems });
 }
+
+export function headers() {
+	return { "Cache-Control": "max-age=300" };
+}
+
+export const unstable_shouldReload: ShouldReloadFunction = ({ submission }) => {
+	return !!submission && submission.method.toLowerCase() !== "get";
+};
 
 export default function AdminBlogLayout() {
 	return (

@@ -1,8 +1,14 @@
 import type { LinksFunction, LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Form, Link, NavLink, Outlet, useMatches } from "@remix-run/react";
+import {
+	Form,
+	Link,
+	NavLink,
+	Outlet,
+	useLoaderData,
+	useMatches,
+} from "@remix-run/react";
 import { requireUser } from "~/lib/session.server";
-import { useUser } from "~/lib/react/use-user";
 
 import routeStylesUrl from "~/dist/styles/routes/admin.css";
 import cx from "clsx";
@@ -12,12 +18,12 @@ export const links: LinksFunction = () => {
 };
 
 export async function loader({ request }: LoaderArgs) {
-	requireUser(request, "/login");
-	return json(null);
+	let user = await requireUser(request, "/login");
+	return json({ user });
 }
 
 export default function AdminBlogLayout() {
-	let user = useUser();
+	let { user } = useLoaderData<typeof loader>();
 	let matches = useMatches();
 
 	let blogRouteMatch = matches.find(
