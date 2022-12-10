@@ -40,9 +40,9 @@ app.use(
 // more aggressive with this caching.
 app.use(express.static("public", { maxAge: "1h" }));
 
-if (process.env.NODE_ENV === "development") {
-	app.use(morgan("tiny"));
-}
+// if (process.env.NODE_ENV === "development") {
+app.use(morgan("tiny"));
+// }
 
 app.all(
 	"*",
