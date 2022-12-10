@@ -8,113 +8,46 @@ import { isString } from "~/lib/utils";
 import type * as Unist from "unist";
 import type * as Hast from "hast";
 import type * as Shiki from "shiki";
+import LRUCache from "lru-cache";
 
-import type { unified } from "unified";
-import type { default as remarkGfm } from "remark-gfm";
-import type { default as remarkParse } from "remark-parse";
-import type { default as remarkRehype } from "remark-rehype";
-import type { default as rehypeSlug } from "rehype-slug";
-import type { default as rehypeStringify } from "rehype-stringify";
-import type escapeGoat from "escape-goat";
-import type unistUtilVisit from "unist-util-visit";
+const NO_CACHE = process.env.NO_CACHE;
 
-interface AsyncMdModules {
-	unified: typeof unified;
-	remarkGfm: typeof remarkGfm;
-	remarkParse: typeof remarkParse;
-	remarkRehype: typeof remarkRehype;
-	rehypeSlug: typeof rehypeSlug;
-	rehypeStringify: typeof rehypeStringify;
-	escapeGoat: typeof escapeGoat;
-	unistUtilVisit: typeof unistUtilVisit;
-}
+export const markdownCache = new LRUCache<string, MarkdownParsed>({
+	max: Math.round((1024 * 1024 * 12) / 10),
+	maxSize: 1024 * 1024 * 12, // 12mb
+	sizeCalculation(value, key) {
+		return JSON.stringify(value).length + (key ? key.length : 0);
+	},
+});
 
-// const markdownCache = new LRUCache<string, MarkdownParsed>({
-// 	max: Math.round((1024 * 1024 * 12) / 10),
-// 	maxSize: 1024 * 1024 * 12, // 12mb
-// 	sizeCalculation(value, key) {
-// 		return JSON.stringify(value).length + (key ? key.length : 0);
-// 	},
-// });
-
-let _highlighter: Shiki.Highlighter | null = null;
-// let _base16Theme: Shiki.IShikiTheme | null = null;
-let _asyncMdModules: AsyncMdModules | null = null;
-
-async function loadAsyncModules(): Promise<AsyncMdModules> {
-	if (_asyncMdModules) {
-		return _asyncMdModules;
-	}
-	let [
-		{ unified },
-		{ default: remarkGfm },
-		{ default: remarkParse },
-		{ default: remarkRehype },
-		{ default: rehypeSlug },
-		{ default: rehypeStringify },
-		unistUtilVisit,
-		escapeGoat,
-	] = await Promise.all([
-		import("unified"),
-		import("remark-gfm"),
-		import("remark-parse"),
-		import("remark-rehype"),
-		import("rehype-slug"),
-		import("rehype-stringify"),
-		import("unist-util-visit"),
-		import("escape-goat"),
-	]);
-	return (_asyncMdModules = {
-		unified,
-		remarkGfm,
-		remarkParse,
-		remarkRehype,
-		rehypeSlug,
-		rehypeStringify,
-		unistUtilVisit,
-		escapeGoat,
-	});
-}
-
-async function loadShikiHighlighter(
-	themes: Shiki.IThemeRegistration[],
-	langs: (Shiki.Lang | Shiki.ILanguageRegistration)[]
-): Promise<Shiki.Highlighter> {
-	if (_highlighter) {
-		return _highlighter;
-	}
-	return (_highlighter = await getHighlighter({ themes, langs }));
-}
-
-async function loadBase16Theme(): Promise<Shiki.IShikiTheme> {
-	// if (_base16Theme) {
-	// 	return _base16Theme;
-	// }
-	// return (_base16Theme = toShikiTheme(vscodeColorTheme));
-	return toShikiTheme(vscodeColorTheme);
-}
-
-interface MarkdownParsed {
+export interface MarkdownParsed {
 	markdown: string;
 	html: string;
+}
+
+export async function processMarkdown(content: string) {
+	let processor = await getProcessor();
+	let vfile = await processor.process(content);
+	return typeof vfile.value === "string" ? vfile.value : vfile.value.toString();
 }
 
 export async function parseMarkdown(
 	key: string,
 	contents: string
-	// debugKey?: string
 ): Promise<MarkdownParsed | null> {
-	// let cached = markdownCache.get(key);
-	// if (cached) {
-	// 	return cached;
-	// }
+	if (!NO_CACHE) {
+		let cached = markdownCache.get(key);
+		if (cached) {
+			return cached;
+		}
+	}
 
-	let processor = await getProcessor();
 	let { body: markdown } = parseFrontMatter(contents);
-	let html = String(await processor.process(markdown));
-
+	let html = await processMarkdown(markdown);
 	let parsed = { markdown, html };
-	// markdownCache.set(key, parsed);
+	if (!NO_CACHE) {
+		markdownCache.set(key, parsed);
+	}
 	return parsed;
 }
 
@@ -123,21 +56,30 @@ export interface ProcessorOptions {
 }
 
 async function getProcessor(options: ProcessorOptions = {}) {
-	let {
-		unified,
-		remarkParse,
-		remarkGfm,
-		remarkRehype,
-		rehypeSlug,
-		rehypeStringify,
-	} = await loadAsyncModules();
+	let [
+		{ unified },
+		{ default: remarkGfm },
+		{ default: remarkParse },
+		{ default: remarkRehype },
+		{ default: rehypeSlug },
+		{ default: rehypeStringify },
+		plugins,
+	] = await Promise.all([
+		import("unified"),
+		import("remark-gfm"),
+		import("remark-parse"),
+		import("remark-rehype"),
+		import("rehype-slug"),
+		import("rehype-stringify"),
+		getPlugins(),
+	]);
 
 	return (
 		unified()
 			.use(remarkParse)
-			.use(stripLinkExtPlugin, options)
-			.use(remarkCodeBlocksPlugin)
-			// .use(responsiveImagesPlugin)
+			.use(plugins.stripLinkExtPlugin, options)
+			.use(plugins.remarkCodeBlocksPlugin)
+			// .use(plugins.responsiveImagesPlugin)
 			.use(remarkGfm)
 			.use(remarkRehype, { allowDangerousHtml: true })
 			.use(rehypeStringify, { allowDangerousHtml: true })
@@ -145,220 +87,222 @@ async function getProcessor(options: ProcessorOptions = {}) {
 	);
 }
 
-function stripLinkExtPlugin(options: ProcessorOptions) {
-	return async function transformer(tree: UnistNode.Root): Promise<void> {
-		let {
-			unistUtilVisit: { visit, SKIP },
-		} = await loadAsyncModules();
-		visit(tree, "link", (node, index, parent) => {
-			if (
-				options.resolveHref &&
-				isString(node.url) &&
-				isRelativeUrl(node.url)
-			) {
-				if (parent && index != null) {
-					parent.children[index] = {
-						...node,
-						url: options.resolveHref(node.url),
+async function getPlugins() {
+	// Shiki Theme values
+	let theme = toShikiTheme(vscodeColorTheme);
+	let langs: Shiki.Lang[] = [
+		"css",
+		"diff",
+		"html",
+		// Not supported, sadness
+		// @ts-ignore
+		// "http",
+		"js",
+		"javascript",
+		"json",
+		"jsx",
+		"markdown",
+		"md",
+		"mdx",
+		"prisma",
+		"scss",
+		"shellscript",
+		"ts",
+		"typescript",
+		"tsx",
+	];
+	let langSet = new Set(langs);
+
+	let [{ visit, SKIP }, { htmlEscape }, highlighter] = await Promise.all([
+		import("unist-util-visit"),
+		import("escape-goat"),
+		getHighlighter({ themes: [theme], langs }),
+	]);
+
+	return {
+		stripLinkExtPlugin(options: ProcessorOptions) {
+			return async function transformer(tree: UnistNode.Root): Promise<void> {
+				visit(tree, "link", (node, index, parent) => {
+					if (
+						options.resolveHref &&
+						isString(node.url) &&
+						isRelativeUrl(node.url)
+					) {
+						if (parent && index != null) {
+							parent.children[index] = {
+								...node,
+								url: options.resolveHref(node.url),
+							};
+							return SKIP;
+						}
+					}
+				});
+			};
+		},
+		responsiveImagesPlugin() {
+			return async function transformer(tree: UnistNode.Root): Promise<void> {
+				visit(tree, "image", (node, index, parent) => {
+					if (!parent || index == null) return;
+
+					parent.type = "element";
+					let srcBase = node.url;
+					let ext = srcBase.slice(srcBase.lastIndexOf("."));
+					let hChildren = [...parent.children] as Hast.Element[];
+					let getSrc = (variant: string) =>
+						srcBase.slice(0, srcBase.lastIndexOf(".")) + "-" + variant + ext;
+
+					hChildren.splice(index, 1, {
+						type: "element",
+						tagName: "img",
+						properties: {
+							src: srcBase,
+							alt: node.alt,
+							// TODO: Check if these are in the images directory first, and
+							// generate dynamically
+							srcSet: ["2000", "1024", "640"].reduce(
+								(prev, cur) => `${prev}, ${getSrc(cur)} ${cur}w`,
+								""
+							),
+							sizes:
+								"(min-width: 1024px) 2000px, (min-width: 768px) 1024px, 640px",
+							loading: "lazy",
+						},
+						children: [],
+					});
+
+					parent.data = {
+						hName: "figure",
+						hChildren,
 					};
 					return SKIP;
-				}
-			}
-		});
-	};
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function responsiveImagesPlugin() {
-	return async function transformer(tree: UnistNode.Root): Promise<void> {
-		let {
-			unistUtilVisit: { visit, SKIP },
-		} = await loadAsyncModules();
-
-		visit(tree, "image", (node, index, parent) => {
-			if (!parent || index == null) return;
-
-			parent.type = "element";
-			let srcBase = node.url;
-			let ext = srcBase.slice(srcBase.lastIndexOf("."));
-			let hChildren = [...parent.children] as Hast.Element[];
-			let getSrc = (variant: string) =>
-				srcBase.slice(0, srcBase.lastIndexOf(".")) + "-" + variant + ext;
-
-			hChildren.splice(index, 1, {
-				type: "element",
-				tagName: "img",
-				properties: {
-					src: srcBase,
-					alt: node.alt,
-					// TODO: Check if these are in the images directory first, and
-					// generate dynamically
-					srcSet: ["2000", "1024", "640"].reduce(
-						(prev, cur) => `${prev}, ${getSrc(cur)} ${cur}w`,
-						""
-					),
-					sizes: "(min-width: 1024px) 2000px, (min-width: 768px) 1024px, 640px",
-					loading: "lazy",
-				},
-				children: [],
-			});
-
-			parent.data = {
-				hName: "figure",
-				hChildren,
+				});
 			};
-			return SKIP;
-		});
-	};
-}
+		},
+		remarkCodeBlocksPlugin() {
+			return async function transformer(tree: UnistNode.Root): Promise<void> {
+				let themeName = "base16";
 
-function remarkCodeBlocksPlugin() {
-	return async function transformer(tree: UnistNode.Root): Promise<void> {
-		let {
-			escapeGoat: { htmlEscape },
-			unistUtilVisit: { visit, SKIP },
-		} = await loadAsyncModules();
-		let theme = await loadBase16Theme();
-		let langs: Shiki.Lang[] = [
-			"css",
-			"diff",
-			"html",
-			// Not supported, sadness
-			// @ts-ignore
-			// "http",
-			"js",
-			"javascript",
-			"json",
-			"jsx",
-			"markdown",
-			"md",
-			"mdx",
-			"prisma",
-			"scss",
-			"shellscript",
-			"ts",
-			"typescript",
-			"tsx",
-		];
-		let langSet = new Set(langs);
-		let highlighter = await loadShikiHighlighter([theme], langs);
-		let themeName = "base16";
+				visit(tree, "code", (node) => {
+					if (!node.lang || !node.value || !langSet.has(node.lang)) {
+						return;
+					}
 
-		visit(tree, "code", (node) => {
-			if (!node.lang || !node.value || !langSet.has(node.lang)) {
-				return;
-			}
+					switch (node.lang) {
+						case "js":
+							node.lang = "javascript";
+							break;
+						case "ts":
+							node.lang = "typescript";
+							break;
+					}
 
-			switch (node.lang) {
-				case "js":
-					node.lang = "javascript";
-					break;
-				case "ts":
-					node.lang = "typescript";
-					break;
-			}
+					// TODO: figure out how this is ever an array?
+					let meta = Array.isArray(node.meta) ? node.meta[0] : node.meta;
 
-			// TODO: figure out how this is ever an array?
-			let meta = Array.isArray(node.meta) ? node.meta[0] : node.meta;
+					let metaParams = new URLSearchParams();
+					if (meta) {
+						let linesHighlightsMetaShorthand = meta.match(/^\[(.+)\]$/);
+						if (linesHighlightsMetaShorthand) {
+							metaParams.set("lines", linesHighlightsMetaShorthand[0]);
+						} else {
+							metaParams = new URLSearchParams(meta.split(/\s+/).join("&"));
+						}
+					}
 
-			let metaParams = new URLSearchParams();
-			if (meta) {
-				let linesHighlightsMetaShorthand = meta.match(/^\[(.+)\]$/);
-				if (linesHighlightsMetaShorthand) {
-					metaParams.set("lines", linesHighlightsMetaShorthand[0]);
-				} else {
-					metaParams = new URLSearchParams(meta.split(/\s+/).join("&"));
-				}
-			}
+					let highlightLines = parseLineHighlights(metaParams.get("lines"));
+					let numbers = !metaParams.has("nonumber");
 
-			let highlightLines = parseLineHighlights(metaParams.get("lines"));
-			let numbers = !metaParams.has("nonumber");
+					let fgColor = convertFakeHexToCustomProp(
+						highlighter.getForegroundColor(themeName) || ""
+					);
+					// let bgColor = convertFakeHexToCustomProp(
+					// 	highlighter.getBackgroundColor(themeName) || ""
+					// );
+					let tokens = highlighter.codeToThemedTokens(
+						node.value!,
+						node.lang,
+						themeName
+					);
+					let children = tokens.map(
+						(lineTokens, zeroBasedLineNumber): Hast.Element => {
+							let children = lineTokens.map(
+								(token): Hast.Text | Hast.Element => {
+									let color = convertFakeHexToCustomProp(token.color || "");
+									let content: Hast.Text = {
+										type: "text",
+										// Do not escape the _actual_ content
+										value: token.content,
+									};
 
-			let fgColor = convertFakeHexToCustomProp(
-				highlighter.getForegroundColor(themeName) || ""
-			);
-			// let bgColor = convertFakeHexToCustomProp(
-			// 	highlighter.getBackgroundColor(themeName) || ""
-			// );
-			let tokens = highlighter.codeToThemedTokens(
-				node.value!,
-				node.lang,
-				themeName
-			);
-			let children = tokens.map(
-				(lineTokens, zeroBasedLineNumber): Hast.Element => {
-					let children = lineTokens.map((token): Hast.Text | Hast.Element => {
-						let color = convertFakeHexToCustomProp(token.color || "");
-						let content: Hast.Text = {
-							type: "text",
-							// Do not escape the _actual_ content
-							value: token.content,
-						};
+									return color && color !== fgColor
+										? {
+												type: "element",
+												tagName: "span",
+												properties: {
+													style: `color: ${htmlEscape(color)}`,
+												},
+												children: [content],
+										  }
+										: content;
+								}
+							);
 
-						return color && color !== fgColor
-							? {
-									type: "element",
-									tagName: "span",
-									properties: {
-										style: `color: ${htmlEscape(color)}`,
-									},
-									children: [content],
-							  }
-							: content;
+							children.push({
+								type: "text",
+								value: "\n",
+							});
+
+							return {
+								type: "element",
+								tagName: "span",
+								properties: {
+									className: "codeblock-line",
+									dataHighlight: highlightLines?.includes(
+										zeroBasedLineNumber + 1
+									)
+										? "true"
+										: undefined,
+									dataLineNumber: zeroBasedLineNumber + 1,
+								},
+								children,
+							};
+						}
+					);
+
+					let metaProps: { [key: string]: string } = {};
+					metaParams.forEach((val, key) => {
+						if (key === "lines") return;
+						metaProps[`data-${key}`] = val;
 					});
 
-					children.push({
-						type: "text",
-						value: "\n",
-					});
-
-					return {
+					let nodeValue = {
 						type: "element",
-						tagName: "span",
+						tagName: "pre",
 						properties: {
-							className: "codeblock-line",
-							dataHighlight: highlightLines?.includes(zeroBasedLineNumber + 1)
-								? "true"
-								: undefined,
-							dataLineNumber: zeroBasedLineNumber + 1,
+							...metaProps,
+							dataLineNumbers: numbers ? "true" : "false",
+							dataLang: htmlEscape(node.lang),
+							style: `color: ${htmlEscape(fgColor)};`,
 						},
-						children,
+						children: [
+							{
+								type: "element",
+								tagName: "code",
+								children,
+							},
+						],
 					};
-				}
-			);
 
-			let metaProps: { [key: string]: string } = {};
-			metaParams.forEach((val, key) => {
-				if (key === "lines") return;
-				metaProps[`data-${key}`] = val;
-			});
+					let data = node.data ?? (node.data = {});
 
-			let nodeValue = {
-				type: "element",
-				tagName: "pre",
-				properties: {
-					...metaProps,
-					dataLineNumbers: numbers ? "true" : "false",
-					dataLang: htmlEscape(node.lang),
-					style: `color: ${htmlEscape(fgColor)};`,
-				},
-				children: [
-					{
-						type: "element",
-						tagName: "code",
-						children,
-					},
-				],
+					(node as any).type = "element";
+					data.hProperties ??= {};
+					data.hChildren = [nodeValue];
+
+					return SKIP;
+				});
 			};
-
-			let data = node.data ?? (node.data = {});
-
-			(node as any).type = "element";
-			data.hProperties ??= {};
-			data.hChildren = [nodeValue];
-
-			return SKIP;
-		});
+		},
 	};
 }
 

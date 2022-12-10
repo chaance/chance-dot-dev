@@ -1,5 +1,9 @@
 import path from "path";
-import { parseMarkdown } from "~/lib/md.server";
+import {
+	parseMarkdown,
+	markdownCache,
+	type MarkdownParsed,
+} from "~/lib/md.server";
 import {
 	type BlogPost,
 	type BlogPostWithSEO,
@@ -7,6 +11,22 @@ import {
 	getBlogPostListItems as getBlogPostListItemsFromDB,
 } from "~/models/blog-post.server";
 import { getExcerpt } from "~/lib/utils";
+
+const CACHE_KEY = "blog";
+export const blogContentCache = Object.freeze({
+	get(key: string) {
+		return markdownCache.get(`${CACHE_KEY}:${key}`);
+	},
+	set(key: string, value: MarkdownParsed) {
+		return markdownCache.set(`${CACHE_KEY}:${key}`, value);
+	},
+	delete(key: string) {
+		return markdownCache.delete(`${CACHE_KEY}:${key}`);
+	},
+	clear() {
+		return markdownCache.clear();
+	},
+});
 
 export async function getMarkdownBlogPost(slug: string) {
 	let blogPost = await getBlogPostBySlugFromDB(slug);

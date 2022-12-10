@@ -7,6 +7,7 @@ import { requireUserId } from "~/lib/session.server";
 import { getFormFieldStringValue } from "~/lib/utils";
 import invariant from "tiny-invariant";
 import { MarkdownEditor, MarkdownEditorTextarea } from "~/ui/markdown-editor";
+import { blogContentCache } from "~/lib/blog.server";
 
 export function links() {
 	return [
@@ -107,6 +108,8 @@ export async function action({ request }: ActionArgs) {
 			twitterCard: values.twitterCard,
 		},
 	});
+
+	blogContentCache.delete(post.slug);
 
 	// TODO: Clear CDN cache once implemented
 	return json({ post, errors });
