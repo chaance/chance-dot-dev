@@ -1,8 +1,8 @@
 import parseFrontMatter from "front-matter";
 // import LRUCache from "lru-cache";
 import rangeParser from "parse-numeric-range";
-import path from "path";
-import { getHighlighter, loadTheme } from "shiki";
+import { getHighlighter, /* loadTheme, */ toShikiTheme } from "shiki";
+import { vscodeColorTheme } from "~/lib/vscode-theme";
 import { isString } from "~/lib/utils";
 
 import type * as Unist from "unist";
@@ -38,7 +38,7 @@ interface AsyncMdModules {
 // });
 
 let _highlighter: Shiki.Highlighter | null = null;
-let _base16Theme: Shiki.IShikiTheme | null = null;
+// let _base16Theme: Shiki.IShikiTheme | null = null;
 let _asyncMdModules: AsyncMdModules | null = null;
 
 async function loadAsyncModules(): Promise<AsyncMdModules> {
@@ -87,14 +87,11 @@ async function loadShikiHighlighter(
 }
 
 async function loadBase16Theme(): Promise<Shiki.IShikiTheme> {
-	if (_base16Theme) {
-		return _base16Theme;
-	}
-	// relative to the build path, not the source
-	const dataPath = path.join(__dirname, "..", "data");
-	return (_base16Theme = await loadTheme(
-		path.resolve(dataPath, "shiki-base16.json")
-	));
+	// if (_base16Theme) {
+	// 	return _base16Theme;
+	// }
+	// return (_base16Theme = toShikiTheme(vscodeColorTheme));
+	return toShikiTheme(vscodeColorTheme);
 }
 
 interface MarkdownParsed {
