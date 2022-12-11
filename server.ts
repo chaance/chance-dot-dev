@@ -40,9 +40,14 @@ app.use(
 // more aggressive with this caching.
 app.use(express.static("public", { maxAge: "1h" }));
 
-// if (process.env.NODE_ENV === "development") {
-app.use(morgan("tiny"));
-// }
+console.log({ ENV: process.env.NODE_ENV });
+if (process.env.NODE_ENV === "development") {
+	app.use(
+		morgan("tiny", {
+			skip: (req, res) => req.url === "/healthcheck",
+		})
+	);
+}
 
 app.all(
 	"*",

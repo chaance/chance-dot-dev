@@ -22,7 +22,6 @@ export async function loader({ request, params }: LoaderArgs) {
 			timeZone: "America/Los_Angeles",
 		})
 	);
-	console.log(currentDate);
 	return json({ currentDate });
 }
 

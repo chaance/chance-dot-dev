@@ -34,8 +34,6 @@ export async function getMarkdownBlogPost(slug: string) {
 		return null;
 	}
 
-	console.log("blogPost", blogPost);
-
 	let markdown = await getProcessedMarkdown(blogPost.slug, blogPost.body);
 	if (!markdown) {
 		return null;
