@@ -4,7 +4,7 @@ import compression from "compression";
 import morgan from "morgan";
 import { createRequestHandler } from "@remix-run/express";
 import { type AppLoadContext } from "@remix-run/server-runtime";
-import rfs from "rotating-file-stream";
+import { createStream, type RotatingFileStream } from "rotating-file-stream";
 
 if (!process.env.SESSION_SECRET) {
 	throw new Error("Please define the SESSION_SECRET environment variable");
@@ -38,9 +38,9 @@ app.use(
 // more aggressive with this caching.
 app.use(express.static("public", { maxAge: "1h" }));
 
-let accessLogStream: rfs.RotatingFileStream | undefined = undefined;
+let accessLogStream: RotatingFileStream | undefined = undefined;
 if (process.env.NODE_ENV === "production") {
-	accessLogStream = rfs.createStream("access.log", {
+	accessLogStream = createStream("access.log", {
 		interval: "1d",
 		path: path.join(__dirname, "log"),
 	});
