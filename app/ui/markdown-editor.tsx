@@ -11,6 +11,9 @@ import type { Options } from "easymde";
 import type SimpleMDE from "easymde";
 import type { Editor, EditorEventMap, KeyMap, Position } from "codemirror";
 import type { EditorChange } from "codemirror";
+import cx from "clsx";
+
+const ROOT_CLASS = "cs--markdown-editor";
 
 export type DOMEvent =
 	| "mousedown"
@@ -83,75 +86,6 @@ interface MarkdownEditorTextareaProps
 		"id" | "value" | "defaultValue"
 	> {}
 
-function useHandleEditorInstanceLifecycle({
-	options,
-	id,
-	initialValue,
-	textRef,
-}: {
-	options?: Options;
-	id: string;
-	initialValue: string | undefined;
-	textRef: HTMLTextAreaElement | null;
-}) {
-	let [editor, setEditor] = useState<SimpleMDE | null>(null);
-	let imageUploadCallback = useCallback(
-		(
-			file: File,
-			onSuccess: (url: string) => void,
-			onError: (error: string) => void
-		) => {
-			let imageUpload = options?.imageUploadFunction;
-			if (imageUpload) {
-				imageUpload(file, (url: string) => onSuccess(url), onError);
-			}
-		},
-		[options?.imageUploadFunction]
-	);
-
-	// let { imageUploadFunction } = options || {};
-
-	useEffect(() => {
-		let editor: SimpleMDE;
-		let isCurrent = true;
-		if (textRef) {
-			let initialOptions: Options = {
-				element: textRef,
-			};
-			if (initialValue != null) {
-				initialOptions.initialValue = initialValue;
-			}
-			let imageUploadFunction = options?.imageUploadFunction
-				? imageUploadCallback
-				: undefined;
-
-			import("easymde").then((module) => {
-				if (isCurrent) {
-					editor = new module.default(
-						Object.assign({}, initialOptions, options, {
-							imageUploadFunction,
-						})
-					);
-					setEditor(editor);
-				}
-			});
-		}
-		return () => {
-			isCurrent = false;
-			editor?.toTextArea();
-			editor?.cleanup();
-		};
-		// Intentionally ignoring `initialValue` since it is thrown away after the
-		// initial render anyway
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [textRef, id, imageUploadCallback, options]);
-
-	const codemirror = useMemo(() => {
-		return editor?.codemirror;
-	}, [editor?.codemirror]) as Editor | undefined;
-	return { editor, codemirror };
-}
-
 const MarkdownEditorContext =
 	React.createContext<MarkdownEditorContextValue | null>(null);
 MarkdownEditorContext.displayName = "MarkdownEditorContext";
@@ -196,27 +130,77 @@ const MarkdownEditor = React.forwardRef<HTMLDivElement, MarkdownEditorProps>(
 		let elementWrapperRef = useRef<HTMLDivElement | null>(null);
 		let nonEventChangeRef = useRef<boolean>(true);
 
-		let [textRef, setTextRef] = useState<HTMLTextAreaElement | null>(null);
+		let [textareaElement, setTextareaElement] =
+			useState<HTMLTextAreaElement | null>(null);
 
 		let { current: isControlled } = useRef<boolean>(value !== undefined);
-		// let currentValueRef = useRef<string | undefined>(value);
 		let initialValue = isControlled ? value : defaultValue;
-		let { editor, codemirror } = useHandleEditorInstanceLifecycle({
-			options,
-			id: fieldId,
-			initialValue,
-			textRef,
-		});
+
+		let [editorInstance, setEditorInstance] = useState<SimpleMDE | null>(null);
+
+		let { imageUploadFunction } = options || {};
+		let imageUploadCallback = useCallback(
+			(
+				file: File,
+				onSuccess: (url: string) => void,
+				onError: (error: string) => void
+			) => {
+				if (imageUploadFunction) {
+					imageUploadFunction(file, (url: string) => onSuccess(url), onError);
+				}
+			},
+			[imageUploadFunction]
+		);
+
+		useEffect(() => {
+			let editor: SimpleMDE;
+			let isCurrent = true;
+			if (textareaElement) {
+				let initialOptions: Options = {
+					element: textareaElement,
+				};
+				if (initialValue != null) {
+					initialOptions.initialValue = initialValue;
+				}
+				let imageUploadFunction = options?.imageUploadFunction
+					? imageUploadCallback
+					: undefined;
+
+				import("easymde").then((module) => {
+					if (isCurrent) {
+						editor = new module.default(
+							Object.assign({}, initialOptions, options, {
+								imageUploadFunction,
+							})
+						);
+						setEditorInstance(editor);
+					}
+				});
+			}
+			return () => {
+				isCurrent = false;
+				editor?.toTextArea();
+				editor?.cleanup();
+			};
+			// Intentionally ignoring `initialValue` since it is thrown away after the
+			// initial render anyway
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		}, [textareaElement, fieldId, imageUploadCallback, options]);
+
+		let codemirror = useMemo(
+			() => editorInstance?.codemirror,
+			[editorInstance?.codemirror]
+		);
 
 		useEffect(() => {
 			// If change comes from the event we don't need to update `SimpleMDE`
 			// value as it already has it Otherwise we shall set it as it comes from
 			// `props` set from the outside. E.g. by some reset button and whatnot
 			if (isControlled && nonEventChangeRef.current) {
-				editor?.value(value ?? "");
+				editorInstance?.value(value ?? "");
 			}
 			nonEventChangeRef.current = true;
-		}, [editor, value, isControlled]);
+		}, [editorInstance, value, isControlled]);
 
 		let onCodemirrorChangeHandler = useCallback(
 			(_: Editor | Event, changeObject?: EditorChange) => {
@@ -248,8 +232,8 @@ const MarkdownEditor = React.forwardRef<HTMLDivElement, MarkdownEditorProps>(
 		}, [getCursorCallback]);
 
 		useEffect(() => {
-			editor && getMdeInstance?.(editor);
-		}, [editor, getMdeInstance]);
+			editorInstance && getMdeInstance?.(editorInstance);
+		}, [editorInstance, getMdeInstance]);
 
 		useEffect(() => {
 			codemirror && getCodemirrorInstance?.(codemirror);
@@ -266,18 +250,28 @@ const MarkdownEditor = React.forwardRef<HTMLDivElement, MarkdownEditorProps>(
 		}, [codemirror, extraKeys]);
 
 		useEffect(() => {
-			const toolbarNode =
+			let toolbarNode =
 				elementWrapperRef.current?.getElementsByClassName(
 					"editor-toolbarNode"
 				)[0];
-			const handler = codemirror && onCodemirrorChangeHandler;
+			let handler = codemirror ? onCodemirrorChangeHandler : undefined;
 			if (handler) {
 				toolbarNode?.addEventListener("click", handler);
 				return () => {
-					toolbarNode?.removeEventListener("click", handler);
+					toolbarNode?.removeEventListener("click", handler!);
 				};
 			}
-			return () => {};
+		}, [codemirror, onCodemirrorChangeHandler]);
+
+		useEffect(() => {
+			let rootEditorNode =
+				elementWrapperRef.current?.querySelector<HTMLDivElement>(
+					"[role=application]"
+				);
+			let editorClass = `${ROOT_CLASS}__editor`;
+			if (rootEditorNode && !rootEditorNode.classList.contains(editorClass)) {
+				rootEditorNode.classList.add(editorClass);
+			}
 		}, [codemirror, onCodemirrorChangeHandler]);
 
 		useEffect(() => {
@@ -289,10 +283,10 @@ const MarkdownEditor = React.forwardRef<HTMLDivElement, MarkdownEditorProps>(
 			};
 		}, [codemirror, getCursorCallback, onCodemirrorChangeHandler]);
 
-		const prevEvents = useRef(events);
+		let prevEvents = useRef(events);
 
 		useEffect(() => {
-			const isNotFirstEffectRun = events !== prevEvents.current;
+			let isNotFirstEffectRun = events !== prevEvents.current;
 			isNotFirstEffectRun &&
 				prevEvents.current &&
 				Object.entries(prevEvents.current).forEach(([event, handler]) => {
@@ -315,11 +309,17 @@ const MarkdownEditor = React.forwardRef<HTMLDivElement, MarkdownEditorProps>(
 		return (
 			<div
 				id={`${fieldId}-wrapper`}
+				className={ROOT_CLASS}
 				{...rest}
 				ref={useComposedRefs(elementWrapperRef, ref)}
 			>
 				<MarkdownEditorContext.Provider
-					value={{ setTextRef, fieldId, value, defaultValue }}
+					value={{
+						setTextRef: setTextareaElement,
+						fieldId,
+						value,
+						defaultValue,
+					}}
 				>
 					{children}
 				</MarkdownEditorContext.Provider>
@@ -342,6 +342,9 @@ const MarkdownEditorTextarea = React.forwardRef<
 			ref={ref}
 			value={value}
 			defaultValue={defaultValue}
+			className={cx(`${ROOT_CLASS}__textarea`, {
+				[`${ROOT_CLASS}__textarea--hidden`]: value || defaultValue,
+			})}
 			// style={{ display: "none" }}
 		/>
 	);

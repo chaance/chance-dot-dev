@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { LoaderArgs, ActionArgs } from "@remix-run/node";
+import type { LoaderArgs, ActionArgs, SerializeFrom } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import { getBlogPost, updateBlogPost } from "~/models/blog-post.server";
@@ -8,6 +8,8 @@ import { getFormFieldStringValue } from "~/lib/utils";
 import invariant from "tiny-invariant";
 import { MarkdownEditor, MarkdownEditorTextarea } from "~/ui/markdown-editor";
 import { blogContentCache } from "~/lib/blog.server";
+import { InputTextarea, InputText } from "~/ui/input";
+import { PostEditorScreen } from "../ui/post-editor-screen";
 
 export function links() {
 	return [
@@ -115,6 +117,9 @@ export async function action({ request }: ActionArgs) {
 	return json({ post, errors });
 }
 
+export type LoaderData = SerializeFrom<typeof loader>;
+export type ActionData = SerializeFrom<typeof action>;
+
 export default function UpdateNotePage() {
 	let loaderData = useLoaderData<typeof loader>();
 	let actionData = useActionData<typeof action>();
@@ -137,57 +142,44 @@ export default function UpdateNotePage() {
 		firstError?.focus();
 	}, [actionData]);
 
+	let formKey = React.useMemo(() => JSON.stringify(post), [post]);
+
 	return (
 		<div>
 			<Link to={`/blog/${post.slug}`}>View Post</Link>
-			<Form
-				key={JSON.stringify(post)}
-				ref={formRef}
-				method="post"
-				style={{
-					display: "flex",
-					flexDirection: "column",
-					gap: 8,
-					width: "100%",
-				}}
-			>
-				{Array.from(formFields).map(([name, desc]) => {
-					let error = actionData?.errors?.[name];
-					let defaultValue =
-						name === "twitterCard" ? post.seo?.twitterCard : post[name];
-
-					if (desc.type === "datetime-local") {
-						defaultValue =
-							typeof defaultValue === "string"
-								? toDateTimeInputValue(new Date(defaultValue))
-								: defaultValue;
+			<PostEditorScreen
+				formRef={formRef}
+				key={formKey}
+				getDefaultValue={(name) => {
+					if (name === "twitterCard") {
+						return post.seo?.twitterCard;
+					} else if (name === "createdAt") {
+						let val = post[name];
+						try {
+							val =
+								typeof val === "string"
+									? toDateTimeInputValue(new Date(val))
+									: val;
+						} catch (err) {
+							val = null;
+						}
+						return val;
+					} else {
+						return post[name];
 					}
-
-					return (
-						<FormField
-							id={`form-field-${name}`}
-							key={name}
-							name={name}
-							errorMessage={error}
-							defaultValue={defaultValue}
-							{...desc}
+				}}
+				errors={actionData?.errors}
+				additionalFields={
+					<>
+						<input type="hidden" name="id" value={loaderData.post.id} />
+						<input
+							type="hidden"
+							name="_createdAt"
+							value={loaderData.post.createdAt}
 						/>
-					);
-				})}
-
-				<input type="hidden" name="id" value={loaderData.post.id} />
-				<input
-					type="hidden"
-					name="_createdAt"
-					value={loaderData.post.createdAt}
-				/>
-
-				<div>
-					<button type="submit" className="button">
-						Save
-					</button>
-				</div>
-			</Form>
+					</>
+				}
+			/>
 		</div>
 	);
 }
@@ -269,7 +261,7 @@ function FormField({
 			<div>
 				<label htmlFor={id}>{label}</label>
 				{type === "textarea" ? (
-					<textarea
+					<InputTextarea
 						name={name}
 						id={id}
 						rows={rows}
@@ -295,7 +287,7 @@ function FormField({
 						/>
 					</MarkdownEditor>
 				) : (
-					<input
+					<InputText
 						name={name}
 						id={id}
 						type={type}
@@ -322,7 +314,7 @@ function hasFormErrors(errors: FormFieldErrors) {
 function toDateTimeInputValue(date: Date) {
 	let year = String(date.getFullYear());
 	let month = String(date.getMonth() + 1).padStart(2, "0");
-	let day = String(date.getDay()).padStart(2, "0");
+	let day = String(date.getDate()).padStart(2, "0");
 	let hours = String(date.getHours()).padStart(2, "0");
 	let minutes = String(date.getMinutes()).padStart(2, "0");
 	return `${year}-${month}-${day}T${hours}:${minutes}`;

@@ -8,6 +8,7 @@ module.exports = {
 		"**/.*",
 		"**/*.css",
 		"**/*.scss",
+		"**/ui/**/*",
 		"**/*.test.{js,jsx,ts,tsx}",
 	],
 	// serverDependenciesToBundle: [

@@ -1,20 +1,11 @@
 import * as React from "react";
-import type { ActionArgs, LoaderArgs } from "@remix-run/node";
+import type { ActionArgs, LoaderArgs, SerializeFrom } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, useActionData, useLoaderData } from "@remix-run/react";
+import { useActionData, useLoaderData } from "@remix-run/react";
 import { createBlogPost } from "~/models/blog-post.server";
 import { requireUserId } from "~/lib/session.server";
 import { getFormFieldStringValue } from "~/lib/utils";
-import { MarkdownEditor, MarkdownEditorTextarea } from "~/ui/markdown-editor";
-
-export function links() {
-	return [
-		{
-			rel: "stylesheet",
-			href: "https://unpkg.com/easymde/dist/easymde.min.css",
-		},
-	];
-}
+import { PostEditorScreen } from "../ui/post-editor-screen";
 
 export async function loader({ request, params }: LoaderArgs) {
 	let currentDate = new Date(
@@ -76,6 +67,9 @@ export async function action({ request }: ActionArgs) {
 	return redirect(`/admin/blog/${post.id}`);
 }
 
+export type LoaderData = SerializeFrom<typeof loader>;
+export type ActionData = SerializeFrom<typeof action>;
+
 export default function NewNotePage() {
 	let { currentDate } = useLoaderData<typeof loader>();
 	let actionData = useActionData<typeof action>();
@@ -97,42 +91,13 @@ export default function NewNotePage() {
 	}, [actionData]);
 
 	return (
-		<Form
-			ref={formRef}
-			method="post"
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				gap: 8,
-				width: "100%",
+		<PostEditorScreen
+			formRef={formRef}
+			defaultValues={{
+				createdAt: toDateTimeInputValue(new Date(currentDate)),
 			}}
-		>
-			{Array.from(formFields).map(([name, desc]) => {
-				let error = actionData?.errors?.[name];
-
-				let defaultValue: string | undefined = undefined;
-				if (desc.type === "datetime-local") {
-					defaultValue = toDateTimeInputValue(new Date(currentDate));
-				}
-
-				return (
-					<FormField
-						id={`form-field-${name}`}
-						key={name}
-						name={name}
-						errorMessage={error}
-						defaultValue={defaultValue}
-						{...desc}
-					/>
-				);
-			})}
-
-			<div>
-				<button type="submit" className="button">
-					Save
-				</button>
-			</div>
-		</Form>
+			errors={actionData?.errors}
+		/>
 	);
 }
 
@@ -170,94 +135,6 @@ type FormFieldDescriptor = { required: boolean; label: string } & (
 type FormFieldErrors = Record<FormFieldName, string | null>;
 type FormFieldValues = Record<FormFieldName, string | null>;
 
-interface FormFieldProps {
-	name: FormFieldName;
-	label: string;
-	type?: InputType | "textarea" | "markdown" | "datetime-local";
-	required?: boolean;
-	placeholder?: string;
-	errorMessage?: string | null;
-	rows?: number;
-	id: string;
-	defaultValue?: string | null;
-	min?: string | number;
-	max?: string | number;
-}
-
-function FormField({
-	name,
-	type = "text",
-	required,
-	label,
-	id,
-	placeholder,
-	errorMessage,
-	rows,
-	defaultValue,
-	min,
-	max,
-}: FormFieldProps) {
-	let errorMessageId = `${id}-error`;
-	let ariaInvalid = errorMessage ? true : undefined;
-	let ariaErrormessage = errorMessage ? errorMessageId : undefined;
-
-	let mdOpts = React.useMemo(() => {
-		return {
-			forceSync: true,
-			maxHeight: "500px",
-		};
-	}, []);
-
-	return (
-		<div>
-			<div>
-				<label htmlFor={id}>{label}</label>
-				{type === "textarea" ? (
-					<textarea
-						name={name}
-						id={id}
-						rows={rows}
-						required={required || undefined}
-						placeholder={placeholder}
-						aria-invalid={ariaInvalid}
-						aria-errormessage={ariaErrormessage}
-						defaultValue={defaultValue || undefined}
-					/>
-				) : type === "markdown" ? (
-					<MarkdownEditor
-						fieldId={id}
-						options={mdOpts}
-						defaultValue={defaultValue || undefined}
-					>
-						<MarkdownEditorTextarea
-							name={name}
-							rows={rows}
-							required={required || undefined}
-							placeholder={placeholder}
-							aria-invalid={ariaInvalid}
-							aria-errormessage={ariaErrormessage}
-						/>
-					</MarkdownEditor>
-				) : (
-					<input
-						name={name}
-						id={id}
-						type={type}
-						required={required || undefined}
-						placeholder={placeholder}
-						aria-invalid={ariaInvalid}
-						aria-errormessage={ariaErrormessage}
-						defaultValue={defaultValue || undefined}
-						min={min}
-						max={max}
-					/>
-				)}
-			</div>
-			{errorMessage ? <div id={errorMessageId}>{errorMessage}</div> : null}
-		</div>
-	);
-}
-
 function hasFormErrors(errors: FormFieldErrors) {
 	let values = Object.values(errors);
 	return values.length > 0 && values.some((error) => error != null);
@@ -266,7 +143,7 @@ function hasFormErrors(errors: FormFieldErrors) {
 function toDateTimeInputValue(date: Date) {
 	let year = String(date.getFullYear());
 	let month = String(date.getMonth() + 1).padStart(2, "0");
-	let day = String(date.getDay()).padStart(2, "0");
+	let day = String(date.getDate()).padStart(2, "0");
 	let hours = String(date.getHours()).padStart(2, "0");
 	let minutes = String(date.getMinutes()).padStart(2, "0");
 	return `${year}-${month}-${day}T${hours}:${minutes}`;

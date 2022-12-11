@@ -10,6 +10,7 @@ import {
 } from "~/lib/utils";
 import { getSafeRedirect } from "~/lib/utils.server";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
+import { InputText } from "~/ui/input";
 
 export async function loader({ request }: LoaderArgs) {
 	let user = await getSessionUser(request);
@@ -182,7 +183,7 @@ export default function Join() {
 							Email address
 						</label>
 						<div className="text-field-input-wrap">
-							<input
+							<InputText
 								ref={emailRef}
 								id="email"
 								required
@@ -211,7 +212,7 @@ export default function Join() {
 							Password
 						</label>
 						<div className="text-field-input-wrap">
-							<input
+							<InputText
 								id="password"
 								ref={passwordRef}
 								name="password"
@@ -238,7 +239,7 @@ export default function Join() {
 							Confirm Password
 						</label>
 						<div className="text-field-input-wrap">
-							<input
+							<InputText
 								id="passwordConfirm"
 								ref={passwordConfirmRef}
 								name="passwordConfirm"

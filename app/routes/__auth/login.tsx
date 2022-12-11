@@ -6,6 +6,7 @@ import { createUserSession, getSessionUser } from "~/lib/session.server";
 import { verifyLogin } from "~/models/user.server";
 import { getSafeRedirect } from "~/lib/utils.server";
 import { isValidEmail } from "~/lib/utils";
+import { InputCheckbox, InputText } from "~/ui/input";
 
 export async function loader({ request }: LoaderArgs) {
 	let user = await getSessionUser(request);
@@ -90,7 +91,7 @@ export default function LoginPage() {
 							Email address
 						</label>
 						<div className="text-field-input-wrap">
-							<input
+							<InputText
 								ref={emailRef}
 								id="email"
 								required
@@ -117,7 +118,7 @@ export default function LoginPage() {
 							Password
 						</label>
 						<div className="text-field-input-wrap">
-							<input
+							<InputText
 								id="password"
 								ref={passwordRef}
 								name="password"
@@ -138,10 +139,9 @@ export default function LoginPage() {
 					</div>
 
 					<div className="checkbox-field">
-						<input
+						<InputCheckbox
 							id="remember"
 							name="remember"
-							type="checkbox"
 							className="checkbox-field-input"
 						/>
 						<label htmlFor="remember" className="checkbox-field-label">
