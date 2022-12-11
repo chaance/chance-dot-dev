@@ -10,6 +10,12 @@ if (!process.env.SESSION_SECRET) {
 	throw new Error("Please define the SESSION_SECRET environment variable");
 }
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+const DEV = process.env.NODE_ENV === "development";
+const STAGING = process.env.IS_STAGING === "true";
+const PROD = process.env.NODE_ENV === "production" && !STAGING;
+/* eslint-enable @typescript-eslint/no-unused-vars */
+
 function getLoadContext(): AppLoadContext {
 	return {
 		services: {
@@ -39,7 +45,7 @@ app.use(
 app.use(express.static("public", { maxAge: "1h" }));
 
 let accessLogStream: RotatingFileStream | undefined = undefined;
-if (process.env.NODE_ENV === "production") {
+if (PROD) {
 	accessLogStream = createStream("access.log", {
 		interval: "1d",
 		path: path.join(__dirname, "log"),
@@ -55,7 +61,7 @@ app.use(
 
 app.all(
 	"*",
-	process.env.NODE_ENV === "development"
+	DEV
 		? (req, res, next) => {
 				purgeRequireCache();
 
@@ -74,15 +80,19 @@ app.all(
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
-	console.log(`Express server listening on port ${port}`);
+	console.log(
+		`Express server listening ` + DEV
+			? `at http://localhost:${port}`
+			: `on port ${port}`
+	);
 });
 
 function purgeRequireCache() {
-	// purge require cache on requests for "server side HMR" this won't let
-	// you have in-memory objects between requests in development,
-	// alternatively you can set up nodemon/pm2-dev to restart the server on
-	// file changes, but then you'll have to reconnect to databases/etc on each
-	// change. We prefer the DX of this, so we've included it for you by default
+	// purge require cache on requests for "server side HMR" this won't let you
+	// have in-memory objects between requests in development, alternatively you
+	// can set up nodemon/pm2-dev to restart the server on file changes, but then
+	// you'll have to reconnect to databases/etc on each change. We prefer the DX
+	// of this, so we've included it for you by default
 	for (const key in require.cache) {
 		if (key.startsWith(BUILD_DIR)) {
 			delete require.cache[key];
