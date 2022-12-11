@@ -25,7 +25,7 @@
 	--cs-field-placeholder: var(--cs-color-text-weakest);
 	--cs-field-outline: hsl(0 0% 0% / 0);
 	--cs-field-outline-focus: var(--cs-color-accent);
-	--cs-field-border: hsl(0 0% 65% / 1);
+	--cs-field-border: var(--cs-color-border-weak);
 	--cs-field-border-focus: var(--cs-color-accent);
 	--cs-field-border-error: var(--cs-color-red-10);
 

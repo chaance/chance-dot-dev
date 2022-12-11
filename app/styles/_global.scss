@@ -13,12 +13,6 @@ body {
 	font-family: var(--cs-font-family-text);
 }
 
-@media screen and (media.get(xl)) {
-	html {
-		font-size: 18px;
-	}
-}
-
 .chance-dot-dev {
 	height: 100%;
 	isolation: isolate;

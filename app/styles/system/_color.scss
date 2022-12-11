@@ -398,6 +398,10 @@ $color_tokens: (
 		"light": get_system_color_var("gray", 17),
 		"dark": get_system_color_var("gray", 3),
 	),
+	"border-weak": (
+		"light": get_system_color_var("gray", 3),
+		"dark": get_system_color_var("gray", 16),
+	),
 	"border-strong": (
 		"light": get_system_color_var("gray", 12),
 		"dark": get_system_color_var("gray", 8),

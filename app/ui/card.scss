@@ -1,0 +1,58 @@
+@use "sass:string";
+@use "~/styles/system/media";
+
+.ui--card {
+	$self: &;
+	--ui-card-pad: 0;
+	--ui-card-bg: none;
+	--ui-card-shadow: none;
+	--ui-card-border: 0;
+	border-radius: 0.75rem;
+	background-color: var(--ui-card-bg);
+	box-shadow: var(--ui-card-shadow);
+	border: var(--ui-card-border);
+
+	&--depth-raised {
+		--ui-card-shadow: 0 20px 13px rgb(0 0 0 / 0.03), 0 8px 5px rgb(0 0 0 / 0.08);
+	}
+
+	&--no-depth {
+		--ui-card-filter: none;
+	}
+
+	&:where(:not(#{$self}--no-pad)) {
+		--ui-card-pad: 1rem;
+		@media (media.get(sm)) {
+			--ui-card-pad: 2rem;
+		}
+		@media (media.get(lg)) {
+			--ui-card-pad: 3rem;
+		}
+	}
+
+	&:where(:not(#{$self}--no-bg)) {
+		--ui-card-border: 1px solid var(--cs-color-border-weak);
+		--ui-card-bg: var(--cs-color-white);
+		@media (media.get(dark)) {
+			--ui-card-bg: var(--cs-color-gray-18);
+		}
+	}
+
+	@each $sz in "sm", "sm-down", "md", "md-down", "lg", "lg-down", "xl" {
+		@media (media.get($sz)) {
+			&:where(#{$self}--no-pad\:#{string.unquote($sz)}) {
+				--ui-card-pad: 0;
+			}
+
+			&:where(#{$self}--no-bg\:#{string.unquote($sz)}) {
+				--ui-card-bg: none;
+				--ui-card-border: 0;
+				--ui-card-filter: none;
+			}
+		}
+	}
+
+	&__inner {
+		padding: var(--ui-card-pad);
+	}
+}

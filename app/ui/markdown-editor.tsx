@@ -113,7 +113,7 @@ const MarkdownEditor = React.forwardRef<HTMLDivElement, MarkdownEditorProps>(
 			events,
 			defaultValue,
 			value,
-			options,
+			options = {},
 			children,
 			extraKeys,
 			getLineAndCursor,
@@ -169,9 +169,16 @@ const MarkdownEditor = React.forwardRef<HTMLDivElement, MarkdownEditorProps>(
 				import("easymde").then((module) => {
 					if (isCurrent) {
 						editor = new module.default(
-							Object.assign({}, initialOptions, options, {
-								imageUploadFunction,
-							})
+							Object.assign(
+								{
+									hideIcons: ["guide", "side-by-side", 'preview'],
+								},
+								initialOptions,
+								options,
+								{
+									imageUploadFunction,
+								}
+							)
 						);
 						setEditorInstance(editor);
 					}

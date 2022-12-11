@@ -2,6 +2,7 @@ import * as React from "react";
 import { Form } from "@remix-run/react";
 import { MarkdownEditor, MarkdownEditorTextarea } from "~/ui/markdown-editor";
 import { InputTextarea, InputText } from "~/ui/input";
+import { Card } from "~/ui/card";
 import { slugify } from "~/lib/utils";
 
 const ROOT_CLASS = "cs--post-editor-screen";
@@ -95,6 +96,12 @@ export function PostEditorScreen({
 						label="Title"
 						required
 						type="text"
+						onBlur={(evt) => {
+							let value = evt.target.value.trim();
+							if (value && !slugValue) {
+								setSlugValue(slugify(value));
+							}
+						}}
 					/>
 					<div className={`${ROOT_CLASS}__slug-wrapper`}>
 						{editingSlug ? (
@@ -163,25 +170,28 @@ export function PostEditorScreen({
 					</div>
 				</div>
 				<div className={`${ROOT_CLASS}__main-content`}>
-					{Array.from(formFields).map(([name, desc]) => {
-						if (name === "title" || name === "slug" || name === "createdAt")
-							return null;
+					<Card removePadding="sm-down" removeBackground="sm-down">
+						{Array.from(formFields).map(([name, desc]) => {
+							if (name === "title" || name === "slug" || name === "createdAt")
+								return null;
 
-						let error = errors?.[name];
-						let defaultValue = defaultValues?.[name] || getDefaultValue?.(name);
-						// name === "twitterCard" ? post.seo?.twitterCard : post[name];
+							let error = errors?.[name];
+							let defaultValue =
+								defaultValues?.[name] || getDefaultValue?.(name);
+							// name === "twitterCard" ? post.seo?.twitterCard : post[name];
 
-						return (
-							<FormField
-								id={`form-field-${name}`}
-								key={name}
-								name={name}
-								errorMessage={error}
-								defaultValue={defaultValue}
-								{...desc}
-							/>
-						);
-					})}
+							return (
+								<FormField
+									id={`form-field-${name}`}
+									key={name}
+									name={name}
+									errorMessage={error}
+									defaultValue={defaultValue}
+									{...desc}
+								/>
+							);
+						})}
+					</Card>
 				</div>
 				<div className={`${ROOT_CLASS}__sidebar`}>
 					<div className={`${ROOT_CLASS}__sidebar-content`}>
@@ -228,6 +238,11 @@ interface FormFieldProps {
 	defaultValue?: string | null;
 	min?: string | number;
 	max?: string | number;
+	onChange?(
+		evt: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	): void;
+	onBlur?(evt: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>): void;
+	onFocus?(evt: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>): void;
 }
 
 function FormField({
@@ -242,6 +257,9 @@ function FormField({
 	defaultValue,
 	min,
 	max,
+	onChange,
+	onBlur,
+	onFocus,
 }: FormFieldProps) {
 	let errorMessageId = `${id}-error`;
 	let ariaInvalid = errorMessage ? true : undefined;
@@ -268,6 +286,9 @@ function FormField({
 						aria-invalid={ariaInvalid}
 						aria-errormessage={ariaErrormessage}
 						defaultValue={defaultValue || undefined}
+						onChange={onChange}
+						onBlur={onBlur}
+						onFocus={onFocus}
 					/>
 				) : type === "markdown" ? (
 					<MarkdownEditor
@@ -282,6 +303,9 @@ function FormField({
 							placeholder={placeholder}
 							aria-invalid={ariaInvalid}
 							aria-errormessage={ariaErrormessage}
+							onChange={onChange}
+							onBlur={onBlur}
+							onFocus={onFocus}
 						/>
 					</MarkdownEditor>
 				) : (
@@ -296,6 +320,9 @@ function FormField({
 						defaultValue={defaultValue || undefined}
 						min={min}
 						max={max}
+						onChange={onChange}
+						onBlur={onBlur}
+						onFocus={onFocus}
 					/>
 				)}
 			</div>
