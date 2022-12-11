@@ -11,15 +11,6 @@ import { blogContentCache } from "~/lib/blog.server";
 import { InputTextarea, InputText } from "~/ui/input";
 import { PostEditorScreen } from "../ui/post-editor-screen";
 
-export function links() {
-	return [
-		{
-			rel: "stylesheet",
-			href: "https://unpkg.com/easymde/dist/easymde.min.css",
-		},
-	];
-}
-
 const formFields = new Map<FormFieldName, FormFieldDescriptor>([
 	["title", { label: "Title", required: true, type: "text" }],
 	["slug", { label: "Slug", required: false, type: "text" }],

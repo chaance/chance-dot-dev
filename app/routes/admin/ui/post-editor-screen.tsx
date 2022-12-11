@@ -2,6 +2,7 @@ import * as React from "react";
 import { Form } from "@remix-run/react";
 import { MarkdownEditor, MarkdownEditorTextarea } from "~/ui/markdown-editor";
 import { InputTextarea, InputText } from "~/ui/input";
+import { slugify } from "~/lib/utils";
 
 const ROOT_CLASS = "cs--post-editor-screen";
 
@@ -42,6 +43,40 @@ export function PostEditorScreen({
 	getDefaultValue?(name: FormFieldName): string | undefined | null;
 	additionalFields?: React.ReactNode;
 }) {
+	let [editingSlug, setEditingSlug] = React.useState(false);
+	let [slugValue, setSlugValue] = React.useState(
+		defaultValues?.slug || getDefaultValue?.("slug") || ""
+	);
+
+	let slugFieldRef = React.useRef<HTMLInputElement>(null);
+	let slugEditButtonRef = React.useRef<HTMLButtonElement>(null);
+	let prevEditingSlug = React.useRef<boolean>(false);
+	React.useEffect(() => {
+		if (prevEditingSlug.current !== editingSlug) {
+			if (editingSlug) {
+				slugFieldRef.current?.focus();
+			} else {
+				slugEditButtonRef.current?.focus();
+			}
+		}
+		prevEditingSlug.current = editingSlug;
+	}, [editingSlug]);
+
+	let slugValueRef = React.useRef(slugValue);
+	React.useEffect(() => {
+		slugValueRef.current = slugValue;
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [editingSlug]);
+
+	function handleSlugEditComplete(value: string) {
+		if (!value) {
+			setSlugValue(slugify(slugValueRef.current));
+		} else {
+			setSlugValue(slugify(value));
+		}
+		setEditingSlug(false);
+	}
+
 	return (
 		<div className={ROOT_CLASS}>
 			<Form
@@ -61,14 +96,71 @@ export function PostEditorScreen({
 						required
 						type="text"
 					/>
-					<FormField
-						id="form-field-slug"
-						name="slug"
-						errorMessage={errors?.slug}
-						defaultValue={defaultValues?.slug || getDefaultValue?.("slug")}
-						label="Slug"
-						type="text"
-					/>
+					<div className={`${ROOT_CLASS}__slug-wrapper`}>
+						{editingSlug ? (
+							<>
+								<label
+									htmlFor="form-field-slug"
+									className={`${ROOT_CLASS}__slug-label`}
+								>
+									Slug:
+								</label>{" "}
+								<div className={`${ROOT_CLASS}__slug-input-wrapper`}>
+									<span className={`${ROOT_CLASS}__slug-input-prefix`}>/</span>
+									<input
+										id="form-field-slug"
+										ref={slugFieldRef}
+										type="text"
+										value={slugValue}
+										className={`${ROOT_CLASS}__slug-input`}
+										onChange={(evt) => {
+											setSlugValue(evt.target.value);
+										}}
+										onKeyDown={(evt) => {
+											if (evt.key === "Enter") {
+												evt.preventDefault();
+												let value = evt.currentTarget.value;
+												handleSlugEditComplete(value);
+											} else if (evt.key === "Escape") {
+												evt.preventDefault();
+												handleSlugEditComplete(slugValueRef.current);
+											}
+										}}
+										onFocus={(evt) => {
+											evt.currentTarget.select();
+										}}
+										onBlur={(evt) => {
+											let value = evt.target.value;
+											handleSlugEditComplete(value);
+										}}
+									/>
+								</div>
+								<input
+									type="hidden"
+									name="slug"
+									value={slugValue ? slugify(slugValue) : undefined}
+								/>
+							</>
+						) : (
+							<>
+								<span className={`${ROOT_CLASS}__slug-label`}>Slug:</span>{" "}
+								<span
+									className={`${ROOT_CLASS}__slug-output`}
+								>{`/${slugValue}`}</span>{" "}
+								<button
+									ref={slugEditButtonRef}
+									type="button"
+									className={`${ROOT_CLASS}__slug-edit-button`}
+									onClick={(evt) => {
+										setEditingSlug(true);
+									}}
+								>
+									Edit<span className="sr-only"> Slug</span>
+								</button>
+								<input type="hidden" name="slug" value={slugValue} />
+							</>
+						)}
+					</div>
 				</div>
 				<div className={`${ROOT_CLASS}__main-content`}>
 					{Array.from(formFields).map(([name, desc]) => {
