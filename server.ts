@@ -4,9 +4,7 @@ import compression from "compression";
 import morgan from "morgan";
 import { createRequestHandler } from "@remix-run/express";
 import { type AppLoadContext } from "@remix-run/server-runtime";
-
-// import { RemixAuthService } from "./services/auth";
-// import { MockItemsService } from "./services/items.mock";
+import rfs from "rotating-file-stream";
 
 if (!process.env.SESSION_SECRET) {
 	throw new Error("Please define the SESSION_SECRET environment variable");
@@ -40,14 +38,20 @@ app.use(
 // more aggressive with this caching.
 app.use(express.static("public", { maxAge: "1h" }));
 
-console.log({ ENV: process.env.NODE_ENV });
-if (process.env.NODE_ENV === "development") {
-	app.use(
-		morgan("tiny", {
-			skip: (req, res) => req.url === "/healthcheck",
-		})
-	);
+let accessLogStream: rfs.RotatingFileStream | undefined = undefined;
+if (process.env.NODE_ENV === "production") {
+	accessLogStream = rfs.createStream("access.log", {
+		interval: "1d",
+		path: path.join(__dirname, "log"),
+	});
 }
+
+app.use(
+	morgan("tiny", {
+		skip: (req) => req.url === "/healthcheck",
+		stream: accessLogStream,
+	})
+);
 
 app.all(
 	"*",
