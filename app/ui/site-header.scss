@@ -73,13 +73,13 @@
 		margin-bottom: var(--cs-space-xl);
 	}
 
-	@media (media.get(sm)) {
+	@media (--sm) {
 		&:where([data-ui-has-bottom-margin]) {
 			margin-bottom: calc(var(--cs-space-md) * 3.5);
 		}
 	}
 
-	@media (media.get(md)) {
+	@media (--md) {
 		&:where([data-ui-has-bottom-margin]) {
 			margin-bottom: var(--cs-space-xxl);
 		}
@@ -91,7 +91,7 @@
 		justify-content: space-between;
 		height: 5rem;
 
-		@media (media.get(sm)) {
+		@media (--sm) {
 			height: 6rem;
 		}
 	}
@@ -120,7 +120,7 @@
 		width: 3.5rem;
 		height: 3.5rem;
 
-		@media (media.get(sm)) {
+		@media (--sm) {
 			width: 4rem;
 			height: 4rem;
 		}

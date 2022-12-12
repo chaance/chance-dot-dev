@@ -65,11 +65,11 @@
 	--body-bg-img: no-repeat 100% var(--body-bg-gradient),
 		repeat center/300px var(--body-bg-grain);
 
-	@media (media.get(lg)) {
+	@media (--lg) {
 		--code-background: #{color.get_system_base_color("white")};
 	}
 
-	@media (media.get(dark)) {
+	@media (--dark) {
 		--cs-field-bg: hsl(0 0% 8% / 1);
 		// --cs-field-placeholder: hsl(0 0% 65% / 1);
 		--cs-field-border: hsl(0 0% 31% / 1);
@@ -100,7 +100,7 @@
 		--body-bg-gradient-stop-3: var(--cs-color-gray-19);
 		--body-bg-gradient-stop-4: var(--cs-color-gray-18);
 
-		@media (media.get(lg)) {
+		@media (--lg) {
 			--code-background: #{color.get_system_base_color("gray", 18)};
 		}
 	}

@@ -11,10 +11,10 @@
 		display: flex;
 		flex-direction: column;
 		gap: 2.5rem;
-		@media (media.get(sm)) {
+		@media (--sm) {
 			gap: 3.5rem;
 		}
-		@media (media.get(md)) {
+		@media (--md) {
 			gap: 4rem;
 		}
 	}
@@ -29,11 +29,11 @@
 			line-height: 1.4;
 			font-family: var(--cs-font-family-heading);
 			font-weight: var(--cs-font-weight-heading);
-			@media (media.get(sm)) {
+			@media (--sm) {
 				font-size: 1.5rem;
 				line-height: 1.33;
 			}
-			@media (media.get(md)) {
+			@media (--md) {
 				font-size: 1.875rem;
 				line-height: 1.2;
 			}
@@ -58,7 +58,7 @@
 				color: var(--cs-color-text-link-hover);
 			}
 
-			@media (media.get(dark)) {
+			@media (--dark) {
 				--grad-stop-1: var(--cs-color-green-02);
 				--grad-stop-2: var(--cs-color-green-09);
 				--color: var(--cs-color-green-06);

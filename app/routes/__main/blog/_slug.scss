@@ -3,10 +3,10 @@
 .page--blog {
 	&__header {
 		margin-bottom: 3rem;
-		@media (media.get(md)) {
+		@media (--md) {
 			margin-bottom: 3.5rem;
 		}
-		@media (media.get(xl)) {
+		@media (--xl) {
 			margin-bottom: 4rem;
 		}
 	}
@@ -17,10 +17,10 @@
 		font-weight: var(--cs-font-weight-heading);
 		margin-bottom: 0.5rem;
 
-		@media (media.get(md)) {
+		@media (--md) {
 			font-size: 2.25rem;
 		}
-		@media (media.get(xl)) {
+		@media (--xl) {
 			font-size: 3rem;
 			margin-bottom: 1rem;
 		}
@@ -33,13 +33,13 @@
 	}
 
 	&__content {
-		@media (media.get(lg)) {
+		@media (--lg) {
 			padding: 7rem;
 		}
 	}
 
 	.macos-window {
-		@media screen and (media.get(lg)) {
+		@media screen and (--lg) {
 			filter: drop-shadow(0 20px 13px rgb(0 0 0 / 0.03))
 				drop-shadow(0 8px 5px rgb(0 0 0 / 0.08));
 			background-color: var(--cs-color-white);
@@ -47,7 +47,7 @@
 			margin-right: -7rem;
 			overflow: hidden;
 			border-radius: 0.75rem;
-			@media (media.get(dark)) {
+			@media (--dark) {
 				background-color: var(--cs-color-gray-18);
 			}
 
@@ -64,7 +64,7 @@
 				margin-left: 1.25rem;
 				margin-right: 1.25rem;
 
-				@media (media.get(dark)) {
+				@media (--dark) {
 					border-bottom-color: var(--cs-color-gray-16);
 				}
 			}

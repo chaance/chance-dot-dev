@@ -22,10 +22,10 @@
 
 	&:where(:not(#{$self}--no-pad)) {
 		--ui-card-pad: 1rem;
-		@media (media.get(sm)) {
+		@media (--sm) {
 			--ui-card-pad: 2rem;
 		}
-		@media (media.get(lg)) {
+		@media (--lg) {
 			--ui-card-pad: 3rem;
 		}
 	}
@@ -36,7 +36,7 @@
 	}
 
 	@each $sz in "sm", "sm-down", "md", "md-down", "lg", "lg-down", "xl" {
-		@media (media.get($sz)) {
+		@media ($sz)) {
 			&:where(#{$self}--no-pad\:#{string.unquote($sz)}) {
 				--ui-card-pad: 0;
 			}
