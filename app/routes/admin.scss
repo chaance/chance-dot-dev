@@ -5,7 +5,7 @@ html,
 body {
 	background-image: none;
 	background-color: var(--cs-color-white);
-	@media (media.get(dark)) {
+	@media (--dark) {
 		background-color: var(--cs-color-gray-18);
 	}
 }
@@ -17,14 +17,14 @@ body {
 	--pad-x: 0.75rem;
 	--header-height: 2.5rem;
 
-	@media (media.get(sm)) {
+	@media (--sm) {
 		--pad-x: 1rem;
 		--header-height: 3rem;
 		height: 100vh;
 		height: 100dvh;
 	}
 
-	@media (media.get(lg)) {
+	@media (--lg) {
 		--pad-x: 1.5rem;
 	}
 
@@ -37,7 +37,7 @@ body {
 			"sidebar" auto
 			"main" 1fr / 1fr;
 
-		@media (media.get(sm)) {
+		@media (--sm) {
 			grid-template:
 				"header header" var(--header-height)
 				"sidebar main" 1fr / 16rem 3fr;
@@ -55,7 +55,7 @@ body {
 			position: relative;
 		}
 
-		@media (media.get(md)) {
+		@media (--md) {
 			position: sticky;
 			top: 0;
 			z-index: 10;
@@ -80,7 +80,7 @@ body {
 	}
 
 	&__main {
-		@media (media.get(sm)) {
+		@media (--sm) {
 			display: contents;
 		}
 	}
@@ -89,7 +89,7 @@ body {
 	&__outlet {
 		max-height: 100%;
 		background-color: var(--cs-color-gray-01);
-		@media (media.get(dark)) {
+		@media (--dark) {
 			background-color: var(--cs-color-gray-19);
 		}
 		// overflow: auto;
@@ -111,13 +111,9 @@ body {
 		overflow-y: auto;
 		background-color: var(--cs-color-green-17);
 		color: var(--cs-color-white);
-		@media (media.get(dark)) {
+		@media (--dark) {
 			background-color: var(--cs-color-green-17);
 		}
-		// @media (media.get(sm)) {
-		// 	position: sticky;
-		// 	top: 100px;
-		// }
 	}
 
 	&__nav-inner {
@@ -176,7 +172,7 @@ body {
 	padding: 0 var(--pad-x);
 	background-color: var(--cs-color-white);
 	font-size: 0.875rem;
-	@media (media.get(dark)) {
+	@media (--dark) {
 		background-color: var(--cs-color-gray-18);
 	}
 
@@ -209,14 +205,14 @@ body {
 		"main-content" 1fr
 		"sidebar" auto / 1fr;
 
-	@media (media.get(xl)) {
+	@media (--xl) {
 		gap: 2rem;
 		grid-template:
 			"title-bar title-bar" auto
 			"main-content sidebar" 1fr / 1fr 18rem;
 	}
 
-	@media (media.get(xxl)) {
+	@media (--xxl) {
 		padding: 3rem;
 	}
 
@@ -246,7 +242,7 @@ body {
 		flex-direction: column;
 		gap: 1rem;
 
-		@media (media.get(xl)) {
+		@media (--xl) {
 			gap: 2rem;
 		}
 	}

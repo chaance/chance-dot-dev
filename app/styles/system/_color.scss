@@ -406,10 +406,6 @@ $color_tokens: (
 		"light": get_system_color_var("gray", 12),
 		"dark": get_system_color_var("gray", 8),
 	),
-	"text-code-block": (
-		"light": get_system_color_var("gray", 15),
-		"dark": get_system_color_var("gray", 4),
-	),
 	"button": (
 		"light": get_system_color_var("white"),
 		"dark": get_system_color_var("gray", 18),
@@ -454,7 +450,7 @@ $color_tokens: (
 		}
 	}
 
-	@media (media.get(dark)) {
+	@media (--dark) {
 		@each $token, $value in $dark_tokens {
 			--#{constants.$namespace}-color-#{$token}: #{$value};
 		}

@@ -7,6 +7,7 @@ import { verifyLogin } from "~/models/user.server";
 import { getSafeRedirect } from "~/lib/utils.server";
 import { isValidEmail } from "~/lib/utils";
 import { InputCheckbox, InputText } from "~/ui/input";
+import { Card } from "~/ui/card";
 
 export async function loader({ request }: LoaderArgs) {
 	let user = await getSessionUser(request);
@@ -84,88 +85,90 @@ export default function LoginPage() {
 	return (
 		<div className="login-route">
 			<h1 className="sr-only">Log In</h1>
-			<div className="auth-box">
-				<Form method="post" className="form">
-					<div className="text-field">
-						<label htmlFor="email" className="text-field-label">
-							Email address
-						</label>
-						<div className="text-field-input-wrap">
-							<InputText
-								ref={emailRef}
-								id="email"
-								required
-								autoFocus={true}
-								name="email"
-								type="email"
-								autoComplete="email"
-								aria-invalid={actionData?.errors?.email ? true : undefined}
-								aria-describedby="email-error"
-								className="text-field-input"
-							/>
-							{actionData?.errors?.email && (
-								<div className="text-field-messages">
-									<div className="text-field-error" id="email-error">
-										{actionData.errors.email}
+			<Card uncard="sm-down">
+				<div className="auth-box">
+					<Form method="post" className="form">
+						<div className="text-field">
+							<label htmlFor="email" className="text-field-label">
+								Email address
+							</label>
+							<div className="text-field-input-wrap">
+								<InputText
+									ref={emailRef}
+									id="email"
+									required
+									autoFocus={true}
+									name="email"
+									type="email"
+									autoComplete="email"
+									aria-invalid={actionData?.errors?.email ? true : undefined}
+									aria-describedby="email-error"
+									className="text-field-input"
+								/>
+								{actionData?.errors?.email && (
+									<div className="text-field-messages">
+										<div className="text-field-error" id="email-error">
+											{actionData.errors.email}
+										</div>
 									</div>
-								</div>
-							)}
+								)}
+							</div>
 						</div>
-					</div>
 
-					<div className="text-field">
-						<label htmlFor="password" className="text-field-label">
-							Password
-						</label>
-						<div className="text-field-input-wrap">
-							<InputText
-								id="password"
-								ref={passwordRef}
-								name="password"
-								type="password"
-								autoComplete="current-password"
-								aria-invalid={actionData?.errors?.password ? true : undefined}
-								aria-describedby="password-error"
-								className="text-field-input"
-							/>
-							{actionData?.errors?.password && (
-								<div className="text-field-messages">
-									<div className="text-field-error" id="password-error">
-										{actionData.errors.password}
+						<div className="text-field">
+							<label htmlFor="password" className="text-field-label">
+								Password
+							</label>
+							<div className="text-field-input-wrap">
+								<InputText
+									id="password"
+									ref={passwordRef}
+									name="password"
+									type="password"
+									autoComplete="current-password"
+									aria-invalid={actionData?.errors?.password ? true : undefined}
+									aria-describedby="password-error"
+									className="text-field-input"
+								/>
+								{actionData?.errors?.password && (
+									<div className="text-field-messages">
+										<div className="text-field-error" id="password-error">
+											{actionData.errors.password}
+										</div>
 									</div>
-								</div>
-							)}
+								)}
+							</div>
 						</div>
-					</div>
 
-					<div className="checkbox-field">
-						<InputCheckbox
-							id="remember"
-							name="remember"
-							className="checkbox-field-input"
-						/>
-						<label htmlFor="remember" className="checkbox-field-label">
-							Remember me
-						</label>
-					</div>
+						<div className="checkbox-field">
+							<InputCheckbox
+								id="remember"
+								name="remember"
+								className="checkbox-field-input"
+							/>
+							<label htmlFor="remember" className="checkbox-field-label">
+								Remember me
+							</label>
+						</div>
 
-					<input type="hidden" name="redirectTo" value={redirectTo} />
-					<button type="submit" className="button button-primary">
-						Log In
-					</button>
-					<div className="auth-postfix">
-						Don't have an account?{" "}
-						<Link
-							to={{
-								pathname: "/join",
-								search: searchParams.toString(),
-							}}
-						>
-							Sign up
-						</Link>
-					</div>
-				</Form>
-			</div>
+						<input type="hidden" name="redirectTo" value={redirectTo} />
+						<button type="submit" className="button button-primary">
+							Log In
+						</button>
+						<div className="auth-postfix">
+							Don't have an account?{" "}
+							<Link
+								to={{
+									pathname: "/join",
+									search: searchParams.toString(),
+								}}
+							>
+								Sign up
+							</Link>
+						</div>
+					</Form>
+				</div>
+			</Card>
 		</div>
 	);
 }

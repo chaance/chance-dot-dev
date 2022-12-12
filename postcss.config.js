@@ -21,6 +21,7 @@ module.exports = (ctx) => {
 						preserve: true,
 					},
 					"nesting-rules": !isScss,
+					"custom-media-queries": true,
 					"custom-properties": false,
 					"color-functional-notation": false,
 				},
