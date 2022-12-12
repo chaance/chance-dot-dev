@@ -7,6 +7,7 @@ export function Card({
 	removePadding,
 	uncard,
 	depth = "raised",
+	roundedCorners,
 }: CardProps) {
 	return (
 		<div
@@ -20,6 +21,9 @@ export function Card({
 				[`${ROOT_CLASS}--no-pad:${removePadding}`]:
 					typeof removePadding === "string",
 				[`${ROOT_CLASS}--uncard:${uncard}`]: uncard,
+				[`${ROOT_CLASS}--rounded-corners-${
+					roundedCorners === true ? "md" : roundedCorners
+				}`]: roundedCorners,
 			})}
 		>
 			<div className={`${ROOT_CLASS}__inner`}>{children}</div>
@@ -31,6 +35,7 @@ interface CardProps {
 	children?: React.ReactNode;
 	removePadding?: boolean | MQ;
 	removeBackground?: boolean | MQ;
+	roundedCorners?: boolean | "xs" | "sm" | "md" | "lg" | "xl";
 	depth?: false | "raised";
 	uncard?: MQ;
 }

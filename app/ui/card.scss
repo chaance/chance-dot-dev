@@ -7,10 +7,11 @@
 	--ui-card-bg: none;
 	--ui-card-shadow: none;
 	--ui-card-border: 0;
-	border-radius: 0.75rem;
+	--ui-card-radius: 0;
 	background-color: var(--ui-card-bg);
 	box-shadow: var(--ui-card-shadow);
 	border: var(--ui-card-border);
+	border-radius: var(--ui-card-radius);
 
 	&--depth-raised {
 		--ui-card-shadow: 0 20px 13px rgb(0 0 0 / 0.03), 0 8px 5px rgb(0 0 0 / 0.08);
@@ -33,10 +34,23 @@
 	&:where(:not(#{$self}--no-bg)) {
 		--ui-card-border: 1px solid var(--cs-color-border-weak);
 		--ui-card-bg: var(--cs-color-background-raised);
+
+		$sizes: (
+			"xs": 2px,
+			"sm": 4px,
+			"md": 6px,
+			"lg": 8px,
+			"xl": 12px,
+		);
+		@each $corner_size, $px in $sizes {
+			&:where(#{$self}--rounded-corners-#{string.unquote($corner_size)}) {
+				--ui-card-radius: #{$px};
+			}
+		}
 	}
 
 	@each $sz in "sm", "sm-down", "md", "md-down", "lg", "lg-down", "xl" {
-		@media ($sz)) {
+		@media (media.get(string.unquote($sz))) {
 			&:where(#{$self}--no-pad\:#{string.unquote($sz)}) {
 				--ui-card-pad: 0;
 			}
@@ -45,6 +59,7 @@
 				--ui-card-bg: none;
 				--ui-card-border: 0;
 				--ui-card-shadow: none;
+				--ui-card-radius: 0;
 			}
 
 			&:where(#{$self}--uncard\:#{string.unquote($sz)}) {
@@ -52,6 +67,7 @@
 				--ui-card-border: 0;
 				--ui-card-shadow: none;
 				--ui-card-pad: 0;
+				--ui-card-radius: 0;
 			}
 		}
 	}
