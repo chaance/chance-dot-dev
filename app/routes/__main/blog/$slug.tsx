@@ -85,7 +85,7 @@ export let meta: MetaFunction<typeof loader> = ({ data }) => {
 		siteUrl,
 		title,
 		authorName: "Chance Strickland",
-		authorTitle: 'chance.dev',
+		authorTitle: "chance.dev",
 		date: createdAtFormatted,
 	})}`;
 
@@ -94,6 +94,7 @@ export let meta: MetaFunction<typeof loader> = ({ data }) => {
 
 		// May be undefined, fix in remix. Will render a pointless tag for now.
 		description: description!,
+		image: socialImageUrl || undefined,
 		"og:url": url,
 		"og:title": title,
 		"og:description": description,
