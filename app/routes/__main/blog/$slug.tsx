@@ -68,29 +68,47 @@ export async function loader({ params, request }: LoaderArgs) {
 		updatedAtISO: updatedAt && updatedAt.toISOString(),
 	};
 
-	return json({ post: fullPost, user }, { headers });
+	let requestUrl = new URL(request.url);
+	let siteUrl = requestUrl.protocol + "//" + requestUrl.host;
+
+	return json({ post: fullPost, user, siteUrl }, { headers });
 }
 
-export let meta: MetaFunction<typeof loader> = (args) => {
-	let data = args.data || {};
-	let { title, description, seo } = data.post || {};
+export let meta: MetaFunction<typeof loader> = ({ data }) => {
+	data = data || {};
+	let { siteUrl } = data;
+	let { title, description, seo, slug, createdAtFormatted } = data.post || {};
+
+	let url = `${siteUrl}/blog/${slug}`;
+	let socialImageUrl = `${siteUrl}/img/social?${new URLSearchParams({
+		slug,
+		siteUrl,
+		title,
+		authorName: "Chance Strickland",
+		authorTitle: 'chance.dev',
+		date: createdAtFormatted,
+	})}`;
+
 	return {
 		title: `${title} | chance.dev`,
 
 		// May be undefined, fix in remix. Will render a pointless tag for now.
 		description: description!,
-		"og:description": description!,
+		"og:url": url,
+		"og:title": title,
+		"og:description": description,
+		"og:image": socialImageUrl || undefined,
 		"twitter:title": `${title} | chance.dev`,
 		"twitter:description": description!,
 		"twitter:site": "@chancethedev",
 		"twitter:creator": "@chancethedev",
-		"twitter:card": seo?.twitterCard ? "summary_large_image" : undefined,
+		"twitter:card": "summary_large_image",
 		"twitter:image": seo?.twitterCard
 			? isAbsoluteUrl(seo.twitterCard)
 				? seo?.twitterCard
-				: `https://chance.dev/${unSlashIt(seo.twitterCard)}`
-			: undefined,
-		"twitter:image:alt": seo?.twitterCard ? title : undefined,
+				: `${siteUrl}/${unSlashIt(seo.twitterCard)}`
+			: socialImageUrl,
+		"twitter:image:alt": title,
 	};
 };
 
