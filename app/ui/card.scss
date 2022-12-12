@@ -17,7 +17,7 @@
 	}
 
 	&--no-depth {
-		--ui-card-filter: none;
+		--ui-card-shadow: none;
 	}
 
 	&:where(:not(#{$self}--no-pad)) {
@@ -32,10 +32,7 @@
 
 	&:where(:not(#{$self}--no-bg)) {
 		--ui-card-border: 1px solid var(--cs-color-border-weak);
-		--ui-card-bg: var(--cs-color-white);
-		@media (media.get(dark)) {
-			--ui-card-bg: var(--cs-color-gray-18);
-		}
+		--ui-card-bg: var(--cs-color-background-raised);
 	}
 
 	@each $sz in "sm", "sm-down", "md", "md-down", "lg", "lg-down", "xl" {
@@ -47,7 +44,14 @@
 			&:where(#{$self}--no-bg\:#{string.unquote($sz)}) {
 				--ui-card-bg: none;
 				--ui-card-border: 0;
-				--ui-card-filter: none;
+				--ui-card-shadow: none;
+			}
+
+			&:where(#{$self}--uncard\:#{string.unquote($sz)}) {
+				--ui-card-bg: none;
+				--ui-card-border: 0;
+				--ui-card-shadow: none;
+				--ui-card-pad: 0;
 			}
 		}
 	}

@@ -5,6 +5,7 @@ export function Card({
 	children,
 	removeBackground,
 	removePadding,
+	uncard,
 	depth = "raised",
 }: CardProps) {
 	return (
@@ -18,6 +19,7 @@ export function Card({
 				[`${ROOT_CLASS}--no-pad`]: removePadding === true,
 				[`${ROOT_CLASS}--no-pad:${removePadding}`]:
 					typeof removePadding === "string",
+				[`${ROOT_CLASS}--uncard:${uncard}`]: uncard,
 			})}
 		>
 			<div className={`${ROOT_CLASS}__inner`}>{children}</div>
@@ -27,23 +29,10 @@ export function Card({
 
 interface CardProps {
 	children?: React.ReactNode;
-	removePadding?:
-		| boolean
-		| "sm"
-		| "sm-down"
-		| "md"
-		| "md-down"
-		| "lg"
-		| "lg-down"
-		| "xl";
-	removeBackground?:
-		| boolean
-		| "sm"
-		| "sm-down"
-		| "md"
-		| "md-down"
-		| "lg"
-		| "lg-down"
-		| "xl";
+	removePadding?: boolean | MQ;
+	removeBackground?: boolean | MQ;
 	depth?: false | "raised";
+	uncard?: MQ;
 }
+
+type MQ = "sm" | "sm-down" | "md" | "md-down" | "lg" | "lg-down" | "xl";
