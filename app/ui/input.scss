@@ -1,18 +1,22 @@
 .cs--input {
+	$self: &;
 	--input-color-bg: var(--cs-field-bg);
 	--input-color-fg: var(--cs-field-fg);
 	--input-color-placeholder: var(--cs-field-placeholder);
 	--input-color-border: var(--cs-field-border);
 	--input-color-error-border: var(--cs-field-border-error);
 	--input-color-outline: var(--cs-field-outline);
+	--input-color-accent: var(--cs-field-bg);
+	--input-color-marker: transparent;
 	--input-size-outline: 0;
+	--input-outline-offset: 0;
 	border: 1px solid var(--input-color-border);
-	border-radius: 4px;
+	border-radius: 0;
 	background: var(--input-color-bg);
 	color: var(--input-color-fg);
 	outline: var(--input-size-outline) solid var(--input-color-outline);
-	outline-offset: 0;
-	transition: border-color 150ms ease-out;
+	outline-offset: var(--input-outline-offset);
+	transition: border-color 50ms ease-out, outline 50ms ease-out;
 	-webkit-tap-highlight-color: transparent;
 
 	&--text,
@@ -49,20 +53,52 @@
 
 	&--checkbox,
 	&--radio {
+		padding: 0;
 		width: 1rem;
 		height: 1rem;
-		accent-color: var(--cs-color-accent);
+	}
+
+	&--checked {
+		--input-color-accent: var(--cs-color-accent);
+		--input-color-marker: var(--cs-color-white);
+	}
+
+	&__accent {
+		fill: var(--input-color-accent);
+	}
+
+	&__marker {
+		fill: var(--input-color-marker);
+		transform-origin: center;
 	}
 
 	&--radio {
 		border-radius: 9999px;
 	}
 
-	&:focus {
+	&:focus,
+	&--focused {
 		--input-color-bg: var(--cs-field-bg-focus);
 		--input-color-border: var(--cs-field-border-focus);
 		--input-color-outline: var(--cs-field-outline-focus);
 		--input-size-outline: 1px;
+		--input-outline-offset: 0;
+	}
+
+	&:active,
+	&--active {
+		--input-color-bg: var(--cs-field-bg-active);
+		--input-color-border: var(--cs-field-border-active);
+		--input-color-outline: var(--cs-field-outline-active);
+		--input-color-border: var(--cs-field-border-focus);
+		--input-size-outline: 0;
+		--input-outline-offset: 0;
+		--input-color-accent: var(--cs-field-bg-active);
+	}
+
+	&:active:where(#{$self}--checked),
+	&--active:where(#{$self}--checked) {
+		--input-color-accent: var(--cs-color-accent-deep);
 	}
 
 	&:invalid:where([data-touched="true"]),

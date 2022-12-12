@@ -318,6 +318,10 @@ $color_tokens: (
 		"light": get_system_color_var("green", 10),
 		"dark": get_system_color_var("green", 10),
 	),
+	"accent-deep": (
+		"light": get_system_color_var("green", 12),
+		"dark": get_system_color_var("green", 12),
+	),
 	"text": (
 		"light": get_system_color_var("gray", 18),
 		"dark": get_system_color_var("gray", 1),

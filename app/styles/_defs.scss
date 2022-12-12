@@ -21,6 +21,7 @@
 
 	--cs-field-bg: hsl(0 0% 99% / 1);
 	--cs-field-bg-focus: hsl(0 0% 100% / 1);
+	--cs-field-bg-active: hsl(0 0% 97% / 1);
 	--cs-field-fg: var(--cs-color-text);
 	--cs-field-placeholder: var(--cs-color-text-weakest);
 	--cs-field-outline: hsl(0 0% 0% / 0);
@@ -74,6 +75,7 @@
 		// --cs-field-placeholder: hsl(0 0% 65% / 1);
 		--cs-field-border: hsl(0 0% 31% / 1);
 		--cs-field-bg-focus: hsl(0 0% 2.5% / 1);
+		--cs-field-bg-active: hsl(0 0% 0% / 1);
 
 		--base00: #{color.get_system_base_color("gray", 16)};
 		--base01: #{color.get_system_base_color("gray", 14)};

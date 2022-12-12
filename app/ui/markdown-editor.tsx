@@ -12,6 +12,7 @@ import type SimpleMDE from "easymde";
 import type { Editor, EditorEventMap, KeyMap, Position } from "codemirror";
 import type { EditorChange } from "codemirror";
 import cx from "clsx";
+import { useComposedRefs } from "~/lib/react/use-composed-refs";
 
 const ROOT_CLASS = "cs--markdown-editor";
 
@@ -171,7 +172,7 @@ const MarkdownEditor = React.forwardRef<HTMLDivElement, MarkdownEditorProps>(
 						editor = new module.default(
 							Object.assign(
 								{
-									hideIcons: ["guide", "side-by-side", 'preview'],
+									hideIcons: ["guide", "side-by-side", "preview"],
 								},
 								initialOptions,
 								options,
@@ -360,21 +361,3 @@ MarkdownEditorTextarea.displayName = "MarkdownEditorTextarea";
 
 export { MarkdownEditor, MarkdownEditorTextarea };
 export type { MarkdownEditorProps, MarkdownEditorTextareaProps };
-
-function useComposedRefs<T>(
-	...refs: (React.Ref<T> | ((instance: T) => void))[]
-) {
-	return useCallback(
-		(instance: T) => {
-			refs.forEach((ref) => {
-				if (typeof ref === "function") {
-					ref(instance);
-				} else if (ref) {
-					(ref as React.MutableRefObject<T>).current = instance;
-				}
-			});
-		},
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		refs
-	);
-}
