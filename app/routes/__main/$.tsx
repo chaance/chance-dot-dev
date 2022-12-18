@@ -1,5 +1,4 @@
 import { useCatch } from "@remix-run/react";
-import { canUseDOM } from "~/lib/utils";
 import { json } from "@remix-run/node";
 import { Container } from "~/ui/container";
 import routeStylesUrl from "~/dist/styles/routes/__main/$.css";
@@ -49,14 +48,16 @@ export function CatchBoundary() {
 		case 401:
 			message = (
 				<p>
-					Oops! Looks like you tried to visit a page that you do not have access
-					to.
+					Oops! It looks like you tried to visit a page that you do not have
+					access to.
 				</p>
 			);
 			break;
 		case 404:
 			message = (
-				<p>Oops! Looks like you tried to visit a page that does not exist.</p>
+				<p>
+					Oops! It looks like you tried to visit a page that does not exist.
+				</p>
 			);
 			break;
 
