@@ -11,6 +11,7 @@ import {
 import { getSafeRedirect } from "~/lib/utils.server";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
 import { InputText } from "~/ui/input";
+import { Card } from "~/ui/card";
 
 export async function loader({ request }: LoaderArgs) {
 	let user = await getSessionUser(request);
@@ -176,112 +177,117 @@ export default function Join() {
 	return (
 		<div className="join-route">
 			<h1 className="sr-only">Join</h1>
-			<div className="auth-box">
-				<Form method="post" className="form">
-					<div className="text-field">
-						<label htmlFor="email" className="text-field-label">
-							Email address
-						</label>
-						<div className="text-field-input-wrap">
-							<InputText
-								ref={emailRef}
-								id="email"
-								required
-								autoFocus={true}
-								name="email"
-								type="email"
-								autoComplete="email"
-								aria-invalid={actionData?.errors?.email ? true : undefined}
-								aria-errormessage={
-									actionData?.errors?.email ? "email-error" : undefined
-								}
-								className="text-field-input"
-							/>
-							{actionData?.errors?.email && (
-								<div className="text-field-messages">
-									<div className="text-field-error" id="email-error">
-										{actionData.errors.email}
+			<Card removeBackground="sm-down" uncard="sm-down">
+				<div className="auth-box">
+					<Form method="post" className="form">
+						<div className="text-field">
+							<label htmlFor="email" className="text-field-label">
+								Email address
+							</label>
+							<div className="text-field-input-wrap">
+								<InputText
+									ref={emailRef}
+									id="email"
+									required
+									autoFocus={true}
+									name="email"
+									type="email"
+									autoComplete="email"
+									aria-invalid={actionData?.errors?.email ? true : undefined}
+									aria-errormessage={
+										actionData?.errors?.email ? "email-error" : undefined
+									}
+									className="text-field-input"
+								/>
+								{actionData?.errors?.email && (
+									<div className="text-field-messages">
+										<div className="text-field-error" id="email-error">
+											{actionData.errors.email}
+										</div>
 									</div>
-								</div>
-							)}
+								)}
+							</div>
 						</div>
-					</div>
 
-					<div className="text-field">
-						<label htmlFor="password" className="text-field-label">
-							Password
-						</label>
-						<div className="text-field-input-wrap">
-							<InputText
-								id="password"
-								ref={passwordRef}
-								name="password"
-								type="password"
-								autoComplete="new-password"
-								aria-invalid={actionData?.errors?.password ? true : undefined}
-								aria-describedby={
-									actionData?.errors?.password ? "password-error" : undefined
-								}
-								className="text-field-input"
-							/>
-							{actionData?.errors?.password && (
-								<div className="text-field-messages">
-									<div className="text-field-error" id="password-error">
-										{actionData.errors.password}
+						<div className="text-field">
+							<label htmlFor="password" className="text-field-label">
+								Password
+							</label>
+							<div className="text-field-input-wrap">
+								<InputText
+									id="password"
+									ref={passwordRef}
+									name="password"
+									type="password"
+									autoComplete="new-password"
+									aria-invalid={actionData?.errors?.password ? true : undefined}
+									aria-describedby={
+										actionData?.errors?.password ? "password-error" : undefined
+									}
+									className="text-field-input"
+								/>
+								{actionData?.errors?.password && (
+									<div className="text-field-messages">
+										<div className="text-field-error" id="password-error">
+											{actionData.errors.password}
+										</div>
 									</div>
-								</div>
-							)}
+								)}
+							</div>
 						</div>
-					</div>
 
-					<div className="text-field">
-						<label htmlFor="password" className="text-field-label">
-							Confirm Password
-						</label>
-						<div className="text-field-input-wrap">
-							<InputText
-								id="passwordConfirm"
-								ref={passwordConfirmRef}
-								name="passwordConfirm"
-								type="password"
-								autoComplete="new-password"
-								aria-invalid={
-									actionData?.errors?.passwordConfirm ? true : undefined
-								}
-								aria-describedby={
-									actionData?.errors?.passwordConfirm
-										? "password-confirm-error"
-										: undefined
-								}
-								className="text-field-input"
-							/>
-							{actionData?.errors?.passwordConfirm && (
-								<div className="text-field-messages">
-									<div className="text-field-error" id="password-confirm-error">
-										{actionData.errors.passwordConfirm}
+						<div className="text-field">
+							<label htmlFor="password" className="text-field-label">
+								Confirm Password
+							</label>
+							<div className="text-field-input-wrap">
+								<InputText
+									id="passwordConfirm"
+									ref={passwordConfirmRef}
+									name="passwordConfirm"
+									type="password"
+									autoComplete="new-password"
+									aria-invalid={
+										actionData?.errors?.passwordConfirm ? true : undefined
+									}
+									aria-describedby={
+										actionData?.errors?.passwordConfirm
+											? "password-confirm-error"
+											: undefined
+									}
+									className="text-field-input"
+								/>
+								{actionData?.errors?.passwordConfirm && (
+									<div className="text-field-messages">
+										<div
+											className="text-field-error"
+											id="password-confirm-error"
+										>
+											{actionData.errors.passwordConfirm}
+										</div>
 									</div>
-								</div>
-							)}
+								)}
+							</div>
 						</div>
-					</div>
 
-					<input type="hidden" name="redirectTo" value={redirectTo} />
-					<button type="submit" className="button button-primary">
-						Create Account
-					</button>
-					<p className="auth-postfix">
-						Already have an account?{" "}
-						<Link
-							to={{
-								pathname: "/login",
-								search: searchParams.toString(),
-							}}
-						>
-							Log in
-						</Link>
-					</p>
-				</Form>
-			</div>
+						<input type="hidden" name="redirectTo" value={redirectTo} />
+						<button type="submit" className="button button-primary">
+							Create Account
+						</button>
+						<p className="auth-postfix">
+							Already have an account?{" "}
+							<Link
+								to={{
+									pathname: "/login",
+									search: searchParams.toString(),
+								}}
+							>
+								Log in
+							</Link>
+						</p>
+					</Form>
+				</div>
+			</Card>
 		</div>
 	);
 }

@@ -19,18 +19,18 @@
 		max-width: 80rem;
 	}
 
-	@media (media.get(sm)) {
+	@media (--sm) {
 		padding-left: var(--cs-space-xl);
 		padding-right: var(--cs-space-xl);
 	}
 
-	@media (media.get(lg)) {
+	@media (--lg) {
 		&:where(#{$self}--purpose-content) {
 			max-width: 48rem;
 		}
 	}
 
-	@media (media.get(xl)) {
+	@media (--xl) {
 		&:where(#{$self}--purpose-content) {
 			max-width: 56rem;
 		}

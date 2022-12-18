@@ -655,7 +655,7 @@
 		.editor-toolbar button:hover {
 			background: var(--cs-color-gray-02);
 			border-color: var(--cs-color-border);
-			@media (media.get(dark)) {
+			@media (--dark) {
 				background: var(--cs-color-gray-16);
 			}
 		}

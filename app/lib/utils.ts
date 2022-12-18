@@ -386,3 +386,20 @@ export function getFormFieldStringValue(formData: FormData, name: string) {
 	}
 	return value;
 }
+
+export function bem(
+	base: string,
+	element?: string | null | undefined,
+	...modifiers: (string | null | undefined)[]
+) {
+	let className = base;
+	if (element) {
+		className += `__${element}`;
+	}
+	for (let modifier of modifiers) {
+		if (modifier) {
+			className += `--${modifier}`;
+		}
+	}
+	return className;
+}

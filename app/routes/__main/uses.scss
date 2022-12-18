@@ -11,12 +11,12 @@
 		font-size: 2.25rem;
 		line-height: 1.25;
 		margin-bottom: 0.5rem;
-		@media (media.get(sm)) {
+		@media (--sm) {
 			font-size: 3rem;
 			line-height: 1;
 			margin-bottom: 1rem;
 		}
-		@media (media.get(md)) {
+		@media (--md) {
 			font-size: 3.75rem;
 			line-height: 1;
 			margin-bottom: 1.75rem;
@@ -27,7 +27,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 1.75rem;
-		@media (media.get(sm)) {
+		@media (--sm) {
 			gap: 2.25rem;
 		}
 	}
@@ -39,10 +39,10 @@
 			font-size: 1.125rem;
 			line-height: 1.4;
 			margin-bottom: 0.5rem;
-			@media (media.get(sm)) {
+			@media (--sm) {
 				font-size: 1.25rem;
 			}
-			@media (media.get(md)) {
+			@media (--md) {
 				font-size: 1.5rem;
 				margin-bottom: 0.5rem;
 			}
@@ -74,7 +74,7 @@
 		&__term,
 		&__desc {
 			display: block;
-			@media (media.get(sm)) {
+			@media (--sm) {
 				display: inline-block;
 			}
 		}

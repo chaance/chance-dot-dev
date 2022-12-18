@@ -40,10 +40,10 @@ $utilities: (
 		margin: 0 auto;
 		width: var(--container-width);
 		max-width: calc(100% - 2 * var(--container-edge-space) * 2);
-		@media (media.get(xs)) {
+		@media (--xs) {
 			--container-edge-space: 1rem;
 		}
-		@media (media.get(sm)) {
+		@media (--sm) {
 			--container-edge-space: 1.75rem;
 		}
 	}

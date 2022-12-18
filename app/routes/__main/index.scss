@@ -3,18 +3,18 @@
 .page--home {
 	padding-top: 6rem;
 	padding-bottom: 2rem;
-	@media (media.get(sm)) {
+	@media (--sm) {
 		padding-top: 8rem;
 		padding-bottom: 4rem;
 	}
-	@media (media.get(lg)) {
+	@media (--lg) {
 		padding-top: 10rem;
 		padding-bottom: 5rem;
 	}
 
 	&__header {
 		max-width: 22rem;
-		@media (media.get(sm)) {
+		@media (--sm) {
 			max-width: none;
 		}
 	}
@@ -33,19 +33,19 @@
 		filter:
 			drop-shadow(var(--shadow-offset) var(--shadow-offset) 0 var(--cs-color-green-04))
 			drop-shadow(var(--shadow-offset) var(--shadow-offset) 0 var(--cs-color-green-10));
-		@media (media.get(dark)) {
+		@media (--dark) {
 			/* prettier-ignore */
 			filter:
 				drop-shadow(var(--shadow-offset) var(--shadow-offset) 0 var(--cs-color-green-10))
 				drop-shadow(var(--shadow-offset) var(--shadow-offset) 0 var(--cs-color-green-18));
 		}
 
-		@media (media.get(sm)) {
+		@media (--sm) {
 			--shadow-offset: 3px;
 			font-size: 4.5rem;
 		}
 
-		@media (media.get(lg)) {
+		@media (--lg) {
 			--shadow-offset: 4px;
 			font-size: 7.5rem;
 		}
@@ -61,15 +61,15 @@
 		margin-top: 1em;
 		line-height: 1.33;
 
-		@media (media.get(sm)) {
+		@media (--sm) {
 			font-size: 1.125rem;
 		}
 
-		@media (media.get(md)) {
+		@media (--md) {
 			font-size: 1.5rem;
 		}
 
-		@media (media.get(xl)) {
+		@media (--xl) {
 			font-size: 1.5rem;
 		}
 	}
@@ -81,13 +81,13 @@
 		font-size: 0.875rem;
 		margin-top: 1.5rem;
 
-		@media (media.get(sm)) {
+		@media (--sm) {
 			flex-direction: row;
 			gap: 1.5rem;
 			font-size: 1rem;
 		}
 
-		@media (media.get(md)) {
+		@media (--md) {
 			margin-top: 2rem;
 		}
 	}
@@ -101,7 +101,7 @@
 		width: 1.25rem;
 		height: 1.25rem;
 		opacity: 0.5;
-		@media (media.get(sm)) {
+		@media (--sm) {
 			width: 1.5rem;
 			height: 1.5rem;
 		}
