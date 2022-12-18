@@ -1,3 +1,4 @@
+@use "~/styles/system/media";
 @use "~/styles/resets";
 @use "~/styles/defs";
 @use "~/styles/global";
@@ -6,3 +7,22 @@
 @use "~/styles/utility";
 
 @include utility.classes;
+
+// Root route
+.layout--root {
+	&__title {
+		font-size: 1.25rem;
+		line-height: 1.4;
+		font-family: var(--cs-font-family-heading);
+		font-weight: var(--cs-font-weight-heading);
+		margin-bottom: 0.5em;
+		@media (media.get(sm)) {
+			font-size: 1.5rem;
+			line-height: 1.33;
+		}
+		@media (media.get(md)) {
+			font-size: 1.875rem;
+			line-height: 1.2;
+		}
+	}
+}

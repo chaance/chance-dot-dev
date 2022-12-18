@@ -12,19 +12,19 @@ import {
 } from "@remix-run/react";
 import type { MetaFunction, LoaderArgs } from "@remix-run/node";
 import { Container } from "~/ui/container";
-import { SiteHeader } from "~/ui/site-header";
-import { SiteFooter } from "~/ui/site-footer";
-import { serverSessionStorage } from "~/lib/session.server";
 import { getSeo } from "~/lib/seo";
 import { RouteChangeAnnouncement } from "~/ui/primitives/route-change-announcement";
 import { RootProvider } from "~/lib/react/context";
 import { useIsHydrated } from "~/lib/react/use-is-hydrated";
 import NProgress from "nprogress";
 
+import { PrimaryLayout } from "~/routes/__main";
+
 import appStylesUrl from "~/dist/styles/app.css";
 import fontStylesUrl from "~/dist/styles/fonts.css";
 
 const DISABLE_JS = false;
+const ROOT_CLASS = "layout--root";
 
 let [seoMeta, seoLinks] = getSeo({
 	title: "chance.dev",
@@ -160,14 +160,16 @@ export function CatchBoundary() {
 		case 401:
 			message = (
 				<p>
-					Oops! Looks like you tried to visit a page that you do not have access
-					to.
+					Oops! It looks like you tried to visit a page that you do not have
+					access to.
 				</p>
 			);
 			break;
 		case 404:
 			message = (
-				<p>Oops! Looks like you tried to visit a page that does not exist.</p>
+				<p>
+					Oops! It looks like you tried to visit a page that does not exist.
+				</p>
 			);
 			break;
 
@@ -184,18 +186,14 @@ export function CatchBoundary() {
 			}
 		>
 			<Layout>
-				<div className="flex flex-col min-h-screen">
-					<SiteHeader />
-					<div className="flex-auto">
+				<PrimaryLayout>
+					<main className={ROOT_CLASS}>
 						<Container>
-							<h1 className="text-3xl md:text-4xl xl:text-5xl gradient-text dark:gradient-text-dark font-medium leading-tight md:leading-tight xl:leading-tight mb-2 xl:mb-4">
-								{caught.status}: {caught.statusText}
-							</h1>
-							{message}
+							<h1 className={`${ROOT_CLASS}__title`}>Oh no!</h1>
+							<div className={`${ROOT_CLASS}__message`}>{message}</div>
 						</Container>
-					</div>
-					<SiteFooter />
-				</div>
+					</main>
+				</PrimaryLayout>
 			</Layout>
 		</Document>
 	);
@@ -209,22 +207,20 @@ export function ErrorBoundary({ error }: { error: Error }) {
 	return (
 		<Document meta={<title>Danger, Will Robinson! 500! | chance.dev</title>}>
 			<Layout>
-				<div className="flex flex-col min-h-screen">
-					<SiteHeader />
-					<div className="flex-auto">
+				<PrimaryLayout>
+					<main className={ROOT_CLASS}>
 						<Container>
-							<h1 className="text-3xl md:text-4xl xl:text-5xl gradient-text dark:gradient-text-dark font-medium leading-tight md:leading-tight xl:leading-tight mb-2 xl:mb-4">
-								Oh no!
-							</h1>
-							<p>
-								Something went wrong and I'm not quite sure what! Maybe go
-								outside for a bit and hopefully I'll get it fixed by the time
-								you get back.
-							</p>
+							<h1 className={`${ROOT_CLASS}__title`}>Oh no!</h1>
+							<div className={`${ROOT_CLASS}__message`}>
+								<p>
+									Something went wrong and I'm not quite sure what! Maybe go
+									outside for a bit and hopefully I'll get it fixed by the time
+									you get back.
+								</p>
+							</div>
 						</Container>
-					</div>
-					<SiteFooter />
-				</div>
+					</main>
+				</PrimaryLayout>
 			</Layout>
 		</Document>
 	);

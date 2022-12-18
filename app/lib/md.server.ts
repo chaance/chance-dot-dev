@@ -9,6 +9,7 @@ import type * as Unist from "unist";
 import type * as Hast from "hast";
 import type * as Shiki from "shiki";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const NO_CACHE = process.env.NO_CACHE;
 
 export const markdownCache = new LRUCache<string, MarkdownParsed>({

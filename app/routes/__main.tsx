@@ -18,7 +18,7 @@ export default function MainLayout() {
 	);
 }
 
-function PrimaryLayout({ children }: React.PropsWithChildren<{}>) {
+export function PrimaryLayout({ children }: React.PropsWithChildren<{}>) {
 	let location = useLocation();
 	let isAbsolute = location.pathname === "/";
 	return (
