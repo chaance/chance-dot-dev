@@ -18,6 +18,11 @@ body {
 	isolation: isolate;
 }
 
+::selection {
+	background: var(--cs-selection-bg);
+	color: var(--cs-selection-fg);
+}
+
 .button {
 	--color-bg: var(--cs-color-button);
 	--color-fg: var(--cs-color-text);

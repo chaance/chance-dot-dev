@@ -1,0 +1,110 @@
+.cs--post-editor-screen {
+	display: grid;
+	gap: 1rem;
+	grid-template:
+		"title-bar" auto
+		"sidebar" auto
+		"main-content" 1fr / 1fr;
+
+	@media (--xl) {
+		gap: 2rem;
+		grid-template:
+			"title-bar title-bar" auto
+			"main-content sidebar" 1fr / 1fr 18rem;
+	}
+
+	@media (--xxl) {
+		padding: 3rem;
+	}
+
+	&__title-bar {
+		grid-area: title-bar;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	&__main-content {
+		grid-area: main-content;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	&__sidebar {
+		grid-area: sidebar;
+		position: relative;
+	}
+
+	&__sidebar-content {
+		position: relative;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+
+		@media (--xl) {
+			gap: 2rem;
+		}
+	}
+
+	&__form {
+		display: contents;
+	}
+
+	&__slug-wrapper {
+		display: flex;
+		gap: 0.5rem;
+		line-height: 1;
+		font-size: 0.875rem;
+		align-items: center;
+		height: 1rem;
+	}
+
+	&__slug-label {
+		font-weight: bold;
+	}
+
+	&__slug-output {
+		flex: 1 1 none;
+	}
+
+	&__slug-input-wrapper {
+		flex: 1 1 100%;
+		display: flex;
+		align-items: center;
+	}
+
+	&__slug-input-prefix {
+		flex: 0 0 auto;
+	}
+
+	&__slug-input {
+		flex: 1 1 100%;
+		appearance: none;
+		height: inherit;
+		line-height: inherit;
+		padding: 0;
+		background-color: transparent;
+		border: 0;
+		padding: 0;
+
+		&:focus {
+			outline: none;
+		}
+	}
+
+	&__slug-edit-button {
+		border: 1px solid var(--cs-color-border);
+		background-color: var(--cs-color-background);
+		font-size: 0.875em;
+		padding: 0.25em 0.375em;
+		display: flex;
+		align-items: center;
+	}
+
+	&__sidebar-buttons {
+		display: flex;
+		gap: 1rem;
+	}
+}

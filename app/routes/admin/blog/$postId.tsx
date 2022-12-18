@@ -137,7 +137,6 @@ export default function UpdateNotePage() {
 
 	return (
 		<div>
-			<Link to={`/blog/${post.slug}`}>View Post</Link>
 			<PostEditorScreen
 				formRef={formRef}
 				key={formKey}
@@ -170,6 +169,7 @@ export default function UpdateNotePage() {
 						/>
 					</>
 				}
+				viewPostPath={`/blog/${post.slug}`}
 			/>
 		</div>
 	);

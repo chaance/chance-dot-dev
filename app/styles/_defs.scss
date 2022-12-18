@@ -29,6 +29,8 @@
 	--cs-field-border: var(--cs-color-border-weak);
 	--cs-field-border-focus: var(--cs-color-accent);
 	--cs-field-border-error: var(--cs-color-red-10);
+	--cs-selection-bg: var(--cs-color-green-05);
+	--cs-selection-fg: var(--cs-color-text);
 
 	--base00: #{color.get_system_base_color("gray", 1)};
 	--base01: #{color.get_system_base_color("gray", 4)};
@@ -76,6 +78,7 @@
 		--cs-field-border: hsl(0 0% 31% / 1);
 		--cs-field-bg-focus: hsl(0 0% 2.5% / 1);
 		--cs-field-bg-active: hsl(0 0% 0% / 1);
+		--cs-selection-bg: var(--cs-color-green-12);
 
 		--base00: #{color.get_system_base_color("gray", 16)};
 		--base01: #{color.get_system_base_color("gray", 14)};

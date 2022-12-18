@@ -10,7 +10,7 @@ export function links() {
 
 const ROOT_CLASS = "page--home";
 
-export default function PrimaryLayoutRoute() {
+export default function HomeRoute() {
 	return (
 		<main className={ROOT_CLASS}>
 			<header data-ui-id="home-header" className={`${ROOT_CLASS}__header`}>

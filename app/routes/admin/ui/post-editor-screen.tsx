@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Form } from "@remix-run/react";
+import { Form, Link } from "@remix-run/react";
 import { MarkdownEditor, MarkdownEditorTextarea } from "~/ui/markdown-editor";
 import { InputTextarea, InputText } from "~/ui/input";
 import { Card } from "~/ui/card";
@@ -35,6 +35,7 @@ export function PostEditorScreen({
 	defaultValues,
 	getDefaultValue,
 	additionalFields,
+	viewPostPath,
 }: {
 	formKey?: string;
 	formRef: React.Ref<HTMLFormElement>;
@@ -43,6 +44,7 @@ export function PostEditorScreen({
 	defaultValues?: Partial<FormFieldValues>;
 	getDefaultValue?(name: FormFieldName): string | undefined | null;
 	additionalFields?: React.ReactNode;
+	viewPostPath?: string;
 }) {
 	let [editingSlug, setEditingSlug] = React.useState(false);
 	let [slugValue, setSlugValue] = React.useState(
@@ -205,10 +207,15 @@ export function PostEditorScreen({
 							label="Created At"
 							type="datetime-local"
 						/>
-						<div>
+						<div className={`${ROOT_CLASS}__sidebar-buttons`}>
 							<button type="submit" className="button">
 								Save
 							</button>
+							{viewPostPath ? (
+								<Link to={viewPostPath} className="button">
+									View Post
+								</Link>
+							) : null}
 						</div>
 					</div>
 				</div>

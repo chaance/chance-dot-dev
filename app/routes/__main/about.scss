@@ -1,0 +1,10 @@
+.page--about {
+	&__intro {
+		:where(:first-child) {
+			margin-top: 0;
+		}
+		:where(:last-child) {
+			margin-bottom: 0;
+		}
+	}
+}
