@@ -22,12 +22,14 @@ function makeLink(
 		if (isString(props.to) && isAbsoluteUrl(props.to)) {
 			let { caseSensitive, className, end, style, children, ...domProps } =
 				props as NavLinkProps;
-			style = isFunction(style) ? style({ isActive: false }) : style;
+			style = isFunction(style)
+				? style({ isActive: false, isPending: false })
+				: style;
 			className = isFunction(className)
-				? className({ isActive: false })
+				? className({ isActive: false, isPending: false })
 				: className;
 			children = isFunction(children)
-				? children({ isActive: false })
+				? children({ isActive: false, isPending: false })
 				: children;
 
 			return (
