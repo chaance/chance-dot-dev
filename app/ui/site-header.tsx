@@ -1,11 +1,28 @@
 import * as React from "react";
-import { NavLink } from "@remix-run/react";
+import { NavLink, useLocation, useTransition } from "@remix-run/react";
 import cx from "clsx";
 import { Container } from "~/ui/container";
 import { isWebKit } from "~/lib/utils";
 import { useRootContext } from "~/lib/react/context";
+import { Button } from "./primitives/button";
+import { Dialog, DialogContent, DialogOverlay } from "./primitives/dialog";
 
 const ROOT_CLASS = "cs--site-header";
+
+const NAV_ITEMS = [
+	{
+		id: "about",
+		to: "/about",
+		prefetch: "intent" as const,
+		label: "About",
+	},
+	{
+		id: "blog",
+		to: "/blog",
+		prefetch: "intent" as const,
+		label: "Articles",
+	},
+];
 
 const SiteHeader: React.FC<SiteHeaderProps> = ({
 	id,
@@ -21,6 +38,25 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
 		logoRotationAngle: 3,
 		logoRotationRef: logoTextRef,
 	});
+
+	let linkClickedRef = React.useRef(false);
+	let [dialogIsOpen, setDialogIsOpen] = React.useState(false);
+	let transition = useTransition();
+	let location = useLocation();
+	React.useEffect(() => {
+		// if the user clicks a link in the nav we want to close the dialog after
+		// the navigation has finished transitioning
+		if (linkClickedRef.current === true) {
+			linkClickedRef.current = false;
+			if (transition.state === "idle") {
+				setDialogIsOpen(false);
+			}
+		} else {
+			// Otherwise, close the dialog if the location changes under any other
+			// circumstances
+			setDialogIsOpen(false);
+		}
+	}, [transition.state, location.pathname]);
 
 	return (
 		<header
@@ -44,16 +80,64 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
 				<div className={`${ROOT_CLASS}__inner`}>
 					<nav aria-label="Main" className={`${ROOT_CLASS}__nav`}>
 						<ul className={`${ROOT_CLASS}__nav-list`}>
-							<li className={`${ROOT_CLASS}__nav-item`}>
-								<NavLink
-									className={`${ROOT_CLASS}__nav-link`}
-									to="/blog"
-									prefetch="intent"
-								>
-									Articles
-								</NavLink>
-							</li>
+							{NAV_ITEMS.map((item) => {
+								return (
+									<li key={item.id} className={`${ROOT_CLASS}__nav-item`}>
+										<NavLink
+											className={`${ROOT_CLASS}__nav-link`}
+											to={item.to}
+											prefetch={item.prefetch || undefined}
+										>
+											{item.label}
+										</NavLink>
+									</li>
+								);
+							})}
 						</ul>
+						<Button
+							onPress={() => setDialogIsOpen(true)}
+							className={`${ROOT_CLASS}__nav-toggle`}
+						>
+							<span className="sr-only">Open Menu</span>
+							<span className={`${ROOT_CLASS}__nav-toggle-icon`} aria-hidden />
+						</Button>
+						{dialogIsOpen ? (
+							<Dialog
+								onDismiss={() => setDialogIsOpen(false)}
+								open
+								aria-label="Main navigation"
+							>
+								<DialogOverlay className={`${ROOT_CLASS}__nav-dialog-overlay`}>
+									<div className={`${ROOT_CLASS}__nav-dialog-overlay-inner`}>
+										<DialogContent className={`${ROOT_CLASS}__nav-dialog`}>
+											<div className={`${ROOT_CLASS}__nav-dialog-inner`}>
+												<ul className={`${ROOT_CLASS}__nav-list`}>
+													{NAV_ITEMS.map((item) => {
+														return (
+															<li
+																key={item.id}
+																className={`${ROOT_CLASS}__nav-item`}
+															>
+																<NavLink
+																	className={`${ROOT_CLASS}__nav-link`}
+																	to={item.to}
+																	prefetch={item.prefetch || undefined}
+																	onClick={() => {
+																		linkClickedRef.current = true;
+																	}}
+																>
+																	{item.label}
+																</NavLink>
+															</li>
+														);
+													})}
+												</ul>
+											</div>
+										</DialogContent>
+									</div>
+								</DialogOverlay>
+							</Dialog>
+						) : null}
 					</nav>
 					{hideLogo ? null : (
 						<NavLink

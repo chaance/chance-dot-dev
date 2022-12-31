@@ -109,7 +109,7 @@ function useCheckboxInput({
 		onBlur: props.onBlur as any,
 	});
 
-	let excludeFromTabOrder = props.tabIndex === -1;
+	let excludeFromTabOrder = props.tabIndex != null && props.tabIndex !== 0;
 	let inputRef = React.useRef<HTMLInputElement | null>(null);
 	let svgRef = React.useRef<SVGSVGElement | null>(null);
 
