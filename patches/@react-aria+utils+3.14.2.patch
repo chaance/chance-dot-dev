@@ -1,0 +1,50 @@
+diff --git a/node_modules/@react-aria/utils/dist/main.js b/node_modules/@react-aria/utils/dist/main.js
+index d7085fe..69d75e9 100644
+--- a/node_modules/@react-aria/utils/dist/main.js
++++ b/node_modules/@react-aria/utils/dist/main.js
+@@ -136,6 +136,10 @@ function $19a2307bfabafaf1$export$14d238f342723f25(defaultValue) {
+ 
+ let $8c61827343eed941$var$idsUpdaterMap = new Map();
+ function $8c61827343eed941$export$f680877a34711e37(defaultId) {
++    if (typeof (0, $1Yh1N$react.useId) === "function") {
++        let gen = $1Yh1N$react.useId();
++        return defaultId != null ? defaultId : gen;
++    }
+     let [value, setValue] = (0, $1Yh1N$react.useState)(defaultId);
+     let nextId = (0, $1Yh1N$react.useRef)(null);
+     let res = (0, $1Yh1N$reactariassr.useSSRSafeId)(value);
+@@ -177,6 +181,9 @@ function $8c61827343eed941$export$cd8c9cb68f842629(idA, idB) {
+     return idB;
+ }
+ function $8c61827343eed941$export$b4cc09c592e8fdb8(depArray = []) {
++    if (typeof (0, $1Yh1N$react.useId) === "function") {
++        return $1Yh1N$react.useId();
++    }
+     let id = $8c61827343eed941$export$f680877a34711e37();
+     let [resolvedId, setResolvedId] = (0, $19a2307bfabafaf1$export$14d238f342723f25)(id);
+     let updateId = (0, $1Yh1N$react.useCallback)(()=>{
+diff --git a/node_modules/@react-aria/utils/dist/module.js b/node_modules/@react-aria/utils/dist/module.js
+index 83fb8b5..eb5b59a 100644
+--- a/node_modules/@react-aria/utils/dist/module.js
++++ b/node_modules/@react-aria/utils/dist/module.js
+@@ -93,6 +93,10 @@ function $1dbecbe27a04f9af$export$14d238f342723f25(defaultValue) {
+ 
+ let $bdb11010cef70236$var$idsUpdaterMap = new Map();
+ function $bdb11010cef70236$export$f680877a34711e37(defaultId) {
++    if (typeof (0, $12uGp$react).useId === "function") {
++			  let gen = (0, $12uGp$react).useId();
++        return defaultId != null ? defaultId : gen;
++    }
+     let [value, setValue] = (0, $12uGp$useState)(defaultId);
+     let nextId = (0, $12uGp$useRef)(null);
+     let res = (0, $12uGp$useSSRSafeId)(value);
+@@ -134,6 +138,9 @@ function $bdb11010cef70236$export$cd8c9cb68f842629(idA, idB) {
+     return idB;
+ }
+ function $bdb11010cef70236$export$b4cc09c592e8fdb8(depArray = []) {
++    if (typeof (0, $12uGp$react).useId === "function") {
++        return (0, $12uGp$react).useId();
++    }
+     let id = $bdb11010cef70236$export$f680877a34711e37();
+     let [resolvedId, setResolvedId] = (0, $1dbecbe27a04f9af$export$14d238f342723f25)(id);
+     let updateId = (0, $12uGp$useCallback)(()=>{
