@@ -170,7 +170,7 @@ export default function AboutRoute() {
 								{[
 									{
 										id: "1",
-										img: "https://picsum.photos/600/600",
+										img: "https://res.cloudinary.com/chancethedev/image/upload/v1672455509/chance.dev/theo.jpg",
 										heading: "Streaming With Theo",
 										desc: "I chat with Theo—streamer, YouTuber and holder of many opinions—to convince him to give Remix a fair shot.",
 										to: "https://www.twitch.tv/theo/video/1643480153",
@@ -184,14 +184,14 @@ export default function AboutRoute() {
 									// },
 									{
 										id: "3",
-										img: "https://picsum.photos/502/400",
+										img: "https://res.cloudinary.com/chancethedev/image/upload/v1672455509/chance.dev/learn-with-jason.jpg",
 										heading: "Learn With Jason",
 										desc: "I join my friend Jason Lengstorf and teach him how to build an esbuild plugin.",
 										to: "https://www.youtube.com/watch?v=O7U-b9knR6U",
 									},
 									{
 										id: "4",
-										img: "https://picsum.photos/503/400",
+										img: "https://res.cloudinary.com/chancethedev/image/upload/v1672455509/chance.dev/some-antics.jpg",
 										heading: "Some Antics",
 										desc: "I teach Ben Myers how we can build an accessible, progressively enhanced project management app with Remix.",
 										to: "https://www.youtube.com/watch?v=QpP3daA2na4",
