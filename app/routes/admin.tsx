@@ -50,11 +50,51 @@ const navItems: NavItem[] = [
 			},
 		],
 	},
+	{
+		key: "subscribers",
+		label: "Subscribers",
+		to: "/admin/subscribers",
+		isActive: (match) => match.id.startsWith("routes/admin/subscribers"),
+		children: [
+			{
+				key: "all-subscribers",
+				label: "All Subscribers",
+				to: "/admin/subscribers",
+				isActive: (match) => match.id === "routes/admin/subscribers/index",
+			},
+			{
+				key: "add-new",
+				label: "Add New",
+				to: "/admin/subscribers/new",
+				isActive: (match) => match.id === "routes/admin/subscribers/new",
+			},
+		],
+	},
+	{
+		key: "mailing-lists",
+		label: "Mailing Lists",
+		to: "/admin/mailing-lists",
+		isActive: (match) => match.id.startsWith("routes/admin/mailing-lists"),
+		children: [
+			{
+				key: "all-mailing-lists",
+				label: "All Mailing Lists",
+				to: "/admin/mailing-lists",
+				isActive: (match) => match.id === "routes/admin/mailing-lists/index",
+			},
+			{
+				key: "add-new",
+				label: "Add New",
+				to: "/admin/mailing-lists/new",
+				isActive: (match) => match.id === "routes/admin/mailing-lists/new",
+			},
+		],
+	},
 ];
 
 const ROOT_CLASS = "cs--admin";
 
-export default function AdminBlogLayout() {
+export default function AdminLayout() {
 	let { user } = useLoaderData<typeof loader>();
 	let matches = useMatches();
 
