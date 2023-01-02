@@ -3,6 +3,7 @@ import type {
 	EmailList as DBEmailList,
 } from "@prisma/client";
 import { prisma } from "~/lib/db.server";
+import { isValidEmail } from "~/lib/utils";
 
 export interface EmailList {
 	id: string;
@@ -119,6 +120,10 @@ export async function createEmailList({
 			subscribers: subscribers
 				? {
 						connectOrCreate: subscribers.map((subscriber) => {
+							if (!isValidEmail(subscriber.email)) {
+								throw new Error("Invalid email address");
+							}
+
 							return {
 								create: {
 									email: subscriber.email,
@@ -161,6 +166,9 @@ export async function createSubscriber({
 	nameLast?: string | null;
 	lists?: Array<{ name: string }>;
 }): Promise<EmailSubscriber | EmailSubscriberWithLists> {
+	if (!isValidEmail(email)) {
+		throw new Error("Invalid email address");
+	}
 	let record = await prisma.emailSubscriber.create({
 		data: {
 			email,
@@ -229,6 +237,9 @@ export async function updateSubscriber(
 		lists?: string[];
 	}
 ): Promise<EmailSubscriber | EmailSubscriberWithLists> {
+	if (!isValidEmail(email)) {
+		throw new Error("Invalid email address");
+	}
 	let record = await prisma.emailSubscriber.update({
 		where: { id },
 		data: {

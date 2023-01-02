@@ -12,6 +12,7 @@ import { useFetcher } from "@remix-run/react";
 import { Button } from "~/ui/primitives/button";
 import { socialIconLinks } from "~/lib/social-icon-links";
 import { SignUpForm, SignUpFormField } from "~/ui/sign-up-form";
+import { useIsHydrated } from "~/lib/react/use-is-hydrated";
 
 export function links() {
 	return [{ rel: "stylesheet", href: routeStylesUrl }];
@@ -28,7 +29,12 @@ const ROOT_CLASS = "page--about";
 
 export default function AboutRoute() {
 	let fetcher = useFetcher();
-	let { errors, values } = fetcher.data || {};
+	let { errors, values, formError } = fetcher.data || {};
+	let hasFieldErrors =
+		errors && typeof errors === "object" && hasFormErrors(errors);
+	let hasSuccessfulSubmission =
+		fetcher.type === "done" && !formError && !hasFieldErrors;
+	let isHydrated = useIsHydrated();
 	return (
 		<main className={ROOT_CLASS}>
 			<h1 className="sr-only">About</h1>
@@ -237,7 +243,7 @@ export default function AboutRoute() {
 					</section>
 				</Container>
 
-				{/* <Container purpose="header">
+				<Container purpose="header">
 					<section className={bem(ROOT_CLASS, "sign-up")}>
 						<div className={bem(ROOT_CLASS, "sign-up-inner")}>
 							<div
@@ -271,15 +277,6 @@ export default function AboutRoute() {
 										fields={
 											<>
 												<SignUpFormField
-													id="form-field-name"
-													name="name"
-													errorMessage={errors?.name}
-													defaultValue={values?.name || undefined}
-													label="Your name"
-													required
-													type="text"
-												/>
-												<SignUpFormField
 													id="form-field-email"
 													name="email"
 													errorMessage={errors?.email}
@@ -288,6 +285,42 @@ export default function AboutRoute() {
 													required
 													type="email"
 												/>
+												<SignUpFormField
+													id="form-field-name-first"
+													name="nameFirst"
+													errorMessage={errors?.nameFirst}
+													defaultValue={values?.nameFirst || undefined}
+													label="First name"
+													type="text"
+												/>
+												<SignUpFormField
+													id="form-field-name-last"
+													name="nameLast"
+													errorMessage={errors?.nameLast}
+													defaultValue={values?.nameLast || undefined}
+													label="Last name"
+													type="text"
+												/>
+												<div className="sr-only">
+													<label htmlFor="form-field-phone">Phone number</label>
+													<span id="phone-desc">
+														Screen-reader users: do not complete this field or
+														the form submission will fail.
+													</span>
+													<input
+														id="form-field-phone"
+														aria-describedby="phone-desc"
+														type="text"
+														name="phone"
+													/>
+													{isHydrated ? (
+														<input
+															type="hidden"
+															name="preventRedirect"
+															value="true"
+														/>
+													) : null}
+												</div>
 											</>
 										}
 										submitButton={
@@ -299,6 +332,18 @@ export default function AboutRoute() {
 											</Button>
 										}
 									/>
+									{hasSuccessfulSubmission ? (
+										<div
+											style={{
+												marginTop: "1rem",
+											}}
+										>
+											<Text color="success">
+												Thanks for signing up! Check your email to confirm your
+												subscription.
+											</Text>
+										</div>
+									) : null}
 								</div>
 								<div className={bem(ROOT_CLASS, "social-nav")}>
 									<HeadingLevelProvider>
@@ -312,7 +357,7 @@ export default function AboutRoute() {
 							</div>
 						</div>
 					</section>
-				</Container> */}
+				</Container>
 			</HeadingLevelProvider>
 		</main>
 	);
@@ -367,4 +412,9 @@ function SocialNavList() {
 			})}
 		</ul>
 	);
+}
+
+function hasFormErrors(errors: Record<string, any>) {
+	let values = Object.values(errors);
+	return values.length > 0 && values.some((error) => error != null);
 }

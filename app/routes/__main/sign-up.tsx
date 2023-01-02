@@ -1,61 +1,116 @@
-import type { ActionArgs, LoaderArgs } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import type { ActionArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { useActionData, useSearchParams } from "@remix-run/react";
 import { isValidEmail } from "~/lib/utils";
+import { safeRedirect } from "~/lib/utils.server";
+import type { EmailSubscriber } from "~/models/email-list.server";
+import { createSubscriber } from "~/models/email-list.server";
 import { Container } from "~/ui/container";
 import { Button } from "~/ui/primitives/button";
 import { SignUpForm, SignUpFormField } from "~/ui/sign-up-form";
 import { Text } from "~/ui/text";
 
-export async function loader({ request }: LoaderArgs) {
-	// TODO: Remove after implementing sign up logic
-	throw json(null, 404);
-}
+// export async function loader({ request }: LoaderArgs) {
+// 	// TODO: Remove after implementing sign up logic
+// 	throw json(null, 404);
+// }
 
 export async function action({ request }: ActionArgs) {
 	let formData = await request.formData();
+	let honeypot = formData.get("phone");
 	let email = formData.get("email");
-	let name = formData.get("name");
+	let nameFirst = formData.get("nameFirst");
+	let nameLast = formData.get("nameLast");
+	let redirectTo = formData.get("redirectTo");
+	let preventRedirect = formData.get("preventRedirect") === "true";
+	if (honeypot) {
+		return json(null, 400);
+	}
 
-	let errors: { name: null | string; email: null | string } = {
-		name: null,
+	let errors: {
+		nameFirst: null | string;
+		nameLast: null | string;
+		email: null | string;
+	} = {
+		nameFirst: null,
+		nameLast: null,
 		email: null,
 	};
-	let values: { name: null | string; email: null | string } = {
-		name: null,
+	let values: typeof errors = {
+		nameFirst: null,
+		nameLast: null,
 		email: null,
 	};
 
 	if (!email) errors.email = "Missing email";
-	if (!name) errors.email = "Missing name";
 	if (!isValidEmail(email)) {
 		errors.email = "Invalid email";
 		values.email = typeof email === "string" ? email : null;
 	}
 
-	if (typeof name !== "string") {
-		errors.name = "Invalid name";
-	} else if (/[<>[\]()@#$%^*=!{}\\/]/.test(name)) {
-		errors.name =
-			"Name cannot contain any of the following characters:\n< > [ ] ( ) @ # $ % ^ * = ! { } \\";
-		values.name = name;
+	if (nameFirst != null) {
+		if (typeof nameFirst !== "string") {
+			errors.nameFirst = "Invalid first name";
+		} else if (/[<>[\]()@#$%^*=!{}\\/]/.test(nameFirst)) {
+			errors.nameFirst =
+				"Name cannot contain any of the following characters:\n< > [ ] ( ) @ # $ % ^ * = ! { } \\";
+			values.nameFirst = nameFirst;
+		}
+	}
+	if (nameLast != null) {
+		if (typeof nameLast !== "string") {
+			errors.nameLast = "Invalid last name";
+		} else if (/[<>[\]()@#$%^*=!{}\\/]/.test(nameLast)) {
+			errors.nameLast =
+				"Name cannot contain any of the following characters:\n< > [ ] ( ) @ # $ % ^ * = ! { } \\";
+			values.nameLast = nameLast;
+		}
 	}
 
-	if (errors.email || errors.name) {
-		return json({ errors, values }, { status: 400 });
+	if (errors.email || errors.nameFirst || errors.nameLast) {
+		return json({ errors, values, formError: null }, { status: 400 });
 	}
 
-	// TODO: Implement sign up logic
+	let subscriber: EmailSubscriber;
+	try {
+		subscriber = await createSubscriber({
+			email: email as string,
+			nameFirst: nameFirst as string,
+			nameLast: nameLast as string,
+		});
+	} catch (error) {
+		return json(
+			{
+				values,
+				errors,
+				formError:
+					"There was an error subscribing to the newsletter. Please try again later.",
+			},
+			{ status: 500 }
+		);
+	}
 
-	return redirect(
-		`/sign-up?success&name=${encodeURIComponent(
-			name as string
-		)}&email=${encodeURIComponent(email as string)}`
-	);
+	if (preventRedirect) {
+		return json({
+			subscriber,
+			values,
+			errors,
+			formError: null,
+		});
+	}
+
+	let params = new URLSearchParams();
+	params.set("success", "true");
+	subscriber.nameFirst && params.set("nameFirst", subscriber.nameFirst);
+	subscriber.nameLast && params.set("nameLast", subscriber.nameLast);
+	params.set("email", subscriber.email);
+	let search = "?" + params.toString();
+	let defaultRedirectUrl = `/sign-up${search}`;
+	return safeRedirect(redirectTo || defaultRedirectUrl, defaultRedirectUrl);
 }
 
 export default function SignUpRoute() {
-	let { errors, values } = useActionData<typeof action>() || {};
+	let { errors, values, formError } = useActionData<typeof action>() || {};
 	let [params] = useSearchParams();
 	let success = params.get("success");
 
@@ -78,15 +133,6 @@ export default function SignUpRoute() {
 							fields={
 								<>
 									<SignUpFormField
-										id="form-field-name"
-										name="name"
-										errorMessage={errors?.name}
-										defaultValue={values?.name || undefined}
-										label="Your name"
-										required
-										type="text"
-									/>
-									<SignUpFormField
 										id="form-field-email"
 										name="email"
 										errorMessage={errors?.email}
@@ -95,6 +141,35 @@ export default function SignUpRoute() {
 										required
 										type="email"
 									/>
+									<SignUpFormField
+										id="form-field-name-first"
+										name="nameFirst"
+										errorMessage={errors?.nameFirst}
+										defaultValue={values?.nameFirst || undefined}
+										label="First name"
+										type="text"
+									/>
+									<SignUpFormField
+										id="form-field-name-last"
+										name="nameLast"
+										errorMessage={errors?.nameLast}
+										defaultValue={values?.nameLast || undefined}
+										label="Last name"
+										type="text"
+									/>
+									<div className="sr-only">
+										<label htmlFor="form-field-phone">Phone number</label>
+										<span id="phone-desc">
+											Screen-reader users: do not complete this field or the
+											form submission will fail.
+										</span>
+										<input
+											id="form-field-phone"
+											aria-describedby="phone-desc"
+											type="text"
+											name="phone"
+										/>
+									</div>
 								</>
 							}
 							submitButton={
@@ -107,7 +182,15 @@ export default function SignUpRoute() {
 							}
 						/>
 					</div>
-					{success === "true" ? (
+					{formError ? (
+						<div
+							style={{
+								marginTop: "1rem",
+							}}
+						>
+							<Text color="critical">{formError}</Text>
+						</div>
+					) : success === "true" ? (
 						<div
 							style={{
 								marginTop: "1rem",
