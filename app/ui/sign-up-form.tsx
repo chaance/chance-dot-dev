@@ -7,14 +7,20 @@ import { Button } from "~/ui/primitives/button";
 
 const SignUpForm = React.forwardRef<HTMLFormElement, SignUpFormProps>(
 	(
-		{ formComponent: FormComp = Form, fields, submitButton, ...props },
+		{
+			formComponent: FormComp = Form,
+			fields,
+			submitButton,
+			formAction = "/sign-up",
+			...props
+		},
 		forwardedRef
 	) => {
 		const ROOT_CLASS = "cs--sign-up-form";
 		return (
 			<FormComp
 				ref={forwardedRef}
-				action="/sign-up"
+				action={formAction}
 				method="post"
 				className={ROOT_CLASS}
 			>
@@ -27,9 +33,10 @@ const SignUpForm = React.forwardRef<HTMLFormElement, SignUpFormProps>(
 SignUpForm.displayName = "SignUpForm";
 
 interface SignUpFormProps {
-	ref?: React.Ref<HTMLFormElement>;
-	formComponent?: typeof Form | "form";
 	fields: React.ReactNode;
+	formAction?: string;
+	formComponent?: typeof Form | "form";
+	ref?: React.Ref<HTMLFormElement>;
 	submitButton: React.ReactNode;
 }
 

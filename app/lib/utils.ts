@@ -455,3 +455,11 @@ export function isEmailLike(string: string) {
 export function isValidEmail(email: unknown): email is string {
 	return typeof email === "string" && isEmailLike(email);
 }
+
+export function getFormDataStringValue(formData: FormData, fieldName: string) {
+	let value = formData.get(fieldName);
+	if (value == null || typeof value !== "string") {
+		return null;
+	}
+	return value;
+}

@@ -1,7 +1,7 @@
 import type { ActionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useActionData, useSearchParams } from "@remix-run/react";
-import { isValidEmail } from "~/lib/utils";
+import { getFormDataStringValue, isValidEmail } from "~/lib/utils";
 import { safeRedirect } from "~/lib/utils.server";
 import type { EmailSubscriber } from "~/models/email-list.server";
 import { createSubscriber } from "~/models/email-list.server";
@@ -9,6 +9,7 @@ import { Container } from "~/ui/container";
 import { Button } from "~/ui/primitives/button";
 import { SignUpForm, SignUpFormField } from "~/ui/sign-up-form";
 import { Text } from "~/ui/text";
+import { addSubscriberToForm } from "~/lib/convertkit.server";
 
 // export async function loader({ request }: LoaderArgs) {
 // 	// TODO: Remove after implementing sign up logic
@@ -17,74 +18,115 @@ import { Text } from "~/ui/text";
 
 export async function action({ request }: ActionArgs) {
 	let formData = await request.formData();
-	let honeypot = formData.get("phone");
-	let email = formData.get("email");
-	let nameFirst = formData.get("nameFirst");
-	let nameLast = formData.get("nameLast");
-	let redirectTo = formData.get("redirectTo");
-	let preventRedirect = formData.get("preventRedirect") === "true";
-	if (honeypot) {
-		return json(null, 400);
-	}
-
+	let fields = {
+		email: getFormDataStringValue(formData, "email"),
+		nameFirst: getFormDataStringValue(formData, "nameFirst"),
+		nameLast: getFormDataStringValue(formData, "nameLast"),
+		redirectTo: getFormDataStringValue(formData, "redirectTo"),
+		convertKitFormId: getFormDataStringValue(formData, "convertKitFormId"),
+	};
 	let errors: {
 		nameFirst: null | string;
 		nameLast: null | string;
 		email: null | string;
+		convertKitFormId: null | string;
 	} = {
 		nameFirst: null,
 		nameLast: null,
 		email: null,
-	};
-	let values: typeof errors = {
-		nameFirst: null,
-		nameLast: null,
-		email: null,
+		convertKitFormId: null,
 	};
 
-	if (!email) errors.email = "Missing email";
-	if (!isValidEmail(email)) {
+	let honeypot = formData.get("phone");
+	if (honeypot) {
+		console.log("FAILED HONEYPOT");
+		// Send a 200 response so the form doesn't show an error. Bots don't deserve
+		// to know they failed.
+		return json({
+			status: "success" as const,
+			values: fields,
+			errors,
+			formError: null,
+		});
+	}
+
+	let preventRedirect = formData.get("preventRedirect") === "true";
+	console.log({ preventRedirect });
+
+	if (!fields.email) {
+		errors.email = "Missing email";
+	} else if (!isValidEmail(fields.email)) {
 		errors.email = "Invalid email";
-		values.email = typeof email === "string" ? email : null;
 	}
 
-	if (nameFirst != null) {
-		if (typeof nameFirst !== "string") {
-			errors.nameFirst = "Invalid first name";
-		} else if (/[<>[\]()@#$%^*=!{}\\/]/.test(nameFirst)) {
-			errors.nameFirst =
-				"Name cannot contain any of the following characters:\n< > [ ] ( ) @ # $ % ^ * = ! { } \\";
-			values.nameFirst = nameFirst;
-		}
+	if (!fields.nameFirst) {
+		errors.nameFirst = "Missing first name";
+	} else if (fields.nameFirst.length > 60) {
+		errors.nameFirst = "First name is too long";
+	} else if (/[<>[\]()@#$%^*=!{}\\/]/.test(fields.nameFirst)) {
+		errors.nameFirst =
+			"Name cannot contain any of the following characters:\n< > [ ] ( ) @ # $ % ^ * = ! { } \\";
 	}
-	if (nameLast != null) {
-		if (typeof nameLast !== "string") {
-			errors.nameLast = "Invalid last name";
-		} else if (/[<>[\]()@#$%^*=!{}\\/]/.test(nameLast)) {
+
+	if (fields.nameLast != null) {
+		if (fields.nameLast.length > 60) {
+			errors.nameLast = "Last name is too long";
+		} else if (/[<>[\]()@#$%^*=!{}\\/]/.test(fields.nameLast)) {
 			errors.nameLast =
 				"Name cannot contain any of the following characters:\n< > [ ] ( ) @ # $ % ^ * = ! { } \\";
-			values.nameLast = nameLast;
 		}
+	}
+
+	if (!fields.convertKitFormId) {
+		errors.convertKitFormId = "Missing ConvertKit form ID";
 	}
 
 	if (errors.email || errors.nameFirst || errors.nameLast) {
-		return json({ errors, values, formError: null }, { status: 400 });
-	}
-
-	let subscriber: EmailSubscriber;
-	try {
-		subscriber = await createSubscriber({
-			email: email as string,
-			nameFirst: nameFirst as string,
-			nameLast: nameLast as string,
-		});
-	} catch (error) {
 		return json(
 			{
-				values,
+				errors,
+				values: fields,
+				formError: null,
+				status: "field-errors" as const,
+			},
+			{ status: 400 }
+		);
+	}
+
+	// let subscriber: EmailSubscriber;
+	// try {
+	// 	subscriber = await createSubscriber({
+	// 		email: fields.email!,
+	// 		nameFirst: fields.nameFirst!,
+	// 		nameLast: fields.nameLast,
+	// 	});
+	// } catch (error) {
+	// 	return json(
+	// 		{
+	// 			values: fields,
+	// 			errors,
+	// 			formError:
+	// 				"There was an error subscribing to the newsletter. Please try again later.",
+	// 		},
+	// 		{ status: 500 }
+	// 	);
+	// }
+
+	try {
+		await addSubscriberToForm({
+			convertKitFormId: fields.convertKitFormId!,
+			email: fields.email!,
+			nameFirst: fields.nameFirst!,
+			nameLast: fields.nameLast,
+		});
+	} catch (error: unknown) {
+		return json(
+			{
+				values: fields,
 				errors,
 				formError:
 					"There was an error subscribing to the newsletter. Please try again later.",
+				status: "error" as const,
 			},
 			{ status: 500 }
 		);
@@ -92,21 +134,22 @@ export async function action({ request }: ActionArgs) {
 
 	if (preventRedirect) {
 		return json({
-			subscriber,
-			values,
+			// subscriber,
+			values: fields,
 			errors,
 			formError: null,
+			status: "success" as const,
 		});
 	}
 
 	let params = new URLSearchParams();
 	params.set("success", "true");
-	subscriber.nameFirst && params.set("nameFirst", subscriber.nameFirst);
-	subscriber.nameLast && params.set("nameLast", subscriber.nameLast);
-	params.set("email", subscriber.email);
+	params.set("nameFirst", fields.nameFirst!);
+	fields.nameLast && params.set("nameLast", fields.nameLast);
+	params.set("email", fields.email!);
 	let search = "?" + params.toString();
 	let defaultRedirectUrl = `/sign-up${search}`;
-	return safeRedirect(redirectTo || defaultRedirectUrl, defaultRedirectUrl);
+	return safeRedirect(formData.get("redirectTo"), defaultRedirectUrl);
 }
 
 export default function SignUpRoute() {

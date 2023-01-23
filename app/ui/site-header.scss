@@ -136,6 +136,7 @@ $small_menu_breakpoint: media.get(sm);
 		gap: 1em;
 		@media screen and (#{$small_menu_breakpoint}) {
 			display: flex;
+			gap: 2em;
 		}
 	}
 
