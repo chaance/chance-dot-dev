@@ -1,0 +1,37 @@
+@use "~/styles/system/media";
+
+.page--links {
+	height: 100%;
+
+	@media (--sm) {
+		font-size: 1.5em;
+	}
+
+	@media (--lg) {
+		font-size: 2em;
+	}
+
+	&__wrap {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+	&__title {
+		font-size: 1.25em;
+		font-weight: bold;
+		margin-bottom: 0.75em;
+	}
+
+	&__list {
+		display: flex;
+		flex-direction: column;
+		gap: 1em;
+	}
+
+	&__list-item-desc {
+		font-size: max(0.725em, 15px);
+		opacity: 0.5;
+	}
+}
