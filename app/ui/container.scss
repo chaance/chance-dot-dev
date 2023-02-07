@@ -19,6 +19,10 @@
 		max-width: 80rem;
 	}
 
+	&:where(#{$self}--full-height) {
+		height: 100%;
+	}
+
 	@media (--sm) {
 		padding-left: var(--cs-space-xl);
 		padding-right: var(--cs-space-xl);
