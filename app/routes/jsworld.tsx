@@ -19,6 +19,11 @@ const LINKS = [
 		url: "https://www.youtube.com/watch?v=lFOfQsi5ye0",
 	},
 	{
+		title: "The Great Divide",
+		desc: "Chris Coyier, 2019",
+		url: "https://css-tricks.com/the-great-divide/",
+	},
+	{
 		title: "When to Fetch?",
 		desc: "Ryan Florence, 2022",
 		url: "https://www.youtube.com/watch?v=95B8mnhzoCM",
