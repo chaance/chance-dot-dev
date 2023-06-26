@@ -31,7 +31,7 @@ export function PrimaryLayout({ children }: React.PropsWithChildren<{}>) {
 			</div>
 			<div className={`${ROOT_CLASS}__main`}>{children}</div>
 			<div className={`${ROOT_CLASS}__footer`}>
-				<SiteFooter includeTopMargin={false} />
+				<SiteFooter />
 			</div>
 		</div>
 	);
