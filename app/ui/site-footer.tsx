@@ -1,10 +1,10 @@
 import * as React from "react";
-import { GitHubIcon, LinkedInIcon, TwitterIcon } from "~/ui/icons";
 import { Container } from "~/ui/container";
+import { TwitterIcon, GitHubIcon, LinkedInIcon } from "~/ui/icons";
 
 const ROOT_CLASS = "cs--site-footer";
 
-const navLinks: SiteNavLink[] = [
+const navLinks = [
 	{
 		label: "Twitter",
 		href: "https://twitter.com/chancethedev/",
@@ -20,12 +20,9 @@ const navLinks: SiteNavLink[] = [
 		href: "https://www.linkedin.com/in/chaance/",
 		icon: <LinkedInIcon titleId="footer-icon-linkedin" aria-hidden />,
 	},
-];
+] as const;
 
-const SiteFooter: React.FC<SiteFooterProps> = ({
-	id,
-	includeTopMargin = true,
-}) => {
+const SiteFooter: React.FC<SiteFooterProps> = ({ id }) => {
 	return (
 		<footer id={id as string} className={ROOT_CLASS}>
 			<Container purpose="footer">
@@ -60,7 +57,7 @@ const SiteFooter: React.FC<SiteFooterProps> = ({
 						</ul>
 					</nav>
 					<p className={`${ROOT_CLASS}__copyright`}>
-						&copy; nobody cares.{" "}
+						&copy; Tony Chanceloney Inc.{" "}
 						<span className="block sm:inline">
 							All rights reserved, I guess.
 						</span>
@@ -73,14 +70,7 @@ const SiteFooter: React.FC<SiteFooterProps> = ({
 
 interface SiteFooterProps {
 	id?: string | number;
-	includeTopMargin?: boolean;
 }
 
 export type { SiteFooterProps };
 export { SiteFooter };
-
-interface SiteNavLink {
-	label: string;
-	href: string;
-	icon: React.ReactElement;
-}
