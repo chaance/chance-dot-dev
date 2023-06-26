@@ -37,9 +37,11 @@ export default function HomeRoute() {
 									/>
 								</dt>
 								<dd>
-									<a href="https://remix.run">Remix</a>{" "}
-									<span aria-hidden>@</span>
-									<span className="sr-only">at</span> Shopify
+									Software <span aria-hidden>@</span>
+									<span className="sr-only">at</span>{" "}
+									<a href="https://replo.app" target="_blank" rel="noreferrer">
+										Replo
+									</a>
 								</dd>
 							</div>
 							<div className={`${ROOT_CLASS}__intro-item`}>
