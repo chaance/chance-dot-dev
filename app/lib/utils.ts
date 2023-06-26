@@ -176,10 +176,6 @@ export function setBrowserEnvVar(key: string, value: string) {
 	window.__chance_dot_dev_env[key] = value;
 }
 
-export function isValidEmail(email: unknown): email is string {
-	return typeof email === "string" && email.length > 3 && email.includes("@");
-}
-
 export function isNonEmptyString(val: any): val is string {
 	return isString(val) && val.length > 0;
 }
@@ -402,4 +398,65 @@ export function bem(
 		}
 	}
 	return className;
+}
+
+export function composeEventHandlers<
+	EventType extends { defaultPrevented: boolean }
+>(
+	theirHandler: ((event: EventType) => any) | undefined,
+	ourHandler: (event: EventType) => any
+): (event: EventType) => any {
+	return (event) => {
+		theirHandler && theirHandler(event);
+		if (!event.defaultPrevented) {
+			return ourHandler(event);
+		}
+	};
+}
+
+export function getOwnerDocument<T extends Node>(
+	element: T | null | undefined
+) {
+	if (!canUseDOM) {
+		throw new Error(
+			"getOwnerDocument can only be used in a browser environment"
+		);
+	}
+	return element?.ownerDocument || document;
+}
+
+export function getOwnerWindow<T extends Element>(
+	element: T | null | undefined
+) {
+	if (!canUseDOM) {
+		throw new Error("getOwnerWindow can only be used in a browser environment");
+	}
+	let ownerDocument = getOwnerDocument(element);
+	return ownerDocument.defaultView || window;
+}
+
+// MIT License, Copyright (c) Sindre Sorhus
+// https://github.com/sindresorhus/email-regex/blob/main/index.js
+export function emailRegex({ exact }: { exact?: boolean } = {}) {
+	const EMAIL_REGEX =
+		"[^\\.\\s@:](?:[^\\s@:]*[^\\s@:\\.])?@[^\\.\\s@]+(?:\\.[^\\.\\s@]+)*";
+	return exact ? new RegExp(`^${EMAIL_REGEX}$`) : new RegExp(EMAIL_REGEX, "g");
+}
+
+// MIT License, Copyright (c) Sindre Sorhus
+// https://github.com/sindresorhus/is-email-like/blob/main/index.js
+export function isEmailLike(string: string) {
+	return emailRegex({ exact: true }).test(string);
+}
+
+export function isValidEmail(email: unknown): email is string {
+	return typeof email === "string" && isEmailLike(email);
+}
+
+export function getFormDataStringValue(formData: FormData, fieldName: string) {
+	let value = formData.get(fieldName);
+	if (value == null || typeof value !== "string") {
+		return null;
+	}
+	return value;
 }
