@@ -201,7 +201,6 @@ async function getPlugins() {
 
 					if (node.lang === "js") node.lang = "javascript";
 					if (node.lang === "ts") node.lang = "typescript";
-					console.log({ lang: node.lang });
 					let language = node.lang;
 					let code = node.value;
 					let {
