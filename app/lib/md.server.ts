@@ -1,9 +1,8 @@
 import parseFrontMatter from "front-matter";
 import rangeParser from "parse-numeric-range";
-import { getHighlighter, /* loadTheme, */ toShikiTheme } from "shiki";
-import { vscodeColorTheme } from "~/lib/vscode-theme";
 import { isString } from "~/lib/utils";
 import LRUCache from "lru-cache";
+import type { Tinypool as TTinypool } from "tinypool";
 
 import type * as Unist from "unist";
 import type * as Hast from "hast";
@@ -11,6 +10,8 @@ import type * as Shiki from "shiki";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const NO_CACHE = process.env.NO_CACHE;
+
+let tokenizePool: TTinypool;
 
 export const markdownCache = new LRUCache<string, MarkdownParsed>({
 	max: 300,
@@ -91,7 +92,6 @@ async function getProcessor(options: ProcessorOptions = {}) {
 
 async function getPlugins() {
 	// Shiki Theme values
-	let theme = toShikiTheme(vscodeColorTheme);
 	let langs: Shiki.Lang[] = [
 		"css",
 		"diff",
@@ -115,10 +115,10 @@ async function getPlugins() {
 	];
 	let langSet = new Set(langs);
 
-	let [{ visit, SKIP }, { htmlEscape }, highlighter] = await Promise.all([
+	let [{ visit, SKIP }, { htmlEscape }, { Tinypool }] = await Promise.all([
 		import("unist-util-visit"),
 		import("escape-goat"),
-		getHighlighter({ themes: [theme], langs }),
+		import("tinypool"),
 	]);
 
 	return {
@@ -181,128 +181,177 @@ async function getPlugins() {
 			};
 		},
 		remarkCodeBlocksPlugin() {
-			return async function transformer(tree: UnistNode.Root): Promise<void> {
-				let themeName = "base16";
+			// Using Tinypool because Shiki has memory leaks. See notes in
+			// shiki-worker.js for details.
+			tokenizePool =
+				tokenizePool ||
+				new Tinypool({
+					// worker directory is relative to the build output
+					filename: require.resolve("../workers/shiki-worker.js"),
+					minThreads: 0,
+					idleTimeout: 60,
+				});
 
+			return async function transformer(tree: UnistNode.Root): Promise<void> {
+				let transformTasks: Array<() => Promise<void>> = [];
 				visit(tree, "code", (node) => {
 					if (!node.lang || !node.value || !langSet.has(node.lang)) {
 						return;
 					}
 
-					switch (node.lang) {
-						case "js":
-							node.lang = "javascript";
-							break;
-						case "ts":
-							node.lang = "typescript";
-							break;
-					}
+					if (node.lang === "js") node.lang = "javascript";
+					if (node.lang === "ts") node.lang = "typescript";
+					console.log({ lang: node.lang });
+					let language = node.lang;
+					let code = node.value;
+					let {
+						addedLines,
+						highlightLines,
+						nodeProperties,
+						removedLines,
+						startingLineNumber,
+						usesLineNumbers,
+					} = getCodeBlockMeta();
 
-					// TODO: figure out how this is ever an array?
-					let meta = Array.isArray(node.meta) ? node.meta[0] : node.meta;
-
-					let metaParams = new URLSearchParams();
-					if (meta) {
-						let linesHighlightsMetaShorthand = meta.match(/^\[(.+)\]$/);
-						if (linesHighlightsMetaShorthand) {
-							metaParams.set("lines", linesHighlightsMetaShorthand[0]);
-						} else {
-							metaParams = new URLSearchParams(meta.split(/\s+/).join("&"));
-						}
-					}
-
-					let highlightLines = parseLineHighlights(metaParams.get("lines"));
-					let numbers = !metaParams.has("nonumber");
-
-					let fgColor = convertFakeHexToCustomProp(
-						highlighter.getForegroundColor(themeName) || ""
-					);
-					// let bgColor = convertFakeHexToCustomProp(
-					// 	highlighter.getBackgroundColor(themeName) || ""
-					// );
-					let tokens = highlighter.codeToThemedTokens(
-						node.value!,
-						node.lang,
-						themeName
-					);
-					let children = tokens.map(
-						(lineTokens, zeroBasedLineNumber): Hast.Element => {
-							let children = lineTokens.map(
-								(token): Hast.Text | Hast.Element => {
-									let color = convertFakeHexToCustomProp(token.color || "");
-									let content: Hast.Text = {
-										type: "text",
-										// Do not escape the _actual_ content
-										value: token.content,
-									};
-
-									return color && color !== fgColor
-										? {
-												type: "element",
-												tagName: "span",
-												properties: {
-													style: `color: ${htmlEscape(color)}`,
-												},
-												children: [content],
-										  }
-										: content;
-								}
-							);
-
-							children.push({
-								type: "text",
-								value: "\n",
-							});
-
-							return {
-								type: "element",
-								tagName: "span",
-								properties: {
-									className: "codeblock-line",
-									dataHighlight: highlightLines?.includes(
-										zeroBasedLineNumber + 1
-									)
-										? "true"
-										: undefined,
-									dataLineNumber: zeroBasedLineNumber + 1,
-								},
-								children,
-							};
-						}
-					);
-
-					let metaProps: { [key: string]: string } = {};
-					metaParams.forEach((val, key) => {
-						if (key === "lines") return;
-						metaProps[`data-${key}`] = val;
-					});
-
-					let nodeValue = {
-						type: "element",
-						tagName: "pre",
-						properties: {
-							...metaProps,
-							dataLineNumbers: numbers ? "true" : "false",
-							dataLang: htmlEscape(node.lang),
-							style: `color: ${htmlEscape(fgColor)};`,
-						},
-						children: [
-							{
-								type: "element",
-								tagName: "code",
-								children,
-							},
-						],
-					};
-
-					let data = node.data ?? (node.data = {});
-
-					(node as any).type = "element";
-					data.hProperties ??= {};
-					data.hChildren = [nodeValue];
-
+					transformTasks.push(highlightNodes);
 					return SKIP;
+
+					async function highlightNodes() {
+						let { bgColor, fgColor, tokens } = await getThemedTokens({
+							code,
+							language,
+						});
+						let children = tokens.map(
+							(lineTokens, zeroBasedLineNumber): Hast.Element => {
+								let children = lineTokens.map(
+									(token): Hast.Text | Hast.Element => {
+										let color = convertFakeHexToCustomProp(token.color || "");
+										let content: Hast.Text = {
+											type: "text",
+											// Do not escape the _actual_ content
+											value: token.content,
+										};
+
+										return color && color !== fgColor
+											? {
+													type: "element",
+													tagName: "span",
+													properties: {
+														style: `color: ${htmlEscape(color)}`,
+													},
+													children: [content],
+											  }
+											: content;
+									}
+								);
+
+								children.push({
+									type: "text",
+									value: "\n",
+								});
+
+								let isDiff = addedLines.length > 0 || removedLines.length > 0;
+								let diffLineNumber = startingLineNumber - 1;
+								let lineNumber = zeroBasedLineNumber + startingLineNumber;
+								let highlightLine = highlightLines?.includes(lineNumber);
+								let removeLine = removedLines.includes(lineNumber);
+								let addLine = addedLines.includes(lineNumber);
+								if (!removeLine) {
+									diffLineNumber++;
+								}
+
+								return {
+									type: "element",
+									tagName: "span",
+									properties: {
+										className: "codeblock-line",
+										dataHighlight: highlightLine ? "true" : undefined,
+										dataLineNumber: usesLineNumbers ? lineNumber : undefined,
+										dataAdd: isDiff ? addLine : undefined,
+										dataRemove: isDiff ? removeLine : undefined,
+										dataDiffLineNumber: isDiff ? diffLineNumber : undefined,
+									},
+									children,
+								};
+							}
+						);
+
+						let nodeValue = {
+							type: "element",
+							tagName: "pre",
+							properties: {
+								...nodeProperties,
+								dataLineNumbers: usesLineNumbers ? "true" : "false",
+								dataLang: htmlEscape(language),
+								style: `color: ${htmlEscape(
+									fgColor
+								)};background-color: ${htmlEscape(bgColor)}`,
+							},
+							children: [
+								{
+									type: "element",
+									tagName: "code",
+									children,
+								},
+							],
+						};
+
+						let data = node.data ?? {};
+						(node as any).type = "element";
+						data.hProperties ??= {};
+						data.hChildren = [nodeValue];
+						node.data = data;
+					}
+
+					function getCodeBlockMeta() {
+						// TODO: figure out how this is ever an array?
+						let meta = Array.isArray(node.meta) ? node.meta[0] : node.meta;
+
+						let metaParams = new URLSearchParams();
+						if (meta) {
+							let linesHighlightsMetaShorthand = meta.match(/^\[(.+)\]$/);
+							if (linesHighlightsMetaShorthand) {
+								metaParams.set("lines", linesHighlightsMetaShorthand[0]);
+							} else {
+								metaParams = new URLSearchParams(meta.split(/\s+/).join("&"));
+							}
+						}
+
+						let addedLines = parseLineHighlights(metaParams.get("add"));
+						let removedLines = parseLineHighlights(metaParams.get("remove"));
+						let highlightLines = parseLineHighlights(metaParams.get("lines"));
+						let startValNum = metaParams.has("start")
+							? Number(metaParams.get("start"))
+							: 1;
+						let startingLineNumber = Number.isFinite(startValNum)
+							? startValNum
+							: 1;
+						let usesLineNumbers = !metaParams.has("nonumber");
+
+						let nodeProperties: { [key: string]: string } = {};
+						metaParams.forEach((val, key) => {
+							if (key === "lines") return;
+							nodeProperties[`data-${key}`] = val;
+						});
+
+						return {
+							addedLines,
+							highlightLines,
+							nodeProperties,
+							removedLines,
+							startingLineNumber,
+							usesLineNumbers,
+						};
+					}
 				});
+
+				await Promise.all(transformTasks.map((exec) => exec()));
+
+				async function getThemedTokens(
+					args: WorkerArgs
+				): Promise<WorkerResult> {
+					return await tokenizePool.run(args);
+				}
 			};
 		},
 	};
@@ -410,3 +459,8 @@ namespace UnistNode {
 		value: string;
 	}
 }
+
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+type WorkerFn = typeof import("~/../workers/shiki-worker");
+type WorkerArgs = Parameters<WorkerFn>[0];
+type WorkerResult = Awaited<ReturnType<WorkerFn>>;
