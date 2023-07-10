@@ -1,11 +1,15 @@
-// import { redirect } from "@remix-run/node";
 import { Container } from "~/ui/container";
 import { BriefcaseIcon, GlobeIcon } from "~/ui/icons";
 
 import routeStylesUrl from "~/dist/styles/routes/__main/index.css";
+import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
 
 export function links() {
 	return [{ rel: "stylesheet", href: routeStylesUrl }];
+}
+
+export function meta() {
+	return getSeoMeta(DEFAULT_METADATA);
 }
 
 const ROOT_CLASS = "page--home";

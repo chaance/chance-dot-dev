@@ -17,5 +17,12 @@ const config = {
 			version: 28,
 		},
 	},
+	rules: {
+		"prefer-const": "off",
+		"@typescript-eslint/ban-ts-comment": "off",
+		"@typescript-eslint/no-non-null-assertion": "off",
+		"@typescript-eslint/no-empty-interface": "off",
+		"@typescript-eslint/no-unused-vars": "warn",
+	},
 };
 module.exports = config;

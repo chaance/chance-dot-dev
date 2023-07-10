@@ -1,18 +1,19 @@
 import * as React from "react";
 import { json } from "@remix-run/node";
+import type { LoaderArgs } from "@remix-run/node";
 import {
 	Links,
 	Meta,
 	Outlet,
 	ScrollRestoration,
 	Scripts,
-	useCatch,
-	useTransition,
+	useNavigation,
 	useFetchers,
+	isRouteErrorResponse,
 } from "@remix-run/react";
-import type { MetaFunction, LoaderArgs } from "@remix-run/node";
+import type { ErrorResponse } from "@remix-run/router";
 import { Container } from "~/ui/container";
-import { getSeo } from "~/lib/seo";
+// import { getSeo } from "~/lib/seo";
 import { RouteChangeAnnouncement } from "~/ui/primitives/route-change-announcement";
 import { RootProvider } from "~/lib/react/context";
 import { useIsHydrated } from "~/lib/react/use-is-hydrated";
@@ -26,24 +27,8 @@ import fontStylesUrl from "~/dist/styles/fonts.css";
 const DISABLE_JS = false;
 const ROOT_CLASS = "layout--root";
 
-let [seoMeta, seoLinks] = getSeo({
-	title: "chance.dev",
-	description:
-		"Thoughts and experiences from a southeastern web dev in southern California",
-	twitter: {
-		site: "@chancethedev",
-		creator: "@chancethedev",
-		card: "summary_large_image",
-		image: {
-			alt: "Chance the Dev: Web developer. Open source maker. Southern fella on the west coast.",
-			url: `https://chance.dev/images/root-twitter-card.jpg`,
-		},
-	},
-});
-
 export function links() {
 	return [
-		...seoLinks,
 		{
 			rel: "apple-touch-icon",
 			sizes: "180x180",
@@ -78,20 +63,14 @@ export function links() {
 	];
 }
 
-export const meta: MetaFunction = () => {
-	return {
-		...seoMeta,
-	};
-};
-
-export let loader = async ({ request }: LoaderArgs) => {
+export async function loader({ request }: LoaderArgs) {
 	let data = {
 		requestInfo: {
 			origin: getDomainUrl(request),
 		},
 	};
 	return json(data);
-};
+}
 
 export function unstable_shouldReload() {
 	return false;
@@ -145,16 +124,11 @@ function Document({
 	);
 }
 
-function Layout({ children }: React.PropsWithChildren<{}>) {
+function Layout({ children }: React.PropsWithChildren) {
 	return <div className="chance-dot-dev">{children}</div>;
 }
 
-export function CatchBoundary() {
-	let caught = useCatch();
-	if (process.env.NODE_ENV === "development") {
-		console.error("ROOT CATCH BOUNDARY: ", caught);
-	}
-
+function CatchBoundary({ caught }: { caught: ErrorResponse }) {
 	let message;
 	switch (caught.status) {
 		case 401:
@@ -204,6 +178,10 @@ export function ErrorBoundary({ error }: { error: Error }) {
 		console.error("ROOT ERROR BOUNDARY: ", error);
 	}
 
+	if (isRouteErrorResponse(error)) {
+		return <CatchBoundary caught={error} />;
+	}
+
 	return (
 		<Document meta={<title>Danger, Will Robinson! 500! | chance.dev</title>}>
 			<Layout>
@@ -237,18 +215,18 @@ function getDomainUrl(request: Request) {
 }
 
 function useProgressBar() {
-	let transition = useTransition();
+	let navigation = useNavigation();
 	let fetchers = useFetchers();
 	let state: "idle" | "busy" = React.useMemo(() => {
 		let states = [
-			transition.state,
+			navigation.state,
 			...fetchers.map((fetcher) => fetcher.state),
 		];
 		if (states.every((state) => state === "idle")) {
 			return "idle";
 		}
 		return "busy";
-	}, [transition.state, fetchers]);
+	}, [navigation.state, fetchers]);
 
 	let nProgressRef = React.useRef<typeof NProgress | null>(null);
 	React.useEffect(() => {

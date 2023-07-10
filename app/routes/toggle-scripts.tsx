@@ -1,5 +1,5 @@
 import { redirect } from "@remix-run/node";
-import type { ActionFunction, LoaderFunction } from "@remix-run/node";
+import type { ActionArgs } from "@remix-run/node";
 import { serverSessionStorage } from "~/lib/session.server";
 import { isString } from "~/lib/utils";
 
@@ -7,11 +7,11 @@ const ENABLED = "enabled";
 const DISABLED = "disabled";
 const SESSION_KEY = "scripts";
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
 	return redirect("/");
-};
+}
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request }: ActionArgs) {
 	let [session, formData] = await Promise.all([
 		serverSessionStorage.getSession(request.headers.get("Cookie")),
 		request.formData(),
@@ -44,4 +44,4 @@ export const action: ActionFunction = async ({ request }) => {
 		});
 	}
 	return redirect(redirectTo, { status: 400 });
-};
+}

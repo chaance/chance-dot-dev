@@ -4,7 +4,7 @@ import { Container } from "~/ui/container";
 import { getMarkdownBlogPost, type MarkdownBlogPost } from "~/lib/blog.server";
 import type {
 	HeadersFunction,
-	MetaFunction,
+	V2_MetaFunction as MetaFunction,
 	LoaderArgs,
 } from "@remix-run/node";
 import { isAbsoluteUrl, unSlashIt } from "~/lib/utils";
@@ -12,6 +12,7 @@ import { isAbsoluteUrl, unSlashIt } from "~/lib/utils";
 import routeStylesUrl from "~/dist/styles/routes/__main/blog/_slug.css";
 import invariant from "tiny-invariant";
 import { getSessionUser } from "~/lib/session.server";
+import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
 
 export function links() {
 	return [{ rel: "stylesheet", href: routeStylesUrl }];
@@ -48,7 +49,6 @@ export async function loader({ params, request }: LoaderArgs) {
 
 	let fullPost: PostData = {
 		...post,
-		// temporary...
 		title: post.title.replace(/&colon;/g, ":"),
 		createdAtFormatted: createdAt.toLocaleString("en-us", {
 			year: "numeric",
@@ -74,10 +74,13 @@ export async function loader({ params, request }: LoaderArgs) {
 	return json({ post: fullPost, user, siteUrl }, { headers });
 }
 
-export let meta: MetaFunction<typeof loader> = ({ data }) => {
-	data = data || {};
-	let { siteUrl } = data;
-	let { title, description, seo, slug, createdAtFormatted } = data.post || {};
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+	if (!data) {
+		return getSeoMeta(DEFAULT_METADATA);
+	}
+
+	const { siteUrl, post } = data;
+	let { title, description, seo, slug, createdAtFormatted } = post;
 
 	let url = `${siteUrl}/blog/${slug}`;
 	let socialImageUrl = `${siteUrl}/img/social?${new URLSearchParams({
@@ -89,28 +92,35 @@ export let meta: MetaFunction<typeof loader> = ({ data }) => {
 		date: createdAtFormatted,
 	})}`;
 
-	return {
-		title: `${title} | chance.dev`,
+	const twitterImageUrl = seo?.twitterCard
+		? isAbsoluteUrl(seo.twitterCard)
+			? seo.twitterCard
+			: `${siteUrl}/${unSlashIt(seo.twitterCard)}`
+		: socialImageUrl;
 
-		// May be undefined, fix in remix. Will render a pointless tag for now.
-		description: description!,
-		image: socialImageUrl || undefined,
-		"og:url": url,
-		"og:title": title,
-		"og:description": description,
-		"og:image": socialImageUrl || undefined,
-		"twitter:title": `${title} | chance.dev`,
-		"twitter:description": description!,
-		"twitter:site": "@chancethedev",
-		"twitter:creator": "@chancethedev",
-		"twitter:card": "summary_large_image",
-		"twitter:image": seo?.twitterCard
-			? isAbsoluteUrl(seo.twitterCard)
-				? seo?.twitterCard
-				: `${siteUrl}/${unSlashIt(seo.twitterCard)}`
-			: socialImageUrl,
-		"twitter:image:alt": title,
-	};
+	return getSeoMeta({
+		...DEFAULT_METADATA,
+		title,
+		description,
+		openGraph: {
+			url,
+			images: [
+				{
+					url: socialImageUrl,
+					alt: title,
+				},
+			],
+		},
+		twitter: {
+			...DEFAULT_METADATA.twitter,
+			image: {
+				url: twitterImageUrl,
+				alt: title,
+			},
+			creator: seo?.twitterCreator || DEFAULT_METADATA.twitter?.creator,
+			site: seo?.twitterSite || DEFAULT_METADATA.twitter?.site,
+		},
+	});
 };
 
 export let headers: HeadersFunction = ({ loaderHeaders }) => {

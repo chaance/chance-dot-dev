@@ -1,8 +1,8 @@
-// import { redirect } from "@remix-run/node";
 import { Container } from "~/ui/container";
-import type { MetaFunction } from "@remix-run/node";
+import type { V2_MetaFunction as MetaFunction } from "@remix-run/node";
 
 import routeStylesUrl from "~/dist/styles/routes/__main/uses.css";
+import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
 
 export function links() {
 	return [{ rel: "stylesheet", href: routeStylesUrl }];
@@ -10,16 +10,12 @@ export function links() {
 
 const ROOT_CLASS = "page--uses";
 
-export const meta: MetaFunction = (args) => {
-	let title = `Uses | chance.dev`;
-	let description = "Tools I use to get the job (or hobby) done.";
-	return {
-		title,
-		description: description,
-		"og:description": description,
-		"twitter:title": title,
-		"twitter:description": description,
-	};
+export const meta: MetaFunction = () => {
+	return getSeoMeta({
+		...DEFAULT_METADATA,
+		title: "Uses",
+		description: "Tools I use to get the job (or hobby) done.",
+	});
 };
 
 interface UsesItem {

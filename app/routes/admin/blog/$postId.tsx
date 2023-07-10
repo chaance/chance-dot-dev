@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from "react";
 import type { LoaderArgs, ActionArgs, SerializeFrom } from "@remix-run/node";
 import { json } from "@remix-run/node";

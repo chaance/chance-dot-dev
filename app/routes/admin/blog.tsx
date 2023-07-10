@@ -1,5 +1,5 @@
 import type { LinksFunction } from "@remix-run/node";
-import { Outlet, type ShouldReloadFunction } from "@remix-run/react";
+import { Outlet, type ShouldRevalidateFunction } from "@remix-run/react";
 
 import routeStylesUrl from "~/dist/styles/routes/admin/blog.css";
 
@@ -11,8 +11,8 @@ export function headers() {
 	return { "Cache-Control": "max-age=300" };
 }
 
-export const unstable_shouldReload: ShouldReloadFunction = ({ submission }) => {
-	return !!submission && submission.method.toLowerCase() !== "get";
+export const shouldRevalidate: ShouldRevalidateFunction = ({ formMethod }) => {
+	return !!formMethod && formMethod?.toLowerCase() !== "get";
 };
 
 export default function AdminBlogLayout() {

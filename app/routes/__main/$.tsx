@@ -1,5 +1,6 @@
-import { useCatch } from "@remix-run/react";
+import type { ErrorResponse } from "@remix-run/router";
 import { json } from "@remix-run/node";
+import { isRouteErrorResponse } from "@remix-run/react";
 import { Container } from "~/ui/container";
 import routeStylesUrl from "~/dist/styles/routes/__main/$.css";
 
@@ -17,9 +18,13 @@ export default function CatchAll() {
 	return null;
 }
 
-export function ErrorBoundary({ error }: { error: Error }) {
+export function ErrorBoundary({ error }: { error: unknown }) {
 	if (process.env.NODE_ENV === "development") {
 		console.error("MAIN LAYOUT ERROR BOUNDARY: ", error);
+	}
+
+	if (isRouteErrorResponse(error)) {
+		return <CatchBoundary caught={error} />;
 	}
 
 	return (
@@ -37,12 +42,7 @@ export function ErrorBoundary({ error }: { error: Error }) {
 	);
 }
 
-export function CatchBoundary() {
-	let caught = useCatch();
-	if (process.env.NODE_ENV === "development") {
-		console.error("MAIN LAYOUT CATCH BOUNDARY: ", caught);
-	}
-
+export function CatchBoundary({ caught }: { caught: ErrorResponse }) {
 	let message;
 	switch (caught.status) {
 		case 401:

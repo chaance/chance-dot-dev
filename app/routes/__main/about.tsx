@@ -1,4 +1,3 @@
-// import { redirect } from "@remix-run/node";
 import { Container } from "~/ui/container";
 import { BriefcaseIcon, GlobeIcon } from "~/ui/icons";
 import { HeadingLevelProvider } from "~/ui/primitives/heading";

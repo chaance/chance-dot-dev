@@ -8,9 +8,17 @@ import { getMarkdownBlogPostListItems } from "~/lib/blog.server";
 
 import routeStylesUrl from "~/dist/styles/routes/__main/blog/index.css";
 import { getSessionUser } from "~/lib/session.server";
+import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
 
 export function links() {
 	return [{ rel: "stylesheet", href: routeStylesUrl }];
+}
+
+export function meta() {
+	return getSeoMeta({
+		...DEFAULT_METADATA,
+		title: "Articles",
+	});
 }
 
 const ROOT_CLASS = "page--blog-index";

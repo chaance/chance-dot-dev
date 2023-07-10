@@ -1,11 +1,6 @@
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import {
-	Link,
-	NavLink,
-	type ShouldReloadFunction,
-	useLoaderData,
-} from "@remix-run/react";
+import { Link, NavLink, useLoaderData } from "@remix-run/react";
 import cx from "clsx";
 import { requireUserId } from "~/lib/session.server";
 import { getBlogPostListItems } from "~/models/blog-post.server";
@@ -18,10 +13,6 @@ export async function loader({ request }: LoaderArgs) {
 	});
 	return json({ blogListItems });
 }
-
-export const unstable_shouldReload: ShouldReloadFunction = ({ submission }) => {
-	return !!submission && submission.method.toLowerCase() !== "get";
-};
 
 export default function AdminBlogIndex() {
 	let { blogListItems } = useLoaderData<typeof loader>();
