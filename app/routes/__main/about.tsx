@@ -4,9 +4,17 @@ import { HeadingLevelProvider } from "~/ui/primitives/heading";
 import { Text, TextGroup, TextListItem, TextProse } from "~/ui/text";
 import { bem } from "~/lib/utils";
 import routeStylesUrl from "~/dist/styles/routes/__main/about.css";
+import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
 
 export function links() {
 	return [{ rel: "stylesheet", href: routeStylesUrl }];
+}
+
+export function meta() {
+	return getSeoMeta({
+		...DEFAULT_METADATA,
+		title: "About Chance",
+	});
 }
 
 const ROOT_CLASS = "page--about";
