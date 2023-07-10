@@ -128,7 +128,7 @@ export default function AboutRoute() {
 												4th grade
 											</a>
 										</li>
-										<li>I ran a marathon in Antarctica in January 2022</li>
+										<li>I ran a marathon in Antarctica in 2022</li>
 										<li>I’m left-handed</li>
 										<li>
 											I worked full-time on both{" "}
