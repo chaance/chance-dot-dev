@@ -1,12 +1,9 @@
 .cs--sign-up-form {
-	display: flex;
-	flex-direction: column;
-	gap: 2rem;
-
+	&,
 	&__fields {
 		display: flex;
 		flex-direction: column;
-		gap: inherit;
+		gap: 2rem;
 	}
 }
 
