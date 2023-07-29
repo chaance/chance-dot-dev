@@ -1,12 +1,33 @@
 @use "~/styles/system/media";
 @use "~/styles/system/color" as color;
 
-$small_menu_breakpoint: media.get(sm);
-
+// Properties scoped to the root because we need them for styles in our dialog,
+// which is appended to the document body via a portal
 :root {
 	--ui-site-header-height: 4.5rem;
+	--ui-site-header-bg-opacity: 0.6;
+	--ui-site-header-nav-bg-opacity: 1;
+	--ui-site-header-bg-hsl: 180deg 8% 100%;
+	--ui-site-header-nav-bg-hsl: var(--ui-site-header-bg-hsl);
+	--ui-site-header-bg-color: hsl(
+		var(--ui-site-header-bg-hsl) / var(--ui-site-header-bg-opacity)
+	);
+	--ui-site-header-nav-bg-color: hsl(
+		var(--ui-site-header-nav-bg-hsl) / var(--ui-site-header-nav-bg-opacity)
+	);
+	--ui-site-header-logo-size: 3.5rem;
+	--ui-site-header-border-size: 1px;
+	height: var(--ui-site-header-height);
+
 	@media (--sm) {
 		--ui-site-header-height: 6rem;
+		--ui-site-header-logo-size: 4rem;
+		--ui-site-header-border-size: 1px;
+		--ui-site-header-nav-bg-opacity: 0.8;
+	}
+
+	@media (--dark) {
+		--ui-site-header-bg-hsl: 0deg 0% 0%;
 	}
 }
 
@@ -16,23 +37,9 @@ $small_menu_breakpoint: media.get(sm);
 
 .cs--site-header {
 	$self: &;
-	--header-bg-opacity: 0.6;
-	--header-bg-color: hsl(180deg 8% 100% / var(--header-bg-opacity));
-	--header-height: var(--ui-site-header-height);
-	--header-logo-size: 3.5rem;
-	--header-border-size: 1px;
-	height: var(--header-height);
-	@media (--sm) {
-		--header-logo-size: 4rem;
-		--header-border-size: 0;
-	}
-	@media (--dark) {
-		--header-bg-color: hsl(0deg 0% 0% / var(--header-bg-opacity));
-	}
-
 	width: 100%;
 	background-color: transparent;
-	border-bottom: var(--header-border-size) solid var(--cs-color-border-weak);
+	border-bottom: var(--ui-site-header-border-size) solid var(--cs-color-border);
 
 	& > * {
 		position: relative;
@@ -66,24 +73,25 @@ $small_menu_breakpoint: media.get(sm);
 			content: "";
 			position: absolute;
 			inset: 0;
-			background-color: var(--header-bg-color);
+			background-color: var(--ui-site-header-bg-color);
 			backdrop-filter: blur(20px);
 		}
 
-		@media screen and (#{$small_menu_breakpoint}) {
+		@media (--sm) {
 			&::before {
 				background-color: transparent;
 				backdrop-filter: blur(0);
 			}
 
 			&:where([data-ui-is-past-scroll-threshold="true"])::before {
-				background-color: var(--header-bg-color);
+				background-color: var(--ui-site-header-bg-color);
 				backdrop-filter: blur(20px);
 			}
 		}
 	}
 
-	@media screen and (#{$small_menu_breakpoint}) {
+	@media (--sm) {
+		--ui-site-header-border-size: 0;
 		&:where([data-ui-is-past-scroll-threshold="true"]) {
 			background-color: var(--cs-color-background-translucent);
 		}
@@ -115,7 +123,7 @@ $small_menu_breakpoint: media.get(sm);
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		height: var(--header-height);
+		height: var(--ui-site-header-height);
 	}
 
 	&__nav-list {
@@ -123,9 +131,25 @@ $small_menu_breakpoint: media.get(sm);
 		font-weight: var(--cs-font-weight-strongest);
 		text-transform: uppercase;
 		gap: 1em;
-		@media screen and (#{$small_menu_breakpoint}) {
-			display: flex;
-			gap: 2em;
+	}
+
+	&__nav-item {
+		--start-pos: -100%;
+		// start position is exponential to the index of the nav item. This value is
+		// overridden inline on the element itself.
+		--start-pos-exp: var(--start-pos);
+		--anim-delay: 0.2s;
+		--move-delay: calc(var(--anim-delay) + 0.2s);
+		--fade-delay: calc(var(--anim-delay) + 0.3s);
+
+		@media (--motion) {
+			transform: translateY(var(--start-pos-exp));
+			animation: siteHeader_navItem_topToBottom 0.4s ease-in-out
+					var(--move-delay),
+				siteHeader_navItem_fadeIn 0.5s ease-in-out var(--fade-delay);
+			animation-iteration-count: 1;
+			animation-fill-mode: forwards;
+			opacity: 0;
 		}
 	}
 
@@ -138,43 +162,61 @@ $small_menu_breakpoint: media.get(sm);
 	}
 
 	&__nav-dialog-overlay {
-		--dialog-overlay-bg-opacity: 0.4;
+		--dialog-overlay-bg-opacity: 0.2;
 		position: fixed;
 		inset: 0;
+		display: none;
+
+		&:where([data-state="open"]) {
+			display: block;
+		}
 
 		@media (--dark) {
 			--dialog-overlay-bg-opacity: 0.8;
 		}
 
-		@media screen and (#{$small_menu_breakpoint}) {
-			display: none;
+		@media (--sm) {
+			--dialog-overlay-bg-opacity: 0;
 		}
 	}
 
 	&__nav-dialog-overlay-inner {
-		height: calc(100% - var(--ui-site-header-height, 0));
+		--overlay-bg-color: hsl(0deg 0% 0% / var(--dialog-overlay-bg-opacity));
+		position: relative;
+		height: calc(
+			100% - var(--ui-site-header-height, 0) -
+				var(--ui-site-header-border-size, 0)
+		);
 		width: 100%;
-		margin-top: var(--ui-site-header-height, 0);
-		background-color: rgb(0 0 0 / var(--dialog-overlay-bg-opacity));
-		backdrop-filter: blur(4px);
+		margin-top: calc(
+			var(--ui-site-header-height, 0) + var(--ui-site-header-border-size, 0)
+		);
+		background-color: transparent;
+		animation: siteHeader_overlay_fadeIn 0.3s ease-in-out;
+		animation-fill-mode: forwards;
+
+		@media (--sm) {
+			animation: none;
+		}
 	}
 
 	&__nav-toggle {
+		--visual-size: 1rem;
+		--touch-target-size: 1rem;
+		--actual-size: calc(var(--visual-size) + var(--touch-target-size));
+		--offset-size: calc(var(--touch-target-size) / 2);
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 2rem;
-		height: 2rem;
-		border: 1px solid var(--cs-color-border-weak);
-		@media screen and (#{$small_menu_breakpoint}) {
-			display: none;
-		}
+		width: var(--actual-size);
+		height: var(--actual-size);
+		margin-left: calc(var(--offset-size) * -1);
 	}
 
 	&__nav-toggle-icon {
 		display: block;
 		height: 1px;
-		width: 1rem;
+		width: var(--visual-size);
 		background-color: currentColor;
 		position: relative;
 
@@ -199,13 +241,27 @@ $small_menu_breakpoint: media.get(sm);
 
 	&__nav-dialog {
 		position: absolute;
-		right: 0;
+		left: 0;
 		top: 0;
-		background-color: var(--cs-color-background);
-		width: 100%;
+		// min-width: calc(100% - (var(--cs-space-lg) * 2));
+		max-width: 100%;
+		height: 100%;
 		:where(#{$self}__nav-list) {
 			display: flex;
 			flex-direction: column;
+		}
+
+		@media (--sm) {
+			min-width: initial;
+			width: 100%;
+		}
+
+		@media (--sm-down) and (--motion) {
+			--start-pos: -100%;
+			transform: translateY(var(--start-pos));
+			animation: siteHeader_navDialog_leftToRight 0.4s ease-in-out 0s,
+				siteHeader_navDialog_fadeIn 0.8s ease-out 0s;
+			animation-fill-mode: forwards;
 		}
 
 		:where(#{$self}__nav-item) {
@@ -216,12 +272,23 @@ $small_menu_breakpoint: media.get(sm);
 			display: flex;
 			width: 100%;
 		}
+
+		&::before {
+			content: "";
+			position: absolute;
+			inset: 0;
+			background-color: var(--ui-site-header-nav-bg-color);
+			backdrop-filter: blur(10px);
+			border-right: var(--ui-site-header-border-size) solid
+				var(--cs-color-border);
+		}
 	}
 
 	&__nav-dialog-inner {
+		position: relative;
 		overflow-x: hidden;
 		overflow-y: auto;
-		padding: 1rem;
+		padding: var(--cs-space-lg) 0;
 	}
 
 	&__logo-link {
@@ -234,7 +301,7 @@ $small_menu_breakpoint: media.get(sm);
 		transform: translate(-50%, -50%);
 		border-radius: 9999px;
 		outline-offset: 2px;
-		@media (#{$small_menu_breakpoint}) {
+		@media (--sm) {
 			position: relative;
 			top: initial;
 			left: initial;
@@ -244,17 +311,18 @@ $small_menu_breakpoint: media.get(sm);
 
 	&__logo {
 		fill: currentColor;
-		width: var(--header-logo-size);
-		height: var(--header-logo-size);
+		width: var(--ui-site-header-logo-size);
+		height: var(--ui-site-header-logo-size);
 	}
 
 	&__logo-text {
+		will-change: transform;
 		transform-origin: center;
 		opacity: 0;
 		:where(#{$self}__logo-link:hover, #{$self}__logo-link:focus) & {
 			opacity: 1;
 		}
-		@media (#{$small_menu_breakpoint}) {
+		@media (--sm) {
 			opacity: 1;
 		}
 	}
@@ -263,5 +331,44 @@ $small_menu_breakpoint: media.get(sm);
 		:where(a:hover) & {
 			fill: var(--cs-color-accent);
 		}
+	}
+}
+
+@keyframes siteHeader_navItem_topToBottom {
+	0% {
+		transform: translateY(var(--start-pos-exp));
+	}
+	100% {
+		transform: translateY(0);
+	}
+}
+
+@keyframes siteHeader_navDialog_leftToRight {
+	0% {
+		transform: translateX(var(--start-pos));
+	}
+	100% {
+		transform: translateX(0);
+	}
+}
+
+@keyframes siteHeader_navItem_fadeIn {
+	0% {
+		opacity: 0;
+	}
+	50% {
+		opacity: 0.3;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes siteHeader_overlay_fadeIn {
+	0% {
+		background-color: transparent;
+	}
+	100% {
+		background-color: var(--overlay-bg-color);
 	}
 }

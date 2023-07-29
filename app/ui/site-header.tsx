@@ -76,9 +76,14 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
 				<div className={`${ROOT_CLASS}__inner`}>
 					<nav aria-label="Main" className={`${ROOT_CLASS}__nav`}>
 						<ul className={`${ROOT_CLASS}__nav-list`}>
-							{NAV_ITEMS.map((item) => {
+							{NAV_ITEMS.map((item, index, items) => {
 								return (
-									<li key={item.id} className={`${ROOT_CLASS}__nav-item`}>
+									<NavItem
+										index={index}
+										totalItemsCount={items.length}
+										key={item.id}
+										className={`${ROOT_CLASS}__nav-item`}
+									>
 										<NavLink
 											className={`${ROOT_CLASS}__nav-link`}
 											to={item.to}
@@ -86,33 +91,35 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
 										>
 											{item.label}
 										</NavLink>
-									</li>
+									</NavItem>
 								);
 							})}
 						</ul>
 						<Button
-							onClick={() => setDialogIsOpen(true)}
+							onPress={() => setDialogIsOpen(true)}
 							className={`${ROOT_CLASS}__nav-toggle`}
 						>
 							<span className="sr-only">Open Menu</span>
 							<span className={`${ROOT_CLASS}__nav-toggle-icon`} aria-hidden />
 						</Button>
-						{dialogIsOpen ? (
-							<Dialog
-								onDismiss={() => setDialogIsOpen(false)}
-								open
-								aria-label="Main navigation"
-							>
-								<DialogOverlay className={`${ROOT_CLASS}__nav-dialog-overlay`}>
-									<div className={`${ROOT_CLASS}__nav-dialog-overlay-inner`}>
-										<DialogContent className={`${ROOT_CLASS}__nav-dialog`}>
-											<div className={`${ROOT_CLASS}__nav-dialog-inner`}>
+						<Dialog
+							onDismiss={() => setDialogIsOpen(false)}
+							open={dialogIsOpen}
+							aria-label="Main navigation"
+						>
+							<DialogOverlay className={`${ROOT_CLASS}__nav-dialog-overlay`}>
+								<div className={`${ROOT_CLASS}__nav-dialog-overlay-inner`}>
+									<DialogContent className={`${ROOT_CLASS}__nav-dialog`}>
+										<div className={`${ROOT_CLASS}__nav-dialog-inner`}>
+											<Container purpose="header">
 												<ul className={`${ROOT_CLASS}__nav-list`}>
-													{NAV_ITEMS.map((item) => {
+													{NAV_ITEMS.map((item, index, items) => {
 														return (
-															<li
+															<NavItem
 																key={item.id}
 																className={`${ROOT_CLASS}__nav-item`}
+																index={index}
+																totalItemsCount={items.length}
 															>
 																<NavLink
 																	className={`${ROOT_CLASS}__nav-link`}
@@ -124,16 +131,16 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
 																>
 																	{item.label}
 																</NavLink>
-															</li>
+															</NavItem>
 														);
 													})}
 												</ul>
-											</div>
-										</DialogContent>
-									</div>
-								</DialogOverlay>
-							</Dialog>
-						) : null}
+											</Container>
+										</div>
+									</DialogContent>
+								</div>
+							</DialogOverlay>
+						</Dialog>
 					</nav>
 					{hideLogo ? null : (
 						<NavLink
@@ -329,4 +336,52 @@ function LogoOld({ ...props }: React.ComponentPropsWithoutRef<"svg">) {
 			/>
 		</svg>
 	);
+}
+
+function NavItem({
+	index,
+	children,
+	className,
+	totalItemsCount,
+}: {
+	index: number;
+	totalItemsCount: number;
+	children: React.ReactNode;
+	className?: string;
+}) {
+	const startMultiplier = round(Math.pow(index + 1, 1.25), 2);
+	const animationDelay = getExponentialMultiplier(index, totalItemsCount);
+	return (
+		<li
+			className={className}
+			style={{
+				// See `site-header` stylesheet for `--start-pos`
+				// @ts-expect-error
+				"--start-pos-exp": `calc(var(--start-pos) * ${startMultiplier})`,
+				"--anim-delay": `${animationDelay}s`,
+			}}
+		>
+			{children}
+		</li>
+	);
+}
+
+function round(value: number, precision: number) {
+	precision = Math.max(0, precision || 0);
+	const multiplier = Math.pow(10, precision);
+	return Math.round(value * multiplier) / multiplier;
+}
+
+function getExponentialMultiplier(index: number, total: number) {
+	const max = total * 0.125;
+	if (index === 0) {
+		return 0;
+	}
+	if (index === total - 1) {
+		return max;
+	}
+	// this should be a formula for exponential easing. Copilot did this, don't
+	// trust my math!
+	const result = (1 - Math.pow(2, (-1 * (index + 1)) / total)) * max;
+	return round(result, 4);
 }

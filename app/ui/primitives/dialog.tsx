@@ -92,12 +92,7 @@ const Dialog: React.FC<DialogProps> = ({
 }) => {
 	let { state } = useDialog(props);
 	return (
-		<Portal
-			data-ui-component="dialog"
-			data-state={state.open ? "open" : "closed"}
-			elementType={portalElementType}
-			mountRef={portalMountRef}
-		>
+		<Portal elementType={portalElementType} mountRef={portalMountRef}>
 			<DialogContext.Provider value={{ state }}>
 				{children}
 			</DialogContext.Provider>
@@ -244,16 +239,22 @@ const DialogOverlay = React.forwardRef<
 		state,
 		forwardedRef
 	);
+	const containerRef = React.useRef<HTMLDivElement>(null);
+	const ref = useComposedRefs(forwardedRef, containerRef);
 	return (
-		<FocusLock {...focusLockProps}>
-			<RemoveScroll {...removeScrollProps}>
-				<div
-					data-ui-component="dialog-overlay"
-					data-state={state.open ? "open" : "closed"}
-					{...componentProps}
-				/>
-			</RemoveScroll>
-		</FocusLock>
+		<DisableEventsMaybe
+			focusLockProps={focusLockProps}
+			removeScrollProps={removeScrollProps}
+			isDialogOpen={state.open}
+			containerRef={containerRef}
+		>
+			<div
+				data-ui-component="dialog-overlay"
+				data-state={state.open ? "open" : "closed"}
+				{...componentProps}
+				ref={ref}
+			/>
+		</DisableEventsMaybe>
 	);
 });
 DialogOverlay.displayName = "DialogOverlay";
@@ -433,6 +434,67 @@ function createAriaHider(dialogNode: Element) {
 			}
 		});
 	};
+}
+
+function DisableEventsMaybe({
+	isDialogOpen,
+	containerRef,
+	focusLockProps,
+	removeScrollProps,
+	children,
+}: {
+	focusLockProps: Omit<React.ComponentProps<typeof FocusLock>, "children">;
+	removeScrollProps: Omit<
+		React.ComponentProps<typeof RemoveScroll>,
+		"children"
+	>;
+	isDialogOpen: boolean;
+	containerRef: React.RefObject<Element>;
+	children: React.ReactElement;
+}) {
+	React.useEffect(() => {
+		const container = containerRef.current;
+		if (isDialogOpen || !container) {
+			return;
+		}
+
+		const handlers = (
+			[
+				"keydown",
+				"keyup",
+				"mousedown",
+				"touchstart",
+				"focusin",
+				"focus",
+			] as const
+		).map((event) => {
+			let handler = (event: Event) => {
+				if (container.contains(event.target as Node)) {
+					event.preventDefault();
+					event.stopPropagation();
+				}
+			};
+			return { event, handler };
+		});
+
+		for (let { event, handler } of handlers) {
+			document.addEventListener(event, handler, true);
+		}
+		return () => {
+			for (let { event, handler } of handlers) {
+				document.removeEventListener(event, handler, true);
+			}
+		};
+	}, [isDialogOpen, containerRef]);
+
+	if (isDialogOpen) {
+		return (
+			<FocusLock {...focusLockProps}>
+				<RemoveScroll {...removeScrollProps}>{children}</RemoveScroll>
+			</FocusLock>
+		);
+	}
+	return children;
 }
 
 export type {
