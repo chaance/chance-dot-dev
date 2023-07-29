@@ -16,8 +16,6 @@ $small_menu_breakpoint: media.get(sm);
 
 .cs--site-header {
 	$self: &;
-	--transition-duration: 200ms;
-	--transition-func: ease-out;
 	--header-bg-opacity: 0.6;
 	--header-bg-color: hsl(180deg 8% 100% / var(--header-bg-opacity));
 	--header-height: var(--ui-site-header-height);
@@ -34,8 +32,6 @@ $small_menu_breakpoint: media.get(sm);
 
 	width: 100%;
 	background-color: transparent;
-	transition: background-color var(--transition-duration) var(--transition-func),
-		color var(--transition-duration) var(--transition-func);
 	border-bottom: var(--header-border-size) solid var(--cs-color-border-weak);
 
 	& > * {
@@ -66,17 +62,10 @@ $small_menu_breakpoint: media.get(sm);
 	}
 
 	:where([data-hydrated]) & {
-		--transition-duration: 200ms;
-		--transition-func: ease-out;
-		transition: filter var(--transition-duration) var(--transition-func),
-			background-color var(--transition-duration) var(--transition-func),
-			color var(--transition-duration) var(--transition-func);
-
 		&::before {
 			content: "";
 			position: absolute;
 			inset: 0;
-			transition: inherit;
 			background-color: var(--header-bg-color);
 			backdrop-filter: blur(20px);
 		}
@@ -260,9 +249,6 @@ $small_menu_breakpoint: media.get(sm);
 	}
 
 	&__logo-text {
-		transition-property: fill, stroke, opacity;
-		transition-timing-function: ease-out;
-		transition-duration: 150ms;
 		transform-origin: center;
 		opacity: 0;
 		:where(#{$self}__logo-link:hover, #{$self}__logo-link:focus) & {
@@ -274,11 +260,6 @@ $small_menu_breakpoint: media.get(sm);
 	}
 
 	&__logo-mark {
-		transition-property: color, background-color, border-color,
-			text-decoration-color, fill, stroke;
-		transition-timing-function: ease-out;
-		transition-duration: 150ms;
-
 		:where(a:hover) & {
 			fill: var(--cs-color-accent);
 		}

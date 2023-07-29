@@ -1,6 +1,5 @@
 import * as React from "react";
 import { NavLink, useLocation, useTransition } from "@remix-run/react";
-import cx from "clsx";
 import { Container } from "~/ui/container";
 import { isWebKit } from "~/lib/utils";
 import { useRootContext } from "~/lib/react/context";
@@ -15,6 +14,12 @@ const NAV_ITEMS = [
 		to: "/about",
 		prefetch: "intent" as const,
 		label: "About",
+	},
+	{
+		id: "content",
+		to: "/content",
+		prefetch: "intent" as const,
+		label: "Featured Content",
 	},
 	{
 		id: "blog",
@@ -65,16 +70,7 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
 			data-ui-hydrated={hydrated || undefined}
 			data-ui-has-bottom-margin={includeBottomMargin || undefined}
 			id={id as string}
-			className={cx(ROOT_CLASS, "w-full", {
-				"transition-colors duration-200": hydrated,
-				"mb-10 sm:mb-14 md:mb-20": includeBottomMargin,
-				relative: position === "default",
-				"sticky top-0 z-10": position === "sticky",
-				"fixed top-0 z-10": position === "fixed",
-				"absolute top-0 z-10": position === "absolute",
-				"bg-opacity-0 border-b border-b-transparent border-opacity-0":
-					!isPastScrollThreshold,
-			})}
+			className={ROOT_CLASS}
 		>
 			<Container purpose="header">
 				<div className={`${ROOT_CLASS}__inner`}>
@@ -95,7 +91,7 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
 							})}
 						</ul>
 						<Button
-							onPress={() => setDialogIsOpen(true)}
+							onClick={() => setDialogIsOpen(true)}
 							className={`${ROOT_CLASS}__nav-toggle`}
 						>
 							<span className="sr-only">Open Menu</span>
