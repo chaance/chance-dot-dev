@@ -645,6 +645,8 @@ function useDialogTrigger(args?: DialogContextValue): UseDialogTriggerReturn {
 	};
 }
 
+export { useDialogTrigger as experimental_useDialogTrigger };
+
 interface UseDialogTriggerReturn {
 	props: {
 		"aria-expanded": boolean;

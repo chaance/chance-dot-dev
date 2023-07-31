@@ -106,9 +106,7 @@ export default function NewSubscriberPage() {
 					</Card>
 				</div>
 
-				<button type="submit" className="button">
-					Save
-				</button>
+				<Button type="submit">Save</Button>
 			</Form>
 		</div>
 	);

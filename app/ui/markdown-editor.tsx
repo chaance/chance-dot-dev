@@ -9,8 +9,13 @@ import React, {
 } from "react";
 import type { Options } from "easymde";
 import type SimpleMDE from "easymde";
-import type { Editor, EditorEventMap, KeyMap, Position } from "codemirror";
-import type { EditorChange } from "codemirror";
+import type {
+	Editor,
+	EditorChange,
+	EditorEventMap,
+	KeyMap,
+	Position,
+} from "codemirror";
 import cx from "clsx";
 import { useComposedRefs } from "~/lib/react/use-composed-refs";
 
