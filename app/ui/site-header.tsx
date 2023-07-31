@@ -1,17 +1,40 @@
 import * as React from "react";
-import { NavLink } from "@remix-run/react";
-import cx from "clsx";
+import { NavLink, useLocation, useTransition } from "@remix-run/react";
 import { Container } from "~/ui/container";
 import { isWebKit } from "~/lib/utils";
 import { useRootContext } from "~/lib/react/context";
+import { Button } from "./primitives/button";
+import { Dialog, DialogContent, DialogOverlay } from "./primitives/dialog";
 
 const ROOT_CLASS = "cs--site-header";
+
+const NAV_ITEMS = [
+	{
+		id: "about",
+		to: "/about",
+		prefetch: "intent" as const,
+		label: "About",
+	},
+	{
+		id: "content",
+		to: "/content",
+		prefetch: "intent" as const,
+		label: "Featured Content",
+	},
+	{
+		id: "blog",
+		to: "/blog",
+		prefetch: "intent" as const,
+		label: "Articles",
+	},
+];
 
 const SiteHeader: React.FC<SiteHeaderProps> = ({
 	id,
 	includeBottomMargin = true,
 	hideLogo,
 	position = "default",
+	containerRef,
 }) => {
 	let { hydrated } = useRootContext();
 	let logoRef = React.useRef<SVGSVGElement | null>(null);
@@ -22,6 +45,38 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
 		logoRotationRef: logoTextRef,
 	});
 
+	let linkClickedRef = React.useRef(false);
+	let [dialogIsOpen, setDialogIsOpen] = React.useState(false);
+	let transition = useTransition();
+	let location = useLocation();
+	React.useEffect(() => {
+		// if the user clicks a link in the nav we want to close the dialog after
+		// the navigation has finished transitioning
+		if (linkClickedRef.current === true) {
+			linkClickedRef.current = false;
+			if (transition.state === "idle") {
+				setDialogIsOpen(false);
+			}
+		} else {
+			// Otherwise, close the dialog if the location changes under any other
+			// circumstances
+			setDialogIsOpen(false);
+		}
+	}, [transition.state, location.pathname]);
+
+	const dialogActions = React.useMemo(() => {
+		return {
+			dismiss: () => {
+				setDialogIsOpen(false);
+			},
+			open: () => {
+				setDialogIsOpen(true);
+			},
+		};
+	}, []);
+
+	const dialogId = `menu-dialog:${React.useId()}`;
+
 	return (
 		<header
 			data-ui-position={position}
@@ -29,31 +84,82 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
 			data-ui-hydrated={hydrated || undefined}
 			data-ui-has-bottom-margin={includeBottomMargin || undefined}
 			id={id as string}
-			className={cx(ROOT_CLASS, "w-full", {
-				"transition-colors duration-200": hydrated,
-				"mb-10 sm:mb-14 md:mb-20": includeBottomMargin,
-				relative: position === "default",
-				"sticky top-0 z-10": position === "sticky",
-				"fixed top-0 z-10": position === "fixed",
-				"absolute top-0 z-10": position === "absolute",
-				"bg-opacity-0 border-b border-b-transparent border-opacity-0":
-					!isPastScrollThreshold,
-			})}
+			className={ROOT_CLASS}
+			ref={containerRef}
 		>
 			<Container purpose="header">
 				<div className={`${ROOT_CLASS}__inner`}>
 					<nav aria-label="Main" className={`${ROOT_CLASS}__nav`}>
 						<ul className={`${ROOT_CLASS}__nav-list`}>
-							<li className={`${ROOT_CLASS}__nav-item`}>
-								<NavLink
-									className={`${ROOT_CLASS}__nav-link`}
-									to="/blog"
-									prefetch="intent"
-								>
-									Articles
-								</NavLink>
-							</li>
+							{NAV_ITEMS.map((item, index, items) => {
+								return (
+									<NavItem
+										index={index}
+										totalItemsCount={items.length}
+										key={item.id}
+										className={`${ROOT_CLASS}__nav-item`}
+									>
+										<NavLink
+											className={`${ROOT_CLASS}__nav-link`}
+											to={item.to}
+											prefetch={item.prefetch || undefined}
+										>
+											{item.label}
+										</NavLink>
+									</NavItem>
+								);
+							})}
 						</ul>
+						<Button
+							onPress={dialogActions.open}
+							className={`${ROOT_CLASS}__nav-toggle`}
+							aria-controls={dialogIsOpen ? dialogId : undefined}
+							aria-expanded={dialogIsOpen}
+						>
+							<span className="sr-only">Open Menu</span>
+							<span className={`${ROOT_CLASS}__nav-toggle-icon`} aria-hidden />
+						</Button>
+						<Dialog
+							onDismiss={dialogActions.dismiss}
+							onOpen={dialogActions.open}
+							open={dialogIsOpen}
+							aria-label="Main navigation"
+							id={dialogId}
+						>
+							<DialogOverlay className={`${ROOT_CLASS}__nav-dialog-overlay`}>
+								<div className={`${ROOT_CLASS}__nav-dialog-overlay-inner`}>
+									<DialogContent className={`${ROOT_CLASS}__nav-dialog`}>
+										<div className={`${ROOT_CLASS}__nav-dialog-inner`}>
+											<Container purpose="header">
+												<ul className={`${ROOT_CLASS}__nav-list`}>
+													{NAV_ITEMS.map((item, index, items) => {
+														return (
+															<NavItem
+																key={item.id}
+																className={`${ROOT_CLASS}__nav-item`}
+																index={index}
+																totalItemsCount={items.length}
+															>
+																<NavLink
+																	className={`${ROOT_CLASS}__nav-link`}
+																	to={item.to}
+																	prefetch={item.prefetch || undefined}
+																	onClick={() => {
+																		linkClickedRef.current = true;
+																	}}
+																>
+																	{item.label}
+																</NavLink>
+															</NavItem>
+														);
+													})}
+												</ul>
+											</Container>
+										</div>
+									</DialogContent>
+								</div>
+							</DialogOverlay>
+						</Dialog>
 					</nav>
 					{hideLogo ? null : (
 						<NavLink
@@ -105,6 +211,7 @@ interface SiteHeaderProps {
 	includeBottomMargin?: boolean;
 	hideLogo?: boolean;
 	position?: "sticky" | "fixed" | "absolute" | "default";
+	containerRef?: React.RefObject<HTMLElement>;
 }
 
 interface SiteNavLink {
@@ -249,4 +356,52 @@ function LogoOld({ ...props }: React.ComponentPropsWithoutRef<"svg">) {
 			/>
 		</svg>
 	);
+}
+
+function NavItem({
+	index,
+	children,
+	className,
+	totalItemsCount,
+}: {
+	index: number;
+	totalItemsCount: number;
+	children: React.ReactNode;
+	className?: string;
+}) {
+	const startMultiplier = round(Math.pow(index + 1, 1.25), 2);
+	const animationDelay = getExponentialMultiplier(index, totalItemsCount);
+	return (
+		<li
+			className={className}
+			style={{
+				// See `site-header` stylesheet for `--start-pos`
+				// @ts-expect-error
+				"--start-pos-exp": `calc(var(--start-pos) * ${startMultiplier})`,
+				"--anim-delay": `${animationDelay}s`,
+			}}
+		>
+			{children}
+		</li>
+	);
+}
+
+function round(value: number, precision: number) {
+	precision = Math.max(0, precision || 0);
+	const multiplier = Math.pow(10, precision);
+	return Math.round(value * multiplier) / multiplier;
+}
+
+function getExponentialMultiplier(index: number, total: number) {
+	const max = total * 0.125;
+	if (index === 0) {
+		return 0;
+	}
+	if (index === total - 1) {
+		return max;
+	}
+	// this should be a formula for exponential easing. Copilot did this, don't
+	// trust my math!
+	const result = (1 - Math.pow(2, (-1 * (index + 1)) / total)) * max;
+	return round(result, 4);
 }

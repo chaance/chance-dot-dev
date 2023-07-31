@@ -37,6 +37,7 @@ interface TextQualities {
 		| "weak"
 		| "weaker"
 		| "weakest"
+		| "accent"
 		| "text";
 	weight?: "bold" | "semibold" | "regular";
 	alignment?: "start" | "center" | "end";
@@ -115,6 +116,8 @@ const Text = React.forwardRef<HTMLElement, TextProps>(
 			transform = ctx?.transform,
 		} = props;
 
+		const ariaProps = filterAriaProps(props);
+
 		return (
 			<Comp
 				ref={forwardedRef}
@@ -135,6 +138,7 @@ const Text = React.forwardRef<HTMLElement, TextProps>(
 				)}
 				id={id}
 				htmlFor={htmlFor}
+				{...ariaProps}
 			>
 				{children}
 			</Comp>
@@ -236,3 +240,14 @@ export {
 	TextSpan,
 	TextLabel,
 };
+
+function filterAriaProps<Props extends Record<string, any>>(props: Props) {
+	let ariaProps = {} as Pick<Props, keyof Props & `aria-${string}`>;
+	for (let key in props) {
+		if (key.startsWith("aria-")) {
+			// @ts-expect-error
+			ariaProps[key] = props[key];
+		}
+	}
+	return ariaProps;
+}

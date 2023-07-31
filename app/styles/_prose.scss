@@ -14,6 +14,16 @@ $not: "[class~='not-prose'] *";
 	@return string.unquote(":where(#{$selector}):not(:where(#{$exclude}))");
 }
 
+@function select_heading($level) {
+	@if $level == title {
+		@return #{select(".htitle", ".ui--text--heading-title")};
+	}
+	$selector_elem: string.unquote("h#{$level}");
+	$selector_class: string.unquote(".h#{$level}");
+	$selector_comp: string.unquote(".ui--text--heading-#{$level}");
+	@return #{select($selector_elem, $selector_class, $selector_comp)};
+}
+
 @mixin defs {
 	--util-prose-fz-title: 1.5rem;
 	--util-prose-fz-h1: 1.5rem;
@@ -93,6 +103,7 @@ $not: "[class~='not-prose'] *";
 
 .prose {
 	@include defs;
+	$self: &;
 	color: inherit;
 	font-size: var(--util-prose-fz-body);
 	line-height: var(--util-prose-lh-body);
@@ -197,71 +208,117 @@ $not: "[class~='not-prose'] *";
 		content: close-quote;
 	}
 
-	#{select(h1, h2, h3, h4)} {
+	#{select_heading(title)} {
 		font-weight: var(--cs-font-weight-heading);
-	}
-	#{select(h5, h6)} {
-		font-weight: var(--cs-font-weight-heading-sm);
-	}
-
-	#{select("h1 strong", "h2 strong", "h3 strong", "h4 strong")} {
-		font-weight: var(--cs-font-weight-heading-bold);
-	}
-
-	#{select("h5 strong", "h6 strong")} {
-		font-weight: var(--cs-font-weight-heading-sm-bold);
-	}
-
-	#{select('.htitle')} {
 		font-size: var(--util-prose-fz-title);
 		line-height: var(--util-prose-lh-title);
 		margin-bottom: 0.75em;
 		margin-top: 0;
+		strong {
+			font-weight: var(--cs-font-weight-heading-bold);
+		}
 	}
 
-	#{select(h1, '.h1')} {
+	#{select_heading(1)} {
+		font-weight: var(--cs-font-weight-heading);
 		font-size: var(--util-prose-fz-h1);
 		line-height: var(--util-prose-lh-h1);
 		margin-bottom: 0.8888889em;
 		margin-top: 0;
+
+		& strong {
+			font-weight: var(--cs-font-weight-heading-bold);
+		}
+
+		&:where([class~="prose-tight"] *) {
+			margin-bottom: 1rem;
+		}
 	}
 
-	#{select(h2, '.h2')} {
+	#{select_heading(2)} {
+		font-weight: var(--cs-font-weight-heading);
 		font-size: var(--util-prose-fz-h2);
 		line-height: var(--util-prose-lh-h2);
 		margin-bottom: 1em;
 		margin-top: 2em;
-		scroll-margin-top: var(--scroll-mt);
+
+		& strong {
+			font-weight: var(--cs-font-weight-heading-bold);
+		}
+
+		&:where([class~="prose-tight"] *) {
+			margin-bottom: 1rem;
+			margin-top: 1.25rem;
+		}
 	}
 
-	#{select(h3, '.h3')} {
+	#{select_heading(3)} {
+		font-weight: var(--cs-font-weight-heading);
 		font-size: var(--util-prose-fz-h3);
 		line-height: var(--util-prose-lh-h3);
 		margin-bottom: 0.6em;
 		margin-top: 1.6em;
 		position: relative;
-		scroll-margin-top: var(--scroll-mt);
+
+		& strong {
+			font-weight: var(--cs-font-weight-heading-bold);
+		}
+
+		&:where([class~="prose-tight"] *) {
+			margin-bottom: 0.5rem;
+			margin-top: 1.25rem;
+		}
 	}
 
-	#{select(h4, '.h4')} {
+	#{select_heading(4)} {
+		font-weight: var(--cs-font-weight-heading);
 		font-size: var(--util-prose-fz-h4);
 		line-height: var(--util-prose-lh-h4);
 		margin-bottom: 0.5em;
 		margin-top: 1.5em;
+
+		& strong {
+			font-weight: var(--cs-font-weight-heading-bold);
+		}
+
+		&:where([class~="prose-tight"] *) {
+			margin-bottom: 0.325rem;
+			margin-top: 1rem;
+		}
 	}
 
-	#{select(h5, '.h5')} {
+	#{select_heading(5)} {
+		font-weight: var(--cs-font-weight-heading-sm);
 		font-size: var(--util-prose-fz-h5);
 		line-height: var(--util-prose-lh-h5);
 		margin-bottom: 0.325em;
 		margin-top: 1.5em;
+
+		& strong {
+			font-weight: var(--cs-font-weight-heading-sm-bold);
+		}
+
+		&:where([class~="prose-tight"] *) {
+			margin-bottom: 0.25rem;
+			margin-top: 1rem;
+		}
 	}
 
-	#{select(h6, '.h6')} {
+	#{select_heading(6)} {
+		font-weight: var(--cs-font-weight-heading-sm);
 		font-size: var(--util-prose-fz-h6);
 		line-height: var(--util-prose-lh-h6);
 		margin-bottom: 1em;
 		margin-top: 1.5em;
+
+		& strong {
+			font-weight: var(--cs-font-weight-heading-sm-bold);
+		}
+
+		&:where([class~="prose-tight"] *) {
+			margin-bottom: 0.25rem;
+			margin-top: 1rem;
+		}
 	}
 
 	#{select('figure > *')} {
@@ -378,6 +435,11 @@ $not: "[class~='not-prose'] *";
 	:where(p):not(:where(#{$not})) {
 		margin-bottom: 1.25em;
 		margin-top: 1.25em;
+
+		&:where([class~="prose-tight"] *) {
+			margin-bottom: 1rem;
+			margin-top: 1rem;
+		}
 	}
 
 	:where(img):not(:where(#{$not})) {
@@ -515,12 +577,10 @@ $not: "[class~='not-prose'] *";
 
 	:where(h1, h2):not(:where(#{$not})) {
 		position: relative;
-		scroll-margin-top: var(--scroll-mt);
 	}
 
 	:where(h4, h5, h6):not(:where(#{$not})) {
 		position: relative;
-		scroll-margin-top: var(--scroll-mt);
 	}
 
 	:where(tbody code):not(:where(#{$not})) {

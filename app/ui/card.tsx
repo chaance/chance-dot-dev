@@ -40,4 +40,4 @@ interface CardProps {
 	uncard?: MQ;
 }
 
-type MQ = "sm" | "sm-down" | "md" | "md-down" | "lg" | "lg-down" | "xl";
+type MQ = "xs" | "sm" | "sm-down" | "md" | "md-down" | "lg" | "lg-down" | "xl";

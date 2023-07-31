@@ -1,6 +1,11 @@
 import kebabCase from "lodash/kebabCase";
 import type { User } from "~/models/user.server";
 
+// MIT License, Copyright (c) Sindre Sorhus
+// https://github.com/sindresorhus/email-regex/blob/main/index.js
+const EMAIL_REGEX =
+	"[^\\.\\s@:](?:[^\\s@:]*[^\\s@:\\.])?@[^\\.\\s@]+(?:\\.[^\\.\\s@]+)*";
+
 export const canUseDOM = !!(
 	typeof window !== "undefined" &&
 	window.document &&
@@ -21,7 +26,7 @@ export function isString(value: any): value is string {
 	return typeof value === "string";
 }
 
-export function isBoolean(value: any): value is string {
+export function isBoolean(value: any): value is boolean {
 	return typeof value === "boolean";
 }
 
@@ -422,7 +427,7 @@ export function getOwnerDocument<T extends Node>(
 			"getOwnerDocument can only be used in a browser environment"
 		);
 	}
-	return element?.ownerDocument || document;
+	return element?.ownerDocument ?? document;
 }
 
 export function getOwnerWindow<T extends Element>(
@@ -438,8 +443,6 @@ export function getOwnerWindow<T extends Element>(
 // MIT License, Copyright (c) Sindre Sorhus
 // https://github.com/sindresorhus/email-regex/blob/main/index.js
 export function emailRegex({ exact }: { exact?: boolean } = {}) {
-	const EMAIL_REGEX =
-		"[^\\.\\s@:](?:[^\\s@:]*[^\\s@:\\.])?@[^\\.\\s@]+(?:\\.[^\\.\\s@]+)*";
 	return exact ? new RegExp(`^${EMAIL_REGEX}$`) : new RegExp(EMAIL_REGEX, "g");
 }
 

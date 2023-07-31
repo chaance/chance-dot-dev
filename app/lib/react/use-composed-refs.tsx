@@ -2,6 +2,15 @@ import type * as React from "react";
 import { useCallback } from "react";
 import { isFunction } from "~/lib/utils";
 
+export function assignRef<T>(ref: React.Ref<T>, value: T) {
+	if (isFunction(ref)) {
+		ref(value);
+	} else if (ref && "current" in ref) {
+		// @ts-expect-error
+		ref.current = value;
+	}
+}
+
 export function useComposedRefs<T>(
 	...refs: (
 		| null
@@ -11,14 +20,10 @@ export function useComposedRefs<T>(
 	)[]
 ) {
 	return useCallback(
-		(instance: T) => {
-			refs.forEach((ref) => {
-				if (isFunction(ref)) {
-					ref(instance);
-				} else if (ref) {
-					(ref as React.MutableRefObject<T>).current = instance;
-				}
-			});
+		(instance: T | null) => {
+			for (let ref of refs) {
+				if (ref) assignRef(ref, instance);
+			}
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		refs

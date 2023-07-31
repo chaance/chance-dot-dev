@@ -1,117 +1,180 @@
+import * as React from "react";
 import { Container } from "~/ui/container";
-import { BriefcaseIcon, GlobeIcon } from "~/ui/icons";
 import { HeadingLevelProvider } from "~/ui/primitives/heading";
-import { Text, TextGroup, TextListItem, TextProse } from "~/ui/text";
 import { bem } from "~/lib/utils";
+import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
+import { useFetcher } from "@remix-run/react";
+import type { action as signUpAction } from "~/routes/__main/sign-up";
+
 import routeStylesUrl from "~/dist/styles/routes/__main/about.css";
+import { SignUpSection } from "~/ui/sign-up-section";
+import { useLayoutEffect } from "~/lib/react/use-layout-effect";
+import { TextHeading, TextSpan } from "~/ui/text";
 
 export function links() {
 	return [{ rel: "stylesheet", href: routeStylesUrl }];
 }
 
+export function meta() {
+	return getSeoMeta({
+		...DEFAULT_METADATA,
+		title: "About Chance",
+	});
+}
+
 const ROOT_CLASS = "page--about";
 
 export default function AboutRoute() {
+	let signUpFetcher = useFetcher<typeof signUpAction>();
+	let hasSuccessfulSubmission =
+		signUpFetcher.type === "done" && signUpFetcher.data.status === "success";
+
+	let formRef = React.useRef<HTMLFormElement>(null);
+	useFakeEventHandler(hasSuccessfulSubmission, () => {
+		formRef.current?.reset();
+	});
+
 	return (
 		<main className={ROOT_CLASS}>
-			<h1 className="sr-only">About</h1>
+			<h1 className="sr-only">About Chance</h1>
 			<HeadingLevelProvider>
-				<section className={bem(ROOT_CLASS, "intro")}>
-					<div>
-						<Text as="Heading" variant="heading-2" color="weaker">
-							Who Is{" "}
-							<Text as="span" color="text">
-								Chance
-							</Text>
-							?
-						</Text>
-						<TextProse variant="body-md">
-							<p>
-								Hola! As you may have gathered, my name is Chance and I’m a
-								software-slinger based in San Diego, CA. I currently work on the
-								Remix web framework at Shopify.
-							</p>
-							<p>
-								I’m also a big collector of hobbies, so what I do outside work
-								hours changes from time to time. Here are just a few items in
-								the cycle.
-							</p>
-						</TextProse>
-					</div>
-					<HeadingLevelProvider>
-						<div>
-							<Text as="Heading" variant="heading-2">
-								Fast Facts
-							</Text>
-							<TextGroup variant="body-md">
-								<ul>
-									<TextListItem>
+				<Container purpose="header">
+					<section className={bem(ROOT_CLASS, "intro")}>
+						<div className={bem(ROOT_CLASS, "intro-heading")}>
+							<TextHeading variant="heading-1">
+								Who <TextSpan color="accent">am I</TextSpan>?
+							</TextHeading>
+						</div>
+						<div className={bem(ROOT_CLASS, "intro-block")}>
+							<div>
+								<p>
+									As you may have gathered, my name is Chance and I’m a
+									software-slinger based in San Diego, CA. I currently work on
+									Replo, a no-code page builder designed for Shopify store
+									owners.
+								</p>
+								<p>
+									I’m also a big collector of hobbies, so what I do outside work
+									hours changes from time to time.
+								</p>
+							</div>
+							<ul className={bem(ROOT_CLASS, "intro-tags")}>
+								{[
+									"Surfing",
+									"Drumming",
+									"Running",
+									"Guitar",
+									"Climbing",
+									"Skateboarding",
+									"Cooking",
+									"Snorkeling",
+									"Backpacking",
+								].map((tag) => {
+									return (
+										<li key={tag} className={bem(ROOT_CLASS, "intro-tag")}>
+											{tag}
+										</li>
+									);
+								})}
+							</ul>
+						</div>
+						<HeadingLevelProvider>
+							<div className={bem(ROOT_CLASS, "intro-block")}>
+								<ul className={bem(ROOT_CLASS, "intro-facts-list")}>
+									<li>
 										I spent a few weeks hiking the Camino de Santiago in
 										Northern Spain a few years back
-									</TextListItem>
-									<TextListItem>
-										I won my elementary school spelling be in 4th grade 2
-									</TextListItem>
-									<TextListItem>
-										I ran a marathon in Antarctica in January 2022
-									</TextListItem>
-									<TextListItem>I’m left-handed</TextListItem>
-									<TextListItem>
-										I worked full-time on both Reach UI and Radix UI 1
-									</TextListItem>
-									<TextListItem>
-										I’ve been to 44/50 states in the US 2
-									</TextListItem>
+									</li>
+									<li>
+										I won my elementary school spelling be in{" "}
+										<a
+											href="#intro-footnote-spelling-bee"
+											aria-describedby="intro-footnotes-label"
+										>
+											4th grade
+										</a>
+									</li>
+									<li>I ran a marathon in Antarctica in 2022</li>
+									<li>I’m left-handed</li>
+									<li>
+										I worked full-time on both{" "}
+										<a
+											href="#intro-footnote-a11y"
+											aria-describedby="intro-footnotes-label"
+										>
+											Reach UI and Radix UI
+										</a>
+									</li>
+									<li>
+										I’ve been to{" "}
+										<a
+											href="#intro-footnote-states"
+											aria-describedby="intro-footnotes-label"
+										>
+											44/50 states in the US
+										</a>
+									</li>
 								</ul>
-							</TextGroup>
-						</div>
-					</HeadingLevelProvider>
-				</section>
-			</HeadingLevelProvider>
-			<section>
-				<Container>
-					<div className={`${ROOT_CLASS}__header`}>
-						<h1 id="page-title" className={`${ROOT_CLASS}__title`}>
-							<span className="block">Chance</span>{" "}
-							<span className="block">the Dev</span>
-						</h1>
-						<p className={`${ROOT_CLASS}__intro`}>
-							Web developer. Open source maker.{" "}
-							<span className="sm:block">
-								Surfing the web and the west coast.
-							</span>
-						</p>
-						<dl className={`${ROOT_CLASS}__intro-list`}>
-							<div className={`${ROOT_CLASS}__intro-item`}>
-								<dt>
-									<span className="sr-only">Current Work</span>
-									<BriefcaseIcon
-										title="Current Work"
-										aria-hidden
-										className={`${ROOT_CLASS}__intro-icon`}
-									/>
-								</dt>
-								<dd>
-									<a href="https://remix.run">Remix</a>{" "}
-									<span aria-hidden>@</span>
-									<span className="sr-only">at</span> Shopify
-								</dd>
+								<footer
+									className={bem(ROOT_CLASS, "intro-footnotes")}
+									aria-labelledby="intro-footnotes-label"
+								>
+									<div className="sr-only" id="intro-footnotes-label">
+										Footnotes
+									</div>
+									<ol className={bem(ROOT_CLASS, "intro-footnotes-list")}>
+										<li
+											id="intro-footnote-spelling-bee"
+											className={bem(ROOT_CLASS, "intro-footnotes-item")}
+										>
+											I ultimately lost at the county level by mispelling the
+											word <em>irksome</em>. This still irks me to this day.
+										</li>
+										<li
+											id="intro-footnote-a11y"
+											className={bem(ROOT_CLASS, "intro-footnotes-item")}
+										>
+											I really enjoy accessibility, UI components and API
+											design.
+										</li>
+										<li
+											id="intro-footnote-states"
+											className={bem(ROOT_CLASS, "intro-footnotes-item")}
+										>
+											Someone please give me a reason to visit Iowa.
+										</li>
+									</ol>
+								</footer>
 							</div>
-							<div className={`${ROOT_CLASS}__intro-item`}>
-								<dt className={`${ROOT_CLASS}__intro-term`}>
-									<span className="sr-only">Current Location</span>
-									<GlobeIcon
-										title="Current Location"
-										aria-hidden
-										className={`${ROOT_CLASS}__intro-icon`}
-									/>
-								</dt>
-								<dd className={`${ROOT_CLASS}__intro-desc`}>San Diego, CA</dd>
-							</div>
-						</dl>
-					</div>
+						</HeadingLevelProvider>
+					</section>
 				</Container>
-			</section>
+				<Container purpose="header">
+					<SignUpSection />
+				</Container>
+			</HeadingLevelProvider>
 		</main>
 	);
+}
+
+function useFakeEventHandler(when: boolean, cb: () => void) {
+	let called = React.useRef(false);
+	let cbRef = React.useRef(cb);
+	useLayoutEffect(() => {
+		cbRef.current = cb;
+	});
+	React.useEffect(() => {
+		let cb = cbRef.current;
+		// "when" happened and we haven't called yet. We need to track whether or
+		// not the cb has in fact been called as effects are not guaranteed to run
+		// only when dependencies change.
+		if (when && !called.current) {
+			called.current = true;
+			cb();
+		}
+		// "when" didn't happen so we reset the call flag
+		else if (!when) {
+			called.current = false;
+		}
+	}, [when]);
 }

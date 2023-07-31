@@ -14,21 +14,14 @@ module.exports = (ctx) => {
 					),
 				}),
 			!isScss && require("postcss-import")(),
-			require("postcss-preset-env")({
-				stage: 3,
-				features: {
-					"logical-properties-and-values": {
-						preserve: true,
-					},
-					"nesting-rules": !isScss,
-					"custom-media-queries": true,
-					"custom-properties": false,
-					"color-functional-notation": false,
-				},
-				autoprefixer: {
-					flexbox: false,
-					grid: false,
-				},
+			require("postcss-logical")({
+				preserve: true,
+			}),
+			!isScss && require("postcss-nesting")(),
+			require("postcss-custom-media")(),
+			require("autoprefixer")({
+				flexbox: false,
+				grid: false,
 			}),
 			isProd && require("cssnano")({ preset: "default" }),
 		].filter(Boolean),

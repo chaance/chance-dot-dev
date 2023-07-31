@@ -23,6 +23,14 @@ body {
 	color: var(--cs-selection-fg);
 }
 
+:focus:where(:not(:focus-visible)) {
+	outline: none;
+}
+
+:focus-visible {
+	outline: 2px solid var(--cs-focus-ring);
+}
+
 .button {
 	--color-bg: var(--cs-color-button);
 	--color-fg: var(--cs-color-text);
@@ -47,6 +55,11 @@ body {
 	line-height: 1;
 	user-select: none;
 	overflow: hidden;
+
+	&-block {
+		display: flex;
+		width: 100%;
+	}
 
 	&:hover {
 		--color-bg: var(--cs-color-button-hover);

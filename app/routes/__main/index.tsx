@@ -3,6 +3,7 @@ import { BriefcaseIcon, GlobeIcon } from "~/ui/icons";
 
 import routeStylesUrl from "~/dist/styles/routes/__main/index.css";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
+import { Link } from "~/ui/primitives/link";
 
 export function links() {
 	return [{ rel: "stylesheet", href: routeStylesUrl }];
@@ -17,8 +18,8 @@ const ROOT_CLASS = "page--home";
 export default function HomeRoute() {
 	return (
 		<main className={ROOT_CLASS}>
-			<header data-ui-id="home-header" className={`${ROOT_CLASS}__header`}>
-				<Container>
+			<Container>
+				<header data-ui-id="home-header" className={`${ROOT_CLASS}__header`}>
 					<div className={`${ROOT_CLASS}__header`}>
 						<h1 id="page-title" className={`${ROOT_CLASS}__title`}>
 							<span className="block">Chance</span>{" "}
@@ -26,7 +27,7 @@ export default function HomeRoute() {
 						</h1>
 						<p className={`${ROOT_CLASS}__intro`}>
 							Web developer. Open source maker.{" "}
-							<span className="sm:block">
+							<span className="block">
 								Surfing the web and the west coast.
 							</span>
 						</p>
@@ -61,8 +62,17 @@ export default function HomeRoute() {
 							</div>
 						</dl>
 					</div>
-				</Container>
-			</header>
+				</header>
+				<nav aria-label="featured" className={`${ROOT_CLASS}__nav`}>
+					<ul className={`${ROOT_CLASS}__nav-list`}>
+						<li className={`${ROOT_CLASS}__nav-item`}>
+							<Link to="/blog" className={`${ROOT_CLASS}__nav-link`}>
+								Articles
+							</Link>
+						</li>
+					</ul>
+				</nav>
+			</Container>
 		</main>
 	);
 }
