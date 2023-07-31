@@ -12,7 +12,12 @@ import { useLayoutEffect } from "~/lib/react/use-layout-effect";
 const ROOT_CLASS = "sign-up-section";
 const CONVERT_KIT_FORM_ID = "3906586";
 
-export function SignUpSection() {
+function SignUpSection() {
+	return null;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function SignUpSection__WIP() {
 	let signUpFetcher = useFetcher<typeof signUpAction>();
 	let { errors } = signUpFetcher.data || {};
 	let isHydrated = useIsHydrated();
@@ -152,6 +157,11 @@ export function SignUpSection() {
 		</section>
 	);
 }
+
+export {
+	// SignUpSection__WIP as
+	SignUpSection,
+};
 
 function useFakeEventHandler(when: boolean, cb: () => void) {
 	let called = React.useRef(false);
