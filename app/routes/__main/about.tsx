@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Container } from "~/ui/container";
 import { HeadingLevelProvider } from "~/ui/primitives/heading";
-import { TextHeading, TextSpan } from "~/ui/text";
 import { bem } from "~/lib/utils";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
 import { useFetcher } from "@remix-run/react";
@@ -10,6 +9,7 @@ import type { action as signUpAction } from "~/routes/__main/sign-up";
 import routeStylesUrl from "~/dist/styles/routes/__main/about.css";
 import { SignUpSection } from "~/ui/sign-up-section";
 import { useLayoutEffect } from "~/lib/react/use-layout-effect";
+import { TextHeading, TextSpan } from "~/ui/text";
 
 export function links() {
 	return [{ rel: "stylesheet", href: routeStylesUrl }];
@@ -36,15 +36,16 @@ export default function AboutRoute() {
 
 	return (
 		<main className={ROOT_CLASS}>
-			<h1 className="sr-only">About</h1>
+			<h1 className="sr-only">About Chance</h1>
 			<HeadingLevelProvider>
 				<Container purpose="header">
 					<section className={bem(ROOT_CLASS, "intro")}>
-						<div className={bem(ROOT_CLASS, "intro-block")}>
-							<TextHeading variant="heading-1" color="weaker" aria-hidden>
-								Who
-								<TextSpan>?</TextSpan>
+						<div className={bem(ROOT_CLASS, "intro-heading")}>
+							<TextHeading variant="heading-1">
+								Who <TextSpan color="accent">am I</TextSpan>?
 							</TextHeading>
+						</div>
+						<div className={bem(ROOT_CLASS, "intro-block")}>
 							<div>
 								<p>
 									As you may have gathered, my name is Chance and I’m a
@@ -54,8 +55,7 @@ export default function AboutRoute() {
 								</p>
 								<p>
 									I’m also a big collector of hobbies, so what I do outside work
-									hours changes from time to time. Here are just a few items in
-									the cycle.
+									hours changes from time to time.
 								</p>
 							</div>
 							<ul className={bem(ROOT_CLASS, "intro-tags")}>
