@@ -32,6 +32,7 @@
 	--ui-text-success: var(--cs-color-green-13);
 	--ui-text-critical: var(--cs-color-red-12);
 	--ui-text-warning: var(--cs-color-yellow-15);
+	--ui-text-accent: var(--cs-color-accent);
 
 	--ui-text-weight-regular: var(--cs-font-weight-default);
 	--ui-text-semibold: var(--cs-font-weight-stronger);
@@ -274,6 +275,10 @@
 
 	&--warning {
 		color: var(--ui-text-warning);
+	}
+
+	&--accent {
+		color: var(--ui-text-accent);
 	}
 
 	// weights

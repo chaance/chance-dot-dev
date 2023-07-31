@@ -37,6 +37,7 @@ interface TextQualities {
 		| "weak"
 		| "weaker"
 		| "weakest"
+		| "accent"
 		| "text";
 	weight?: "bold" | "semibold" | "regular";
 	alignment?: "start" | "center" | "end";
