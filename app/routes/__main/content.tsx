@@ -7,6 +7,7 @@ import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
 import { SignUpSection } from "~/ui/sign-up-section";
 
 import routeStylesUrl from "~/dist/styles/routes/__main/content.css";
+import { Card } from "~/ui/card";
 
 export function links() {
 	return [{ rel: "stylesheet", href: routeStylesUrl }];
@@ -26,26 +27,28 @@ export default function ContentRoute() {
 		<main className={ROOT_CLASS}>
 			<Container purpose="header">
 				<div className={bem(ROOT_CLASS, "featured")}>
-					<TextHeading variant="heading-1" color="weaker">
-						Featured <TextSpan>Content</TextSpan>
-					</TextHeading>
+					<div className={bem(ROOT_CLASS, "page-title")}>
+						<TextHeading variant="heading-1" color="weaker">
+							Featured <TextSpan>Content</TextSpan>
+						</TextHeading>
+					</div>
 					<HeadingLevelProvider>
 						<ul className={bem(ROOT_CLASS, "featured-items")}>
 							{[
 								{
 									id: "1",
 									img: "https://res.cloudinary.com/chancethedev/image/upload/v1672455509/chance.dev/theo.jpg",
-									heading: "Streaming With Theo",
+									heading: "Theo (t3.gg)",
 									desc: "I chat with Theo—streamer, YouTuber and holder of many opinions—to convince him to give Remix a fair shot.",
-									to: "https://www.twitch.tv/theo/video/1643480153",
+									to: "https://www.youtube.com/watch?v=iNvNYt53oOI",
 								},
-								// {
-								// 	id: "2",
-								// 	img: "https://picsum.photos/501/400",
-								// 	heading: "PodRocket Podcast",
-								// 	desc: "I talk shop with the LogRocket crew about how Remix helps developers build better websites out of the box.",
-								// 	to: "https://podrocket.logrocket.com/remix",
-								// },
+								{
+									id: "2",
+									img: "https://picsum.photos/501/400",
+									heading: "PodRocket Podcast",
+									desc: "I talk shop with the LogRocket crew about how Remix helps developers build better websites out of the box.",
+									to: "https://podrocket.logrocket.com/remix",
+								},
 								{
 									id: "3",
 									img: "https://res.cloudinary.com/chancethedev/image/upload/v1672455509/chance.dev/learn-with-jason.jpg",
@@ -72,16 +75,20 @@ export default function ContentRoute() {
 											className={bem(ROOT_CLASS, "featured-item-link")}
 										>
 											<div className={bem(ROOT_CLASS, "featured-item-card")}>
-												<div className={bem(ROOT_CLASS, "featured-item-body")}>
-													<Text
-														as="Heading"
-														variant="heading-3"
-														id={`featured-item-${item.id}-label`}
+												<Card uncard="sm-down" depth={false}>
+													<div
+														className={bem(ROOT_CLASS, "featured-item-body")}
 													>
-														{item.heading}
-													</Text>
-													<p>{item.desc}</p>
-												</div>
+														<Text
+															as="Heading"
+															variant="heading-3"
+															id={`featured-item-${item.id}-label`}
+														>
+															{item.heading}
+														</Text>
+														<p>{item.desc}</p>
+													</div>
+												</Card>
 											</div>
 										</a>
 									</li>

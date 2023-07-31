@@ -72,10 +72,6 @@ export async function loader({ request }: LoaderArgs) {
 	return json(data);
 }
 
-export function unstable_shouldReload() {
-	return false;
-}
-
 export default function Root() {
 	return (
 		<Document>
