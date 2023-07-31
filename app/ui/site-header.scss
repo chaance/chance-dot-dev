@@ -158,6 +158,17 @@
 		&:hover {
 			color: var(--cs-color-text-link-hover);
 		}
+
+		@media screen {
+			transform: translateY(0);
+			&:hover {
+				transform: translateY(-1px);
+			}
+		}
+
+		@media screen and (--motion) {
+			transition: transform 300ms cubic-bezier(0.22, 0.15, 0, 4.06);
+		}
 	}
 
 	&__nav-dialog-overlay {
@@ -166,8 +177,15 @@
 		inset: 0;
 		display: none;
 
+		// TODO: transitions!
+		// pointer-events: none;
+		opacity: 0;
+		transition: opacity 10s ease-out;
+
 		&:where([data-state="open"]) {
+			// pointer-events: initial;
 			display: block;
+			opacity: 1;
 		}
 
 		@media (--dark) {

@@ -66,8 +66,12 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
 
 	const dialogActions = React.useMemo(() => {
 		return {
-			dismiss: () => setDialogIsOpen(false),
-			open: () => setDialogIsOpen(true),
+			dismiss: () => {
+				setDialogIsOpen(false);
+			},
+			open: () => {
+				setDialogIsOpen(true);
+			},
 		};
 	}, []);
 
