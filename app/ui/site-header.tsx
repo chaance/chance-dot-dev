@@ -34,6 +34,7 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
 	includeBottomMargin = true,
 	hideLogo,
 	position = "default",
+	containerRef,
 }) => {
 	let { hydrated } = useRootContext();
 	let logoRef = React.useRef<SVGSVGElement | null>(null);
@@ -63,6 +64,15 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
 		}
 	}, [transition.state, location.pathname]);
 
+	const dialogActions = React.useMemo(() => {
+		return {
+			dismiss: () => setDialogIsOpen(false),
+			open: () => setDialogIsOpen(true),
+		};
+	}, []);
+
+	const dialogId = `menu-dialog:${React.useId()}`;
+
 	return (
 		<header
 			data-ui-position={position}
@@ -71,6 +81,7 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
 			data-ui-has-bottom-margin={includeBottomMargin || undefined}
 			id={id as string}
 			className={ROOT_CLASS}
+			ref={containerRef}
 		>
 			<Container purpose="header">
 				<div className={`${ROOT_CLASS}__inner`}>
@@ -96,16 +107,20 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
 							})}
 						</ul>
 						<Button
-							onPress={() => setDialogIsOpen(true)}
+							onPress={dialogActions.open}
 							className={`${ROOT_CLASS}__nav-toggle`}
+							aria-controls={dialogIsOpen ? dialogId : undefined}
+							aria-expanded={dialogIsOpen}
 						>
 							<span className="sr-only">Open Menu</span>
 							<span className={`${ROOT_CLASS}__nav-toggle-icon`} aria-hidden />
 						</Button>
 						<Dialog
-							onDismiss={() => setDialogIsOpen(false)}
+							onDismiss={dialogActions.dismiss}
+							onOpen={dialogActions.open}
 							open={dialogIsOpen}
 							aria-label="Main navigation"
+							id={dialogId}
 						>
 							<DialogOverlay className={`${ROOT_CLASS}__nav-dialog-overlay`}>
 								<div className={`${ROOT_CLASS}__nav-dialog-overlay-inner`}>
@@ -192,6 +207,7 @@ interface SiteHeaderProps {
 	includeBottomMargin?: boolean;
 	hideLogo?: boolean;
 	position?: "sticky" | "fixed" | "absolute" | "default";
+	containerRef?: React.RefObject<HTMLElement>;
 }
 
 interface SiteNavLink {

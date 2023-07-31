@@ -6,7 +6,7 @@
 
 import * as React from "react";
 import { Portal } from "~/ui/primitives/portal";
-import { getOwnerDocument } from "~/lib/utils";
+import { getOwnerDocument, isFunction } from "~/lib/utils";
 import { useComposedRefs } from "~/lib/react/use-composed-refs";
 import FocusLock from "react-focus-lock";
 import { RemoveScroll } from "react-remove-scroll";
@@ -45,14 +45,33 @@ type DismissDetails =
 
 interface DialogState {
 	open: boolean;
+}
+
+interface DialogActions {
 	dismiss(details: DismissDetails): void;
+	open(): void;
+}
+
+interface UseDialogReturn {
+	state: DialogState;
+	actions: DialogActions;
+	props: {
+		id: string;
+	};
 }
 
 interface DialogContextValue {
 	state: DialogState;
+	actions: DialogActions;
+	dialogId: string;
 }
 
-function useDialog({ open, onDismiss }: UseDialogOptions) {
+function useDialog({
+	open,
+	onDismiss,
+	onOpen,
+	id,
+}: UseDialogOptions): UseDialogReturn {
 	// We want to ignore the immediate focus of a tooltip so it doesn't pop
 	// up again when the menu closes, only pops up when focus returns again
 	// to the tooltip (like native OS tooltips).
@@ -76,10 +95,56 @@ function useDialog({ open, onDismiss }: UseDialogOptions) {
 		[onDismiss]
 	);
 
+	let openDialog = React.useCallback(() => {
+		onOpen?.();
+	}, [onOpen]);
+
 	return {
-		state: React.useMemo(() => ({ open, dismiss }), [open, dismiss]),
+		state: { open },
+		actions: { dismiss, open: openDialog },
+		props: { id },
 	};
 }
+
+const DialogProvider: React.FC<DialogProviderProps> = ({
+	children,
+	...props
+}) => {
+	let { state, actions, props: resolvedProps } = useDialog(props);
+	let context: DialogContextValue = {
+		state,
+		actions,
+		dialogId: resolvedProps.id,
+	};
+	return (
+		<DialogContext.Provider value={context}>
+			{isFunction(children) ? children(context) : children}
+		</DialogContext.Provider>
+	);
+};
+
+const DialogStatefulProvider: React.FC<DialogStatefulProviderProps> = ({
+	children,
+	...context
+}) => {
+	return (
+		<DialogContext.Provider value={context}>
+			{isFunction(children) ? children(context) : children}
+		</DialogContext.Provider>
+	);
+};
+
+const DialogPortal: React.FC<DialogPortalProps> = ({
+	children,
+	elementType,
+	mountRef,
+}) => {
+	return (
+		<Portal elementType={elementType} mountRef={mountRef}>
+			{children}
+		</Portal>
+	);
+};
 
 /**
  * Dialog
@@ -90,10 +155,15 @@ const Dialog: React.FC<DialogProps> = ({
 	portalMountRef,
 	...props
 }) => {
-	let { state } = useDialog(props);
+	let { state, actions, props: resolvedProps } = useDialog(props);
+	let context: DialogContextValue = {
+		state,
+		actions,
+		dialogId: resolvedProps.id,
+	};
 	return (
 		<Portal elementType={portalElementType} mountRef={portalMountRef}>
-			<DialogContext.Provider value={{ state }}>
+			<DialogContext.Provider value={context}>
 				{children}
 			</DialogContext.Provider>
 		</Portal>
@@ -110,14 +180,49 @@ interface UseDialogOptions {
 	 * Fires when the dialog is dismissed.
 	 */
 	onDismiss(details: DismissDetails): void;
+	/**
+	 * Fires when the dialog is opened.
+	 */
+	onOpen(): void;
+	/**
+	 * Unique ID for the dialog.
+	 */
+	id: string;
 }
 
-interface DialogProps extends UseDialogOptions {
-	children?: React.ReactNode;
+type CustomElementType = `${string}-${string}`;
+type PortalElementType = CustomElementType | "div";
+
+interface DialogProviderProps extends UseDialogOptions {
+	children:
+		| React.ReactNode
+		| ((context: DialogContextValue) => React.ReactNode);
+}
+
+interface DialogStatefulProviderProps
+	extends DialogProviderProps,
+		DialogContextValue {}
+
+interface DialogPortalProps {
+	children: React.ReactNode;
 	/**
 	 * The DOM element type to be rendered by the dialog's portal.
 	 */
-	portalElementType?: string;
+	elementType?: PortalElementType;
+	/**
+	 * The container ref to which the dialog's portal will be mounted. If not set
+	 * the portal will be mounted to the body of the component's owner document
+	 * (typically this is the `document.body`).
+	 */
+	mountRef?: React.RefObject<Node>;
+}
+
+interface DialogProps extends UseDialogOptions {
+	children: React.ReactNode;
+	/**
+	 * The DOM element type to be rendered by the dialog's portal.
+	 */
+	portalElementType?: PortalElementType;
 	/**
 	 * The container ref to which the dialog's portal will be mounted. If not set
 	 * the portal will be mounted to the body of the component's owner document
@@ -126,8 +231,8 @@ interface DialogProps extends UseDialogOptions {
 	portalMountRef?: React.RefObject<Node>;
 }
 
-function useDialogOverlay<E extends keyof JSX.IntrinsicElements>(
-	{
+function useDialogOverlay<E extends keyof JSX.IntrinsicElements>({
+	props: {
 		allowPinchZoom,
 		dangerouslyBypassFocusLock,
 
@@ -139,10 +244,16 @@ function useDialogOverlay<E extends keyof JSX.IntrinsicElements>(
 		onMouseDown,
 		unstable_lockFocusAcrossFrames,
 		...props
-	}: DialogOverlayProps<E>,
-	state: DialogState,
-	forwardedRef?: React.Ref<ElementFrom<E>> | null
-) {
+	},
+	state,
+	actions,
+	ref: forwardedRef,
+}: {
+	props: DialogOverlayProps<E>;
+	state: DialogState;
+	actions: DialogActions;
+	ref?: React.Ref<ElementFrom<E>> | null;
+}) {
 	let mouseDownTarget = React.useRef<EventTarget | null>(null);
 	let overlayNode = React.useRef<Element | null>(null);
 	let ref = useComposedRefs(overlayNode, forwardedRef);
@@ -153,7 +264,7 @@ function useDialogOverlay<E extends keyof JSX.IntrinsicElements>(
 		}
 	}, [initialFocusRef]);
 
-	let { dismiss } = state;
+	let { dismiss } = actions;
 	let handleClick = useComposedEventHandlers(
 		onClick as any,
 		React.useCallback(
@@ -233,12 +344,13 @@ const DialogOverlay = React.forwardRef<
 	HTMLDivElement,
 	DialogOverlayProps<"div">
 >((props, forwardedRef) => {
-	let { state } = useDialogContext("DialogOverlay");
-	let { componentProps, focusLockProps, removeScrollProps } = useDialogOverlay(
+	let { state, actions } = useDialogContext("DialogOverlay");
+	let { componentProps, focusLockProps, removeScrollProps } = useDialogOverlay({
+		actions,
 		props,
 		state,
-		forwardedRef
-	);
+		ref: forwardedRef,
+	});
 	const containerRef = React.useRef<HTMLDivElement>(null);
 	const ref = useComposedRefs(forwardedRef, containerRef);
 	return (
@@ -332,11 +444,17 @@ interface DialogOverlayOwnProps {
 type DialogOverlayProps<Elem extends keyof JSX.IntrinsicElements> =
 	ExtendPropsWithRef<Elem, DialogOverlayOwnProps>;
 
-function useDialogContent<E extends keyof JSX.IntrinsicElements>(
-	props: DialogContentProps<E>,
-	state: DialogState,
-	forwardedRef?: React.Ref<ElementFrom<E>> | null
-) {
+function useDialogContent<E extends keyof JSX.IntrinsicElements>({
+	props,
+	state,
+	actions,
+	ref: forwardedRef,
+}: {
+	props: DialogContentProps<E>;
+	state: DialogState;
+	actions: DialogActions;
+	ref?: React.Ref<ElementFrom<E>> | null;
+}) {
 	let handleClick = useComposedEventHandlers(
 		props.onClick as any,
 		React.useCallback((event: React.MouseEvent<ElementFrom<E>>) => {
@@ -373,8 +491,13 @@ const DialogContent = React.forwardRef<
 	HTMLDivElement,
 	DialogContentProps<"div">
 >(({ children, ...props }, forwardedRef) => {
-	let { state } = useDialogContext("DialogContent");
-	let { componentProps } = useDialogContent<"div">(props, state, forwardedRef);
+	let { state, actions } = useDialogContext("DialogContent");
+	let { componentProps } = useDialogContent<"div">({
+		actions,
+		props,
+		state,
+		ref: forwardedRef,
+	});
 	return (
 		<div
 			{...componentProps}
@@ -497,13 +620,56 @@ function DisableEventsMaybe({
 	return children;
 }
 
+function useDialogTrigger(args?: DialogContextValue): UseDialogTriggerReturn {
+	const context = React.useContext(DialogContext);
+	if (args && context) {
+		// TODO: Support nested contexts, this will require some scoping mechanism
+		console.warn(
+			"[useDialogTrigger]: You should not pass arguments if called from within a Dialog or DialogProvider"
+		);
+	}
+	if (!context && !args) {
+		throw new Error(
+			"[useDialogTrigger]: You must pass `state` and `action` arguments if not called from within a Dialog or DialogProvider."
+		);
+	}
+	const ctx = args || context!;
+	return {
+		props: {
+			"aria-expanded": ctx.state.open,
+			"aria-controls": ctx.state.open ? ctx.dialogId : null,
+		},
+		actions: {
+			open: ctx.actions.open,
+		},
+	};
+}
+
+interface UseDialogTriggerReturn {
+	props: {
+		"aria-expanded": boolean;
+		"aria-controls": string | null;
+	};
+	actions: {};
+}
+
 export type {
-	DialogProps,
 	DialogContentProps,
 	DialogOverlayProps,
+	DialogPortalProps,
+	DialogProps,
+	DialogProviderProps,
+	DialogStatefulProviderProps,
 	DialogUIState,
 };
-export { Dialog, DialogContent, DialogOverlay };
+export {
+	Dialog,
+	DialogContent,
+	DialogOverlay,
+	DialogPortal,
+	DialogProvider,
+	DialogStatefulProvider,
+};
 
 type ElementFrom<E> = E extends keyof ElementTagNameMap
 	? ElementTagNameMap[E]

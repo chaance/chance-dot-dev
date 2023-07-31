@@ -17,7 +17,6 @@
 	);
 	--ui-site-header-logo-size: 3.5rem;
 	--ui-site-header-border-size: 1px;
-	height: var(--ui-site-header-height);
 
 	@media (--sm) {
 		--ui-site-header-height: 6rem;
@@ -214,10 +213,12 @@
 	}
 
 	&__nav-toggle-icon {
+		--bg-color: currentColor;
+		--offset: 0.375rem;
 		display: block;
 		height: 1px;
 		width: var(--visual-size);
-		background-color: currentColor;
+		background-color: var(--bg-color);
 		position: relative;
 
 		&::before,
@@ -226,16 +227,32 @@
 			display: block;
 			height: inherit;
 			width: inherit;
-			background-color: inherit;
+			background-color: var(--bg-color);
 			position: absolute;
 		}
 
 		&::before {
-			top: -0.375rem;
+			top: calc(var(--offset) * -1);
 		}
 
 		&::after {
-			top: 0.375rem;
+			top: var(--offset);
+		}
+
+		:where([aria-expanded="true"]) & {
+			&,
+			&::before,
+			&::after {
+				animation: siteHeader_navToggle_centerBar 0.5s ease-in-out forwards;
+			}
+
+			&::before {
+				animation-name: siteHeader_navToggle_topBar;
+			}
+
+			&::after {
+				animation-name: siteHeader_navToggle_bottomBar;
+			}
 		}
 	}
 
@@ -266,6 +283,7 @@
 
 		:where(#{$self}__nav-item) {
 			width: 100%;
+			width: fit-content;
 		}
 
 		:where(#{$self}__nav-link) {
@@ -313,12 +331,14 @@
 		fill: currentColor;
 		width: var(--ui-site-header-logo-size);
 		height: var(--ui-site-header-logo-size);
+		transition: fill 0.3s ease-in-out;
 	}
 
 	&__logo-text {
 		will-change: transform;
 		transform-origin: center;
 		opacity: 0;
+		transition: opacity 0.3s ease-in-out;
 		:where(#{$self}__logo-link:hover, #{$self}__logo-link:focus) & {
 			opacity: 1;
 		}
@@ -328,6 +348,7 @@
 	}
 
 	&__logo-mark {
+		transition: fill 0.3s ease-in-out;
 		:where(a:hover) & {
 			fill: var(--cs-color-accent);
 		}
@@ -370,5 +391,50 @@
 	}
 	100% {
 		background-color: var(--overlay-bg-color);
+	}
+}
+
+@keyframes siteHeader_navToggle_topBar {
+	0% {
+		transform: translateY(0) rotate(0);
+	}
+	40% {
+		transform: translateY(var(--offset)) rotate(0);
+	}
+	50% {
+		transform: translateY(var(--offset)) rotate(0);
+	}
+	100% {
+		transform: translateY(var(--offset)) rotate(45deg);
+	}
+}
+
+@keyframes siteHeader_navToggle_bottomBar {
+	0% {
+		transform: translateY(0) rotate(0);
+	}
+	40% {
+		transform: translateY(calc(var(--offset) * -1)) rotate(0);
+	}
+	50% {
+		transform: translateY(calc(var(--offset) * -1)) rotate(0);
+	}
+	100% {
+		transform: translateY(calc(var(--offset) * -1)) rotate(-45deg);
+	}
+}
+
+@keyframes siteHeader_navToggle_centerBar {
+	0% {
+		background-color: var(--bg-color);
+	}
+	40% {
+		background-color: var(--bg-color);
+	}
+	45% {
+		background-color: transparent;
+	}
+	100% {
+		background-color: transparent;
 	}
 }
