@@ -99,6 +99,8 @@ function Document({
 	// 	loaderData = _loaderData;
 	// }
 
+	useDisableTransitionsOnColorSchemeChange();
+
 	return (
 		<html lang="en">
 			<head>
@@ -245,4 +247,38 @@ function useProgressBar() {
 				break;
 		}
 	}, [state]);
+}
+
+function useDisableTransitionsOnColorSchemeChange() {
+	// Credit for the brilliant technique to Paco Coursey 🖤
+	// https://paco.me/writing/disable-theme-transitions
+	React.useEffect(() => {
+		const darkModeMatches = window.matchMedia("(prefers-color-scheme: dark)");
+		darkModeMatches.addEventListener("change", handleColorSchemeChange);
+		return () => {
+			darkModeMatches.removeEventListener("change", handleColorSchemeChange);
+		};
+
+		function handleColorSchemeChange(e: MediaQueryListEvent) {
+			const css = document.createElement("style");
+			css.type = "text/css";
+			css.appendChild(
+				document.createTextNode(
+					`* {
+       -webkit-transition: none !important;
+       -moz-transition: none !important;
+       -o-transition: none !important;
+       -ms-transition: none !important;
+       transition: none !important;
+    }`
+				)
+			);
+			document.head.appendChild(css);
+
+			// Calling getComputedStyle forces the browser to redraw
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const _ = window.getComputedStyle(css).opacity;
+			document.head.removeChild(css);
+		}
+	}, []);
 }
