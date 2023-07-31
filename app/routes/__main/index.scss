@@ -106,4 +106,60 @@
 			height: 1.5rem;
 		}
 	}
+
+	&__nav-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		margin-top: 1.5rem;
+		padding-top: 0.75rem;
+		border-top: 1px solid var(--cs-color-border);
+
+		@media (--sm) {
+			flex-direction: row;
+			gap: 1.5rem;
+		}
+
+		@media (--md) {
+			margin-top: 2rem;
+			padding-top: 1rem;
+		}
+	}
+
+	&__nav-item {
+		font-weight: var(--cs-font-weight-strongest);
+		text-transform: uppercase;
+		display: flex;
+	}
+
+	&__nav-link {
+		display: flex;
+		padding: var(--touch-offset);
+		color: var(--cs-color-text);
+		&:hover {
+			color: var(--cs-color-text-link-hover);
+		}
+
+		@media (--sm-down) {
+			outline-offset: 0;
+		}
+		@media (--md) {
+			border-radius: 0;
+		}
+
+		@media screen {
+			transform: translateY(0);
+			&:hover {
+				transform: translateY(-1px);
+			}
+		}
+
+		@media screen and (--md) {
+			padding: 0;
+		}
+
+		@media screen and (--motion) {
+			transition: transform 300ms cubic-bezier(0.22, 0.15, 0, 4.06);
+		}
+	}
 }
