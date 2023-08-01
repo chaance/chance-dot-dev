@@ -371,6 +371,8 @@ function NavItem({
 }) {
 	const startMultiplier = round(Math.pow(index + 1, 1.25), 2);
 	const animationDelay = getExponentialMultiplier(index, totalItemsCount);
+	const [animationState, setAnimationState] = React.useState("pending");
+
 	return (
 		<li
 			className={className}
@@ -380,6 +382,8 @@ function NavItem({
 				"--start-pos-exp": `calc(var(--start-pos) * ${startMultiplier})`,
 				"--anim-delay": `${animationDelay}s`,
 			}}
+			onAnimationEnd={() => setAnimationState("complete")}
+			data-animation-state={animationState}
 		>
 			{children}
 		</li>
