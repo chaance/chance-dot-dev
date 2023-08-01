@@ -161,7 +161,7 @@
 
 		@media screen {
 			transform: translateY(0);
-			&:hover {
+			:where([data-animation-state="complete"]) > &:hover {
 				transform: translateY(-1px);
 			}
 		}
