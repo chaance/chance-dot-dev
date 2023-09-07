@@ -1,71 +1,6 @@
 @use "~/styles/system/media";
-@use "~/styles/lib/list" as cs_list;
 @use "sass:string";
 @use "sass:list";
-
-@mixin defs {
-	--ui-text-fz-title: 1.5rem;
-	--ui-text-fz-h1: 1.5rem;
-	--ui-text-fz-h2: 1.25rem;
-	--ui-text-fz-h3: 1.125rem;
-	--ui-text-fz-h4: 1rem;
-	--ui-text-fz-h5: 0.875rem;
-	--ui-text-fz-h6: 0.75rem;
-	--ui-text-fz-body: 1rem;
-	--ui-text-fz-body-sm: 0.75rem;
-	--ui-text-fz-body-md: 1rem;
-	--ui-text-fz-body-lg: 1.125rem;
-
-	--ui-text-lh-title: 1.25;
-	--ui-text-lh-h1: 1.25;
-	--ui-text-lh-h2: 1.333;
-	--ui-text-lh-h3: 1.333;
-	--ui-text-lh-h4: 1.5;
-	--ui-text-lh-h5: 1.5;
-	--ui-text-lh-h6: 1.625;
-	--ui-text-lh-body: 1.5;
-
-	--ui-text-color-text: var(--cs-color-text);
-	--ui-text-weak: var(--cs-color-text-weak);
-	--ui-text-weaker: var(--cs-color-text-weaker);
-	--ui-text-weakest: var(--cs-color-text-weakest);
-	--ui-text-success: var(--cs-color-green-13);
-	--ui-text-critical: var(--cs-color-red-12);
-	--ui-text-warning: var(--cs-color-yellow-15);
-	--ui-text-accent: var(--cs-color-accent);
-
-	--ui-text-weight-regular: var(--cs-font-weight-default);
-	--ui-text-semibold: var(--cs-font-weight-stronger);
-	--ui-text-bold: var(--cs-font-weight-strongest);
-
-	@media (--dark) {
-		--ui-text-success: var(--cs-color-green-06);
-		--ui-text-critical: var(--cs-color-red-06);
-		--ui-text-warning: var(--cs-color-yellow-09);
-	}
-
-	@media (--sm) {
-		--ui-text-fz-title: 2rem;
-		--ui-text-fz-h1: 2rem;
-		--ui-text-fz-h2: 1.5rem;
-		--ui-text-fz-h3: 1.25rem;
-		--ui-text-fz-h4: 1.125rem;
-		--ui-text-fz-h5: 1rem;
-		--ui-text-fz-h6: 0.875rem;
-		--ui-text-fz-body-sm: 0.875rem;
-		--ui-text-fz-body-md: 1.125rem;
-		--ui-text-fz-body-lg: 1.25rem;
-	}
-
-	@media (--lg) {
-		--ui-text-fz-title: 2.5rem;
-		--ui-text-fz-h1: 2.5rem;
-		--ui-text-fz-h2: 2rem;
-		--ui-text-fz-h3: 1.625rem;
-		--ui-text-fz-h4: 1.325rem;
-		--ui-text-fz-body-lg: 1.5rem;
-	}
-}
 
 @mixin text_base {
 	font-family: var(--cs-font-family-text);
@@ -145,61 +80,115 @@
 	line-height: var(--ui-text-lh-body);
 }
 
-.ui--text-prose {
-	$self: &;
-	@function where($selectors...) {
-		$comma: string.unquote(",");
-		$selector: cs_list.to_string($selectors, $comma);
-		@return string.unquote(
-			':where(#{$selector}):not(:where([class~="not-#{$self}"] *))'
-		);
+.ui--text-prose,
+.ui--text {
+	--ui-text-fz-title: 1.5rem;
+	--ui-text-fz-h1: 1.5rem;
+	--ui-text-fz-h2: 1.25rem;
+	--ui-text-fz-h3: 1.125rem;
+	--ui-text-fz-h4: 1rem;
+	--ui-text-fz-h5: 0.875rem;
+	--ui-text-fz-h6: 0.75rem;
+	--ui-text-fz-body: 1rem;
+	--ui-text-fz-body-sm: 0.75rem;
+	--ui-text-fz-body-md: 1rem;
+	--ui-text-fz-body-lg: 1.125rem;
+
+	--ui-text-lh-title: 1.25;
+	--ui-text-lh-h1: 1.25;
+	--ui-text-lh-h2: 1.333;
+	--ui-text-lh-h3: 1.333;
+	--ui-text-lh-h4: 1.5;
+	--ui-text-lh-h5: 1.5;
+	--ui-text-lh-h6: 1.625;
+	--ui-text-lh-body: 1.5;
+
+	--ui-text-color-text: var(--cs-color-text);
+	--ui-text-weak: var(--cs-color-text-weak);
+	--ui-text-weaker: var(--cs-color-text-weaker);
+	--ui-text-weakest: var(--cs-color-text-weakest);
+	--ui-text-success: var(--cs-color-green-13);
+	--ui-text-critical: var(--cs-color-red-12);
+	--ui-text-warning: var(--cs-color-yellow-15);
+	--ui-text-accent: var(--cs-color-accent);
+
+	--ui-text-weight-regular: var(--cs-font-weight-default);
+	--ui-text-semibold: var(--cs-font-weight-stronger);
+	--ui-text-bold: var(--cs-font-weight-strongest);
+
+	@media (--dark) {
+		--ui-text-success: var(--cs-color-green-06);
+		--ui-text-critical: var(--cs-color-red-06);
+		--ui-text-warning: var(--cs-color-yellow-09);
 	}
 
-	@include defs;
+	@media (--sm) {
+		--ui-text-fz-title: 2rem;
+		--ui-text-fz-h1: 2rem;
+		--ui-text-fz-h2: 1.5rem;
+		--ui-text-fz-h3: 1.25rem;
+		--ui-text-fz-h4: 1.125rem;
+		--ui-text-fz-h5: 1rem;
+		--ui-text-fz-h6: 0.875rem;
+		--ui-text-fz-body-sm: 0.875rem;
+		--ui-text-fz-body-md: 1.125rem;
+		--ui-text-fz-body-lg: 1.25rem;
+	}
 
-	#{where(p, li)} {
+	@media (--lg) {
+		--ui-text-fz-title: 2.5rem;
+		--ui-text-fz-h1: 2.5rem;
+		--ui-text-fz-h2: 2rem;
+		--ui-text-fz-h3: 1.625rem;
+		--ui-text-fz-h4: 1.325rem;
+		--ui-text-fz-body-lg: 1.5rem;
+	}
+}
+
+.ui--text-prose {
+	$self: &;
+
+	:where(p, li) {
 		@include text_body;
 	}
 
-	&:where(#{$self}--body-sm) #{where(p, li)} {
+	&:where(#{$self}--body-sm) :where(p, li) {
 		@include text_body_sm;
 	}
 
-	&:where(#{$self}--body-md) #{where(p, li)} {
+	&:where(#{$self}--body-md) :where(p, li) {
 		@include text_body_md;
 	}
 
-	&:where(#{$self}--body-lg) #{where(p, li)} {
+	&:where(#{$self}--body-lg) :where(p, li) {
 		@include text_body_lg;
 	}
 
-	#{where(ol, ul)} {
+	:where(ol, ul) {
 		margin-top: 1.25em;
 		margin-bottom: 1.25em;
 	}
 
-	#{where(ol)} {
+	:where(ol) {
 		list-style-type: decimal;
 		padding-left: 1.625em;
 	}
 
-	#{where(ul)} {
+	:where(ul) {
 		list-style-type: none;
 		padding-left: 0;
 	}
 
-	#{where(li)} {
+	:where(li) {
 		display: list-item;
 	}
 
-	#{where('ol > li')}::marker {
+	:where(ol > li)::marker {
 		font-weight: 400;
 	}
 }
 
 .ui--text {
-	@include defs;
-
 	// base
 	@include text_base;
 
