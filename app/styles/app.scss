@@ -6,8 +6,6 @@
 @use "~/styles/prose";
 @use "~/styles/utility";
 
-@include utility.classes;
-
 // Root route
 .layout--root {
 	&__title {
