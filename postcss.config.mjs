@@ -5,7 +5,6 @@ import { postcssSass } from "./scripts/postcss-sass.mjs";
 import autoprefixer from "autoprefixer";
 import cssnano from "cssnano";
 import postcssNesting from "postcss-nesting";
-import postcssLogical from "postcss-logical";
 
 const config = (ctx) => {
 	const isScss = ctx.file.extname === ".scss";
@@ -20,7 +19,6 @@ const config = (ctx) => {
 					importer: nodeSassAliasImporter({ "~": "." }, { root: "./app" }),
 				}),
 			!isScss && postcssImport(),
-			postcssLogical({ preserve: true }),
 			!isScss && postcssNesting(),
 			postcssCustomMedia(),
 			autoprefixer({
