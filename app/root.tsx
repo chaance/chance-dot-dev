@@ -22,7 +22,7 @@ import NProgress from "nprogress";
 import { PrimaryLayout } from "~/routes/__main";
 
 import fontStylesUrl from "~/styles/fonts.css";
-import colorsStylesUrl from "~/styles/colors.css";
+import colorStylesUrl from "~/styles/color.css";
 import appStylesUrl from "~/dist/styles/app.css";
 
 const DISABLE_JS = false;
@@ -60,7 +60,7 @@ export function links() {
 		},
 
 		{ rel: "stylesheet", href: fontStylesUrl },
-		{ rel: "stylesheet", href: colorsStylesUrl },
+		{ rel: "stylesheet", href: colorStylesUrl },
 		{ rel: "stylesheet", href: appStylesUrl },
 	];
 }

@@ -1,6 +1,3 @@
-@use "~/styles/system/media";
-@use "~/styles/system/color" as color;
-
 // Properties scoped to the root because we need them for styles in our dialog,
 // which is appended to the document body via a portal
 :root {
