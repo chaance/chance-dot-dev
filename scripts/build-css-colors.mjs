@@ -5,11 +5,7 @@ import fsp from "node:fs/promises";
 const COLOR_PROPERTY_PREFIX = "cs-color";
 
 const SRC_FILE = path.resolve(process.cwd(), "scripts", "colors.css");
-const DEST_FILE = path.resolve(
-	process.cwd(),
-	"app/styles/system",
-	"_color.scss"
-);
+const DEST_FILE = path.resolve(process.cwd(), "app/styles", "color.css");
 
 async function main() {
 	const baseColors = await getBaseColors();
