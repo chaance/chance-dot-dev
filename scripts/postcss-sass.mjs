@@ -6,7 +6,7 @@
 import { SourceMapConsumer, SourceMapGenerator } from "source-map";
 
 import sassResolve from "./sass-import-resolve.mjs";
-import sass from "sass";
+import * as sass from "sass";
 import path from "node:path";
 
 const sassMatch = /#sass$/;

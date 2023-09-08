@@ -1,15 +1,50 @@
 @use "~/styles/system/animations";
-@use "~/styles/system/color";
-@use "~/styles/system/theme";
-@use "~/styles/system/fonts";
 @use "~/styles/system/media";
-
-@include fonts.load_fonts;
-@include animations.keyframes;
+@use "~/styles/system/color";
 
 :root {
-	@include color.color_properties;
-	@include fonts.font_properties;
+	/* fonts! */
+	--cs-font-family-sans: "armingrotesk";
+	--cs-font-family-sans-fb: "armingrotesk-fb", ui-sans-serif, system-ui,
+		-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial,
+		Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol,
+		Noto Color Emoji;
+	--cs-font-family-mono: "IBM Plex Mono";
+	--cs-font-family-mono-fb: ui-monospace, IBM Plex Mono, Menlo, Monaco, Consolas,
+		Liberation Mono, Courier New, monospace;
+
+	--cs-font-family-default: var(--cs-font-family-sans),
+		var(--cs-font-family-sans-fb);
+	--cs-font-family-text: var(--cs-font-family-default);
+	--cs-font-family-heading: var(--cs-font-family-default);
+	--cs-font-family-blockquote: var(--cs-font-family-default);
+	--cs-font-family-list-marker: var(--cs-font-family-default);
+	--cs-font-family-list-item: var(--cs-font-family-default);
+	--cs-font-family-code: var(--cs-font-family-mono),
+		var(--cs-font-family-mono-fb);
+
+	--cs-font-weight-default: 400;
+	--cs-font-weight-strong: 500;
+	--cs-font-weight-stronger: 600;
+	--cs-font-weight-strongest: 700;
+
+	--cs-font-weight-text: var(--cs-font-weight-default);
+	--cs-font-weight-text-bold: var(--cs-font-weight-stronger);
+	--cs-font-weight-heading: var(--cs-font-weight-stronger);
+	--cs-font-weight-heading-bold: var(--cs-font-weight-strongest);
+	--cs-font-weight-heading-sm: var(--cs-font-weight-strong);
+	--cs-font-weight-heading-sm-bold: var(--cs-font-weight-stronger);
+	--cs-font-weight-blockquote: var(--cs-font-weight-strong);
+	--cs-font-weight-blockquote-bold: var(--cs-font-weight-stronger);
+	--cs-font-weight-list-marker: var(--cs-font-weight-strong);
+	--cs-font-weight-list-item: var(--cs-font-weight-default);
+	--cs-font-weight-list-item-active: var(--cs-font-weight-stronger);
+	--cs-font-weight-list-item-heading: var(--cs-font-weight-strongest);
+	--cs-font-weight-code: var(--cs-font-weight-strong);
+	--cs-font-weight-code-bold: var(--cs-font-weight-stronger);
+	--cs-font-weight-code: var(--cs-font-weight-strong);
+	--cs-font-weight-code-block: var(--cs-font-weight-default);
+	--cs-font-weight-table-heading: var(--cs-font-weight-stronger);
 
 	--cs-space-xxl: 4.5rem; // 72px
 	--cs-space-xl: 2.25rem; // 36px
@@ -34,24 +69,24 @@
 	--cs-selection-bg: var(--cs-color-green-05);
 	--cs-selection-fg: var(--cs-color-text);
 
-	--base00: #{color.get_system_base_color("gray", 1)};
-	--base01: #{color.get_system_base_color("gray", 4)};
-	--base02: #{color.get_system_base_color("gray", 6)};
-	--base03: #{color.get_system_base_color("gray", 8)};
-	--base04: #{color.get_system_base_color("gray", 10)};
-	--base05: #{color.get_system_base_color("gray", 16)};
-	--base06: #{color.get_system_base_color("gray", 14)};
-	--base07: #{color.get_system_base_color("gray", 17)};
-	--base08: #{color.get_system_base_color("mint", 17)};
-	--base09: #{color.get_system_base_color("green", 13)};
-	--base0A: #{color.get_system_base_color("green", 14)};
-	--base0B: #{color.get_system_base_color("mint", 14)};
-	--base0C: #{color.get_system_base_color("mint", 12)};
-	--base0D: #{color.get_system_base_color("green", 16)};
-	--base0E: #{color.get_system_base_color("green", 18)};
-	--base0F: #{color.get_system_base_color("gray", 13)};
+	--base00: var(--cs-color-gray-01);
+	--base01: var(--cs-color-gray-04);
+	--base02: var(--cs-color-gray-06);
+	--base03: var(--cs-color-gray-08);
+	--base04: var(--cs-color-gray-10);
+	--base05: var(--cs-color-gray-16);
+	--base06: var(--cs-color-gray-14);
+	--base07: var(--cs-color-gray-17);
+	--base08: var(--cs-color-mint-17);
+	--base09: var(--cs-color-green-13);
+	--base0A: var(--cs-color-green-14);
+	--base0B: var(--cs-color-mint-14);
+	--base0C: var(--cs-color-mint-12);
+	--base0D: var(--cs-color-green-16);
+	--base0E: var(--cs-color-green-18);
+	--base0F: var(--cs-color-gray-13);
 
-	--code-background: #{color.get_system_base_color("green", 0)};
+	--code-background: var(--cs-color-green-00);
 
 	--body-bg-grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 310' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 
@@ -71,7 +106,7 @@
 		repeat center/300px var(--body-bg-grain);
 
 	@media (--lg) {
-		--code-background: #{color.get_system_base_color("white")};
+		--code-background: var(--cs-color-white);
 	}
 
 	@media (--dark) {
@@ -82,25 +117,24 @@
 		--cs-field-bg-active: hsl(0 0% 0% / 1);
 		--cs-selection-bg: var(--cs-color-green-12);
 
-		--base00: #{color.get_system_base_color("gray", 16)};
-		--base01: #{color.get_system_base_color("gray", 14)};
-		--base02: #{color.get_system_base_color("gray", 12)};
-		--base03: #{color.get_system_base_color("gray", 11)};
-		--base04: #{color.get_system_base_color("gray", 8)};
-		--base05: #{color.get_system_base_color("gray", 6)};
-		--base06: #{color.get_system_base_color("gray", 4)};
-		--base07: #{color.get_system_base_color("gray", 2)};
-		--base08: #{color.get_system_base_color("mint", 6)};
-		--base09: #{color.get_system_base_color("green", 8)};
-		--base0A: #{color.get_system_base_color("green", 6)};
-		--base0B: #{color.get_system_base_color("mint", 4)};
-		--base0C: #{color.get_system_base_color("mint", 2)};
-		--base0D: #{color.get_system_base_color("green", 4)};
-		--base0E: #{color.get_system_base_color("green", 2)};
-		--base0F: #{color.get_system_base_color("gray", 7)};
+		--base00: var(--cs-color-gray-16);
+		--base01: var(--cs-color-gray-14);
+		--base02: var(--cs-color-gray-12);
+		--base03: var(--cs-color-gray-11);
+		--base04: var(--cs-color-gray-08);
+		--base05: var(--cs-color-gray-06);
+		--base06: var(--cs-color-gray-04);
+		--base07: var(--cs-color-gray-02);
+		--base08: var(--cs-color-mint-06);
+		--base09: var(--cs-color-green-08);
+		--base0A: var(--cs-color-green-06);
+		--base0B: var(--cs-color-mint-04);
+		--base0C: var(--cs-color-mint-02);
+		--base0D: var(--cs-color-green-04);
+		--base0E: var(--cs-color-green-02);
+		--base0F: var(--cs-color-gray-07);
 
-		--code-background: #{color.get_system_base_color("black")};
-		// --color-focus-ring: theme("colors.blue.300");
+		--code-background: var(--cs-color-black);
 
 		--body-bg-gradient-stop-1: var(--cs-color-black);
 		--body-bg-gradient-stop-2: var(--cs-color-gray-19);
@@ -108,7 +142,7 @@
 		--body-bg-gradient-stop-4: var(--cs-color-gray-18);
 
 		@media (--lg) {
-			--code-background: #{color.get_system_base_color("gray", 18)};
+			--code-background: var(--cs-color-gray-18);
 		}
 	}
 }
