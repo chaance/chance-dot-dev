@@ -32,7 +32,6 @@
 }
 
 .cs--site-header {
-	$self: &;
 	width: 100%;
 	background-color: transparent;
 	border-bottom: var(--ui-site-header-border-size) solid var(--cs-color-border);
@@ -278,7 +277,7 @@
 		// min-width: calc(100% - (var(--cs-space-lg) * 2));
 		max-width: 100%;
 		height: 100%;
-		:where(#{$self}__nav-list) {
+		:where(.cs--site-header__nav-list) {
 			display: flex;
 			flex-direction: column;
 		}
@@ -296,12 +295,12 @@
 			animation-fill-mode: forwards;
 		}
 
-		:where(#{$self}__nav-item) {
+		:where(.cs--site-header__nav-item) {
 			width: 100%;
 			width: fit-content;
 		}
 
-		:where(#{$self}__nav-link) {
+		:where(.cs--site-header__nav-link) {
 			display: flex;
 			width: 100%;
 		}
@@ -354,7 +353,8 @@
 		transform-origin: center;
 		opacity: 0;
 		transition: opacity 0.3s ease-in-out;
-		:where(#{$self}__logo-link:hover, #{$self}__logo-link:focus) & {
+		:where(.cs--site-header__logo-link:hover, .cs--site-header__logo-link:focus)
+			& {
 			opacity: 1;
 		}
 		@media (--sm) {

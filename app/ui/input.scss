@@ -1,5 +1,4 @@
 .cs--input {
-	$self: &;
 	--input-color-bg: var(--cs-field-bg);
 	--input-color-fg: var(--cs-field-fg);
 	--input-color-placeholder: var(--cs-field-placeholder);
@@ -96,8 +95,8 @@
 		--input-color-accent: var(--cs-field-bg-active);
 	}
 
-	&:active:where(#{$self}--checked),
-	&--active:where(#{$self}--checked) {
+	&:active:where(.cs--input--checked),
+	&--active:where(.cs--input--checked) {
 		--input-color-accent: var(--cs-color-accent-deep);
 	}
 

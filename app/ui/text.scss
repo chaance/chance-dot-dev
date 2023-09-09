@@ -64,27 +64,25 @@
 }
 
 .ui--text-prose {
-	$self: &;
-
 	:where(p, li) {
 		font-weight: var(--ui-text-weight-regular);
 		font-size: var(--ui-text-fz-body);
 		line-height: var(--ui-text-lh-body);
 	}
 
-	&:where(#{$self}--body-sm) :where(p, li) {
+	&:where(.ui--text-prose--body-sm) :where(p, li) {
 		font-weight: var(--ui-text-weight-regular);
 		font-size: var(--ui-text-fz-body-sm);
 		line-height: var(--ui-text-lh-body);
 	}
 
-	&:where(#{$self}--body-md) :where(p, li) {
+	&:where(.ui--text-prose--body-md) :where(p, li) {
 		font-weight: var(--ui-text-weight-regular);
 		font-size: var(--ui-text-fz-body-md);
 		line-height: var(--ui-text-lh-body);
 	}
 
-	&:where(#{$self}--body-lg) :where(p, li) {
+	&:where(.ui--text-prose--body-lg) :where(p, li) {
 		font-weight: var(--ui-text-weight-regular);
 		font-size: var(--ui-text-fz-body-lg);
 		line-height: var(--ui-text-lh-body);
