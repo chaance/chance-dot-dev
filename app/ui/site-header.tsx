@@ -3,10 +3,9 @@ import { NavLink, useLocation, useTransition } from "@remix-run/react";
 import { Container } from "~/ui/container";
 import { isWebKit } from "~/lib/utils";
 import { useRootContext } from "~/lib/react/context";
-import { Button } from "./primitives/button";
-import { Dialog, DialogContent, DialogOverlay } from "./primitives/dialog";
-
-const ROOT_CLASS = "cs--site-header";
+import { Button } from "~/ui/primitives/button";
+import { Dialog, DialogContent, DialogOverlay } from "~/ui/primitives/dialog";
+import styles from "~/ui/site-header.module.css";
 
 const NAV_ITEMS = [
 	{
@@ -84,23 +83,23 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
 			data-ui-hydrated={hydrated || undefined}
 			data-ui-has-bottom-margin={includeBottomMargin || undefined}
 			id={id as string}
-			className={ROOT_CLASS}
+			className={styles.siteHeader}
 			ref={containerRef}
 		>
 			<Container purpose="header">
-				<div className={`${ROOT_CLASS}__inner`}>
-					<nav aria-label="Main" className={`${ROOT_CLASS}__nav`}>
-						<ul className={`${ROOT_CLASS}__nav-list`}>
+				<div className={styles.inner}>
+					<nav aria-label="Main" className={styles.nav}>
+						<ul className={styles.navList}>
 							{NAV_ITEMS.map((item, index, items) => {
 								return (
 									<NavItem
 										index={index}
 										totalItemsCount={items.length}
 										key={item.id}
-										className={`${ROOT_CLASS}__nav-item`}
+										className={styles.navItem}
 									>
 										<NavLink
-											className={`${ROOT_CLASS}__nav-link`}
+											className={styles.navLink}
 											to={item.to}
 											prefetch={item.prefetch || undefined}
 										>
@@ -112,12 +111,12 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
 						</ul>
 						<Button
 							onPress={dialogActions.open}
-							className={`${ROOT_CLASS}__nav-toggle`}
+							className={styles.navToggle}
 							aria-controls={dialogIsOpen ? dialogId : undefined}
 							aria-expanded={dialogIsOpen}
 						>
 							<span className="sr-only">Open Menu</span>
-							<span className={`${ROOT_CLASS}__nav-toggle-icon`} aria-hidden />
+							<span className={styles.navToggleIcon} aria-hidden />
 						</Button>
 						<Dialog
 							onDismiss={dialogActions.dismiss}
@@ -126,22 +125,22 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
 							aria-label="Main navigation"
 							id={dialogId}
 						>
-							<DialogOverlay className={`${ROOT_CLASS}__nav-dialog-overlay`}>
-								<div className={`${ROOT_CLASS}__nav-dialog-overlay-inner`}>
-									<DialogContent className={`${ROOT_CLASS}__nav-dialog`}>
-										<div className={`${ROOT_CLASS}__nav-dialog-inner`}>
+							<DialogOverlay className={styles.navDialogOverlay}>
+								<div className={styles.navDialogOverlayInner}>
+									<DialogContent className={styles.navDialog}>
+										<div className={styles.navDialogInner}>
 											<Container purpose="header">
-												<ul className={`${ROOT_CLASS}__nav-list`}>
+												<ul className={styles.navList}>
 													{NAV_ITEMS.map((item, index, items) => {
 														return (
 															<NavItem
 																key={item.id}
-																className={`${ROOT_CLASS}__nav-item`}
+																className={styles.navItem}
 																index={index}
 																totalItemsCount={items.length}
 															>
 																<NavLink
-																	className={`${ROOT_CLASS}__nav-link`}
+																	className={styles.navLink}
 																	to={item.to}
 																	prefetch={item.prefetch || undefined}
 																	onClick={() => {
@@ -163,13 +162,13 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
 					</nav>
 					{hideLogo ? null : (
 						<NavLink
-							className={`${ROOT_CLASS}__logo-link`}
+							className={styles.logoLink}
 							to="/"
 							aria-label="Chance the Dev"
 							prefetch="intent"
 						>
 							<svg
-								className={`${ROOT_CLASS}__logo`}
+								className={styles.logo}
 								ref={logoRef}
 								viewBox="0 0 600 600"
 								xmlns="http://www.w3.org/2000/svg"
@@ -177,7 +176,7 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
 								<g
 									ref={logoTextRef}
 									data-ui-id="site-header-logo-text"
-									className={`${ROOT_CLASS}__logo-text`}
+									className={styles.logoText}
 								>
 									<path d="M98.0149 338.589C93.9379 317.559 79.1279 304.353 61.8582 304.128L58.6669 324.525C68.1212 325.244 75.6968 332.069 77.628 342.031C80.1075 354.82 71.8867 365.729 57.0063 368.614C42.1259 371.499 30.4242 364.452 27.9446 351.663C26.0135 341.701 30.4897 332.54 38.9903 328.34L28.408 310.613C12.4735 317.275 3.67161 335.059 7.74854 356.088C12.7791 382.037 34.2425 395.995 61.2978 390.75C88.3531 385.505 103.045 364.537 98.0149 338.589Z" />
 									<path d="M55.2287 208.18L45.5011 239.263L12.6247 228.974L6.26434 249.298L91.1453 275.861L97.5057 255.538L64.6292 245.249L74.3568 214.166L107.233 224.455L113.594 204.131L28.7127 177.567L22.3523 197.891L55.2287 208.18Z" />
@@ -192,7 +191,7 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
 									<path d="M270.717 542.583L237.704 537.214L234.688 555.76L267.701 561.129L265.288 575.967L226.093 569.592L222.876 589.375L283.09 599.168L297.367 511.381L235.916 501.387L232.699 521.17L273.13 527.745L270.717 542.583Z" />
 									<path d="M168.83 490.242L146.959 555.815L166.564 569.53L193.939 480.137L170.126 463.478L95.5342 519.84L114.831 533.339L168.83 490.242Z" />
 								</g>
-								<g className={`${ROOT_CLASS}__logo-mark`}>
+								<g className={styles.logoMark}>
 									<path d="M440 303C419.326 286.333 398.745 269.667 378.259 253C357.961 236.333 337.474 219.667 316.8 203V247.841C328.077 257.101 339.354 266.36 350.631 275.619C362.095 284.614 373.466 293.741 384.743 303C373.466 312.259 362.095 321.518 350.631 330.778C339.354 339.772 328.077 348.899 316.8 358.159V403C337.474 386.333 357.961 369.667 378.259 353C398.745 336.333 419.326 319.667 440 303Z" />
 									<path d="M160 303C180.674 319.667 201.255 336.333 221.741 353C242.039 369.667 262.526 386.333 283.2 403V358.159C271.923 348.899 260.646 339.64 249.369 330.381C237.904 321.386 226.534 312.259 215.257 303C226.534 293.741 237.905 284.481 249.369 275.222C260.646 266.228 271.923 257.101 283.2 247.841V203C262.526 219.667 242.039 236.333 221.741 253C201.255 269.667 180.674 286.333 160 303Z" />
 								</g>
