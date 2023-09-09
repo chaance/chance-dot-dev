@@ -78,3 +78,14 @@
 	font-weight: 700;
 	font-style: italic;
 }
+
+@media (--sm) {
+	.hello {
+		color: green;
+		background: red;
+
+		.world {
+			color: crimson;
+		}
+	}
+}
