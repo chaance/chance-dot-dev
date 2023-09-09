@@ -46,6 +46,7 @@
 			border-radius: 0.75rem;
 			@media (--dark) {
 				background-color: var(--cs-color-gray-18);
+				border-color: var(--cs-color-gray-16);
 			}
 
 			&__topbar {
