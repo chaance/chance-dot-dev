@@ -132,7 +132,9 @@ async function main() {
 
 	/**
 	 * @param {string} color
-	 * @param {{ scale: number | null }} args
+	 * @param {number | null} [scale=null]
+	 * @param {Object} [args]
+	 * @param {number|null} [args.alpha=null]
 	 */
 	function getSystemBaseColor(color, scale = null, { alpha = null }) {
 		validateColorAlpha(alpha);
@@ -311,8 +313,8 @@ function getColorString(value) {
 }
 
 /**
- * @param {[number, number, number] | null} hex
- * @returns
+ * @param {string} hex
+ * @returns {[number, number, number] | null}
  */
 function hexToRgb(hex) {
 	let _hex = hex.trim();
