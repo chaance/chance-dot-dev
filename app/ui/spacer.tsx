@@ -1,6 +1,7 @@
 import * as React from "react";
 import cx from "clsx";
 import { isString } from "~/lib/utils";
+import styles from "~/ui/spacer.module.css";
 
 const Spacer = React.forwardRef<HTMLDivElement, SpacerProps>(
 	({ children, axis = "y", size, className, ...props }, forwardedRef) => {
@@ -17,11 +18,11 @@ const Spacer = React.forwardRef<HTMLDivElement, SpacerProps>(
 		return (
 			<div
 				ref={forwardedRef}
-				className={cx(className, "ui--spacer", `ui--spacer--axis-${axis}`, {
-					[`ui--spacer--minmax`]: isMinMax,
-					[`ui--spacer--${size}`]: !isMinMax,
-					[`ui--spacer--min-${min}`]: !!(isMinMax && min),
-					[`ui--spacer--max-${max}`]: !!(isMinMax && max),
+				className={cx(className, styles.spacer, styles[`spacer--axis${axis}`], {
+					[styles["spacer--minmax"]]: isMinMax,
+					[styles[`spacer--${size}`]]: !isMinMax,
+					[styles[`spacer--min-${min}`]]: !!(isMinMax && min),
+					[styles[`spacer--max-${max}`]]: !!(isMinMax && max),
 				})}
 				{...props}
 			>
