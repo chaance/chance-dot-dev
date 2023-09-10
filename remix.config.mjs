@@ -19,6 +19,7 @@ const config = {
 		});
 	},
 	cacheDirectory: "./node_modules/.cache/remix",
+	postcss: true,
 	future: {
 		v2_headers: true,
 		v2_meta: true,

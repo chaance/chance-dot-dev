@@ -1,8 +1,4 @@
-@use "sass:string";
-@use "~/styles/system/media";
-
 .ui--card {
-	$self: &;
 	--ui-card-pad: 0;
 	--ui-card-bg: none;
 	--ui-card-shadow: none;
@@ -12,67 +8,193 @@
 	box-shadow: var(--ui-card-shadow);
 	border: var(--ui-card-border);
 	border-radius: var(--ui-card-radius);
+}
 
-	&--depth-raised {
-		--ui-card-shadow: 0 20px 13px rgb(0 0 0 / 0.03), 0 8px 5px rgb(0 0 0 / 0.08);
+.ui--card--depth-raised {
+	--ui-card-shadow: 0 20px 13px rgb(0 0 0 / 0.03), 0 8px 5px rgb(0 0 0 / 0.08);
+}
+
+.ui--card--no-depth {
+	--ui-card-shadow: none;
+}
+
+.ui--card:where(:not(.ui--card--no-pad)) {
+	--ui-card-pad: 1rem;
+}
+
+@media (--sm) {
+	.ui--card:where(:not(.ui--card--no-pad)) {
+		--ui-card-pad: 2rem;
+	}
+}
+
+@media (--lg) {
+	.ui--card:where(:not(.ui--card--no-pad)) {
+		--ui-card-pad: 3rem;
+	}
+}
+
+.ui--card:where(:not(.ui--card--no-bg)) {
+	--ui-card-border: 1px solid var(--cs-color-border-weak);
+	--ui-card-bg: var(--cs-color-background-raised);
+}
+
+.ui--card:where(:not(.ui--card--no-bg)):where(.ui--card--rounded-corners-xs) {
+	--ui-card-radius: 2px;
+}
+
+.ui--card:where(:not(.ui--card--no-bg)):where(.ui--card--rounded-corners-sm) {
+	--ui-card-radius: 4px;
+}
+
+.ui--card:where(:not(.ui--card--no-bg)):where(.ui--card--rounded-corners-md) {
+	--ui-card-radius: 6px;
+}
+
+.ui--card:where(:not(.ui--card--no-bg)):where(.ui--card--rounded-corners-lg) {
+	--ui-card-radius: 8px;
+}
+
+.ui--card:where(:not(.ui--card--no-bg)):where(.ui--card--rounded-corners-xl) {
+	--ui-card-radius: 12px;
+}
+
+@media (--sm) {
+	.ui--card:where(.ui--card--no-pad\:sm) {
+		--ui-card-pad: 0;
 	}
 
-	&--no-depth {
+	.ui--card:where(.ui--card--no-bg\:sm) {
+		--ui-card-bg: none;
+		--ui-card-border: 0;
 		--ui-card-shadow: none;
+		--ui-card-radius: 0;
 	}
 
-	&:where(:not(#{$self}--no-pad)) {
-		--ui-card-pad: 1rem;
-		@media (--sm) {
-			--ui-card-pad: 2rem;
-		}
-		@media (--lg) {
-			--ui-card-pad: 3rem;
-		}
+	.ui--card:where(.ui--card--uncard\:sm) {
+		--ui-card-bg: none;
+		--ui-card-border: 0;
+		--ui-card-shadow: none;
+		--ui-card-pad: 0;
+		--ui-card-radius: 0;
+	}
+}
+
+@media (--sm-down) {
+	.ui--card:where(.ui--card--no-pad\:sm-down) {
+		--ui-card-pad: 0;
 	}
 
-	&:where(:not(#{$self}--no-bg)) {
-		--ui-card-border: 1px solid var(--cs-color-border-weak);
-		--ui-card-bg: var(--cs-color-background-raised);
-
-		$sizes: (
-			"xs": 2px,
-			"sm": 4px,
-			"md": 6px,
-			"lg": 8px,
-			"xl": 12px,
-		);
-		@each $corner_size, $px in $sizes {
-			&:where(#{$self}--rounded-corners-#{string.unquote($corner_size)}) {
-				--ui-card-radius: #{$px};
-			}
-		}
+	.ui--card:where(.ui--card--no-bg\:sm-down) {
+		--ui-card-bg: none;
+		--ui-card-border: 0;
+		--ui-card-shadow: none;
+		--ui-card-radius: 0;
 	}
 
-	@each $sz in "sm", "sm-down", "md", "md-down", "lg", "lg-down", "xl" {
-		@media (media.get(string.unquote($sz))) {
-			&:where(#{$self}--no-pad\:#{string.unquote($sz)}) {
-				--ui-card-pad: 0;
-			}
+	.ui--card:where(.ui--card--uncard\:sm-down) {
+		--ui-card-bg: none;
+		--ui-card-border: 0;
+		--ui-card-shadow: none;
+		--ui-card-pad: 0;
+		--ui-card-radius: 0;
+	}
+}
 
-			&:where(#{$self}--no-bg\:#{string.unquote($sz)}) {
-				--ui-card-bg: none;
-				--ui-card-border: 0;
-				--ui-card-shadow: none;
-				--ui-card-radius: 0;
-			}
-
-			&:where(#{$self}--uncard\:#{string.unquote($sz)}) {
-				--ui-card-bg: none;
-				--ui-card-border: 0;
-				--ui-card-shadow: none;
-				--ui-card-pad: 0;
-				--ui-card-radius: 0;
-			}
-		}
+@media (--md) {
+	.ui--card:where(.ui--card--no-pad\:md) {
+		--ui-card-pad: 0;
 	}
 
-	&__inner {
-		padding: var(--ui-card-pad);
+	.ui--card:where(.ui--card--no-bg\:md) {
+		--ui-card-bg: none;
+		--ui-card-border: 0;
+		--ui-card-shadow: none;
+		--ui-card-radius: 0;
 	}
+
+	.ui--card:where(.ui--card--uncard\:md) {
+		--ui-card-bg: none;
+		--ui-card-border: 0;
+		--ui-card-shadow: none;
+		--ui-card-pad: 0;
+		--ui-card-radius: 0;
+	}
+}
+
+@media (--md-down) {
+	.ui--card:where(.ui--card--no-pad\:md-down) {
+		--ui-card-pad: 0;
+	}
+	.ui--card:where(.ui--card--no-bg\:md-down) {
+		--ui-card-bg: none;
+		--ui-card-border: 0;
+		--ui-card-shadow: none;
+		--ui-card-radius: 0;
+	}
+	.ui--card:where(.ui--card--uncard\:md-down) {
+		--ui-card-bg: none;
+		--ui-card-border: 0;
+		--ui-card-shadow: none;
+		--ui-card-pad: 0;
+		--ui-card-radius: 0;
+	}
+}
+@media (--lg) {
+	.ui--card:where(.ui--card--no-pad\:lg) {
+		--ui-card-pad: 0;
+	}
+	.ui--card:where(.ui--card--no-bg\:lg) {
+		--ui-card-bg: none;
+		--ui-card-border: 0;
+		--ui-card-shadow: none;
+		--ui-card-radius: 0;
+	}
+	.ui--card:where(.ui--card--uncard\:lg) {
+		--ui-card-bg: none;
+		--ui-card-border: 0;
+		--ui-card-shadow: none;
+		--ui-card-pad: 0;
+		--ui-card-radius: 0;
+	}
+}
+@media (--lg-down) {
+	.ui--card:where(.ui--card--no-pad\:lg-down) {
+		--ui-card-pad: 0;
+	}
+	.ui--card:where(.ui--card--no-bg\:lg-down) {
+		--ui-card-bg: none;
+		--ui-card-border: 0;
+		--ui-card-shadow: none;
+		--ui-card-radius: 0;
+	}
+	.ui--card:where(.ui--card--uncard\:lg-down) {
+		--ui-card-bg: none;
+		--ui-card-border: 0;
+		--ui-card-shadow: none;
+		--ui-card-pad: 0;
+		--ui-card-radius: 0;
+	}
+}
+@media (--xl) {
+	.ui--card:where(.ui--card--no-pad\:xl) {
+		--ui-card-pad: 0;
+	}
+	.ui--card:where(.ui--card--no-bg\:xl) {
+		--ui-card-bg: none;
+		--ui-card-border: 0;
+		--ui-card-shadow: none;
+		--ui-card-radius: 0;
+	}
+	.ui--card:where(.ui--card--uncard\:xl) {
+		--ui-card-bg: none;
+		--ui-card-border: 0;
+		--ui-card-shadow: none;
+		--ui-card-pad: 0;
+		--ui-card-radius: 0;
+	}
+}
+
+.ui--card__inner {
+	padding: var(--ui-card-pad);
 }

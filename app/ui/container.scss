@@ -1,25 +1,22 @@
-@use "~/styles/system/media";
-
 .ui--container {
-	$self: &;
 	padding-left: var(--cs-space-lg);
 	padding-right: var(--cs-space-lg);
 
-	&:where(#{$self}--centered) {
+	&:where(.ui--container--centered) {
 		margin-left: auto;
 		margin-right: auto;
 	}
 
-	&:where(#{$self}--purpose-content) {
+	&:where(.ui--container--purpose-content) {
 		max-width: 42rem;
 	}
 
-	&:where(#{$self}--purpose-header),
-	&:where(#{$self}--purpose-footer) {
+	&:where(.ui--container--purpose-header),
+	&:where(.ui--container--purpose-footer) {
 		max-width: 80rem;
 	}
 
-	&:where(#{$self}--full-height) {
+	&:where(.ui--container--full-height) {
 		height: 100%;
 	}
 
@@ -29,13 +26,13 @@
 	}
 
 	@media (--lg) {
-		&:where(#{$self}--purpose-content) {
+		&:where(.ui--container--purpose-content) {
 			max-width: 48rem;
 		}
 	}
 
 	@media (--xl) {
-		&:where(#{$self}--purpose-content) {
+		&:where(.ui--container--purpose-content) {
 			max-width: 56rem;
 		}
 	}

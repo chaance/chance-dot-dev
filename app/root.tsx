@@ -21,8 +21,10 @@ import NProgress from "nprogress";
 
 import { PrimaryLayout } from "~/routes/__main";
 
+import fontStylesUrl from "~/styles/fonts.css";
+import colorStylesUrl from "~/styles/color.css";
 import appStylesUrl from "~/dist/styles/app.css";
-import fontStylesUrl from "~/dist/styles/fonts.css";
+import { cssBundleHref } from "@remix-run/css-bundle";
 
 const DISABLE_JS = false;
 const ROOT_CLASS = "layout--root";
@@ -59,7 +61,9 @@ export function links() {
 		},
 
 		{ rel: "stylesheet", href: fontStylesUrl },
+		{ rel: "stylesheet", href: colorStylesUrl },
 		{ rel: "stylesheet", href: appStylesUrl },
+		...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 	];
 }
 

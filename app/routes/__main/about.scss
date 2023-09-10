@@ -1,6 +1,4 @@
-@use "~/styles/system/media";
 .page--about {
-	$self: &;
 	--intro-fz: 1rem;
 	--intro-lh: 1.5;
 	--intro-mt: 1.5em;
@@ -225,7 +223,7 @@
 		transition-timing-function: cubic-bezier(0.15, 0.35, 0.43, 0.92);
 		transition-duration: 0.33s;
 
-		:where(#{$self}__featured-item-link):hover & {
+		:where(.page--about__featured-item-link):hover & {
 			transform: translateY(-4px);
 			box-shadow: 0px 8px 34px -16px hsl(0deg 0% 0% / 0.375);
 		}
