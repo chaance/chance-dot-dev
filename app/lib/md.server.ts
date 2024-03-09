@@ -6,7 +6,6 @@ import type { Tinypool as TTinypool } from "tinypool";
 
 import type * as Unist from "unist";
 import type * as Hast from "hast";
-import type * as Shiki from "shiki";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const NO_CACHE = process.env.NO_CACHE;
