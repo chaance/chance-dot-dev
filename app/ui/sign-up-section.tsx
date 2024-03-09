@@ -22,7 +22,7 @@ function SignUpSection__WIP() {
 	let { errors } = signUpFetcher.data || {};
 	let isHydrated = useIsHydrated();
 	let hasSuccessfulSubmission =
-		signUpFetcher.type === "done" && signUpFetcher.data.status === "success";
+		signUpFetcher.state === "idle" && signUpFetcher.data?.status === "success";
 
 	let formRef = React.useRef<HTMLFormElement>(null);
 	useFakeEventHandler(hasSuccessfulSubmission, () => {

@@ -92,7 +92,7 @@ async function getProcessor(options: ProcessorOptions = {}) {
 
 async function getPlugins() {
 	// Shiki Theme values
-	let langs: Shiki.Lang[] = [
+	let langs = [
 		"css",
 		"diff",
 		"html",
@@ -437,7 +437,7 @@ namespace UnistNode {
 	export interface Code extends Unist.Parent {
 		type: "code";
 		value?: string;
-		lang?: Shiki.Lang;
+		lang?: string;
 		meta?: string | string[];
 	}
 

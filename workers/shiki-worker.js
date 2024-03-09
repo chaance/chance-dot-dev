@@ -8,7 +8,10 @@ import fs from "node:fs/promises";
 import { getHighlighter } from "shiki";
 
 const base16Theme = JSON.parse(
-	await fs.readFile(new URL("../data/shiki-base16.json", import.meta.url))
+	await fs.readFile(
+		new URL("../data/shiki-base16.json", import.meta.url),
+		"utf-8"
+	)
 );
 
 /**
@@ -23,6 +26,7 @@ async function getThemedTokens({ code, language }) {
 
 	const theme = highlighter.getTheme(themeName);
 	const tokens = highlighter.codeToTokensWithThemes(code, {
+		// @ts-expect-error
 		lang: language,
 		themes: { dark: themeName, light: themeName },
 	});

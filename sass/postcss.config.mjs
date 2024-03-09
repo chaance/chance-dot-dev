@@ -1,3 +1,4 @@
+// @ts-nocheck
 import path from "node:path";
 import postcssGlobalData from "@csstools/postcss-global-data";
 import nodeSassAliasImporter from "node-sass-alias-importer";

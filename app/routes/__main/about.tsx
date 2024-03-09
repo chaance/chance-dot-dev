@@ -23,7 +23,7 @@ const ROOT_CLASS = "page--about";
 export default function AboutRoute() {
 	let signUpFetcher = useFetcher<typeof signUpAction>();
 	let hasSuccessfulSubmission =
-		signUpFetcher.type === "done" && signUpFetcher.data.status === "success";
+		signUpFetcher.state === "idle" && signUpFetcher.data?.status === "success";
 
 	let formRef = React.useRef<HTMLFormElement>(null);
 	useFakeEventHandler(hasSuccessfulSubmission, () => {

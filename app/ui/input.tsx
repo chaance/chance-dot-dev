@@ -413,6 +413,8 @@ const InputRadioGroup = React.forwardRef<HTMLDivElement, InputRadioGroupProps>(
 			useRadioGroup(
 				{
 					...props,
+					onFocus: props.onFocus as any,
+					onBlur: props.onBlur as any,
 					id,
 					onChange: onValueChange,
 					isDisabled,

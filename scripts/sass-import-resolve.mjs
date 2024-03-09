@@ -1,3 +1,4 @@
+// @ts-nocheck
 // (c) 2017 Jonathan Neal
 // CC0 1.0 Universal (CC0 1.0) Public Domain Dedication
 // https://github.com/jonathantneal/sass-import-resolve/blob/master/index.mjs

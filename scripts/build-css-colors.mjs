@@ -1,3 +1,4 @@
+// @ts-nocheck
 import * as csstree from "css-tree";
 import path from "node:path";
 import fsp from "node:fs/promises";

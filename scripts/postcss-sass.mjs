@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Forked because the official plugin is no longer maintained and may have
 // issues with newer versions of Node.
 // (c) 2022 Jonathan Neal CC0 1.0 Universal

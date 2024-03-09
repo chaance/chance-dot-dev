@@ -38,6 +38,10 @@ export type DOMEvent =
 	| "dragleave"
 	| "drop";
 
+type DocumentAndElementEventHandlersEventMap = DocumentEventMap &
+	HTMLElementEventMap &
+	SVGElementEventMap;
+
 export type CopyEvents = {
 	[TKey in string &
 		DOMEvent &
