@@ -2,7 +2,7 @@ import * as React from "react";
 import type {
 	ActionFunctionArgs,
 	LoaderFunctionArgs,
-	V2_MetaFunction as MetaFunction,
+	MetaFunction,
 } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { createUserSession, getSessionUser } from "~/lib/session.server";

@@ -1,12 +1,8 @@
 import { Container } from "~/ui/container";
-import type { V2_MetaFunction as MetaFunction } from "@remix-run/node";
+import type { MetaFunction } from "@remix-run/node";
 
-import routeStylesUrl from "~/dist/styles/routes/__main/uses.css";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
-
-export function links() {
-	return [{ rel: "stylesheet", href: routeStylesUrl }];
-}
+import "~/dist/styles/routes/__main/uses.css";
 
 const ROOT_CLASS = "page--uses";
 

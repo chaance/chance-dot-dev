@@ -6,14 +6,10 @@ import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
 import { useFetcher } from "@remix-run/react";
 import type { action as signUpAction } from "~/routes/__main/sign-up";
 
-import routeStylesUrl from "~/dist/styles/routes/__main/about.css";
 import { SignUpSection } from "~/ui/sign-up-section";
 import { useLayoutEffect } from "~/lib/react/use-layout-effect";
 import { TextHeading, TextSpan } from "~/ui/text";
-
-export function links() {
-	return [{ rel: "stylesheet", href: routeStylesUrl }];
-}
+import "~/dist/styles/routes/__main/about.css";
 
 export function meta() {
 	return getSeoMeta({

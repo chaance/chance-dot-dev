@@ -6,12 +6,8 @@ import { bem } from "~/lib/utils";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
 import { SignUpSection } from "~/ui/sign-up-section";
 
-import routeStylesUrl from "~/dist/styles/routes/__main/content.css";
 import { Card } from "~/ui/card";
-
-export function links() {
-	return [{ rel: "stylesheet", href: routeStylesUrl }];
-}
+import "~/dist/styles/routes/__main/content.css";
 
 export function meta() {
 	return getSeoMeta({

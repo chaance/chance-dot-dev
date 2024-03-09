@@ -2,16 +2,12 @@ import type { ErrorResponse } from "@remix-run/router";
 import { json } from "@remix-run/node";
 import { isRouteErrorResponse } from "@remix-run/react";
 import { Container } from "~/ui/container";
-import routeStylesUrl from "~/dist/styles/routes/__main/$.css";
+import "~/dist/styles/routes/__main/$.css";
 
 const ROOT_CLASS = "page--main-catchall";
 
 export async function loader() {
 	throw json(null, 404);
-}
-
-export function links() {
-	return [{ rel: "stylesheet", href: routeStylesUrl }];
 }
 
 export default function CatchAll() {

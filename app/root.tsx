@@ -21,12 +21,10 @@ import NProgress from "nprogress";
 
 import { PrimaryLayout } from "~/routes/__main";
 
-import fontStylesUrl from "~/styles/fonts.css";
-import colorStylesUrl from "~/styles/color.css";
-import appStylesUrl from "~/dist/styles/app.css";
-import { cssBundleHref } from "@remix-run/css-bundle";
+import "~/styles/fonts.css";
+import "~/styles/color.css";
+import "~/dist/styles/app.css";
 
-const DISABLE_JS = false;
 const ROOT_CLASS = "layout--root";
 
 export function links() {
@@ -59,11 +57,6 @@ export function links() {
 			type: "font/woff2",
 			crossOrigin: "",
 		},
-
-		{ rel: "stylesheet", href: fontStylesUrl },
-		{ rel: "stylesheet", href: colorStylesUrl },
-		{ rel: "stylesheet", href: appStylesUrl },
-		...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 	];
 }
 
@@ -93,12 +86,6 @@ function Document({
 	useProgressBar();
 	let hydrated = useIsHydrated();
 
-	// let _loaderData = useLoaderData();
-	// let loaderData: LoaderData | null = null;
-	// if (_loaderData && isValidLoaderData(_loaderData)) {
-	// 	loaderData = _loaderData;
-	// }
-
 	useDisableTransitionsOnColorSchemeChange();
 
 	return (
@@ -113,13 +100,9 @@ function Document({
 			<body data-hydrated={hydrated ? "" : undefined}>
 				<RootProvider hydrated={hydrated}>
 					{children}
-					{!DISABLE_JS ? (
-						<React.Fragment>
-							<RouteChangeAnnouncement />
-							<ScrollRestoration />
-							<Scripts />
-						</React.Fragment>
-					) : null}
+					<RouteChangeAnnouncement />
+					<ScrollRestoration />
+					<Scripts />
 				</RootProvider>
 			</body>
 		</html>

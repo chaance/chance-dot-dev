@@ -1,10 +1,6 @@
-import type { LinksFunction } from "@remix-run/node";
+import { Outlet } from "@remix-run/react";
 
-import routeStylesUrl from "~/dist/styles/routes/admin/subscribers.css";
-
-export const links: LinksFunction = () => {
-	return [{ rel: "stylesheet", href: routeStylesUrl }];
-};
+import "~/dist/styles/routes/admin/subscribers.css";
 
 export function headers() {
 	return { "Cache-Control": "max-age=300" };

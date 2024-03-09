@@ -4,19 +4,15 @@ import { Container } from "~/ui/container";
 import { getMarkdownBlogPost, type MarkdownBlogPost } from "~/lib/blog.server";
 import type {
 	HeadersFunction,
-	V2_MetaFunction as MetaFunction,
+	MetaFunction,
 	LoaderFunctionArgs,
 } from "@remix-run/node";
 import { isAbsoluteUrl, unSlashIt } from "~/lib/utils";
 
-import routeStylesUrl from "~/dist/styles/routes/__main/blog/_slug.css";
 import invariant from "tiny-invariant";
 import { getSessionUser } from "~/lib/session.server";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
-
-export function links() {
-	return [{ rel: "stylesheet", href: routeStylesUrl }];
-}
+import "~/dist/styles/routes/__main/blog/_slug.css";
 
 const ROOT_CLASS = "page--blog";
 

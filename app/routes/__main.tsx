@@ -2,12 +2,7 @@ import * as React from "react";
 import { Outlet, useLocation } from "@remix-run/react";
 import { SiteHeader } from "~/ui/site-header";
 import { SiteFooter } from "~/ui/site-footer";
-
-import routeStylesUrl from "~/dist/styles/routes/__main.css";
-
-export function links() {
-	return [{ rel: "stylesheet", href: routeStylesUrl }];
-}
+import "~/dist/styles/routes/__main.css";
 
 const ROOT_CLASS = "layout--main";
 

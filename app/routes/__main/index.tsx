@@ -1,13 +1,9 @@
 import { Container } from "~/ui/container";
 import { BriefcaseIcon, GlobeIcon } from "~/ui/icons";
 
-import routeStylesUrl from "~/dist/styles/routes/__main/index.css";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
 import { Link } from "~/ui/primitives/link";
-
-export function links() {
-	return [{ rel: "stylesheet", href: routeStylesUrl }];
-}
+import "~/dist/styles/routes/__main/index.css";
 
 export function meta() {
 	return getSeoMeta(DEFAULT_METADATA);
@@ -27,9 +23,7 @@ export default function HomeRoute() {
 						</h1>
 						<p className={`${ROOT_CLASS}__intro`}>
 							Web developer. Open source maker.{" "}
-							<span className="block">
-								Surfing the web and the west coast.
-							</span>
+							<span className="block">Surfing the web and the west coast.</span>
 						</p>
 						<dl className={`${ROOT_CLASS}__intro-list`}>
 							<div className={`${ROOT_CLASS}__intro-item`}>

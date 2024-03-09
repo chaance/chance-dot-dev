@@ -6,13 +6,9 @@ import { Link } from "~/ui/primitives/link";
 import { Container } from "~/ui/container";
 import { getMarkdownBlogPostListItems } from "~/lib/blog.server";
 
-import routeStylesUrl from "~/dist/styles/routes/__main/blog/index.css";
 import { getSessionUser } from "~/lib/session.server";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
-
-export function links() {
-	return [{ rel: "stylesheet", href: routeStylesUrl }];
-}
+import "~/dist/styles/routes/__main/blog/index.css";
 
 export function meta() {
 	return getSeoMeta({
