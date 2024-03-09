@@ -1,7 +1,7 @@
 import parseFrontMatter from "front-matter";
 import rangeParser from "parse-numeric-range";
 import { isString } from "~/lib/utils";
-import LRUCache from "lru-cache";
+import { LRUCache } from "lru-cache";
 import type { Tinypool as TTinypool } from "tinypool";
 
 import type * as Unist from "unist";
@@ -187,7 +187,8 @@ async function getPlugins() {
 				tokenizePool ||
 				new Tinypool({
 					// worker directory is relative to the build output
-					filename: require.resolve("../workers/shiki-worker.js"),
+					filename: new URL("../workers/shiki-worker.js", import.meta.url)
+						.pathname,
 					minThreads: 0,
 					idleTimeout: 60,
 				});
@@ -460,6 +461,6 @@ namespace UnistNode {
 }
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-type WorkerFn = typeof import("~/../workers/shiki-worker");
+type WorkerFn = typeof import("~/../workers/shiki-worker").default;
 type WorkerArgs = Parameters<WorkerFn>[0];
 type WorkerResult = Awaited<ReturnType<WorkerFn>>;

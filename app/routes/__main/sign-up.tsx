@@ -1,4 +1,4 @@
-import type { ActionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useActionData, useSearchParams } from "@remix-run/react";
 import { getFormDataStringValue, isValidEmail } from "~/lib/utils";
@@ -11,12 +11,12 @@ import { SignUpForm, SignUpFormField } from "~/ui/sign-up-form";
 import { Text } from "~/ui/text";
 import { addSubscriberToForm } from "~/lib/convertkit.server";
 
-// export async function loader({ request }: LoaderArgs) {
+// export async function loader({ request }: LoaderFunctionArgs) {
 // 	// TODO: Remove after implementing sign up logic
 // 	throw json(null, 404);
 // }
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
 	let formData = await request.formData();
 	let fields = {
 		email: getFormDataStringValue(formData, "email"),

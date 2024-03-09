@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { ActionArgs, LoaderArgs, SerializeFrom } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs, SerializeFrom } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useActionData, useLoaderData } from "@remix-run/react";
 import { createBlogPost } from "~/models/blog-post.server";
@@ -7,7 +7,7 @@ import { requireUserId } from "~/lib/session.server";
 import { getFormFieldStringValue } from "~/lib/utils";
 import { PostEditorScreen } from "../ui/post-editor-screen";
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
 	let currentDate = new Date(
 		new Date().toLocaleString("en-US", {
 			timeZone: "America/Los_Angeles",
@@ -29,7 +29,7 @@ const formFields = new Map<FormFieldName, FormFieldDescriptor>([
 	["twitterCard", { label: "Twitter Card URL", required: false, type: "text" }],
 ]);
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
 	let userId = await requireUserId(request);
 	let formData = await request.formData();
 

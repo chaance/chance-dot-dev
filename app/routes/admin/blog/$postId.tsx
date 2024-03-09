@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from "react";
-import type { LoaderArgs, ActionArgs, SerializeFrom } from "@remix-run/node";
+import type { LoaderFunctionArgs, ActionFunctionArgs, SerializeFrom } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import { getBlogPost, updateBlogPost } from "~/models/blog-post.server";
@@ -25,7 +25,7 @@ const formFields = new Map<FormFieldName, FormFieldDescriptor>([
 	["twitterCard", { label: "Twitter Card URL", required: false, type: "text" }],
 ]);
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
 	let { postId } = params;
 	invariant(postId, "Post ID is required");
 	let userId = await requireUserId(request);
@@ -36,7 +36,7 @@ export async function loader({ request, params }: LoaderArgs) {
 	return json({ post });
 }
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
 	// let userId = await requireUserId(request);
 	let formData = await request.formData();
 	let postId = formData.get("id");

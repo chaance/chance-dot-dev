@@ -1,6 +1,6 @@
 import { useLoaderData } from "@remix-run/react";
 import { json } from "@remix-run/node";
-import type { HeadersFunction, LoaderArgs } from "@remix-run/node";
+import type { HeadersFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { H1, HeadingLevelProvider } from "~/ui/primitives/heading";
 import { Link } from "~/ui/primitives/link";
 import { Container } from "~/ui/container";
@@ -23,7 +23,7 @@ export function meta() {
 
 const ROOT_CLASS = "page--blog-index";
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
 	let user = await getSessionUser(request);
 	try {
 		// TODO: Implement CDN caching

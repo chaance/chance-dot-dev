@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { LoaderArgs, ActionArgs, SerializeFrom } from "@remix-run/node";
+import type { LoaderFunctionArgs, ActionFunctionArgs, SerializeFrom } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { requireUserId } from "~/lib/session.server";
@@ -11,7 +11,7 @@ const formFields = new Map<FormFieldName, FormFieldDescriptor>([
 	["name", { label: "List Name", required: true, type: "text" }],
 ]);
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
 	let { listId } = params;
 	invariant(listId, "List ID is required");
 	await requireUserId(request);
@@ -22,7 +22,7 @@ export async function loader({ request, params }: LoaderArgs) {
 	return json({ list });
 }
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
 	await requireUserId(request);
 	console.log("SHIIIIT OH NO");
 

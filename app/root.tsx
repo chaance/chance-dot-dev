@@ -1,6 +1,6 @@
 import * as React from "react";
 import { json } from "@remix-run/node";
-import type { LoaderArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import {
 	Links,
 	Meta,
@@ -67,7 +67,7 @@ export function links() {
 	];
 }
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
 	let data = {
 		requestInfo: {
 			origin: getDomainUrl(request),

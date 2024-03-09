@@ -1,11 +1,11 @@
-import type { LoaderArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, NavLink, useLoaderData } from "@remix-run/react";
 import cx from "clsx";
 import { requireUserId } from "~/lib/session.server";
 import { getBlogPostListItems } from "~/models/blog-post.server";
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
 	let userId = await requireUserId(request);
 	let blogListItems = await getBlogPostListItems({
 		userId,

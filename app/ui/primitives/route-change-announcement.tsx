@@ -1,9 +1,7 @@
 import * as React from "react";
-import { useLocation, useTransition } from "@remix-run/react";
+import type { Navigation, Location } from "@remix-run/react";
+import { useLocation, useNavigation } from "@remix-run/react";
 import { useRootContext } from "~/lib/react/context";
-
-type Location = ReturnType<typeof useLocation>;
-type Transition = ReturnType<typeof useTransition>;
 
 enum NavigationState {
 	Idle = 0,
@@ -16,7 +14,7 @@ function getPageTitle(location: Location) {
 
 function getNavigatingState(
 	location: Location,
-	transition: Transition
+	transition: Navigation
 ): NavigationState {
 	return transition.state === "loading" &&
 		transition.location.pathname === location.pathname
@@ -31,13 +29,13 @@ const RouteChangeAnnouncement = React.memo(function RouteChangeAnnouncement() {
 	let { hydrated } = useRootContext();
 	let [innerHtml, setInnerHtml] = React.useState("");
 	let location = useLocation();
-	let transition = useTransition();
+	let navigation = useNavigation();
 
 	let locationHasChanged = React.useRef(false);
 	React.useEffect(() => {
 		// We know navigation has changed since the initial page load the first time
 		// our transition state is loading
-		if (transition.state === "loading") {
+		if (navigation.state === "loading") {
 			locationHasChanged.current = true;
 		}
 
@@ -47,11 +45,11 @@ const RouteChangeAnnouncement = React.memo(function RouteChangeAnnouncement() {
 		}
 
 		setInnerHtml(
-			getNavigatingState(location, transition) === NavigationState.Navigating
+			getNavigatingState(location, navigation) === NavigationState.Navigating
 				? `Navigating` // ?? `Navigating to ${getPageTitle(transition.location!)}`
 				: `Navigated to ${getPageTitle(location)}`
 		);
-	}, [location, transition]);
+	}, [location, navigation]);
 
 	// Render nothing on the server. Transitions before hydration will be handled
 	// by the browser.
@@ -65,7 +63,7 @@ const RouteChangeAnnouncement = React.memo(function RouteChangeAnnouncement() {
 			aria-live="assertive"
 			aria-atomic
 			aria-busy={
-				getNavigatingState(location, transition) === NavigationState.Navigating
+				getNavigatingState(location, navigation) === NavigationState.Navigating
 					? true
 					: undefined
 			}

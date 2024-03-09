@@ -2,11 +2,8 @@ node_modules
 .DS_Store
 
 /build
-/public/build
 .env
 
-/cypress/screenshots
-/cypress/videos
 /coverage
 /prisma/data.db
 /prisma/data.db-journal

@@ -5,7 +5,7 @@ import { getMarkdownBlogPost, type MarkdownBlogPost } from "~/lib/blog.server";
 import type {
 	HeadersFunction,
 	V2_MetaFunction as MetaFunction,
-	LoaderArgs,
+	LoaderFunctionArgs,
 } from "@remix-run/node";
 import { isAbsoluteUrl, unSlashIt } from "~/lib/utils";
 
@@ -27,7 +27,7 @@ interface PostData extends MarkdownBlogPost {
 	updatedAtISO: string | null;
 }
 
-export async function loader({ params, request }: LoaderArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
 	invariant(params.slug, "Slug is required");
 	let [user, post] = await Promise.all([
 		getSessionUser(request),

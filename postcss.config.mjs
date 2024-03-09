@@ -1,3 +1,4 @@
+// @ts-nocheck
 import path from "node:path";
 import url from "node:url";
 import postcssGlobalData from "@csstools/postcss-global-data";

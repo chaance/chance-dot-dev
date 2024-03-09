@@ -1,5 +1,5 @@
 import * as React from "react";
-import { NavLink, useLocation, useTransition } from "@remix-run/react";
+import { NavLink, useLocation, useNavigation } from "@remix-run/react";
 import { Container } from "~/ui/container";
 import { isWebKit } from "~/lib/utils";
 import { useRootContext } from "~/lib/react/context";
@@ -46,14 +46,14 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
 
 	let linkClickedRef = React.useRef(false);
 	let [dialogIsOpen, setDialogIsOpen] = React.useState(false);
-	let transition = useTransition();
+	let navigation = useNavigation();
 	let location = useLocation();
 	React.useEffect(() => {
 		// if the user clicks a link in the nav we want to close the dialog after
 		// the navigation has finished transitioning
 		if (linkClickedRef.current === true) {
 			linkClickedRef.current = false;
-			if (transition.state === "idle") {
+			if (navigation.state === "idle") {
 				setDialogIsOpen(false);
 			}
 		} else {
@@ -61,7 +61,7 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
 			// circumstances
 			setDialogIsOpen(false);
 		}
-	}, [transition.state, location.pathname]);
+	}, [navigation.state, location.pathname]);
 
 	const dialogActions = React.useMemo(() => {
 		return {
