@@ -1,5 +1,5 @@
-@use "~/ui/markdown-editor";
-@use "./admin/ui/post-editor-screen";
+@use "~/features/admin/markdown-editor";
+@use "/features/admin/post-editor-screen";
 
 html,
 body {

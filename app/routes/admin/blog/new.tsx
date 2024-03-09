@@ -5,7 +5,7 @@ import { useActionData, useLoaderData } from "@remix-run/react";
 import { createBlogPost } from "~/models/blog-post.server";
 import { requireUserId } from "~/lib/session.server";
 import { getFormFieldStringValue } from "~/lib/utils";
-import { PostEditorScreen } from "../ui/post-editor-screen";
+import { PostEditorScreen } from "~/features/admin/post-editor-screen";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
 	let currentDate = new Date(

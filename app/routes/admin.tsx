@@ -8,7 +8,7 @@ import {
 } from "@remix-run/react";
 import { requireUser } from "~/lib/session.server";
 import cx from "clsx";
-import { AdminHeader } from "./admin/ui/admin-header";
+import { AdminHeader } from "~/features/admin/admin-header";
 import "~/dist/styles/routes/admin.css";
 
 export async function loader({ request }: LoaderFunctionArgs) {

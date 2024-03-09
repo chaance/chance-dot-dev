@@ -1,16 +1,23 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from "react";
-import type { LoaderFunctionArgs, ActionFunctionArgs, SerializeFrom } from "@remix-run/node";
+import type {
+	LoaderFunctionArgs,
+	ActionFunctionArgs,
+	SerializeFrom,
+} from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import { getBlogPost, updateBlogPost } from "~/models/blog-post.server";
 import { requireUserId } from "~/lib/session.server";
 import { getFormFieldStringValue } from "~/lib/utils";
 import invariant from "tiny-invariant";
-import { MarkdownEditor, MarkdownEditorTextarea } from "~/ui/markdown-editor";
 import { blogContentCache } from "~/lib/blog.server";
 import { InputTextarea, InputText } from "~/ui/input";
-import { PostEditorScreen } from "../ui/post-editor-screen";
+import { PostEditorScreen } from "~/features/admin/post-editor-screen.js";
+import {
+	MarkdownEditor,
+	MarkdownEditorTextarea,
+} from "../../../features/admin/markdown-editor.js";
 
 const formFields = new Map<FormFieldName, FormFieldDescriptor>([
 	["title", { label: "Title", required: true, type: "text" }],

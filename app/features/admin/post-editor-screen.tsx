@@ -1,9 +1,12 @@
 import * as React from "react";
 import { Form, Link } from "@remix-run/react";
-import { MarkdownEditor, MarkdownEditorTextarea } from "~/ui/markdown-editor";
 import { InputTextarea, InputText } from "~/ui/input";
 import { Card } from "~/ui/card";
 import { slugify } from "~/lib/utils";
+import {
+	MarkdownEditor,
+	MarkdownEditorTextarea,
+} from "~/features/admin/markdown-editor.js";
 
 const ROOT_CLASS = "cs--post-editor-screen";
 

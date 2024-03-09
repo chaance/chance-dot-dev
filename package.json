@@ -3,8 +3,8 @@
 	"private": true,
 	"sideEffects": false,
 	"type": "module",
-	"imports": {
-		"#*": "./*"
+	"#imports": {
+		"~/*": "./app/*"
 	},
 	"scripts": {
 		"build": "npm run build:css && npm run build:remix",
