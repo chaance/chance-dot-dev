@@ -20,7 +20,36 @@ export function ErrorBoundary({ error }: { error: unknown }) {
 	}
 
 	if (isRouteErrorResponse(error)) {
-		return <CatchBoundary caught={error} />;
+		let message;
+		switch (error.status) {
+			case 401:
+				message = (
+					<p>
+						Oops! It looks like you tried to visit a page that you do not have
+						access to.
+					</p>
+				);
+				break;
+			case 404:
+				message = (
+					<p>
+						Oops! It looks like you tried to visit a page that does not exist.
+					</p>
+				);
+				break;
+
+			default:
+				throw new Error(error.data || error.statusText);
+		}
+
+		return (
+			<main className={ROOT_CLASS}>
+				<Container>
+					<h1 className={`${ROOT_CLASS}__title`}>Oh no!</h1>
+					<div className={`${ROOT_CLASS}__message`}>{message}</div>
+				</Container>
+			</main>
+		);
 	}
 
 	return (
@@ -33,39 +62,6 @@ export function ErrorBoundary({ error }: { error: unknown }) {
 						for a bit and hopefully I'll get it fixed by the time you get back.
 					</p>
 				</div>
-			</Container>
-		</main>
-	);
-}
-
-export function CatchBoundary({ caught }: { caught: ErrorResponse }) {
-	let message;
-	switch (caught.status) {
-		case 401:
-			message = (
-				<p>
-					Oops! It looks like you tried to visit a page that you do not have
-					access to.
-				</p>
-			);
-			break;
-		case 404:
-			message = (
-				<p>
-					Oops! It looks like you tried to visit a page that does not exist.
-				</p>
-			);
-			break;
-
-		default:
-			throw new Error(caught.data || caught.statusText);
-	}
-
-	return (
-		<main className={ROOT_CLASS}>
-			<Container>
-				<h1 className={`${ROOT_CLASS}__title`}>Oh no!</h1>
-				<div className={`${ROOT_CLASS}__message`}>{message}</div>
 			</Container>
 		</main>
 	);

@@ -116,58 +116,54 @@ function Layout({ children }: React.PropsWithChildren) {
 	return <div className="chance-dot-dev">{children}</div>;
 }
 
-function CatchBoundary({ caught }: { caught: ErrorResponse }) {
-	let message;
-	switch (caught.status) {
-		case 401:
-			message = (
-				<p>
-					Oops! It looks like you tried to visit a page that you do not have
-					access to.
-				</p>
-			);
-			break;
-		case 404:
-			message = (
-				<p>
-					Oops! It looks like you tried to visit a page that does not exist.
-				</p>
-			);
-			break;
-
-		default:
-			throw new Error(caught.data || caught.statusText);
-	}
-
-	return (
-		<Document
-			meta={
-				<title>
-					{`Error ${caught.status}: ${caught.statusText} | chance.dev`}
-				</title>
-			}
-		>
-			<Layout>
-				<PrimaryLayout>
-					<main className={ROOT_CLASS}>
-						<Container>
-							<h1 className={`${ROOT_CLASS}__title`}>Oh no!</h1>
-							<div className={`${ROOT_CLASS}__message`}>{message}</div>
-						</Container>
-					</main>
-				</PrimaryLayout>
-			</Layout>
-		</Document>
-	);
-}
-
 export function ErrorBoundary({ error }: { error: Error }) {
 	if (process.env.NODE_ENV === "development") {
 		console.error("ROOT ERROR BOUNDARY: ", error);
 	}
 
 	if (isRouteErrorResponse(error)) {
-		return <CatchBoundary caught={error} />;
+		let message;
+		switch (error.status) {
+			case 401:
+				message = (
+					<p>
+						Oops! It looks like you tried to visit a page that you do not have
+						access to.
+					</p>
+				);
+				break;
+			case 404:
+				message = (
+					<p>
+						Oops! It looks like you tried to visit a page that does not exist.
+					</p>
+				);
+				break;
+
+			default:
+				throw new Error(error.data || error.statusText);
+		}
+
+		return (
+			<Document
+				meta={
+					<title>
+						{`Error ${error.status}: ${error.statusText} | chance.dev`}
+					</title>
+				}
+			>
+				<Layout>
+					<PrimaryLayout>
+						<main className={ROOT_CLASS}>
+							<Container>
+								<h1 className={`${ROOT_CLASS}__title`}>Oh no!</h1>
+								<div className={`${ROOT_CLASS}__message`}>{message}</div>
+							</Container>
+						</main>
+					</PrimaryLayout>
+				</Layout>
+			</Document>
+		);
 	}
 
 	return (
