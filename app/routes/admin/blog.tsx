@@ -1,5 +1,5 @@
 import { Outlet } from "@remix-run/react";
-import "~/dist/styles/routes/admin/blog.css";
+import "./blog.css";
 
 export function headers() {
 	return { "Cache-Control": "max-age=300" };

@@ -9,7 +9,6 @@ import type { action as signUpAction } from "~/routes/__main/sign-up";
 import { SignUpSection } from "~/ui/sign-up-section";
 import { useLayoutEffect } from "~/lib/react/use-layout-effect";
 import { TextHeading, TextSpan } from "~/ui/text";
-import "~/dist/styles/routes/__main/about.css";
 
 export function meta() {
 	return getSeoMeta({

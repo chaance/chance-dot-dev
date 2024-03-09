@@ -2,7 +2,7 @@ import { Container } from "~/ui/container";
 import type { MetaFunction } from "@remix-run/node";
 
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
-import "~/dist/styles/routes/__main/uses.css";
+import "./uses.css";
 
 const ROOT_CLASS = "page--uses";
 

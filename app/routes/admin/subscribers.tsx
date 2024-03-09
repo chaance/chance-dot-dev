@@ -1,6 +1,5 @@
 import { Outlet } from "@remix-run/react";
-
-import "~/dist/styles/routes/admin/subscribers.css";
+import "./subscribers.css";
 
 export function headers() {
 	return { "Cache-Control": "max-age=300" };

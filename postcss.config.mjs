@@ -16,15 +16,17 @@ const config = (ctx) => {
 		plugins: [
 			postcssImport({
 				resolve: (id) => {
+					console.log(`resolving ${id} from ${__dirname}`);
 					// resolve `~/` prefixed imports to the `app` directory
 					if (id.startsWith("~/")) {
+						console.log("FOUND!", id);
 						return path.resolve(__dirname, `app/${id.slice(2)}`);
 					}
 					return id;
 				},
 			}),
 			postcssGlobalData({
-				files: ["app/styles/system/media.css"],
+				files: ["app/styles/media.css"],
 			}),
 			postcssNesting(),
 			postcssCustomMedia(),

@@ -1,5 +1,5 @@
-// adapted from TailwindCSS typography plugin
-// MIT License, Copyright (c) Tailwind Labs, Inc.
+/* adapted from TailwindCSS typography plugin */
+/* MIT License, Copyright (c) Tailwind Labs, Inc. */
 
 .prose {
 	--util-prose-fz-title: 1.5rem;

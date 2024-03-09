@@ -18,7 +18,7 @@ const config = (ctx) => {
 		syntax: isScss ? "postcss-scss" : false,
 		plugins: [
 			postcssGlobalData({
-				files: [path.resolve(process.cwd(), "app/styles/system", "media.css")],
+				files: [path.resolve(process.cwd(), "app/styles", "media.css")],
 			}),
 			isScss &&
 				postcssSass({

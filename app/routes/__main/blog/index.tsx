@@ -8,7 +8,7 @@ import { getMarkdownBlogPostListItems } from "~/lib/blog.server";
 
 import { getSessionUser } from "~/lib/session.server";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
-import "~/dist/styles/routes/__main/blog/index.css";
+import "./index.css";
 
 export function meta() {
 	return getSeoMeta({

@@ -1,3 +1,84 @@
+@font-face {
+	font-family: armingrotesk-fb;
+	src: url("/fonts/armingrotesk-400.woff2") format("woff2"),
+		url("/fonts/armingrotesk-400.woff") format("woff");
+	font-display: block;
+	font-weight: 400;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: armingrotesk;
+	src: url("/fonts/armingrotesk-400.woff2") format("woff2"),
+		url("/fonts/armingrotesk-400.woff") format("woff");
+	font-display: swap;
+	font-weight: 400;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: armingrotesk;
+	src: url("/fonts/armingrotesk-400i.woff2") format("woff2"),
+		url("/fonts/armingrotesk-400i.woff") format("woff");
+	font-display: swap;
+	font-weight: 400;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: armingrotesk;
+	src: url("/fonts/armingrotesk-500.woff2") format("woff2"),
+		url("/fonts/armingrotesk-500.woff") format("woff");
+	font-display: swap;
+	font-weight: 500;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: armingrotesk;
+	src: url("/fonts/armingrotesk-500i.woff2") format("woff2"),
+		url("/fonts/armingrotesk-500i.woff") format("woff");
+	font-display: swap;
+	font-weight: 500;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: armingrotesk;
+	src: url("/fonts/armingrotesk-600.woff2") format("woff2"),
+		url("/fonts/armingrotesk-600.woff") format("woff");
+	font-display: swap;
+	font-weight: 600;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: armingrotesk;
+	src: url("/fonts/armingrotesk-600i.woff2") format("woff2"),
+		url("/fonts/armingrotesk-600i.woff") format("woff");
+	font-display: swap;
+	font-weight: 600;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: armingrotesk;
+	src: url("/fonts/armingrotesk-700.woff2") format("woff2"),
+		url("/fonts/armingrotesk-700.woff") format("woff");
+	font-display: swap;
+	font-weight: 700;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: armingrotesk;
+	src: url("/fonts/armingrotesk-700i.woff2") format("woff2"),
+		url("/fonts/armingrotesk-700i.woff") format("woff");
+	font-display: swap;
+	font-weight: 700;
+	font-style: italic;
+}
+
 :root {
 	/* fonts! */
 	--cs-font-family-sans: "armingrotesk";
@@ -42,13 +123,13 @@
 	--cs-font-weight-code-block: var(--cs-font-weight-default);
 	--cs-font-weight-table-heading: var(--cs-font-weight-stronger);
 
-	--cs-space-xxl: 4.5rem; // 72px
-	--cs-space-xl: 2.25rem; // 36px
-	--cs-space-lg: 1.5rem; // 24px
-	--cs-space-md: 1rem; // 16px
-	--cs-space-sm: 0.5rem; // 8px
+	--cs-space-xxl: 4.5rem; /* 72px */
+	--cs-space-xl: 2.25rem; /* 36px */
+	--cs-space-lg: 1.5rem; /* 24px */
+	--cs-space-md: 1rem; /* 16px */
+	--cs-space-sm: 0.5rem; /* 8px */
 
-	--cs-font-size-xxl: 2.25rem; // 36px
+	--cs-font-size-xxl: 2.25rem; /* 36px */
 
 	--cs-focus-ring: var(--cs-color-accent-deep);
 
@@ -107,7 +188,7 @@
 
 	@media (--dark) {
 		--cs-field-bg: hsl(0 0% 8% / 1);
-		// --cs-field-placeholder: hsl(0 0% 65% / 1);
+		/* --cs-field-placeholder: hsl(0 0% 65% / 1); */
 		--cs-field-border: hsl(0 0% 31% / 1);
 		--cs-field-bg-focus: hsl(0 0% 2.5% / 1);
 		--cs-field-bg-active: hsl(0 0% 0% / 1);
@@ -142,3 +223,36 @@
 		}
 	}
 }
+
+html,
+body {
+	background: var(--cs-color-background);
+	background: var(--body-bg-img);
+	background-attachment: fixed;
+	background-blend-mode: hard-light;
+	color: var(--cs-color-text);
+}
+
+body {
+	font-family: var(--cs-font-family-text);
+}
+
+.chance-dot-dev {
+	height: 100%;
+	isolation: isolate;
+}
+
+::selection {
+	background: var(--cs-selection-bg);
+	color: var(--cs-selection-fg);
+}
+
+:focus:where(:not(:focus-visible)) {
+	outline: none;
+}
+
+:focus-visible {
+	outline: 2px solid var(--cs-focus-ring);
+}
+
+

@@ -1,0 +1,112 @@
+.cs--input {
+	--input-color-bg: var(--cs-field-bg);
+	--input-color-fg: var(--cs-field-fg);
+	--input-color-placeholder: var(--cs-field-placeholder);
+	--input-color-border: var(--cs-field-border);
+	--input-color-error-border: var(--cs-field-border-error);
+	--input-color-outline: var(--cs-field-outline);
+	--input-color-accent: var(--cs-field-bg);
+	--input-color-marker: transparent;
+	--input-size-outline: 0;
+	--input-outline-offset: 0;
+	border: 1px solid var(--input-color-border);
+	border-radius: 0;
+	background: var(--input-color-bg);
+	color: var(--input-color-fg);
+	outline: var(--input-size-outline) solid var(--input-color-outline);
+	outline-offset: var(--input-outline-offset);
+	transition: border-color 50ms ease-out, outline 50ms ease-out;
+	-webkit-tap-highlight-color: transparent;
+}
+
+.cs--input--text,
+.cs--input--email,
+.cs--input--url,
+.cs--input--password,
+.cs--input--search,
+.cs--input--tel,
+.cs--input--number,
+.cs--input--date,
+.cs--input--month,
+.cs--input--week,
+.cs--input--time,
+.cs--input--datetime,
+.cs--input--datetime-local,
+.cs--input--select,
+.cs--input--textarea {
+	appearance: none;
+	font: inherit;
+	font-size: 1rem;
+	width: 100%;
+	min-width: 0;
+	display: inline-flex;
+	padding: 0 0.75em;
+	height: 3em;
+	line-height: 1;
+}
+
+.cs--input--textarea {
+	min-height: 6em;
+	resize: vertical;
+	padding: 1em 0.75em;
+}
+
+.cs--input--checkbox,
+.cs--input--radio {
+	padding: 0;
+	width: 1rem;
+	height: 1rem;
+}
+
+.cs--input--checked {
+	--input-color-accent: var(--cs-color-accent);
+	--input-color-marker: var(--cs-color-white);
+}
+
+.cs--input__accent {
+	fill: var(--input-color-accent);
+}
+
+.cs--input__marker {
+	fill: var(--input-color-marker);
+	transform-origin: center;
+}
+
+.cs--input--radio {
+	border-radius: 9999px;
+}
+
+.cs--input:focus,
+.cs--input--focused {
+	--input-color-bg: var(--cs-field-bg-focus);
+	--input-color-border: var(--cs-field-border-focus);
+	--input-color-outline: var(--cs-field-outline-focus);
+	--input-size-outline: 1px;
+	--input-outline-offset: 0;
+}
+
+.cs--input:active,
+.cs--input--active {
+	--input-color-bg: var(--cs-field-bg-active);
+	--input-color-border: var(--cs-field-border-active);
+	--input-color-outline: var(--cs-field-outline-active);
+	--input-color-border: var(--cs-field-border-focus);
+	--input-size-outline: 0;
+	--input-outline-offset: 0;
+	--input-color-accent: var(--cs-field-bg-active);
+}
+
+.cs--input:active:where(.cs--input--checked),
+.cs--input--active:where(.cs--input--checked) {
+	--input-color-accent: var(--cs-color-accent-deep);
+}
+
+.cs--input:invalid:where([data-touched="true"]),
+.cs--input[aria-invalid="true"] {
+	--input-color-border: var(--input-color-error-border);
+	--input-color-outline: var(--input-color-error-border);
+}
+
+.cs--input::placeholder {
+	color: var(--cs-field-placeholder);
+}

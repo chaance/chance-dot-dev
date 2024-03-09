@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Outlet } from "@remix-run/react";
-import "~/dist/styles/routes/__auth.css";
+import "./__auth.css";
 
 export default function AuthLayout() {
 	return (

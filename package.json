@@ -7,23 +7,17 @@
 		"~/*": "./app/*"
 	},
 	"scripts": {
-		"build": "npm run build:css && npm run build:remix",
-		"build:css": "cross-env NODE_ENV=production concurrently \"npm:generate:css:*\"",
-		"build:remix": "remix vite:build",
-		"dev": "concurrently --names \"Remix,CSS\" \"npm:dev:remix\" \"npm:dev:css\"",
-		"dev:css": "concurrently \"npm:generate:css:* -- --verbose --watch\"",
-		"dev:remix": "cross-env NODE_ENV=development node ./server.mjs",
+		"build": "cross-env NODE_ENV=production npm run generate:css && remix vite:build",
+		"dev": "cross-env NODE_ENV=development node ./server.mjs",
 		"format": "prettier --write .",
-		"generate:css:colors": "node scripts/build-css-colors.mjs",
-		"generate:css:base": "postcss \"app/styles/**/*.scss\" --config sass --base app/styles --dir app/dist/styles --ext css --map",
-		"generate:css:routes": "postcss \"app/routes/**/*.scss\" --config sass --base app/routes --dir app/dist/styles/routes --ext css --map",
+		"generate:css": "node scripts/build-css-colors.mjs",
 		"lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
-		"setup:css": "cross-env NODE_ENV=development npm run build:css",
-		"setup:prisma": "prisma generate && prisma migrate deploy && prisma db seed",
-		"setup": "concurrently \"npm:setup:*\"",
 		"start": "cross-env NODE_ENV=production node server.mjs",
 		"typecheck": "tsc -b",
-		"postinstall": "patch-package"
+		"postinstall": "patch-package",
+		"setup:css": "cross-env NODE_ENV=development npm run generate:css",
+		"setup:prisma": "prisma generate && prisma migrate deploy && prisma db seed",
+		"setup": "concurrently \"npm:setup:*\""
 	},
 	"dependencies": {
 		"@prisma/client": "^5.10.2",

@@ -2,7 +2,7 @@ import type { ErrorResponse } from "@remix-run/router";
 import { json } from "@remix-run/node";
 import { isRouteErrorResponse } from "@remix-run/react";
 import { Container } from "~/ui/container";
-import "~/dist/styles/routes/__main/$.css";
+import "./$.css";
 
 const ROOT_CLASS = "page--main-catchall";
 

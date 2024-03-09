@@ -12,7 +12,7 @@ import { isAbsoluteUrl, unSlashIt } from "~/lib/utils";
 import invariant from "tiny-invariant";
 import { getSessionUser } from "~/lib/session.server";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
-import "~/dist/styles/routes/__main/blog/_slug.css";
+import "./$slug.css";
 
 const ROOT_CLASS = "page--blog";
 

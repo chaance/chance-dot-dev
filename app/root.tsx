@@ -21,9 +21,12 @@ import NProgress from "nprogress";
 
 import { PrimaryLayout } from "~/routes/__main";
 
-import "~/styles/fonts.css";
+import "~/styles/resets.css";
 import "~/styles/color.css";
-import "~/dist/styles/app.css";
+import "~/styles/app.css";
+import "~/styles/ui.css";
+import "~/styles/utility.css";
+import "~/styles/prose.css";
 
 const ROOT_CLASS = "layout--root";
 

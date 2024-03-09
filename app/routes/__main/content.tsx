@@ -7,7 +7,7 @@ import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
 import { SignUpSection } from "~/ui/sign-up-section";
 
 import { Card } from "~/ui/card";
-import "~/dist/styles/routes/__main/content.css";
+import "./content.css";
 
 export function meta() {
 	return getSeoMeta({

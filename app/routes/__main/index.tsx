@@ -3,7 +3,7 @@ import { BriefcaseIcon, GlobeIcon } from "~/ui/icons";
 
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
 import { Link } from "~/ui/primitives/link";
-import "~/dist/styles/routes/__main/index.css";
+import "./index.css";
 
 export function meta() {
 	return getSeoMeta(DEFAULT_METADATA);
