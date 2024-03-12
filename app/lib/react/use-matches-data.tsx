@@ -11,7 +11,7 @@ export function useMatchesData(id: string) {
 	let matchingRoutes = useMatches();
 	let route = useMemo(
 		() => matchingRoutes.find((route) => route.id === id),
-		[matchingRoutes, id]
+		[matchingRoutes, id],
 	);
 	return route?.data;
 }

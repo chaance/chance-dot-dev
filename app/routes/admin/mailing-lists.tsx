@@ -1,8 +1,8 @@
 import { Outlet } from "@remix-run/react";
-import "./mailing-lists.css";
+import stylesheetUrl from "./mailing-lists.css?url";
 
-export function headers() {
-	return { "Cache-Control": "max-age=300" };
+export function links() {
+	return [{ rel: "stylesheet", href: stylesheetUrl }];
 }
 
 export default function AdminMailingListsLayout() {

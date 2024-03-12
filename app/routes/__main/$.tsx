@@ -1,12 +1,24 @@
 import type { ErrorResponse } from "@remix-run/router";
-import { json } from "@remix-run/node";
+import { LoaderFunctionArgs, json, redirect } from "@remix-run/node";
 import { isRouteErrorResponse } from "@remix-run/react";
 import { Container } from "~/ui/container";
-import "./$.css";
+import stylesheetUrl from "./$.css?url";
+import { getMarkdownBlogPost } from "~/lib/blog.server";
+
+export function links() {
+	return [{ rel: "stylesheet", href: stylesheetUrl }];
+}
 
 const ROOT_CLASS = "page--main-catchall";
 
-export async function loader() {
+export async function loader({ params }: LoaderFunctionArgs) {
+	const possibleSlug = params["*"];
+	if (possibleSlug) {
+		let post = await getMarkdownBlogPost(possibleSlug).catch(() => null);
+		if (post) {
+			return redirect(`/blog/${post.slug}`);
+		}
+	}
 	throw json(null, 404);
 }
 

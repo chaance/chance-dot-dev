@@ -1,7 +1,6 @@
 import { Form } from "@remix-run/react";
 import * as React from "react";
 import { bem } from "~/lib/utils";
-import { Text } from "~/ui/text";
 import { InputText } from "~/ui/input";
 import { Button } from "~/ui/primitives/button";
 
@@ -62,9 +61,9 @@ function SignUpFormField({
 		<div className={ROOT_CLASS}>
 			<div className={bem(ROOT_CLASS, "field-group")}>
 				<div className={bem(ROOT_CLASS, "label")}>
-					<Text as="label" htmlFor={id}>
+					<label className="text-body" htmlFor={id}>
 						{label}
-					</Text>
+					</label>
 				</div>
 				<InputText
 					name={name}
@@ -85,9 +84,9 @@ function SignUpFormField({
 				<div id={errorMessageId} className={bem(ROOT_CLASS, "error-message")}>
 					{errorMessage.split("\n").map((line, i) => {
 						return (
-							<Text variant="body-sm" color="critical" key={line}>
+							<span className="text-critical text-body-sm" key={line}>
 								{line}
-							</Text>
+							</span>
 						);
 					})}
 				</div>

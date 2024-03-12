@@ -9,7 +9,11 @@ import {
 import { requireUser } from "~/lib/session.server";
 import cx from "clsx";
 import { AdminHeader } from "~/features/admin/admin-header";
-import "./admin.css";
+import stylesheetUrl from "./admin.css?url";
+
+export function links() {
+	return [{ rel: "stylesheet", href: stylesheetUrl }];
+}
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	let user = await requireUser(request, "/login");

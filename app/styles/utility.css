@@ -1,63 +1,62 @@
-.container {
-	--container-width: 64rem;
-	--container-edge-space: 0.5rem;
-	margin: 0 auto;
-	width: var(--container-width);
-	max-width: calc(100% - 2 * var(--container-edge-space) * 2);
-	@media (--xs) {
-		--container-edge-space: 1rem;
-	}
+@tailwind utilities;
+
+.text-base {
+	font-size: 1rem;
+	line-height: 1.6;
+}
+
+.text-sm {
+	font-size: 0.825rem;
+	line-height: 1.571;
+}
+
+.text-weak {
+	color: var(--cs-color-text-weak);
+}
+
+.text-weaker {
+	color: var(--cs-color-text-weaker);
+}
+
+.text-weakest {
+	color: var(--cs-color-text-weakest);
+}
+
+.text-h1,
+.text-h2,
+.text-h3,
+.text-h4 {
+	font-family: var(--cs-ff-heading);
+}
+
+.text-h1 {
+	font-size: 2.25rem;
+	line-height: 1.111;
 	@media (--sm) {
-		--container-edge-space: 1.75rem;
+		font-size: 3rem;
+		line-height: 1;
 	}
 }
 
-.container .container {
-	max-width: 100%;
-}
-
-.sr-only {
-	position: absolute;
-	width: 1px;
-	height: 1px;
-	padding: 0;
-	margin: -1px;
-	overflow: hidden;
-	clip: rect(0, 0, 0, 0);
-	white-space: nowrap;
-	border-width: 0;
-}
-
-.block {
-	display: block;
-}
-
-.inline {
-	display: inline;
-}
-
-.flex {
-	display: flex;
-}
-
-.hidden {
-	display: none;
-}
-
-@media (--sm) {
-	.sm\:block {
-		display: block;
+.text-h2 {
+	font-size: 1.5rem;
+	line-height: 1.333;
+	@media (--sm) {
+		font-size: 2.25rem;
+		line-height: 1.111;
 	}
+}
 
-	.sm\:inline {
-		display: inline;
+.text-h3 {
+	font-size: 1.25rem;
+	line-height: 1.4;
+	@media (--sm) {
+		font-size: 1.5rem;
+		line-height: 1.333;
 	}
+}
 
-	.sm\:flex {
-		display: flex;
-	}
-
-	.sm\:hidden {
-		display: none;
-	}
+.text-h4 {
+	font-size: 1.25rem;
+	line-height: 1.4;
 }

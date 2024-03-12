@@ -17,7 +17,7 @@ import type {
 	Position,
 } from "codemirror";
 import cx from "clsx";
-import { useComposedRefs } from "~/lib/react/use-composed-refs";
+import { useComposedRefs } from "@chance/hooks/use-composed-refs";
 
 const ROOT_CLASS = "cs--markdown-editor";
 
@@ -47,7 +47,7 @@ export type CopyEvents = {
 		DOMEvent &
 		keyof DocumentAndElementEventHandlersEventMap as `${TKey}`]?: (
 		instance: Editor,
-		event: DocumentAndElementEventHandlersEventMap[TKey]
+		event: DocumentAndElementEventHandlersEventMap[TKey],
 	) => void;
 };
 
@@ -56,7 +56,7 @@ export type GlobalEvents = {
 		DOMEvent &
 		keyof GlobalEventHandlersEventMap as `${TKey}`]?: (
 		instance: Editor,
-		event: GlobalEventHandlersEventMap[TKey]
+		event: GlobalEventHandlersEventMap[TKey],
 	) => void;
 };
 
@@ -111,7 +111,7 @@ function useMarkdownEditorContext() {
 	let context = React.useContext(MarkdownEditorContext);
 	if (context == null) {
 		throw new Error(
-			"useMarkdownEditorContext must be used within a MarkdownEditor"
+			"useMarkdownEditorContext must be used within a MarkdownEditor",
 		);
 	}
 	return context;
@@ -153,13 +153,13 @@ const MarkdownEditor = React.forwardRef<HTMLDivElement, MarkdownEditorProps>(
 			(
 				file: File,
 				onSuccess: (url: string) => void,
-				onError: (error: string) => void
+				onError: (error: string) => void,
 			) => {
 				if (imageUploadFunction) {
 					imageUploadFunction(file, (url: string) => onSuccess(url), onError);
 				}
 			},
-			[imageUploadFunction]
+			[imageUploadFunction],
 		);
 
 		useEffect(() => {
@@ -187,8 +187,8 @@ const MarkdownEditor = React.forwardRef<HTMLDivElement, MarkdownEditorProps>(
 								options,
 								{
 									imageUploadFunction,
-								}
-							)
+								},
+							),
 						);
 						setEditorInstance(editor);
 					}
@@ -206,7 +206,7 @@ const MarkdownEditor = React.forwardRef<HTMLDivElement, MarkdownEditorProps>(
 
 		let codemirror = useMemo(
 			() => editorInstance?.codemirror,
-			[editorInstance?.codemirror]
+			[editorInstance?.codemirror],
 		);
 
 		useEffect(() => {
@@ -228,7 +228,7 @@ const MarkdownEditor = React.forwardRef<HTMLDivElement, MarkdownEditorProps>(
 			},
 			[
 				/* editor, onChange */
-			]
+			],
 		);
 
 		useEffect(() => {
@@ -261,7 +261,7 @@ const MarkdownEditor = React.forwardRef<HTMLDivElement, MarkdownEditorProps>(
 			if (extraKeys && codemirror) {
 				codemirror.setOption(
 					"extraKeys",
-					Object.assign({}, codemirror.getOption("extraKeys"), extraKeys)
+					Object.assign({}, codemirror.getOption("extraKeys"), extraKeys),
 				);
 			}
 		}, [codemirror, extraKeys]);
@@ -269,7 +269,7 @@ const MarkdownEditor = React.forwardRef<HTMLDivElement, MarkdownEditorProps>(
 		useEffect(() => {
 			let toolbarNode =
 				elementWrapperRef.current?.getElementsByClassName(
-					"editor-toolbarNode"
+					"editor-toolbarNode",
 				)[0];
 			let handler = codemirror ? onCodemirrorChangeHandler : undefined;
 			if (handler) {
@@ -283,7 +283,7 @@ const MarkdownEditor = React.forwardRef<HTMLDivElement, MarkdownEditorProps>(
 		useEffect(() => {
 			let rootEditorNode =
 				elementWrapperRef.current?.querySelector<HTMLDivElement>(
-					"[role=application]"
+					"[role=application]",
 				);
 			let editorClass = `${ROOT_CLASS}__editor`;
 			if (rootEditorNode && !rootEditorNode.classList.contains(editorClass)) {
@@ -342,7 +342,7 @@ const MarkdownEditor = React.forwardRef<HTMLDivElement, MarkdownEditorProps>(
 				</MarkdownEditorContext.Provider>
 			</div>
 		);
-	}
+	},
 );
 MarkdownEditor.displayName = "MarkdownEditor";
 

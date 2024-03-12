@@ -51,7 +51,7 @@ export function PostEditorScreen({
 }) {
 	let [editingSlug, setEditingSlug] = React.useState(false);
 	let [slugValue, setSlugValue] = React.useState(
-		defaultValues?.slug || getDefaultValue?.("slug") || ""
+		defaultValues?.slug || getDefaultValue?.("slug") || "",
 	);
 
 	let slugFieldRef = React.useRef<HTMLInputElement>(null);
@@ -249,7 +249,7 @@ interface FormFieldProps {
 	min?: string | number;
 	max?: string | number;
 	onChange?(
-		evt: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+		evt: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 	): void;
 	onBlur?(evt: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>): void;
 	onFocus?(evt: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>): void;

@@ -1,8 +1,8 @@
 import { Outlet } from "@remix-run/react";
-import "./blog.css";
+import stylesheetUrl from "./blog.css?url";
 
-export function headers() {
-	return { "Cache-Control": "max-age=300" };
+export function links() {
+	return [{ rel: "stylesheet", href: stylesheetUrl }];
 }
 
 export default function AdminBlogLayout() {

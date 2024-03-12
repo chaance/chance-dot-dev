@@ -1,8 +1,8 @@
 import { Outlet } from "@remix-run/react";
-import "./subscribers.css";
+import stylesheetUrl from "./subscribers.css?url";
 
-export function headers() {
-	return { "Cache-Control": "max-age=300" };
+export function links() {
+	return [{ rel: "stylesheet", href: stylesheetUrl }];
 }
 
 export default function AdminSubscribersLayout() {

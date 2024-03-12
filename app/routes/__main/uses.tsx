@@ -1,10 +1,16 @@
 import { Container } from "~/ui/container";
-import type { MetaFunction } from "@remix-run/node";
-
+import { json, redirect, type MetaFunction } from "@remix-run/node";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
-import "./uses.css";
+import stylesheetUrl from "./uses.css?url";
 
-const ROOT_CLASS = "page--uses";
+export function links() {
+	return [{ rel: "stylesheet", href: stylesheetUrl }];
+}
+
+export function loader() {
+	// TODO: Remove when this page is ready again
+	return redirect("/", 307);
+}
 
 export const meta: MetaFunction = () => {
 	return getSeoMeta({
@@ -198,13 +204,13 @@ const ITEMS: UsesItem[] = [
 	},
 ];
 
-export default function PrimaryLayoutRoute() {
+export default function UsesRoute() {
 	return (
-		<div className={ROOT_CLASS}>
+		<div>
 			<Container>
 				<main>
-					<h1 className={`${ROOT_CLASS}__title`}>Things I Use</h1>
-					<div className={`${ROOT_CLASS}__inner`}>
+					<h1>Things I Use</h1>
+					<div>
 						{ITEMS.map(({ title, list }) => {
 							return <ItemGroup key={title} list={list} title={title} />;
 						})}

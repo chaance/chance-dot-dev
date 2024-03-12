@@ -1,0 +1,56 @@
+@font-face {
+	font-family: helvetica-now;
+	src: url("/fonts/helvetica-now.woff2");
+	font-weight: 100 900;
+	font-display: swap;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: helvetica-now;
+	src: url("/fonts/helvetica-now-italic.woff2");
+	font-weight: 100 900;
+	font-display: swap;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: editorial-new;
+	src: url("/fonts/editorial-new.ttf");
+	font-weight: 100 900;
+	font-display: swap;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: editorial-new;
+	src: url("/fonts/editorial-new-italic.ttf");
+	font-weight: 100 900;
+	font-display: swap;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: berkeley-mono;
+	src: url("/fonts/berkeley-mono.woff2");
+	font-weight: 100 900;
+	font-display: swap;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: berkeley-mono;
+	src: url("/fonts/berkeley-mono-italic.ttf");
+	font-weight: 100 900;
+	font-display: swap;
+	font-style: italic;
+}
+
+:root {
+	--cs-ff-sans: helvetica-now, "Helvetica Neue", Helvetica, ui-sans-serif,
+		system-ui;
+	--cs-ff-serif: editorial-new, ui-serif, Garamond, "Times New Roman", serif;
+	--cs-ff-mono: berkeley-mono, ui-monospace, monospace;
+	--cs-ff-heading: var(--cs-ff-serif);
+	--cs-ff-body: var(--cs-ff-sans);
+}

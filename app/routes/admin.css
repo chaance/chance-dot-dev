@@ -89,7 +89,7 @@ body {
 .cs--admin__nav,
 .cs--admin__outlet {
 	max-height: 100%;
-	background-color: var(--cs-color-gray-01);
+	background-color: var(--cs-color-gray-005);
 	@media (--dark) {
 		background-color: var(--cs-color-gray-19);
 	}

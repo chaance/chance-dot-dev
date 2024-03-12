@@ -8,7 +8,6 @@ import { safeRedirect } from "~/lib/utils.server";
 import { Container } from "~/ui/container";
 import { Button } from "~/ui/primitives/button";
 import { SignUpForm, SignUpFormField } from "~/ui/sign-up-form";
-import { Text } from "~/ui/text";
 import { addSubscriberToForm } from "~/lib/convertkit.server";
 
 // export async function loader({ request }: LoaderFunctionArgs) {
@@ -162,15 +161,13 @@ export default function SignUpRoute() {
 			<Container>
 				<div style={{ maxWidth: "28rem", margin: "0 auto" }}>
 					<div>
-						<div className="prose prose-tight" style={{ marginBottom: "2rem" }}>
-							<Text as="Heading" variant="heading-1">
-								Sign Up for Updates
-							</Text>
-							<Text variant="body">
+						<div className="prose" style={{ marginBottom: "2rem" }}>
+							<h1>Sign Up for Updates</h1>
+							<p className="text-body">
 								I send out infrequent emails—trust me, I hate spam too—with
 								updates about Remix, my course Front to Back, events, and other
 								goodies from my software journey.
-							</Text>
+							</p>
 						</div>
 						<SignUpForm
 							fields={
@@ -231,7 +228,7 @@ export default function SignUpRoute() {
 								marginTop: "1rem",
 							}}
 						>
-							<Text color="critical">{formError}</Text>
+							<span className="text-critical">{formError}</span>
 						</div>
 					) : success === "true" ? (
 						<div
@@ -239,10 +236,10 @@ export default function SignUpRoute() {
 								marginTop: "1rem",
 							}}
 						>
-							<Text color="success">
+							<span className="text-success">
 								Thanks for signing up! Check your email to confirm your
 								subscription.
-							</Text>
+							</span>
 						</div>
 					) : null}
 				</div>

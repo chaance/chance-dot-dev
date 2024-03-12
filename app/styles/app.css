@@ -1,151 +1,34 @@
-@font-face {
-	font-family: armingrotesk-fb;
-	src: url("/fonts/armingrotesk-400.woff2") format("woff2"),
-		url("/fonts/armingrotesk-400.woff") format("woff");
-	font-display: block;
-	font-weight: 400;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: armingrotesk;
-	src: url("/fonts/armingrotesk-400.woff2") format("woff2"),
-		url("/fonts/armingrotesk-400.woff") format("woff");
-	font-display: swap;
-	font-weight: 400;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: armingrotesk;
-	src: url("/fonts/armingrotesk-400i.woff2") format("woff2"),
-		url("/fonts/armingrotesk-400i.woff") format("woff");
-	font-display: swap;
-	font-weight: 400;
-	font-style: italic;
-}
-
-@font-face {
-	font-family: armingrotesk;
-	src: url("/fonts/armingrotesk-500.woff2") format("woff2"),
-		url("/fonts/armingrotesk-500.woff") format("woff");
-	font-display: swap;
-	font-weight: 500;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: armingrotesk;
-	src: url("/fonts/armingrotesk-500i.woff2") format("woff2"),
-		url("/fonts/armingrotesk-500i.woff") format("woff");
-	font-display: swap;
-	font-weight: 500;
-	font-style: italic;
-}
-
-@font-face {
-	font-family: armingrotesk;
-	src: url("/fonts/armingrotesk-600.woff2") format("woff2"),
-		url("/fonts/armingrotesk-600.woff") format("woff");
-	font-display: swap;
-	font-weight: 600;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: armingrotesk;
-	src: url("/fonts/armingrotesk-600i.woff2") format("woff2"),
-		url("/fonts/armingrotesk-600i.woff") format("woff");
-	font-display: swap;
-	font-weight: 600;
-	font-style: italic;
-}
-
-@font-face {
-	font-family: armingrotesk;
-	src: url("/fonts/armingrotesk-700.woff2") format("woff2"),
-		url("/fonts/armingrotesk-700.woff") format("woff");
-	font-display: swap;
-	font-weight: 700;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: armingrotesk;
-	src: url("/fonts/armingrotesk-700i.woff2") format("woff2"),
-		url("/fonts/armingrotesk-700i.woff") format("woff");
-	font-display: swap;
-	font-weight: 700;
-	font-style: italic;
-}
-
 :root {
-	/* fonts! */
-	--cs-font-family-sans: "armingrotesk";
-	--cs-font-family-sans-fb: "armingrotesk-fb", ui-sans-serif, system-ui,
-		-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial,
-		Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol,
-		Noto Color Emoji;
-	--cs-font-family-mono: "IBM Plex Mono";
-	--cs-font-family-mono-fb: ui-monospace, IBM Plex Mono, Menlo, Monaco, Consolas,
-		Liberation Mono, Courier New, monospace;
+	--body-bg-grain: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 400 310' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23a)'/%3E%3C/svg%3E");
+	--body-bg-gradient-stop-1: var(--cs-color-gray-02);
+	--body-bg-gradient-stop-2: var(--cs-color-gray-005);
+	--body-bg-gradient-stop-3: var(--cs-color-gray-00);
+	--body-bg-gradient-stop-4: var(--cs-color-white);
+	--body-bg-gradient: linear-gradient(
+		45deg,
+		var(--body-bg-gradient-stop-1),
+		var(--body-bg-gradient-stop-2) 20%,
+		var(--body-bg-gradient-stop-3) 70%,
+		var(--body-bg-gradient-stop-4)
+	);
+	--bg-body-gradient: linear-gradient(
+		45deg,
+		var(--body-bg-gradient-stop-1),
+		var(--body-bg-gradient-stop-2) 20%,
+		var(--body-bg-gradient-stop-3) 70%,
+		var(--body-bg-gradient-stop-4)
+	);
+	--bg-body-img: no-repeat 100% var(--body-bg-gradient),
+		repeat center/300px var(--body-bg-grain);
 
-	--cs-font-family-default: var(--cs-font-family-sans),
-		var(--cs-font-family-sans-fb);
-	--cs-font-family-text: var(--cs-font-family-default);
-	--cs-font-family-heading: var(--cs-font-family-default);
-	--cs-font-family-blockquote: var(--cs-font-family-default);
-	--cs-font-family-list-marker: var(--cs-font-family-default);
-	--cs-font-family-list-item: var(--cs-font-family-default);
-	--cs-font-family-code: var(--cs-font-family-mono),
-		var(--cs-font-family-mono-fb);
+	@media (--dark) {
+		--body-bg-gradient-stop-1: var(--cs-color-black);
+		--body-bg-gradient-stop-2: var(--cs-color-gray-19);
+		--body-bg-gradient-stop-3: var(--cs-color-gray-19);
+		--body-bg-gradient-stop-4: var(--cs-color-gray-18);
+	}
 
-	--cs-font-weight-default: 400;
-	--cs-font-weight-strong: 500;
-	--cs-font-weight-stronger: 600;
-	--cs-font-weight-strongest: 700;
-
-	--cs-font-weight-text: var(--cs-font-weight-default);
-	--cs-font-weight-text-bold: var(--cs-font-weight-stronger);
-	--cs-font-weight-heading: var(--cs-font-weight-stronger);
-	--cs-font-weight-heading-bold: var(--cs-font-weight-strongest);
-	--cs-font-weight-heading-sm: var(--cs-font-weight-strong);
-	--cs-font-weight-heading-sm-bold: var(--cs-font-weight-stronger);
-	--cs-font-weight-blockquote: var(--cs-font-weight-strong);
-	--cs-font-weight-blockquote-bold: var(--cs-font-weight-stronger);
-	--cs-font-weight-list-marker: var(--cs-font-weight-strong);
-	--cs-font-weight-list-item: var(--cs-font-weight-default);
-	--cs-font-weight-list-item-active: var(--cs-font-weight-stronger);
-	--cs-font-weight-list-item-heading: var(--cs-font-weight-strongest);
-	--cs-font-weight-code: var(--cs-font-weight-strong);
-	--cs-font-weight-code-bold: var(--cs-font-weight-stronger);
-	--cs-font-weight-code: var(--cs-font-weight-strong);
-	--cs-font-weight-code-block: var(--cs-font-weight-default);
-	--cs-font-weight-table-heading: var(--cs-font-weight-stronger);
-
-	--cs-space-xxl: 4.5rem; /* 72px */
-	--cs-space-xl: 2.25rem; /* 36px */
-	--cs-space-lg: 1.5rem; /* 24px */
-	--cs-space-md: 1rem; /* 16px */
-	--cs-space-sm: 0.5rem; /* 8px */
-
-	--cs-font-size-xxl: 2.25rem; /* 36px */
-
-	--cs-focus-ring: var(--cs-color-accent-deep);
-
-	--cs-field-bg: hsl(0 0% 99% / 1);
-	--cs-field-bg-focus: hsl(0 0% 100% / 1);
-	--cs-field-bg-active: hsl(0 0% 97% / 1);
-	--cs-field-fg: var(--cs-color-text);
-	--cs-field-placeholder: var(--cs-color-text-weakest);
-	--cs-field-outline: hsl(0 0% 0% / 0);
-	--cs-field-outline-focus: var(--cs-color-accent);
-	--cs-field-border: var(--cs-color-border-weak);
-	--cs-field-border-focus: var(--cs-color-accent);
-	--cs-field-border-error: var(--cs-color-red-10);
-	--cs-selection-bg: var(--cs-color-green-05);
-	--cs-selection-fg: var(--cs-color-text);
-
+	/* syntax highlighting junk */
 	--base00: var(--cs-color-gray-01);
 	--base01: var(--cs-color-gray-04);
 	--base02: var(--cs-color-gray-06);
@@ -163,38 +46,8 @@
 	--base0E: var(--cs-color-green-18);
 	--base0F: var(--cs-color-gray-13);
 
-	--code-background: var(--cs-color-green-00);
-
-	--body-bg-grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 310' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-
-	--body-bg-gradient-stop-1: var(--cs-color-gray-02);
-	--body-bg-gradient-stop-2: var(--cs-color-gray-01);
-	--body-bg-gradient-stop-3: var(--cs-color-gray-00);
-	--body-bg-gradient-stop-4: var(--cs-color-white);
-
-	--body-bg-gradient: linear-gradient(
-		45deg,
-		var(--body-bg-gradient-stop-1),
-		var(--body-bg-gradient-stop-2) 20%,
-		var(--body-bg-gradient-stop-3) 70%,
-		var(--body-bg-gradient-stop-4)
-	);
-	--body-bg-img: no-repeat 100% var(--body-bg-gradient),
-		repeat center/300px var(--body-bg-grain);
-
-	@media (--lg) {
-		--code-background: var(--cs-color-white);
-	}
-
 	@media (--dark) {
-		--cs-field-bg: hsl(0 0% 8% / 1);
-		/* --cs-field-placeholder: hsl(0 0% 65% / 1); */
-		--cs-field-border: hsl(0 0% 31% / 1);
-		--cs-field-bg-focus: hsl(0 0% 2.5% / 1);
-		--cs-field-bg-active: hsl(0 0% 0% / 1);
-		--cs-selection-bg: var(--cs-color-green-12);
-
-		--base00: var(--cs-color-gray-16);
+		--base00: var(--cs-color-gray-18);
 		--base01: var(--cs-color-gray-14);
 		--base02: var(--cs-color-gray-12);
 		--base03: var(--cs-color-gray-11);
@@ -210,49 +63,78 @@
 		--base0D: var(--cs-color-green-04);
 		--base0E: var(--cs-color-green-02);
 		--base0F: var(--cs-color-gray-07);
-
-		--code-background: var(--cs-color-black);
-
-		--body-bg-gradient-stop-1: var(--cs-color-black);
-		--body-bg-gradient-stop-2: var(--cs-color-gray-19);
-		--body-bg-gradient-stop-3: var(--cs-color-gray-19);
-		--body-bg-gradient-stop-4: var(--cs-color-gray-18);
-
-		@media (--lg) {
-			--code-background: var(--cs-color-gray-18);
-		}
 	}
 }
 
-html,
-body {
-	background: var(--cs-color-background);
-	background: var(--body-bg-img);
-	background-attachment: fixed;
-	background-blend-mode: hard-light;
-	color: var(--cs-color-text);
-}
-
-body {
-	font-family: var(--cs-font-family-text);
-}
-
-.chance-dot-dev {
-	height: 100%;
-	isolation: isolate;
-}
-
-::selection {
-	background: var(--cs-selection-bg);
-	color: var(--cs-selection-fg);
-}
-
-:focus:where(:not(:focus-visible)) {
+:where(:not(:focus-visible):focus) {
 	outline: none;
 }
 
 :focus-visible {
-	outline: 2px solid var(--cs-focus-ring);
+	outline: 2px solid var(--cs-color-focus-ring);
+	outline-offset: 0;
 }
 
+*,
+::before,
+::after {
+	border-width: 0;
+	border-style: solid;
+	border-color: var(--cs-color-border);
+}
 
+html,
+body,
+.chance-dot-dev {
+	height: 100%;
+}
+
+html {
+	background-color: var(--cs-color-background);
+	color: var(--cs-color-text);
+	font-family: var(--cs-ff-body);
+	font-weight: 300;
+	font-size: 15px;
+	line-height: 1.6;
+	@media (--lg) {
+		font-size: 16px;
+	}
+}
+
+body {
+	background-color: var(--cs-color-background);
+	background-image: var(--body-bg-img);
+	background-attachment: fixed;
+	background-blend-mode: hard-light;
+	font-size: 1rem;
+	color: inherit;
+}
+
+code,
+kbd,
+samp,
+pre {
+	font-family: var(--cs-ff-mono);
+}
+
+pre {
+	max-width: 100%;
+	overflow-x: auto;
+}
+
+input::-moz-placeholder,
+textarea::-moz-placeholder {
+	opacity: 1;
+	color: var(--cs-color-text-weakest);
+}
+
+input::placeholder,
+textarea::placeholder {
+	opacity: 1;
+	color: var(--cs-color-text-weakest);
+}
+
+::selection {
+	background-color: var(--cs-color-accent);
+	color: var(--cs-color-white);
+}

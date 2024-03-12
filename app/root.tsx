@@ -10,23 +10,24 @@ import {
 	useNavigation,
 	useFetchers,
 	isRouteErrorResponse,
+	useLoaderData,
 } from "@remix-run/react";
-import type { ErrorResponse } from "@remix-run/router";
 import { Container } from "~/ui/container";
 // import { getSeo } from "~/lib/seo";
 import { RouteChangeAnnouncement } from "~/ui/primitives/route-change-announcement";
 import { RootProvider } from "~/lib/react/context";
-import { useIsHydrated } from "~/lib/react/use-is-hydrated";
+import { useIsHydrated } from "@chance/hooks/use-is-hydrated";
 import NProgress from "nprogress";
 
-import { PrimaryLayout } from "~/routes/__main";
+import { PrimaryLayout } from "~/ui/primary-layout.js";
 
-import "~/styles/resets.css";
-import "~/styles/color.css";
-import "~/styles/app.css";
-import "~/styles/ui.css";
-import "~/styles/utility.css";
-import "~/styles/prose.css";
+import fontsStylesUrl from "~/styles/fonts.css?url";
+import colorStylesUrl from "~/styles/color.css?url";
+import resetsStylesUrl from "~/styles/resets.css?url";
+import appStylesUrl from "~/styles/app.css?url";
+import uiStylesUrl from "~/styles/ui.css?url";
+import utilityStylesUrl from "~/styles/utility.css?url";
+import proseStylesUrl from "~/styles/prose.css?url";
 
 const ROOT_CLASS = "layout--root";
 
@@ -52,24 +53,39 @@ export function links() {
 		{ rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
 		{ rel: "alternate icon", href: "/favicon.png", type: "image/png" },
 		{ rel: "manifest", href: "/manifest.json" },
-
 		{
 			rel: "preload",
 			as: "font",
-			href: "/fonts/armingrotesk-400.woff2",
+			href: "/fonts/helvetica-now.woff2",
 			type: "font/woff2",
 			crossOrigin: "",
 		},
+		{
+			rel: "preload",
+			as: "font",
+			href: "/fonts/editorial-new.ttf",
+			type: "font/ttf",
+			crossOrigin: "",
+		},
+		// styles
+		{ rel: "stylesheet", href: fontsStylesUrl },
+		{ rel: "stylesheet", href: colorStylesUrl },
+		{ rel: "stylesheet", href: resetsStylesUrl },
+		{ rel: "stylesheet", href: appStylesUrl },
+		{ rel: "stylesheet", href: uiStylesUrl },
+		{ rel: "stylesheet", href: utilityStylesUrl },
+		{ rel: "stylesheet", href: proseStylesUrl },
 	];
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
-	let data = {
+	const currentYear = String(new Date().getFullYear());
+	return json({
+		currentYear,
 		requestInfo: {
 			origin: getDomainUrl(request),
 		},
-	};
-	return json(data);
+	});
 }
 
 export default function Root() {
@@ -88,6 +104,7 @@ function Document({
 }: React.PropsWithChildren<{ meta?: React.ReactNode }>) {
 	useProgressBar();
 	let hydrated = useIsHydrated();
+	let { currentYear = "2024" } = useLoaderData<typeof loader>() ?? {};
 
 	useDisableTransitionsOnColorSchemeChange();
 
@@ -101,7 +118,7 @@ function Document({
 				<Links />
 			</head>
 			<body data-hydrated={hydrated ? "" : undefined}>
-				<RootProvider hydrated={hydrated}>
+				<RootProvider hydrated={hydrated} currentYear={currentYear}>
 					{children}
 					<RouteChangeAnnouncement />
 					<ScrollRestoration />
@@ -252,8 +269,8 @@ function useDisableTransitionsOnColorSchemeChange() {
        -o-transition: none !important;
        -ms-transition: none !important;
        transition: none !important;
-    }`
-				)
+    }`,
+				),
 			);
 			document.head.appendChild(css);
 

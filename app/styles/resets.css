@@ -1,44 +1,37 @@
-*,
-*::before,
-*::after {
+* {
+	box-sizing: border-box;
+}
+
+::before,
+::after {
 	box-sizing: inherit;
-	margin: 0;
-	padding: 0;
-	border: 0 solid currentColor;
+}
+
+* {
 	overflow-wrap: break-word;
 	hyphens: auto;
-
 	@media (min-width: 640px) {
 		hyphens: initial;
 	}
 }
 
-:root {
-	--_re-line-height: 1.5;
-	--_re-font-size: 16px;
-	--_re-font-mono: ui-monospace, IBM Plex Mono, Menlo, Monaco, Consolas,
-		Liberation Mono, Courier New, monospace;
-	--_re-font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-		Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,
-		Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
-	--_re-tab-size: 4;
-}
-
-html {
-	box-sizing: border-box;
+html,
+:host {
+	line-height: 1.5;
+	-webkit-text-size-adjust: 100%;
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+	font-feature-settings: normal;
+	font-variation-settings: normal;
+	-webkit-tap-highlight-color: transparent;
 	scrollbar-gutter: stable both-edges;
-	height: 100%;
 }
 
 body {
-	font-size: var(--_re-font-size);
-	font-family: var(--_re-font-sans);
-	line-height: var(--_re-line-height);
-	font-feature-settings: normal;
-	-webkit-text-size-adjust: 100%;
-	tab-size: var(--_re-tab-size);
+	margin: 0;
+	line-height: inherit;
 	scrollbar-gutter: inherit;
-	height: inherit;
 }
 
 hr {
@@ -48,7 +41,8 @@ hr {
 }
 
 abbr:where([title]) {
-	text-decoration: inherit;
+	-webkit-text-decoration: underline dotted;
+	text-decoration: underline dotted;
 }
 
 h1,
@@ -57,15 +51,8 @@ h3,
 h4,
 h5,
 h6 {
-	font: inherit;
-}
-
-menu,
-ol,
-ul {
-	list-style: none;
-	margin: 0;
-	padding: 0;
+	font-size: inherit;
+	font-weight: inherit;
 }
 
 a {
@@ -76,6 +63,15 @@ a {
 b,
 strong {
 	font-weight: bolder;
+}
+
+code,
+kbd,
+samp,
+pre {
+	font-feature-settings: normal;
+	font-variation-settings: normal;
+	font-size: 1em;
 }
 
 small {
@@ -98,40 +94,36 @@ sup {
 	top: -0.5em;
 }
 
-code,
-kbd,
-pre,
-samp {
-	font-family: var(--_re-font-mono);
-	font-size: 1em;
+table {
+	text-indent: 0;
+	border-color: inherit;
+	border-collapse: collapse;
 }
 
 button,
 input,
+optgroup,
 select,
 textarea {
 	font: inherit;
 	line-height: inherit;
 	color: inherit;
+	margin: 0;
+	padding: 0;
 }
 
+button,
 select {
 	text-transform: inherit;
 }
 
 button,
-[type="button"],
-[type="submit"],
-[type="reset"] {
-	display: inline-block;
-	appearance: none;
-	text-shadow: none;
-	text-transform: inherit;
-	border: 0;
-	box-shadow: none;
-	background: none;
-	text-align: inherit;
-	color: inherit;
+:where([type="button"]),
+:where([type="reset"]),
+:where([type="submit"]) {
+	-webkit-appearance: button;
+	background-color: transparent;
+	background-image: none;
 }
 
 :-moz-focusring {
@@ -151,49 +143,67 @@ progress {
 	height: auto;
 }
 
-[type="text"],
-[type="password"],
-[type="email"],
-[type="url"],
-[type="tel"],
-[type="number"],
-[type="search"],
-[type="date"],
-[type="month"],
-[type="week"],
-[type="time"],
-[type="datetime-local"] {
-	appearance: none;
+:where([type="search"]) {
+	-webkit-appearance: textfield;
 	outline-offset: -2px;
 }
 
 ::-webkit-search-decoration {
-	appearance: none;
+	-webkit-appearance: none;
 }
 
 ::-webkit-file-upload-button {
-	-webkit-appearance: none;
+	-webkit-appearance: button;
 	font: inherit;
+}
+
+summary {
+	display: list-item;
+}
+
+blockquote,
+dl,
+dd,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+figure,
+p,
+pre {
+	margin: 0;
+}
+
+fieldset {
+	margin: 0;
+	padding: 0;
+}
+
+legend {
+	padding: 0;
+}
+
+ol,
+ul,
+menu {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+dialog {
+	padding: 0;
 }
 
 textarea {
 	resize: vertical;
 }
 
-input::placeholder,
-textarea::placeholder {
-	opacity: 1;
-	color: #a7a7a7;
-}
-
-table {
-	text-indent: 0;
-	border-color: inherit;
-	border-collapse: collapse;
-}
-
-summary {
-	display: list-item;
+:disabled {
+	cursor: default;
 }
 
 audio,
@@ -218,5 +228,5 @@ video {
 }
 
 [hidden] {
-	display: none;
+	display: none !important;
 }

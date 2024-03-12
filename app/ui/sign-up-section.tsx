@@ -1,13 +1,12 @@
 import * as React from "react";
-import { Text } from "~/ui/text";
 import { bem } from "~/lib/utils";
 import cx from "clsx";
 import { useFetcher } from "@remix-run/react";
 import { Button } from "~/ui/primitives/button";
 import { SignUpForm, SignUpFormField } from "~/ui/sign-up-form";
-import { useIsHydrated } from "~/lib/react/use-is-hydrated";
+import { useIsHydrated } from "@chance/hooks/use-is-hydrated";
+import { useLayoutEffect } from "@chance/hooks/use-layout-effect";
 import type { action as signUpAction } from "~/routes/__main/sign-up";
-import { useLayoutEffect } from "~/lib/react/use-layout-effect";
 
 const ROOT_CLASS = "sign-up-section";
 const CONVERT_KIT_FORM_ID = "3906586";
@@ -45,19 +44,17 @@ function SignUpSection__WIP() {
 	return (
 		<section className={ROOT_CLASS}>
 			<div className={bem(ROOT_CLASS, "inner")}>
-				<div className={cx(bem(ROOT_CLASS, "body"), "prose prose-tight")}>
-					<Text as="Heading" variant="heading-2" color="weaker">
-						What am I building?{" "}
-						<Text as="div" color="text">
-							Join me to stay in the loop.
-						</Text>
-					</Text>
-					<Text>
+				<div className={cx(bem(ROOT_CLASS, "body"), "prose")}>
+					<h2 className="h2 ">
+						<span className="h2 text-weaker">What am I building?</span> Join me
+						to stay in the loop.
+					</h2>
+					<p>
 						I send out infrequent emails—trust me, I hate spam too—with updates
 						about Remix, my course Front to Back, and other things that interest
 						me.
-					</Text>
-					<Text>Hopefully they interest you too 🍻</Text>
+					</p>
+					<p>Hopefully they interest you too 🍻</p>
 				</div>
 				<div className={bem(ROOT_CLASS, "form")}>
 					<div className={bem(ROOT_CLASS, "card")}>
@@ -145,10 +142,10 @@ function SignUpSection__WIP() {
 										  }
 								}
 							>
-								<Text color="success">
+								<p className="text-success">
 									Thanks for signing up! Check your email to confirm your
 									subscription.
-								</Text>
+								</p>
 							</div>
 						) : null}
 					</div>

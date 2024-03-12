@@ -35,7 +35,7 @@ export async function processMarkdown(content: string) {
 
 export async function parseMarkdown(
 	key: string,
-	contents: string
+	contents: string,
 ): Promise<MarkdownParsed | null> {
 	// if (!NO_CACHE) {
 	// 	let cached = markdownCache.get(key);
@@ -162,7 +162,7 @@ async function getPlugins() {
 							// generate dynamically
 							srcSet: ["2000", "1024", "640"].reduce(
 								(prev, cur) => `${prev}, ${getSrc(cur)} ${cur}w`,
-								""
+								"",
 							),
 							sizes:
 								"(min-width: 1024px) 2000px, (min-width: 768px) 1024px, 640px",
@@ -186,7 +186,7 @@ async function getPlugins() {
 				tokenizePool ||
 				new Tinypool({
 					// worker directory is relative to the build output
-					filename: new URL("../workers/shiki-worker.js", import.meta.url)
+					filename: new URL("../../workers/shiki-worker.js", import.meta.url)
 						.pathname,
 					minThreads: 0,
 					idleTimeout: 60,
@@ -239,9 +239,9 @@ async function getPlugins() {
 														style: `color: ${htmlEscape(color)}`,
 													},
 													children: [content],
-											  }
+												}
 											: content;
-									}
+									},
 								);
 
 								children.push({
@@ -272,7 +272,7 @@ async function getPlugins() {
 									},
 									children,
 								};
-							}
+							},
 						);
 
 						let nodeValue = {
@@ -283,7 +283,7 @@ async function getPlugins() {
 								dataLineNumbers: usesLineNumbers ? "true" : "false",
 								dataLang: htmlEscape(language),
 								style: `color: ${htmlEscape(
-									fgColor
+									fgColor,
 								)};background-color: ${htmlEscape(bgColor)}`,
 							},
 							children: [
@@ -297,7 +297,9 @@ async function getPlugins() {
 
 						let data = node.data ?? {};
 						(node as any).type = "element";
+						// @ts-expect-error
 						data.hProperties ??= {};
+						// @ts-expect-error
 						data.hChildren = [nodeValue];
 						node.data = data;
 					}
@@ -347,7 +349,7 @@ async function getPlugins() {
 				await Promise.all(transformTasks.map((exec) => exec()));
 
 				async function getThemedTokens(
-					args: WorkerArgs
+					args: WorkerArgs,
 				): Promise<WorkerResult> {
 					return await tokenizePool.run(args);
 				}

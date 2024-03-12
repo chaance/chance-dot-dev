@@ -1,6 +1,6 @@
 import * as React from "react";
-import { useLayoutEffect } from "~/lib/react/use-layout-effect";
-import { useForceUpdate } from "~/lib/react/use-force-update";
+import { useLayoutEffect } from "@chance/hooks/use-layout-effect";
+import { useForceUpdate } from "@chance/hooks/use-force-update";
 import { createPortal } from "react-dom";
 
 const PortalImpl: React.FC<PortalProps> = ({

@@ -27,3 +27,6 @@ POST,DELETE,PATCH,PUT  /                                                https://
 /webfig(.*)                                                             https://www.youtube.com/watch?v=dQw4w9WgXcQ
 /config(.*)                                                             https://www.youtube.com/watch?v=dQw4w9WgXcQ
 /console(.*)                                                            https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+/jsworld                                                                /
+

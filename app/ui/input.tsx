@@ -6,7 +6,7 @@ import { useRadioGroupState, type RadioGroupState } from "@react-stately/radio";
 import { useFocusRing } from "@react-aria/focus";
 import { usePress } from "@react-aria/interactions";
 import cx from "clsx";
-import { useComposedRefs } from "~/lib/react/use-composed-refs";
+import { useComposedRefs } from "@chance/hooks/use-composed-refs";
 
 // annoying af but the type is exposed in a dependency of
 // @react-aria/interactions instead of that package itself, and that seems like
@@ -24,7 +24,7 @@ const InputBase = React.forwardRef<any, InputBaseProps>(
 				{...props}
 			/>
 		);
-	}
+	},
 );
 InputBase.displayName = "InputBase";
 
@@ -44,7 +44,7 @@ const InputText = React.forwardRef<HTMLInputElement, InputTextProps>(
 				className={cx(`${BASE_CLASS}--${type}`)}
 			/>
 		);
-	}
+	},
 );
 InputText.displayName = "InputText";
 
@@ -154,7 +154,7 @@ function useCheckboxInput({
 			onChange: onToggle,
 		},
 		state,
-		inputRef
+		inputRef,
 	);
 
 	inputProps["aria-label"] = props["aria-label"];
@@ -236,7 +236,7 @@ function useRadioInput({
 				"hi",
 		},
 		state,
-		inputRef
+		inputRef,
 	);
 
 	inputProps["aria-label"] = props["aria-label"];
@@ -324,7 +324,7 @@ const InputCheckbox = React.forwardRef<HTMLInputElement, InputCheckboxProps>(
 				</div>
 			</>
 		);
-	}
+	},
 );
 InputCheckbox.displayName = "InputCheckbox";
 
@@ -394,7 +394,7 @@ const InputRadioGroup = React.forwardRef<HTMLDivElement, InputRadioGroupProps>(
 			required: isRequired,
 			...props
 		},
-		ref
+		ref,
 	) => {
 		let generatedId = React.useId();
 		let id = props.id || `radio-group:${generatedId}`;
@@ -424,7 +424,7 @@ const InputRadioGroup = React.forwardRef<HTMLDivElement, InputRadioGroupProps>(
 						// Annoying react aria warning. Throw away.
 						"hi",
 				},
-				state
+				state,
 			);
 
 		radioGroupProps["aria-label"] = props["aria-label"];
@@ -444,7 +444,7 @@ const InputRadioGroup = React.forwardRef<HTMLDivElement, InputRadioGroupProps>(
 				</RadioGroupContext.Provider>
 			</div>
 		);
-	}
+	},
 );
 InputRadioGroup.displayName = "InputRadioGroup";
 
@@ -520,7 +520,7 @@ const InputRadio = React.forwardRef<HTMLInputElement, InputRadioProps>(
 				</div>
 			</>
 		);
-	}
+	},
 );
 InputRadio.displayName = "InputRadio";
 
@@ -545,7 +545,7 @@ const InputSelect = React.forwardRef<HTMLSelectElement, InputSelectProps>(
 				className={cx(`${BASE_CLASS}--select`)}
 			/>
 		);
-	}
+	},
 );
 InputSelect.displayName = "InputSelect";
 
@@ -561,7 +561,7 @@ const InputTextarea = React.forwardRef<HTMLTextAreaElement, InputTextareaProps>(
 				className={cx(`${BASE_CLASS}--textarea`)}
 			/>
 		);
-	}
+	},
 );
 InputTextarea.displayName = "InputTextarea";
 
