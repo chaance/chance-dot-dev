@@ -1,0 +1,148 @@
+.prose {
+	font-size: 0.9375rem;
+	line-height: 1.6;
+
+	p {
+		margin-top: 1em;
+		margin-bottom: 1em;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4 {
+		font-family: var(--cs-ff-heading);
+	}
+
+	h1 {
+		font-size: 2.25rem;
+		line-height: 1.111;
+		margin-top: 1em;
+		margin-bottom: 0.125em;
+		@media (--sm) {
+			font-size: 3rem;
+			line-height: 1;
+		}
+	}
+
+	h2 {
+		font-size: 1.5rem;
+		line-height: 1.333;
+		margin-top: 2em;
+		margin-bottom: 0.5em;
+		@media (--sm) {
+			font-size: 2.25rem;
+			line-height: 1.111;
+		}
+	}
+
+	h3 {
+		font-size: 1.25rem;
+		line-height: 1.4;
+		margin-top: 1.5em;
+		margin-bottom: 0;
+		@media (--sm) {
+			font-size: 1.5rem;
+			line-height: 1.333;
+		}
+	}
+
+	h4 {
+		font-size: 1.25rem;
+		line-height: 1.4;
+		margin-top: 1.25em;
+		margin-bottom: -0.5em;
+	}
+
+	a {
+		color: var(--cs-color-text-weak);
+		text-decoration: underline;
+		text-decoration-color: var(--cs-color-text-weaker);
+		&:hover {
+			color: var(--cs-color-accent);
+			text-decoration-color: var(--cs-color-accent);
+		}
+	}
+
+	aside {
+		font-size: inherit;
+		color: var(--cs-color-text-weaker);
+		padding: 1em 0;
+		border-top: 1px solid var(--cs-color-border-weak);
+		border-bottom: 1px solid var(--cs-color-border-weak);
+	}
+
+	pre {
+		background-color: var(--base00);
+		border: 1px solid var(--cs-color-border-weak);
+		margin-top: 1em;
+		margin-bottom: 1em;
+		font-size: inherit;
+		padding: 1em;
+		font-weight: 100;
+		tab-size: 2;
+	}
+
+	pre[data-line-numbers="true"] {
+		padding-left: 3.5rem;
+	}
+
+	.codeblock-line {
+		position: relative;
+		display: block;
+		width: 100%;
+	}
+
+	.codeblock-line[data-line-number]::before {
+		content: attr(data-line-number);
+		display: block;
+		font: inherit;
+		line-height: inherit;
+		line-height: inherit;
+		opacity: 0.325;
+		position: absolute;
+		right: calc(100% + 1rem);
+		text-align: right;
+	}
+
+	code {
+		font-size: 0.875em;
+		font-weight: 100;
+		display: inline-flex;
+		position: relative;
+		padding: 0 0.5em;
+		font-style: normal;
+	}
+
+	pre code {
+		display: contents;
+	}
+
+	> p code {
+		position: relative;
+		padding: 0 0.5em;
+		&::before {
+			content: "";
+			position: absolute;
+			top: -0.125em;
+			bottom: -0.125em;
+			left: 0;
+			right: 0;
+			border: 1px solid var(--cs-color-border-weak);
+			border-radius: 2px;
+		}
+	}
+
+	del {
+		text-decoration-thickness: clamp(2px, 0.125em, 6px);
+		text-decoration-color: var(--cs-color-text-danger);
+	}
+
+	:first-child {
+		margin-top: 0;
+	}
+
+	:last-child {
+		margin-bottom: 0;
+	}
+}

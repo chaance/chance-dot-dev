@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { ActionArgs, LoaderArgs, SerializeFrom } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs, SerializeFrom } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { requireUserId } from "~/lib/session.server";
@@ -7,7 +7,7 @@ import { getFormFieldStringValue } from "~/lib/utils";
 import { createEmailList } from "~/models/email-list.server";
 import { InputText } from "~/ui/input";
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
 	await requireUserId(request);
 	return json(null);
 }
@@ -16,7 +16,7 @@ const formFields = new Map<FormFieldName, FormFieldDescriptor>([
 	["name", { label: "List Name", required: true, type: "text" }],
 ]);
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
 	await requireUserId(request);
 	let formData = await request.formData();
 

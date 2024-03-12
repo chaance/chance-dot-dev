@@ -1,11 +1,10 @@
 import * as React from "react";
-import type { LinksFunction } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
-import routeStylesUrl from "~/dist/styles/routes/__auth.css";
+import stylesheetUrl from "./__auth.css?url";
 
-export const links: LinksFunction = () => {
-	return [{ rel: "stylesheet", href: routeStylesUrl }];
-};
+export function links() {
+	return [{ rel: "stylesheet", href: stylesheetUrl }];
+}
 
 export default function AuthLayout() {
 	return (

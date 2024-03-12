@@ -1,0 +1,9 @@
+.cs--sign-up-form,
+.cs--sign-up-form__fields {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+}
+
+.cs--sign-up-form-field {
+}

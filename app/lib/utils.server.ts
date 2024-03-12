@@ -29,7 +29,7 @@ export async function readableFileExists(filePath: string) {
  */
 export function getSafeRedirect(
 	to: FormDataEntryValue | string | null | undefined,
-	defaultRedirect: string = "/"
+	defaultRedirect: string = "/",
 ) {
 	if (!to || typeof to !== "string") {
 		return defaultRedirect;
@@ -52,7 +52,7 @@ export function getSafeRedirect(
 export function safeRedirect(
 	to: FormDataEntryValue | string | null | undefined,
 	defaultRedirect: string = "/",
-	init?: number | ResponseInit
+	init?: number | ResponseInit,
 ) {
 	return redirect(getSafeRedirect(to, defaultRedirect), init);
 }

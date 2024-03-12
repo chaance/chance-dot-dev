@@ -1,16 +1,21 @@
 import * as React from "react";
 import { Container } from "~/ui/container";
 import { HeadingLevelProvider } from "~/ui/primitives/heading";
-import { Text, TextHeading, TextSpan } from "~/ui/text";
 import { bem } from "~/lib/utils";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
 import { SignUpSection } from "~/ui/sign-up-section";
 
-import routeStylesUrl from "~/dist/styles/routes/__main/content.css";
 import { Card } from "~/ui/card";
+import stylesheetUrl from "./content.css?url";
+import { redirect } from "@remix-run/node";
 
 export function links() {
-	return [{ rel: "stylesheet", href: routeStylesUrl }];
+	return [{ rel: "stylesheet", href: stylesheetUrl }];
+}
+
+export function loader() {
+	// TODO: Remove when this page is ready again
+	return redirect("/", 307);
 }
 
 export function meta() {
@@ -20,20 +25,18 @@ export function meta() {
 	});
 }
 
-const ROOT_CLASS = "page--content";
-
 export default function ContentRoute() {
 	return (
-		<main className={ROOT_CLASS}>
+		<main>
 			<Container purpose="header">
-				<div className={bem(ROOT_CLASS, "featured")}>
-					<div className={bem(ROOT_CLASS, "page-title")}>
-						<TextHeading variant="heading-1" color="weaker">
-							Featured <TextSpan>Content</TextSpan>
-						</TextHeading>
+				<div>
+					<div>
+						<h1>
+							Featured <span className="text-weaker">Content</span>
+						</h1>
 					</div>
 					<HeadingLevelProvider>
-						<ul className={bem(ROOT_CLASS, "featured-items")}>
+						<ul>
 							{[
 								{
 									id: "1",
@@ -65,27 +68,17 @@ export default function ContentRoute() {
 								},
 							].map((item) => {
 								return (
-									<li
-										key={item.id}
-										className={bem(ROOT_CLASS, "featured-item")}
-									>
+									<li key={item.id}>
 										<a
 											aria-labelledby={`featured-item-${item.id}-label`}
 											href={item.to}
-											className={bem(ROOT_CLASS, "featured-item-link")}
 										>
-											<div className={bem(ROOT_CLASS, "featured-item-card")}>
+											<div>
 												<Card uncard="sm-down" depth={false}>
-													<div
-														className={bem(ROOT_CLASS, "featured-item-body")}
-													>
-														<Text
-															as="Heading"
-															variant="heading-3"
-															id={`featured-item-${item.id}-label`}
-														>
+													<div>
+														<h3 id={`featured-item-${item.id}-label`}>
 															{item.heading}
-														</Text>
+														</h3>
 														<p>{item.desc}</p>
 													</div>
 												</Card>

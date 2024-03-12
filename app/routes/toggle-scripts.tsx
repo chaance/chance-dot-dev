@@ -1,5 +1,5 @@
 import { redirect } from "@remix-run/node";
-import type { ActionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs } from "@remix-run/node";
 import { serverSessionStorage } from "~/lib/session.server";
 import { isString } from "~/lib/utils";
 
@@ -11,7 +11,7 @@ export async function loader() {
 	return redirect("/");
 }
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
 	let [session, formData] = await Promise.all([
 		serverSessionStorage.getSession(request.headers.get("Cookie")),
 		request.formData(),

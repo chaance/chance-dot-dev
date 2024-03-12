@@ -1,19 +1,9 @@
-import type { LinksFunction } from "@remix-run/node";
-import { Outlet, type ShouldReloadFunction } from "@remix-run/react";
+import { Outlet } from "@remix-run/react";
+import stylesheetUrl from "./subscribers.css?url";
 
-import routeStylesUrl from "~/dist/styles/routes/admin/subscribers.css";
-
-export const links: LinksFunction = () => {
-	return [{ rel: "stylesheet", href: routeStylesUrl }];
-};
-
-export function headers() {
-	return { "Cache-Control": "max-age=300" };
+export function links() {
+	return [{ rel: "stylesheet", href: stylesheetUrl }];
 }
-
-export const unstable_shouldReload: ShouldReloadFunction = ({ submission }) => {
-	return !!submission && submission.method.toLowerCase() !== "get";
-};
 
 export default function AdminSubscribersLayout() {
 	return (

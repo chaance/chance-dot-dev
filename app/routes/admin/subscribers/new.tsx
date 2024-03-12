@@ -1,5 +1,9 @@
 import * as React from "react";
-import type { ActionArgs, LoaderArgs, SerializeFrom } from "@remix-run/node";
+import type {
+	LoaderFunctionArgs,
+	ActionFunctionArgs,
+	SerializeFrom,
+} from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { requireUserId } from "~/lib/session.server";
@@ -9,7 +13,7 @@ import { InputText } from "~/ui/input";
 import { Card } from "~/ui/card";
 import { Button } from "~/ui/primitives/button";
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
 	await requireUserId(request);
 	return json(null);
 }
@@ -20,7 +24,7 @@ const formFields = new Map<FormFieldName, FormFieldDescriptor>([
 	["nameLast", { label: "Slug", type: "text" }],
 ]);
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
 	await requireUserId(request);
 	let formData = await request.formData();
 

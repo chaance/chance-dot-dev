@@ -1,0 +1,62 @@
+.sign-up-section {
+	margin: 3rem 0;
+
+	@media (--sm) {
+		margin: 5rem 0;
+	}
+
+	@media (--md) {
+		margin: 6rem 0;
+	}
+
+	@media (--lg) {
+		margin: 10rem 0;
+	}
+
+	@media (--xl) {
+		margin: 13rem 0;
+	}
+}
+
+.sign-up-section__inner {
+	max-width: 56rem;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+
+	@media (--md) {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 2rem;
+	}
+
+	@media (--lg) {
+		gap: 3rem;
+	}
+
+	@media (--xl) {
+		gap: 5rem;
+	}
+}
+
+.sign-up-section__body {
+	position: relative;
+}
+
+.sign-up-section__form {
+	display: flex;
+	flex-direction: column;
+	gap: 2.125rem;
+}
+
+.sign-up-section__card {
+	position: relative;
+	padding: 1.5rem;
+	background: var(--cs-color-background-raised);
+	box-shadow: 0px 8px 30px -16px hsl(0deg 0% 0% / 0.25);
+
+	@media (--sm) {
+		padding: 2rem;
+	}
+}

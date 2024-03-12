@@ -1,8 +1,8 @@
 import * as React from "react";
 import type {
-	ActionArgs,
-	LoaderArgs,
-	V2_MetaFunction as MetaFunction,
+	ActionFunctionArgs,
+	LoaderFunctionArgs,
+	MetaFunction,
 } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { createUserSession, getSessionUser } from "~/lib/session.server";
@@ -18,7 +18,7 @@ import { InputText } from "~/ui/input";
 import { Card } from "~/ui/card";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
 	let user = await getSessionUser(request);
 	if (user) {
 		return redirect("/admin");
@@ -26,7 +26,7 @@ export async function loader({ request }: LoaderArgs) {
 	return json(null);
 }
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
 	let formData = await request.formData();
 	let email = formData.get("email");
 	let password = formData.get("password");

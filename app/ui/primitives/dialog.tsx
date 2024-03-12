@@ -7,12 +7,12 @@
 import * as React from "react";
 import { Portal } from "~/ui/primitives/portal";
 import { getOwnerDocument, isFunction } from "~/lib/utils";
-import { useComposedRefs } from "~/lib/react/use-composed-refs";
+import { useComposedRefs } from "@chance/hooks/use-composed-refs";
 import FocusLock from "react-focus-lock";
 import { RemoveScroll } from "react-remove-scroll";
 import { createContext } from "~/lib/react/create-context";
 import { useRequiredContext } from "~/lib/react/use-required-context";
-import { useComposedEventHandlers } from "~/lib/react/use-composed-event-handlers";
+import { useComposedEventHandlers } from "@chance/hooks/use-composed-event-handlers";
 import type { ExtendPropsWithRef, ElementTagNameMap } from "~/types";
 
 const noop = () => {};
@@ -21,7 +21,7 @@ type DialogUIState = "opening" | "open" | "closing" | "closed";
 
 const DialogContext = createContext<DialogContextValue | null>(
 	"DialogContext",
-	null
+	null,
 );
 
 function useDialogContext(component?: string) {
@@ -29,7 +29,7 @@ function useDialogContext(component?: string) {
 		DialogContext,
 		component
 			? `${component} is missing a parent <Dialog /> component.`
-			: `useDialogContext called outside of a <Dialog /> component.`
+			: `useDialogContext called outside of a <Dialog /> component.`,
 	);
 }
 
@@ -92,7 +92,7 @@ function useDialog({
 		(details: DismissDetails) => {
 			onDismiss?.(details);
 		},
-		[onDismiss]
+		[onDismiss],
 	);
 
 	let openDialog = React.useCallback(() => {
@@ -274,8 +274,8 @@ function useDialogOverlay<E extends keyof JSX.IntrinsicElements>({
 					dismiss({ trigger: "overlay-click", event });
 				}
 			},
-			[dismiss]
-		)
+			[dismiss],
+		),
 	);
 
 	let handleKeyDown = useComposedEventHandlers(
@@ -287,15 +287,15 @@ function useDialogOverlay<E extends keyof JSX.IntrinsicElements>({
 					dismiss({ trigger: "keyboard-escape", event });
 				}
 			},
-			[dismiss]
-		)
+			[dismiss],
+		),
 	);
 
 	let handleMouseDown = useComposedEventHandlers(
 		onMouseDown as any,
 		React.useCallback((event: React.MouseEvent<ElementFrom<E>>) => {
 			mouseDownTarget.current = event.target;
-		}, [])
+		}, []),
 	);
 
 	React.useEffect(() => {
@@ -459,7 +459,7 @@ function useDialogContent<E extends keyof JSX.IntrinsicElements>({
 		props.onClick as any,
 		React.useCallback((event: React.MouseEvent<ElementFrom<E>>) => {
 			event.stopPropagation();
-		}, [])
+		}, []),
 	);
 	return {
 		state,
@@ -524,7 +524,7 @@ function createAriaHider(dialogNode: Element) {
 	let ownerDocument = getOwnerDocument(dialogNode)!;
 	if (!dialogNode) {
 		console.warn(
-			"A ref has not yet been attached to a dialog node when attempting to call `createAriaHider`."
+			"A ref has not yet been attached to a dialog node when attempting to call `createAriaHider`.",
 		);
 		return noop;
 	}
@@ -544,7 +544,7 @@ function createAriaHider(dialogNode: Element) {
 			originalValues.push(attr);
 			rootNodes.push(node);
 			node.setAttribute("aria-hidden", "true");
-		}
+		},
 	);
 
 	return () => {
@@ -625,12 +625,12 @@ function useDialogTrigger(args?: DialogContextValue): UseDialogTriggerReturn {
 	if (args && context) {
 		// TODO: Support nested contexts, this will require some scoping mechanism
 		console.warn(
-			"[useDialogTrigger]: You should not pass arguments if called from within a Dialog or DialogProvider"
+			"[useDialogTrigger]: You should not pass arguments if called from within a Dialog or DialogProvider",
 		);
 	}
 	if (!context && !args) {
 		throw new Error(
-			"[useDialogTrigger]: You must pass `state` and `action` arguments if not called from within a Dialog or DialogProvider."
+			"[useDialogTrigger]: You must pass `state` and `action` arguments if not called from within a Dialog or DialogProvider.",
 		);
 	}
 	const ctx = args || context!;

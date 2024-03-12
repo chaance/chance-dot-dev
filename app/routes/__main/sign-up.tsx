@@ -1,4 +1,4 @@
-import type { ActionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useActionData, useSearchParams } from "@remix-run/react";
 import { getFormDataStringValue, isValidEmail } from "~/lib/utils";
@@ -8,15 +8,14 @@ import { safeRedirect } from "~/lib/utils.server";
 import { Container } from "~/ui/container";
 import { Button } from "~/ui/primitives/button";
 import { SignUpForm, SignUpFormField } from "~/ui/sign-up-form";
-import { Text } from "~/ui/text";
 import { addSubscriberToForm } from "~/lib/convertkit.server";
 
-// export async function loader({ request }: LoaderArgs) {
+// export async function loader({ request }: LoaderFunctionArgs) {
 // 	// TODO: Remove after implementing sign up logic
 // 	throw json(null, 404);
 // }
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
 	let formData = await request.formData();
 	let fields = {
 		email: getFormDataStringValue(formData, "email"),
@@ -162,15 +161,13 @@ export default function SignUpRoute() {
 			<Container>
 				<div style={{ maxWidth: "28rem", margin: "0 auto" }}>
 					<div>
-						<div className="prose prose-tight" style={{ marginBottom: "2rem" }}>
-							<Text as="Heading" variant="heading-1">
-								Sign Up for Updates
-							</Text>
-							<Text variant="body">
+						<div className="prose" style={{ marginBottom: "2rem" }}>
+							<h1>Sign Up for Updates</h1>
+							<p className="text-body">
 								I send out infrequent emails—trust me, I hate spam too—with
 								updates about Remix, my course Front to Back, events, and other
 								goodies from my software journey.
-							</Text>
+							</p>
 						</div>
 						<SignUpForm
 							fields={
@@ -231,7 +228,7 @@ export default function SignUpRoute() {
 								marginTop: "1rem",
 							}}
 						>
-							<Text color="critical">{formError}</Text>
+							<span className="text-critical">{formError}</span>
 						</div>
 					) : success === "true" ? (
 						<div
@@ -239,10 +236,10 @@ export default function SignUpRoute() {
 								marginTop: "1rem",
 							}}
 						>
-							<Text color="success">
+							<span className="text-success">
 								Thanks for signing up! Check your email to confirm your
 								subscription.
-							</Text>
+							</span>
 						</div>
 					) : null}
 				</div>

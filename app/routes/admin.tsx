@@ -1,22 +1,21 @@
-import { json, type LinksFunction, type LoaderArgs } from "@remix-run/node";
+import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import {
 	Link,
 	Outlet,
 	useLoaderData,
 	useMatches,
-	type RouteMatch,
+	type UIMatch,
 } from "@remix-run/react";
 import { requireUser } from "~/lib/session.server";
-
-import routeStylesUrl from "~/dist/styles/routes/admin.css";
 import cx from "clsx";
-import { AdminHeader } from "./admin/ui/admin-header";
+import { AdminHeader } from "~/features/admin/admin-header";
+import stylesheetUrl from "./admin.css?url";
 
-export const links: LinksFunction = () => {
-	return [{ rel: "stylesheet", href: routeStylesUrl }];
-};
+export function links() {
+	return [{ rel: "stylesheet", href: stylesheetUrl }];
+}
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
 	let user = await requireUser(request, "/login");
 	return json({ user });
 }
@@ -25,7 +24,7 @@ interface NavItem {
 	key: string;
 	label: string;
 	to: string;
-	isActive(match: RouteMatch): boolean;
+	isActive(match: UIMatch): boolean;
 	children?: NavItem[];
 }
 

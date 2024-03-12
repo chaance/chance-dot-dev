@@ -1,14 +1,8 @@
-import type { LinksFunction } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
+import stylesheetUrl from "./blog.css?url";
 
-import routeStylesUrl from "~/dist/styles/routes/admin/blog.css";
-
-export const links: LinksFunction = () => {
-	return [{ rel: "stylesheet", href: routeStylesUrl }];
-};
-
-export function headers() {
-	return { "Cache-Control": "max-age=300" };
+export function links() {
+	return [{ rel: "stylesheet", href: stylesheetUrl }];
 }
 
 export default function AdminBlogLayout() {

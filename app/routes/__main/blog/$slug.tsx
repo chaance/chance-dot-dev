@@ -1,24 +1,17 @@
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import { Container } from "~/ui/container";
 import { getMarkdownBlogPost, type MarkdownBlogPost } from "~/lib/blog.server";
 import type {
 	HeadersFunction,
-	V2_MetaFunction as MetaFunction,
-	LoaderArgs,
+	MetaFunction,
+	LoaderFunctionArgs,
 } from "@remix-run/node";
-import { isAbsoluteUrl, unSlashIt } from "~/lib/utils";
-
-import routeStylesUrl from "~/dist/styles/routes/__main/blog/_slug.css";
+import { isAbsoluteUrl, isLocalHost, unSlashIt } from "~/lib/utils";
+import cx from "clsx";
 import invariant from "tiny-invariant";
 import { getSessionUser } from "~/lib/session.server";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
-
-export function links() {
-	return [{ rel: "stylesheet", href: routeStylesUrl }];
-}
-
-const ROOT_CLASS = "page--blog";
+import styles from "./$slug.module.css";
 
 interface PostData extends MarkdownBlogPost {
 	createdAtFormatted: string;
@@ -27,25 +20,33 @@ interface PostData extends MarkdownBlogPost {
 	updatedAtISO: string | null;
 }
 
-export async function loader({ params, request }: LoaderArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
 	invariant(params.slug, "Slug is required");
 	let [user, post] = await Promise.all([
 		getSessionUser(request),
 		getMarkdownBlogPost(params.slug),
 	]);
 
-	let headers = {
-		"Cache-Control": user
-			? "no-cache"
-			: "public, max-age=300, s-maxage=300, stale-while-revalidate=604800",
-	};
+	let headers: HeadersInit = isLocalHost(new URL(request.url))
+		? {}
+		: {
+				"Cache-Control": user
+					? "no-cache"
+					: "public, max-age=300, s-maxage=300, stale-while-revalidate=604800",
+			};
 
 	if (!post) {
 		throw json(null, { status: 404, headers });
 	}
 
-	let createdAt = new Date(post.createdAt);
-	let updatedAt = post.updatedAt && new Date(post.updatedAt);
+	const createdAt = new Date(post.createdAt);
+	const updatedAt = new Date(post.updatedAt);
+	let which = "created";
+	let date = createdAt;
+	if (post.createdAt.getTime() !== post.updatedAt.getTime()) {
+		which = "updated";
+		date = updatedAt;
+	}
 
 	let fullPost: PostData = {
 		...post,
@@ -132,53 +133,39 @@ export let headers: HeadersFunction = ({ loaderHeaders }) => {
 
 export default function BlogPostRoute() {
 	let { post, user } = useLoaderData<typeof loader>();
-
 	return (
-		<div className={ROOT_CLASS}>
-			<main className={`${ROOT_CLASS}__main`}>
-				<article className={`${ROOT_CLASS}__article`}>
-					<Container>
-						<header className={`${ROOT_CLASS}__header`}>
-							<h1 className={`${ROOT_CLASS}__title`}>{post.title}</h1>
-							{/* post.description ? (
-								<p _className="text-lg xl:text-xl" className={`${ROOT_CLASS}__desc`}>{post.description}</p>
-							) : null */}
-							<p className={`${ROOT_CLASS}__meta`}>
-								<span>Posted on </span>
-								<time dateTime={post.createdAtISO}>
-									{post.createdAtFormatted}
+		<main className={styles.root}>
+			<article className={styles.article}>
+				<header className="mb-6">
+					<h1 className="text-h1 mb-10">{post.title}</h1>
+					<p className="text-sm text-weaker">
+						<span>Posted on </span>
+						<time dateTime={post.createdAtISO}>{post.createdAtFormatted}</time>
+						{post.updatedAtISO &&
+						new Date(post.updatedAtISO) > new Date(post.createdAtISO) ? (
+							<>
+								; <span>Updated on </span>
+								<time dateTime={post.updatedAtISO}>
+									{post.updatedAtFormatted}
 								</time>
-								{post.updatedAtISO &&
-								new Date(post.updatedAtISO) > new Date(post.createdAtISO) ? (
-									<>
-										; <span>Updated on </span>
-										<time dateTime={post.updatedAtISO}>
-											{post.updatedAtFormatted}
-										</time>
-									</>
-								) : null}
+							</>
+						) : null}
 
-								{user ? (
-									<>
-										; <Link to={`/admin/blog/${post.id}`}>Edit Post</Link>
-									</>
-								) : null}
-							</p>
-						</header>
-					</Container>
-					<Container>
-						<MacOsWindow>
-							<div
-								className={`${ROOT_CLASS}__content prose prose-markdown`}
-								dangerouslySetInnerHTML={{
-									__html: post.bodyHTML,
-								}}
-							/>
-						</MacOsWindow>
-					</Container>
-				</article>
-			</main>
-		</div>
+						{user ? (
+							<>
+								; <Link to={`/admin/blog/${post.id}`}>Edit Post</Link>
+							</>
+						) : null}
+					</p>
+				</header>
+				<div
+					className={cx(styles.body, "prose")}
+					dangerouslySetInnerHTML={{
+						__html: post.bodyHTML,
+					}}
+				/>
+			</article>
+		</main>
 	);
 }
 

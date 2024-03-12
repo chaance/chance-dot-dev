@@ -4,16 +4,9 @@ import { HeadingLevelProvider } from "~/ui/primitives/heading";
 import { bem } from "~/lib/utils";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
 import { useFetcher } from "@remix-run/react";
+import { useLayoutEffect } from "@chance/hooks/use-layout-effect";
 import type { action as signUpAction } from "~/routes/__main/sign-up";
-
-import routeStylesUrl from "~/dist/styles/routes/__main/about.css";
 import { SignUpSection } from "~/ui/sign-up-section";
-import { useLayoutEffect } from "~/lib/react/use-layout-effect";
-import { TextHeading, TextSpan } from "~/ui/text";
-
-export function links() {
-	return [{ rel: "stylesheet", href: routeStylesUrl }];
-}
 
 export function meta() {
 	return getSeoMeta({
@@ -27,7 +20,7 @@ const ROOT_CLASS = "page--about";
 export default function AboutRoute() {
 	let signUpFetcher = useFetcher<typeof signUpAction>();
 	let hasSuccessfulSubmission =
-		signUpFetcher.type === "done" && signUpFetcher.data.status === "success";
+		signUpFetcher.state === "idle" && signUpFetcher.data?.status === "success";
 
 	let formRef = React.useRef<HTMLFormElement>(null);
 	useFakeEventHandler(hasSuccessfulSubmission, () => {
@@ -41,9 +34,9 @@ export default function AboutRoute() {
 				<Container purpose="header">
 					<section className={bem(ROOT_CLASS, "intro")}>
 						<div className={bem(ROOT_CLASS, "intro-heading")}>
-							<TextHeading variant="heading-1">
-								Who <TextSpan color="accent">am I</TextSpan>?
-							</TextHeading>
+							<h2 className="h1">
+								Who <span className="text-weaker">am I</span>?
+							</h2>
 						</div>
 						<div className={bem(ROOT_CLASS, "intro-block")}>
 							<div>

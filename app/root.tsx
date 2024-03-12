@@ -1,6 +1,6 @@
 import * as React from "react";
 import { json } from "@remix-run/node";
-import type { LoaderArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import {
 	Links,
 	Meta,
@@ -10,23 +10,26 @@ import {
 	useNavigation,
 	useFetchers,
 	isRouteErrorResponse,
+	useLoaderData,
+	useRouteError,
 } from "@remix-run/react";
-import type { ErrorResponse } from "@remix-run/router";
 import { Container } from "~/ui/container";
 // import { getSeo } from "~/lib/seo";
 import { RouteChangeAnnouncement } from "~/ui/primitives/route-change-announcement";
 import { RootProvider } from "~/lib/react/context";
-import { useIsHydrated } from "~/lib/react/use-is-hydrated";
+import { useIsHydrated } from "@chance/hooks/use-is-hydrated";
 import NProgress from "nprogress";
 
-import { PrimaryLayout } from "~/routes/__main";
+import { PrimaryLayout } from "~/ui/primary-layout.js";
 
-import fontStylesUrl from "~/styles/fonts.css";
-import colorStylesUrl from "~/styles/color.css";
-import appStylesUrl from "~/dist/styles/app.css";
-import { cssBundleHref } from "@remix-run/css-bundle";
+import fontsStylesUrl from "~/styles/fonts.css?url";
+import colorStylesUrl from "~/styles/color.css?url";
+import resetsStylesUrl from "~/styles/resets.css?url";
+import appStylesUrl from "~/styles/app.css?url";
+import uiStylesUrl from "~/styles/ui.css?url";
+import utilityStylesUrl from "~/styles/utility.css?url";
+import proseStylesUrl from "~/styles/prose.css?url";
 
-const DISABLE_JS = false;
 const ROOT_CLASS = "layout--root";
 
 export function links() {
@@ -51,29 +54,39 @@ export function links() {
 		{ rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
 		{ rel: "alternate icon", href: "/favicon.png", type: "image/png" },
 		{ rel: "manifest", href: "/manifest.json" },
-
 		{
 			rel: "preload",
 			as: "font",
-			href: "/fonts/armingrotesk-400.woff2",
+			href: "/fonts/helvetica-now.woff2",
 			type: "font/woff2",
 			crossOrigin: "",
 		},
-
-		{ rel: "stylesheet", href: fontStylesUrl },
+		{
+			rel: "preload",
+			as: "font",
+			href: "/fonts/editorial-new.ttf",
+			type: "font/ttf",
+			crossOrigin: "",
+		},
+		// styles
+		{ rel: "stylesheet", href: fontsStylesUrl },
 		{ rel: "stylesheet", href: colorStylesUrl },
+		{ rel: "stylesheet", href: resetsStylesUrl },
 		{ rel: "stylesheet", href: appStylesUrl },
-		...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
+		{ rel: "stylesheet", href: uiStylesUrl },
+		{ rel: "stylesheet", href: utilityStylesUrl },
+		{ rel: "stylesheet", href: proseStylesUrl },
 	];
 }
 
-export async function loader({ request }: LoaderArgs) {
-	let data = {
+export async function loader({ request }: LoaderFunctionArgs) {
+	const currentYear = String(new Date().getFullYear());
+	return json({
+		currentYear,
 		requestInfo: {
 			origin: getDomainUrl(request),
 		},
-	};
-	return json(data);
+	});
 }
 
 export default function Root() {
@@ -92,12 +105,7 @@ function Document({
 }: React.PropsWithChildren<{ meta?: React.ReactNode }>) {
 	useProgressBar();
 	let hydrated = useIsHydrated();
-
-	// let _loaderData = useLoaderData();
-	// let loaderData: LoaderData | null = null;
-	// if (_loaderData && isValidLoaderData(_loaderData)) {
-	// 	loaderData = _loaderData;
-	// }
+	let { currentYear = "2024" } = useLoaderData<typeof loader>() ?? {};
 
 	useDisableTransitionsOnColorSchemeChange();
 
@@ -111,15 +119,11 @@ function Document({
 				<Links />
 			</head>
 			<body data-hydrated={hydrated ? "" : undefined}>
-				<RootProvider hydrated={hydrated}>
+				<RootProvider hydrated={hydrated} currentYear={currentYear}>
 					{children}
-					{!DISABLE_JS ? (
-						<React.Fragment>
-							<RouteChangeAnnouncement />
-							<ScrollRestoration />
-							<Scripts />
-						</React.Fragment>
-					) : null}
+					<RouteChangeAnnouncement />
+					<ScrollRestoration />
+					<Scripts />
 				</RootProvider>
 			</body>
 		</html>
@@ -130,58 +134,55 @@ function Layout({ children }: React.PropsWithChildren) {
 	return <div className="chance-dot-dev">{children}</div>;
 }
 
-function CatchBoundary({ caught }: { caught: ErrorResponse }) {
-	let message;
-	switch (caught.status) {
-		case 401:
-			message = (
-				<p>
-					Oops! It looks like you tried to visit a page that you do not have
-					access to.
-				</p>
-			);
-			break;
-		case 404:
-			message = (
-				<p>
-					Oops! It looks like you tried to visit a page that does not exist.
-				</p>
-			);
-			break;
-
-		default:
-			throw new Error(caught.data || caught.statusText);
-	}
-
-	return (
-		<Document
-			meta={
-				<title>
-					{`Error ${caught.status}: ${caught.statusText} | chance.dev`}
-				</title>
-			}
-		>
-			<Layout>
-				<PrimaryLayout>
-					<main className={ROOT_CLASS}>
-						<Container>
-							<h1 className={`${ROOT_CLASS}__title`}>Oh no!</h1>
-							<div className={`${ROOT_CLASS}__message`}>{message}</div>
-						</Container>
-					</main>
-				</PrimaryLayout>
-			</Layout>
-		</Document>
-	);
-}
-
-export function ErrorBoundary({ error }: { error: Error }) {
+export function ErrorBoundary() {
+	const error = useRouteError();
 	if (process.env.NODE_ENV === "development") {
 		console.error("ROOT ERROR BOUNDARY: ", error);
 	}
 
 	if (isRouteErrorResponse(error)) {
-		return <CatchBoundary caught={error} />;
+		let message;
+		switch (error.status) {
+			case 401:
+				message = (
+					<p>
+						Oops! It looks like you tried to visit a page that you do not have
+						access to.
+					</p>
+				);
+				break;
+			case 404:
+				message = (
+					<p>
+						Oops! It looks like you tried to visit a page that does not exist.
+					</p>
+				);
+				break;
+
+			default:
+				throw new Error(error.data || error.statusText);
+		}
+
+		return (
+			<Document
+				meta={
+					<title>
+						{`Error ${error.status}: ${error.statusText} | chance.dev`}
+					</title>
+				}
+			>
+				<Layout>
+					<PrimaryLayout>
+						<main className={ROOT_CLASS}>
+							<Container>
+								<h1 className={`${ROOT_CLASS}__title`}>Oh no!</h1>
+								<div className={`${ROOT_CLASS}__message`}>{message}</div>
+							</Container>
+						</main>
+					</PrimaryLayout>
+				</Layout>
+			</Document>
+		);
 	}
 
 	return (
@@ -270,8 +271,8 @@ function useDisableTransitionsOnColorSchemeChange() {
        -o-transition: none !important;
        -ms-transition: none !important;
        transition: none !important;
-    }`
-				)
+    }`,
+				),
 			);
 			document.head.appendChild(css);
 

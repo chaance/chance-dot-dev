@@ -1,0 +1,62 @@
+@tailwind utilities;
+
+.text-base {
+	font-size: 1rem;
+	line-height: 1.6;
+}
+
+.text-sm {
+	font-size: 0.825rem;
+	line-height: 1.571;
+}
+
+.text-weak {
+	color: var(--cs-color-text-weak);
+}
+
+.text-weaker {
+	color: var(--cs-color-text-weaker);
+}
+
+.text-weakest {
+	color: var(--cs-color-text-weakest);
+}
+
+.text-h1,
+.text-h2,
+.text-h3,
+.text-h4 {
+	font-family: var(--cs-ff-heading);
+}
+
+.text-h1 {
+	font-size: 2.25rem;
+	line-height: 1.111;
+	@media (--sm) {
+		font-size: 3rem;
+		line-height: 1;
+	}
+}
+
+.text-h2 {
+	font-size: 1.5rem;
+	line-height: 1.333;
+	@media (--sm) {
+		font-size: 2.25rem;
+		line-height: 1.111;
+	}
+}
+
+.text-h3 {
+	font-size: 1.25rem;
+	line-height: 1.4;
+	@media (--sm) {
+		font-size: 1.5rem;
+		line-height: 1.333;
+	}
+}
+
+.text-h4 {
+	font-size: 1.25rem;
+	line-height: 1.4;
+}

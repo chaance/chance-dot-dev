@@ -1,4 +1,4 @@
-import type { V2_MetaDescriptor as MetaDescriptor } from "@remix-run/react";
+import type { MetaDescriptor } from "@remix-run/react";
 import uniqBy from "lodash/uniqBy";
 
 // TODO: Provide a smart merge function. Figure out reasonable expectations on

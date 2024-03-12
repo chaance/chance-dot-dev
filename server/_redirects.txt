@@ -1,0 +1,32 @@
+# https://raw.githubusercontent.com/kentcdodds/kentcdodds.com/main/server/_redirects.txt
+# (c) Kent C. Dodds GPL v3
+
+# not a single URL actually ends in .php... or .env
+/(.*).php                                                               https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/(.*).env                                                               https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/ads.txt                                                                https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/boaform(.*)                                                            https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/setup.cgi                                                              https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/cgi-bin(.*)                                                            https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/s3cmd.ini                                                              https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/HNAP1(.*)                                                              https://www.youtube.com/watch?v=dQw4w9WgXcQ
+# this is for phpmyadmin and php-my-admin stuff:
+/php(.*)                                                                https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/db(.*)                                                                 https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/sql(.*)                                                                https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/.git(.*)                                                               https://www.youtube.com/watch?v=dQw4w9WgXcQ
+(.*)/wp-includes/(.*)                                                   https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/api(.*)                                                                https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/Autodiscover(.*)                                                       https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/_ignition(.*)                                                          https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/solr(.*)                                                               https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/wp-content(.*)                                                         https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/ReportServer(.*)                                                       https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/currentsetting(.*)                                                     https://www.youtube.com/watch?v=dQw4w9WgXcQ
+POST,DELETE,PATCH,PUT  /                                                https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/webfig(.*)                                                             https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/config(.*)                                                             https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/console(.*)                                                            https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+/jsworld                                                                /
+

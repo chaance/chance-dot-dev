@@ -23,13 +23,21 @@ function makeLink(
 			let { caseSensitive, className, end, style, children, ...domProps } =
 				props as NavLinkProps;
 			style = isFunction(style)
-				? style({ isActive: false, isPending: false })
+				? style({ isActive: false, isPending: false, isTransitioning: false })
 				: style;
 			className = isFunction(className)
-				? className({ isActive: false, isPending: false })
+				? className({
+						isActive: false,
+						isPending: false,
+						isTransitioning: false,
+				  })
 				: className;
 			children = isFunction(children)
-				? children({ isActive: false, isPending: false })
+				? children({
+						isActive: false,
+						isPending: false,
+						isTransitioning: false,
+				  })
 				: children;
 
 			return (

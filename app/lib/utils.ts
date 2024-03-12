@@ -17,7 +17,7 @@ export function isFunction(value: any): value is Function {
 }
 
 export function isObject(
-	value: any
+	value: any,
 ): value is { [key in string | number | symbol]: any } {
 	return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -33,7 +33,7 @@ export function isBoolean(value: any): value is boolean {
 export function getServerEnvVar(key: string) {
 	if (canUseDOM) {
 		throw new Error(
-			`Attempted to access server environment variables outside of the server environment.`
+			`Attempted to access server environment variables outside of the server environment.`,
 		);
 	}
 	return process.env[key];
@@ -130,7 +130,7 @@ export function debugOverflowXCulprit() {
 }
 
 export function typedBoolean<T>(
-	value: T
+	value: T,
 ): value is Exclude<T, "" | 0 | false | null | undefined> {
 	return Boolean(value);
 }
@@ -146,14 +146,14 @@ export function getRequiredServerEnvVar(key: string) {
 export function getBrowserEnvVar(key: string) {
 	if (!canUseDOM) {
 		throw new Error(
-			`Attempted to access browser environment variables outside of the browser environment.`
+			`Attempted to access browser environment variables outside of the browser environment.`,
 		);
 	}
 	// @ts-expect-error
 	let envVal = window.__chance_dot_dev_env[key];
 	if (typeof envVal !== "undefined" && typeof envVal !== "string") {
 		throw new TypeError(
-			`Invalid type for environment variable ${key}. Expected string; got ${typeof envVal}.`
+			`Invalid type for environment variable ${key}. Expected string; got ${typeof envVal}.`,
 		);
 	}
 	return envVal;
@@ -170,7 +170,7 @@ export function getRequiredBrowserEnvVar(key: string) {
 export function setBrowserEnvVar(key: string, value: string) {
 	if (!canUseDOM) {
 		throw new Error(
-			`Attempted to set a browser environment variable outside of the browser environment.`
+			`Attempted to set a browser environment variable outside of the browser environment.`,
 		);
 	}
 	if (!("__chance_dot_dev_env" in window)) {
@@ -286,7 +286,7 @@ function testUserAgent(re: RegExp) {
 	}
 	return (
 		window.navigator["userAgentData"]?.brands.some((brand) =>
-			re.test(brand.brand)
+			re.test(brand.brand),
 		) || re.test(window.navigator.userAgent)
 	);
 }
@@ -294,8 +294,9 @@ function testUserAgent(re: RegExp) {
 function testPlatform(re: RegExp) {
 	return typeof window !== "undefined" && window.navigator != null
 		? re.test(
-				window.navigator["userAgentData"]?.platform || window.navigator.platform
-		  )
+				window.navigator["userAgentData"]?.platform ||
+					window.navigator.platform,
+			)
 		: false;
 }
 
@@ -406,10 +407,10 @@ export function bem(
 }
 
 export function composeEventHandlers<
-	EventType extends { defaultPrevented: boolean }
+	EventType extends { defaultPrevented: boolean },
 >(
 	theirHandler: ((event: EventType) => any) | undefined,
-	ourHandler: (event: EventType) => any
+	ourHandler: (event: EventType) => any,
 ): (event: EventType) => any {
 	return (event) => {
 		theirHandler && theirHandler(event);
@@ -420,18 +421,18 @@ export function composeEventHandlers<
 }
 
 export function getOwnerDocument<T extends Node>(
-	element: T | null | undefined
+	element: T | null | undefined,
 ) {
 	if (!canUseDOM) {
 		throw new Error(
-			"getOwnerDocument can only be used in a browser environment"
+			"getOwnerDocument can only be used in a browser environment",
 		);
 	}
 	return element?.ownerDocument ?? document;
 }
 
 export function getOwnerWindow<T extends Element>(
-	element: T | null | undefined
+	element: T | null | undefined,
 ) {
 	if (!canUseDOM) {
 		throw new Error("getOwnerWindow can only be used in a browser environment");
@@ -462,4 +463,15 @@ export function getFormDataStringValue(formData: FormData, fieldName: string) {
 		return null;
 	}
 	return value;
+}
+
+export function isLocalHost(url: URL) {
+	return (
+		url.hostname === "localhost" ||
+		url.hostname === "127.0.0.1" ||
+		// IPv6 localhost address
+		url.hostname === "[::1]" ||
+		// Static site preview maybe?
+		url.hostname === ""
+	);
 }

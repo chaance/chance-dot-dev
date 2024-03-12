@@ -4,49 +4,53 @@
 //
 // This is intended to work around a memory leak in shiki so that the site
 // doesn't crash when it hits memory limits
-const path = require("path");
-const { getHighlighter, loadTheme } = require("shiki");
+import fs from "node:fs/promises";
+import { getHighlighter } from "shiki";
 
-/** @type {Awaited<ReturnType<typeof loadTheme>>} */
-let theme;
-/** @type {Awaited<ReturnType<typeof getHighlighter>>} */
-let highlighter;
-/** @type {string} */
-let fgColor;
-/** @type {string} */
-let bgColor;
-
-const THEME_PATH = path.join(__dirname, "..", "data", "shiki-base16.json");
+const base16Theme = JSON.parse(
+	await fs.readFile(
+		new URL("../data/shiki-base16.json", import.meta.url),
+		"utf-8"
+	)
+);
 
 /**
  * @param {{ code: string; language: string }} args
  */
 async function getThemedTokens({ code, language }) {
-	theme = theme || (await loadTheme(THEME_PATH));
-	highlighter = highlighter || (await getHighlighter({ themes: [theme] }));
-	fgColor =
-		fgColor ||
-		convertFakeHexToCustomProp(
-			highlighter.getForegroundColor(theme.name) || ""
-		);
-	bgColor =
-		bgColor ||
-		convertFakeHexToCustomProp(
-			highlighter.getBackgroundColor(theme.name) || ""
-		);
+	const themeName = base16Theme.name;
+	const highlighter = await getHighlighter({
+		langs: [language],
+		themes: [base16Theme],
+	});
 
-	let tokens = highlighter.codeToThemedTokens(code, language, theme.name);
+	const theme = highlighter.getTheme(themeName);
+	const tokens = highlighter.codeToTokensWithThemes(code, {
+		// @ts-expect-error
+		lang: language,
+		themes: { dark: themeName, light: themeName },
+	});
 	return {
-		fgColor,
-		bgColor,
-		tokens,
+		fgColor: convertFakeHexToCustomProp(theme.fg || ""),
+		bgColor: convertFakeHexToCustomProp(theme.bg || ""),
+		tokens: tokens.map((lineTokens) =>
+			lineTokens.map((t) => ({
+				content: t.content,
+				color: convertFakeHexToCustomProp(t.variants.light.color || ""),
+			}))
+		),
 	};
 }
-module.exports = getThemedTokens;
 
-// The theme actually stores #FFFF${base-16-color-id} because vscode-textmate
-// requires colors to be valid hex codes, if they aren't, it changes them to a
-// default, so this is a mega hack to trick it.
+export default getThemedTokens;
+
+/**
+ * The theme actually stores #FFFF${base-16-color-id} because vscode-textmate
+ * requires colors to be valid hex codes, if they aren't, it changes them to a
+ * default, so this is a mega hack to trick it.
+ *
+ * @param {string} color
+ */
 function convertFakeHexToCustomProp(color) {
 	return color.replace(/^#FFFF(.+)/, "var(--base$1)");
 }

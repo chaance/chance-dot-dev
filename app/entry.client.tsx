@@ -1,17 +1,17 @@
 import { RemixBrowser } from "@remix-run/react";
-import { startTransition, StrictMode } from "react";
+import * as React from "react";
 import { hydrateRoot } from "react-dom/client";
 
-const hydrate = () => {
-	startTransition(() => {
+function hydrate() {
+	React.startTransition(() => {
 		hydrateRoot(
 			document,
-			<StrictMode>
+			<React.StrictMode>
 				<RemixBrowser />
-			</StrictMode>
+			</React.StrictMode>
 		);
 	});
-};
+}
 
 if (window.requestIdleCallback) {
 	window.requestIdleCallback(hydrate);
