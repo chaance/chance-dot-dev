@@ -122,6 +122,8 @@
 
 	> p code {
 		position: relative;
+		display: inline;
+		white-space: nowrap;
 		padding: 0 0.5em;
 		&::before {
 			content: "";
