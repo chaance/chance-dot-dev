@@ -12,6 +12,7 @@
 		"format": "prettier --write .",
 		"lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
 		"start": "cross-env NODE_ENV=production node server.mjs",
+		"test": "echo yolo",
 		"typecheck": "tsc -b",
 		"postinstall": "patch-package",
 		"setup:prisma": "prisma generate && prisma migrate deploy && prisma db seed",
