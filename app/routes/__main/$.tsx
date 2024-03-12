@@ -1,9 +1,15 @@
 import type { ErrorResponse } from "@remix-run/router";
-import { LoaderFunctionArgs, json, redirect } from "@remix-run/node";
-import { isRouteErrorResponse } from "@remix-run/react";
+import {
+	LoaderFunctionArgs,
+	MetaFunction,
+	json,
+	redirect,
+} from "@remix-run/node";
+import { Link, isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import { Container } from "~/ui/container";
 import stylesheetUrl from "./$.css?url";
 import { getMarkdownBlogPost } from "~/lib/blog.server";
+import { Button } from "~/ui/primitives/button";
 
 export function links() {
 	return [{ rel: "stylesheet", href: stylesheetUrl }];
@@ -22,23 +28,35 @@ export async function loader({ params }: LoaderFunctionArgs) {
 	throw json(null, 404);
 }
 
+export const meta: MetaFunction<typeof loader> = ({ error }) => {
+	if (error) {
+		let title = "Oh no!";
+		if (isRouteErrorResponse(error)) {
+			title += ` ${error.status}!`;
+		}
+		return [{ title }];
+	}
+	return [];
+};
+
 export default function CatchAll() {
 	return null;
 }
 
-export function ErrorBoundary({ error }: { error: unknown }) {
+export function ErrorBoundary() {
+	const error = useRouteError();
 	if (process.env.NODE_ENV === "development") {
 		console.error("MAIN LAYOUT ERROR BOUNDARY: ", error);
 	}
 
+	let message;
 	if (isRouteErrorResponse(error)) {
-		let message;
 		switch (error.status) {
 			case 401:
 				message = (
 					<p>
-						Oops! It looks like you tried to visit a page that you do not have
-						access to.
+						It looks like you tried to visit a page that you do not have access
+						to.
 					</p>
 				);
 				break;
@@ -53,25 +71,23 @@ export function ErrorBoundary({ error }: { error: unknown }) {
 			default:
 				throw new Error(error.data || error.statusText);
 		}
-
-		return (
-			<main className={ROOT_CLASS}>
-				<Container>
-					<h1 className={`${ROOT_CLASS}__title`}>Oh no!</h1>
-					<div className={`${ROOT_CLASS}__message`}>{message}</div>
-				</Container>
-			</main>
+	} else {
+		message = (
+			<p>
+				Something went wrong and I'm not quite sure what! Maybe go outside for a
+				bit and hopefully I'll get it fixed by the time you get back.
+			</p>
 		);
 	}
 
 	return (
-		<main className={ROOT_CLASS}>
+		<main>
 			<Container>
-				<h1 className={`${ROOT_CLASS}__title`}>Oh no!</h1>
-				<div className={`${ROOT_CLASS}__message`}>
+				<div className="prose">
+					<h1>Oh no!</h1>
+					<div>{message}</div>
 					<p>
-						Something went wrong and I'm not quite sure what! Maybe go outside
-						for a bit and hopefully I'll get it fixed by the time you get back.
+						<Link to="/">Go back home</Link>
 					</p>
 				</div>
 			</Container>

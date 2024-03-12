@@ -47,6 +47,14 @@
 .postTitle {
 	grid-area: title;
 	margin-bottom: 1rem;
+
+	a {
+		transition: color 250ms ease-out;
+	}
+
+	a:hover {
+		color: var(--cs-color-accent);
+	}
 }
 
 .postContent {

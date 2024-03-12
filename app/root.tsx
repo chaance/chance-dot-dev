@@ -11,6 +11,7 @@ import {
 	useFetchers,
 	isRouteErrorResponse,
 	useLoaderData,
+	useRouteError,
 } from "@remix-run/react";
 import { Container } from "~/ui/container";
 // import { getSeo } from "~/lib/seo";
@@ -133,7 +134,8 @@ function Layout({ children }: React.PropsWithChildren) {
 	return <div className="chance-dot-dev">{children}</div>;
 }
 
-export function ErrorBoundary({ error }: { error: Error }) {
+export function ErrorBoundary() {
+	const error = useRouteError();
 	if (process.env.NODE_ENV === "development") {
 		console.error("ROOT ERROR BOUNDARY: ", error);
 	}

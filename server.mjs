@@ -1,4 +1,6 @@
-import path from "node:path";
+import * as path from "node:path";
+import * as fs from "node:fs";
+import * as url from "node:url";
 import express from "express";
 import compression from "compression";
 import morgan from "morgan";
@@ -7,8 +9,10 @@ import rateLimit from "express-rate-limit";
 import sourceMapSupport from "source-map-support";
 import { installGlobals } from "@remix-run/node";
 import { createStream } from "rotating-file-stream";
+import { compile as compileRedirectPath, pathToRegexp } from "path-to-regexp";
+import { getRedirectsMiddleware } from "./server/redirects.js";
 
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
 const MODE = process.env.NODE_ENV;
 const STAGING = process.env.IS_STAGING === "true";
@@ -22,8 +26,8 @@ const viteDevServer = IS_DEV
 	? await import("vite").then((vite) =>
 			vite.createServer({
 				server: { middlewareMode: true },
-			})
-	  )
+			}),
+		)
 	: undefined;
 
 const app = express();
@@ -37,6 +41,27 @@ const limiter = rateLimit({
 
 // app.set("trust proxy", true);
 app.use(limiter);
+
+app.all(
+	"*",
+	getRedirectsMiddleware({
+		redirectsString: fs.readFileSync(
+			path.join(__dirname, "server/_redirects.txt"),
+			"utf8",
+		),
+	}),
+);
+
+app.use((req, res, next) => {
+	if (req.path.endsWith("/") && req.path.length > 1) {
+		const query = req.url.slice(req.path.length);
+		const safePath = req.path.slice(0, -1).replace(/\/+/g, "/");
+		res.redirect(301, safePath + query);
+	} else {
+		next();
+	}
+});
+
 app.use(compression());
 
 // http://expressjs.com/en/advanced/best-practice-security.html#at-a-minimum-disable-x-powered-by-header
@@ -48,7 +73,7 @@ if (viteDevServer) {
 	// Remix fingerprints its assets so we can cache forever.
 	app.use(
 		"/assets",
-		express.static("build/client/assets", { immutable: true, maxAge: "1y" })
+		express.static("build/client/assets", { immutable: true, maxAge: "1y" }),
 	);
 }
 
@@ -69,7 +94,7 @@ app.use(
 	morgan("tiny", {
 		skip: (req) => req.url === "/healthcheck",
 		stream: accessLogStream,
-	})
+	}),
 );
 
 app.all(
@@ -78,15 +103,20 @@ app.all(
 		build: viteDevServer
 			? () => viteDevServer.ssrLoadModule("virtual:remix/server-build")
 			: // this may or may not exist depending on the state of the build
-			  // @ts-ignore
-			  await import("./build/server/index.js"),
+				// @ts-ignore
+				await import("./build/server/index.js"),
 		mode: process.env.NODE_ENV,
-	})
+	}),
 );
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
 	console.log(
-		`Express server listening on port ${port} (http://localhost:${port})`
+		`Express server listening on port ${port} (http://localhost:${port})`,
 	);
 });
+
+/**
+ * @typedef {import("path-to-regexp").Key} Key
+ * @typedef {import("express").RequestHandler} RequestHandler
+ */

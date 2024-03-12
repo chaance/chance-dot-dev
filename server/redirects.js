@@ -1,17 +1,21 @@
 // https://github.com/kentcdodds/kentcdodds.com/blob/main/server/redirects.ts
 // (c) Kent C. Dodds GPL v3
-import { type RequestHandler } from "express";
-import {
-	compile as compileRedirectPath,
-	pathToRegexp,
-	type Key,
-} from "path-to-regexp";
+import { compile as compileRedirectPath, pathToRegexp } from "path-to-regexp";
 
-export function getRedirectsMiddleware({
-	redirectsString,
-}: {
-	redirectsString: string;
-}): RequestHandler {
+/**
+ * @typedef {import("path-to-regexp").Key} Key
+ * @typedef {import("express").RequestHandler} RequestHandler
+ */
+
+/**
+ * https://github.com/kentcdodds/kentcdodds.com/blob/main/server/redirects.ts
+ * (c) Kent C. Dodds GPL v3
+ * @param {{
+ *   redirectsString: string
+ * }} options
+ * @returns {RequestHandler}
+ */
+export function getRedirectsMiddleware({ redirectsString }) {
 	const possibleMethods = [
 		"HEAD",
 		"GET",
@@ -50,7 +54,8 @@ export function getRedirectsMiddleware({
 				console.error(`Invalid redirect on line ${lineNumber + 1}: "${line}"`);
 				return null;
 			}
-			const keys: Array<Key> = [];
+			/** @type {Array<Key>} */
+			const keys = [];
 
 			const toUrl = to.includes("//")
 				? new URL(to)
@@ -65,19 +70,24 @@ export function getRedirectsMiddleware({
 					}),
 					toUrl,
 				};
-			} catch (error: unknown) {
+			} catch (error) {
 				// if parsing the redirect fails, we'll warn, but we won't crash
 				console.error(
-					`Failed to parse redirect on line ${lineNumber}: "${line}"`
+					`Failed to parse redirect on line ${lineNumber}: "${line}"`,
 				);
 				return null;
 			}
 		})
-		.filter(function boolean<T>(
-			value: T
-		): value is Exclude<T, "" | 0 | false | null | undefined> {
-			return Boolean(value);
-		});
+		.filter(
+			/**
+			 * @template T
+			 * @param {T} value
+			 * @returns  {value is Exclude<T, "" | 0 | false | null | undefined>}
+			 */
+			(value) => {
+				return !!value;
+			},
+		);
 
 	return function redirectsMiddleware(req, res, next) {
 		const host = req.header("X-Forwarded-Host") ?? req.header("host");
@@ -85,7 +95,7 @@ export function getRedirectsMiddleware({
 		let reqUrl;
 		try {
 			reqUrl = new URL(`${protocol}://${host}${req.url}`);
-		} catch (error: unknown) {
+		} catch (error) {
 			console.error(`Invalid URL: ${protocol}://${host}${req.url}`);
 			next();
 			return;
@@ -101,7 +111,8 @@ export function getRedirectsMiddleware({
 				const match = req.path.match(redirect.from);
 				if (!match) continue;
 
-				const params: Record<string, string> = {};
+				/** @type {Record<string, string>} */
+				const params = {};
 				const paramValues = match.slice(1);
 				for (
 					let paramIndex = 0;
@@ -125,7 +136,7 @@ export function getRedirectsMiddleware({
 				toUrl.pathname = redirect.toPathname(params);
 				res.redirect(307, toUrl.toString());
 				return;
-			} catch (error: unknown) {
+			} catch (error) {
 				// an error in the redirect shouldn't stop the request from going through
 				console.error(`Error processing redirects:`, {
 					error,
