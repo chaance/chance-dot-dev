@@ -12,3 +12,4 @@ node_modules
 /app/lib/prisma/client
 
 /NOTES.md
+/.vscode
