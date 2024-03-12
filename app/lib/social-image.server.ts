@@ -28,7 +28,7 @@ function getCloudinarySocialImageUrl({
 
 	// Custom font files — must be uploaded to cloudinary in the same folder as
 	// all of the images
-	let primaryFont = "helvetica-now.woff2";
+	let primaryFont = "untitled-sans-regular.woff2";
 	let titleFont = "editorial-new.woff2";
 
 	let vars = [

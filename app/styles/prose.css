@@ -12,6 +12,7 @@
 	h3,
 	h4 {
 		font-family: var(--cs-ff-heading);
+		font-weight: 300;
 	}
 
 	h1 {
@@ -66,6 +67,7 @@
 
 	aside {
 		font-size: inherit;
+		font-weight: 400;
 		color: var(--cs-color-text-weaker);
 		padding: 1em 0;
 		border-top: 1px solid var(--cs-color-border-weak);

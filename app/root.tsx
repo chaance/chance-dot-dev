@@ -57,8 +57,29 @@ export function links() {
 		{
 			rel: "preload",
 			as: "font",
-			href: "/fonts/helvetica-now.woff2",
+			href: "/fonts/untitled-sans-light.woff2",
 			type: "font/woff2",
+			crossOrigin: "",
+		},
+		{
+			rel: "preload",
+			as: "font",
+			href: "/fonts/untitled-sans-medium.woff2",
+			type: "font/woff2",
+			crossOrigin: "",
+		},
+		{
+			rel: "preload",
+			as: "font",
+			href: "/fonts/untitled-sans-light-italic.woff",
+			type: "font/woff",
+			crossOrigin: "",
+		},
+		{
+			rel: "preload",
+			as: "font",
+			href: "/fonts/untitled-sans-medium-italic.woff",
+			type: "font/woff",
 			crossOrigin: "",
 		},
 		{
