@@ -140,7 +140,7 @@
 		}
 	}
 
-	&:where(not([data-collapsible])) {
+	&:where(:not([data-collapsible])) {
 		display: none;
 		@media (--md) {
 			display: flex;
