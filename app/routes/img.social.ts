@@ -1,4 +1,8 @@
-import { json, type LoaderFunctionArgs, type SerializeFrom } from "@remix-run/node";
+import {
+	json,
+	type LoaderFunctionArgs,
+	type SerializeFrom,
+} from "@remix-run/node";
 import {
 	getSocialImageUrl,
 	getImageContentType,
@@ -15,7 +19,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 	let authorTitle = searchParams.get("authorTitle");
 	let displayDate = searchParams.get("date");
 
-	if (!slug || !title || !authorName || !authorTitle || !displayDate) {
+	if (!slug || !title || !displayDate) {
 		throw json({ error: "Missing required params" }, 400);
 	}
 
@@ -44,7 +48,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 		return resp;
 	} catch (err) {
 		throw Error(
-			"Error fetching the social image; this is likely an error in the img/social route loader"
+			"Error fetching the social image; this is likely an error in the img/social route loader",
 		);
 	}
 }

@@ -88,8 +88,8 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 		slug,
 		siteUrl,
 		title,
-		authorName: "Chance Strickland",
-		authorTitle: "chance.dev",
+		// authorName: "Chance Strickland",
+		// authorTitle: "chance.dev",
 		date: createdAtFormatted,
 	})}`;
 

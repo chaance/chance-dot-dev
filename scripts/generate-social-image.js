@@ -1,27 +1,78 @@
 import path from "node:path";
 import getEmojiRegex from "emoji-regex";
-import { getRequiredServerEnvVar } from "~/lib/utils";
+import yargs from "yargs/yargs";
+import { hideBin } from "yargs/helpers";
+import dotenv from "dotenv";
 
-const CLOUDINARY_CLOUD_NAME = getRequiredServerEnvVar("CLOUDINARY_CLOUD_NAME");
-const CLOUDINARY_FOLDER_NAME = getRequiredServerEnvVar(
-	"CLOUDINARY_FOLDER_NAME",
+dotenv.config({ path: path.resolve(process.cwd(), ".env") });
+
+const CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME;
+const CLOUDINARY_FOLDER_NAME = process.env.CLOUDINARY_FOLDER_NAME;
+if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_FOLDER_NAME) {
+	throw new Error("Missing CLOUDINARY_CLOUD_NAME or CLOUDINARY_FOLDER_NAME");
+}
+
+const argv = await yargs(process.argv.slice(2))
+	.options({
+		title: { type: "string", demandOption: true },
+		slug: { type: "string" },
+		authorName: { type: "string" },
+		authorTitle: { type: "string" },
+		siteUrl: { type: "string", default: "https://chance.dev" },
+		date: {
+			type: "string",
+			default: new Date().toLocaleString("en-US", {
+				year: "numeric",
+				month: "long",
+				day: "numeric",
+				timeZone: "America/Los_Angeles",
+			}),
+		},
+	})
+	.parse();
+
+let title = argv.title;
+let slug = argv.slug || kebabCase(title);
+let siteUrl = argv.siteUrl;
+let authorName = argv.authorName;
+let authorTitle = argv.authorTitle;
+let displayDate = argv.date;
+
+console.log(
+	"----------------------\n" +
+		(await getSocialImageUrl({
+			slug,
+			siteUrl,
+			title,
+			displayDate,
+			authorName,
+			authorTitle,
+		})),
 );
 
-function stripEmojis(string: string): string {
+/** @param {string} string */
+function stripEmojis(string) {
 	return string.replace(getEmojiRegex(), "").replace(/\s+/g, " ").trim();
 }
 
-// cloudinary needs double-encoding
-function doubleEncode(string: string) {
+/**
+ * Cloudinary needs double-encoding
+ * @param {string} string
+ */
+function doubleEncode(string) {
 	return encodeURIComponent(encodeURIComponent(string));
 }
 
+/**
+ * Cloudinary needs double-encoding
+ * @param {SocialImageArgs} args
+ */
 function getCloudinarySocialImageUrl({
 	title,
 	displayDate,
 	authorName,
 	authorTitle,
-}: SocialImageArgs) {
+}) {
 	// Important: no leading hash for hex values
 	let primaryTextColor = "ffffff";
 	let secondaryTextColor = "d0d0d0";
@@ -125,11 +176,10 @@ function getCloudinarySocialImageUrl({
 		.join("/");
 }
 
-export async function getSocialImageUrl({
-	slug,
-	siteUrl,
-	...socialImageArgs
-}: { slug: string; siteUrl: string } & SocialImageArgs) {
+/**
+ * @param {{ slug: string; siteUrl: string } & SocialImageArgs} args
+ */
+export async function getSocialImageUrl({ slug, siteUrl, ...socialImageArgs }) {
 	// let basePath = `blog-images/social/${slug}.jpg`;
 	// let filePath = path.join(__dirname, "..", "public", basePath);
 	// if (await fileExists(filePath)) {
@@ -138,15 +188,35 @@ export async function getSocialImageUrl({
 	return getCloudinarySocialImageUrl(socialImageArgs);
 }
 
-export async function getImageContentType(imagePath: string) {
+/** @param {string} imagePath */
+export async function getImageContentType(imagePath) {
 	let ext = path.extname(imagePath).toLowerCase();
 	if (!ext) return null;
 	return `image/${ext.slice(1)}`;
 }
 
-interface SocialImageArgs {
-	title: string;
-	displayDate: string;
-	authorName?: string | null;
-	authorTitle?: string | null;
+/**
+ * @typedef {{
+ *  title: string;
+ *  displayDate: string;
+ *  authorName?: string;
+ *  authorTitle?: string;
+ * }} SocialImageArgs
+ */
+
+// async function fileExists(filePath: string) {
+// 	try {
+// 		let stat = await fsp.stat(filePath);
+// 		return stat.isFile();
+// 	} catch (_) {
+// 		return false;
+// 	}
+// }
+
+/** @param {string} string */
+function kebabCase(string) {
+	return string
+		.replace(/([a-z0-9])([A-Z])/g, "$1-$2")
+		.replace(/[\s_]+/g, "-")
+		.toLowerCase();
 }
