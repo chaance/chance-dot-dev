@@ -23,11 +23,11 @@ export function SocialNav() {
 						href: "https://www.linkedin.com/in/chaance/",
 						icon: <LinkedInIcon titleId="footer-icon-linkedin" aria-hidden />,
 					},
-				].map(({ label, icon }) => {
+				].map(({ label, icon, href }) => {
 					return (
 						<li key={label} className={styles.navItem}>
 							<Link
-								to="/about"
+								to={href}
 								rel="noreferrer"
 								target="_blank"
 								className={styles.navLink}
