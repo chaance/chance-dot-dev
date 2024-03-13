@@ -13,6 +13,7 @@
 	h4 {
 		font-family: var(--cs-ff-heading);
 		font-weight: 300;
+		text-wrap: balance;
 	}
 
 	h1 {
