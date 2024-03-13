@@ -71,8 +71,8 @@ export function links() {
 		{
 			rel: "preload",
 			as: "font",
-			href: "/fonts/untitled-sans-light-italic.woff",
-			type: "font/woff",
+			href: "/fonts/untitled-sans-light-italic.woff2",
+			type: "font/woff2",
 			crossOrigin: "",
 		},
 		{

@@ -31,9 +31,8 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	let headers: HeadersInit = isLocalHost(new URL(request.url))
 		? {}
 		: {
-				"Cache-Control": user
-					? "no-cache"
-					: "public, max-age=300, s-maxage=300, stale-while-revalidate=604800",
+				"Cache-Control":
+					"public, max-age=300, s-maxage=300, stale-while-revalidate=604800",
 			};
 
 	if (!post) {

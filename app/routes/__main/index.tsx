@@ -5,20 +5,17 @@ import styles from "./index.module.css";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import cx from "clsx";
-import { getSessionUser } from "~/lib/session.server";
 import { useLoaderData } from "@remix-run/react";
 import { getMarkdownBlogPostListItems } from "~/lib/blog.server";
 import { isLocalHost } from "~/lib/utils";
 
 export async function loader({ request }: LoaderFunctionArgs) {
-	let user = await getSessionUser(request);
 	// TODO: Implement CDN caching
 	let headers: HeadersInit = isLocalHost(new URL(request.url))
 		? {}
 		: {
-				"Cache-Control": user
-					? "no-cache"
-					: "public, max-age=300, s-maxage=300, stale-while-revalidate=604800",
+				"Cache-Control":
+					"public, max-age=300, s-maxage=300, stale-while-revalidate=604800",
 			};
 	try {
 		let rawPosts = await getMarkdownBlogPostListItems();
