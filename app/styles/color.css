@@ -240,6 +240,7 @@
 	--cs-color-border-strong: var(--cs-color-gray-12);
 	--cs-color-button: var(--cs-color-white);
 	--cs-color-button-hover: var(--cs-color-gray-02);
+	--cs-color-button-text: var(--cs-color-gray-18);
 	--cs-color-focus-ring: var(--cs-color-accent);
 	@media (--dark) {
 		--cs-color-accent: var(--cs-color-green-10);
@@ -268,6 +269,7 @@
 		--cs-color-border-strong: var(--cs-color-gray-08);
 		--cs-color-button: var(--cs-color-gray-18);
 		--cs-color-button-hover: var(--cs-color-gray-16);
+		--cs-color-button-text: var(--cs-color-gray-005);
 	}
 
 	.theme-light {
@@ -298,6 +300,7 @@
 		--cs-color-border-strong: var(--cs-color-gray-12);
 		--cs-color-button: var(--cs-color-white);
 		--cs-color-button-hover: var(--cs-color-gray-02);
+		--cs-color-button-text: var(--cs-color-gray-18);
 		--cs-color-focus-ring: var(--cs-color-accent);
 	}
 
@@ -328,6 +331,7 @@
 		--cs-color-border-strong: var(--cs-color-gray-08);
 		--cs-color-button: var(--cs-color-gray-18);
 		--cs-color-button-hover: var(--cs-color-gray-16);
+		--cs-color-button-text: var(--cs-color-gray-005);
 	}
 	/* #endregion */
 }
