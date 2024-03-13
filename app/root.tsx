@@ -48,8 +48,8 @@ export function links() {
 		{
 			rel: "icon",
 			type: "image/png",
-			sizes: "192x192",
-			href: "/app-icons/android-chrome-192x192.png",
+			sizes: "196x196",
+			href: "/app-icons/android-chrome-196x196.png",
 		},
 		{ rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
 		{ rel: "alternate icon", href: "/favicon.png", type: "image/png" },

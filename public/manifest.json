@@ -2,8 +2,18 @@
 	"name": "chance.dev",
 	"icons": [
 		{
-			"src": "/app-icons/android-chrome-192x192.png",
-			"sizes": "192x192",
+			"src": "/app-icons/android-chrome-48x48.png",
+			"sizes": "48x48",
+			"type": "image/png"
+		},
+		{
+			"src": "/app-icons/android-chrome-128x128.png",
+			"sizes": "128x128",
+			"type": "image/png"
+		},
+		{
+			"src": "/app-icons/android-chrome-196x196.png",
+			"sizes": "196x196",
 			"type": "image/png"
 		},
 		{
@@ -12,7 +22,7 @@
 			"type": "image/png"
 		}
 	],
-	"theme_color": "#ffffff",
+	"theme_color": "#02A767",
 	"background_color": "#ffffff",
 	"display": "standalone"
 }
