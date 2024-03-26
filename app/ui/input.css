@@ -1,11 +1,13 @@
 .cs--input {
-	--input-color-bg: var(--cs-field-bg);
-	--input-color-fg: var(--cs-field-fg);
-	--input-color-placeholder: var(--cs-field-placeholder);
-	--input-color-border: var(--cs-field-border);
-	--input-color-error-border: var(--cs-field-border-error);
-	--input-color-outline: var(--cs-field-outline);
-	--input-color-accent: var(--cs-field-bg);
+	--input-color-bg: var(--cs-color-white);
+	--input-color-bg-focus: var(--cs-color-gray-005);
+	--input-color-fg: var(--cs-color-text);
+	--input-color-placeholder: var(--cs-color-text-weakest);
+	--input-color-border: var(--cs-color-border);
+	--input-color-border-focus: var(--cs-color-focus-ring);
+	--input-color-error-border: var(--cs-color-text-error);
+	--input-color-outline: transparent;
+	--input-color-accent: var(--input-color-bg);
 	--input-color-marker: transparent;
 	--input-size-outline: 0;
 	--input-outline-offset: 0;
@@ -15,8 +17,15 @@
 	color: var(--input-color-fg);
 	outline: var(--input-size-outline) solid var(--input-color-outline);
 	outline-offset: var(--input-outline-offset);
-	transition: border-color 50ms ease-out, outline 50ms ease-out;
+	transition:
+		border-color 50ms ease-out,
+		outline 50ms ease-out;
 	-webkit-tap-highlight-color: transparent;
+
+	@media (--dark) {
+		--input-color-bg: var(--cs-color-black);
+		--input-color-bg-focus: var(--cs-color-gray-18);
+	}
 }
 
 .cs--input--text,
@@ -78,9 +87,9 @@
 
 .cs--input:focus,
 .cs--input--focused {
-	--input-color-bg: var(--cs-field-bg-focus);
-	--input-color-border: var(--cs-field-border-focus);
-	--input-color-outline: var(--cs-field-outline-focus);
+	--input-color-bg: var(--input-color-bg-focus);
+	--input-color-border: var(--input-color-border-focus);
+	--input-color-outline: var(--input-color-border-focus);
 	--input-size-outline: 1px;
 	--input-outline-offset: 0;
 }
@@ -90,7 +99,7 @@
 	--input-color-bg: var(--cs-field-bg-active);
 	--input-color-border: var(--cs-field-border-active);
 	--input-color-outline: var(--cs-field-outline-active);
-	--input-color-border: var(--cs-field-border-focus);
+	--input-color-border: var(--input-color-border-focus);
 	--input-size-outline: 0;
 	--input-outline-offset: 0;
 	--input-color-accent: var(--cs-field-bg-active);

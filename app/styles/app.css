@@ -1,3 +1,5 @@
+@import "ui.css";
+
 :root {
 	--body-bg-grain: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 400 310' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23a)'/%3E%3C/svg%3E");
 	--body-bg-gradient-stop-1: var(--cs-color-gray-02);
@@ -137,4 +139,32 @@ textarea::placeholder {
 ::selection {
 	background-color: var(--cs-color-accent);
 	color: var(--cs-color-white);
+}
+
+.login-button {
+	--color: var(--cs-color-accent);
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	border: 1.5px solid var(--color);
+	line-height: 1;
+	font-weight: bold;
+	border-radius: 6px;
+	height: 3rem;
+	margin-top: 1rem;
+	transform: translateY(0);
+	background-color: var(--color);
+	color: var(--cs-color-white);
+	user-select: none;
+
+	&:hover {
+		transform: translateY(-1px);
+		--color: var(--cs-color-accent-deep);
+	}
+
+	&:active {
+		transform: translateY(1px);
+	}
 }

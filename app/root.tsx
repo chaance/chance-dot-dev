@@ -13,7 +13,6 @@ import {
 	useLoaderData,
 	useRouteError,
 } from "@remix-run/react";
-import { Container } from "~/ui/container";
 // import { getSeo } from "~/lib/seo";
 import { RouteChangeAnnouncement } from "~/ui/primitives/route-change-announcement";
 import { RootProvider } from "~/lib/react/context";
@@ -202,10 +201,10 @@ export function ErrorBoundary() {
 				<Layout>
 					<PrimaryLayout>
 						<main className={ROOT_CLASS}>
-							<Container>
+							<div>
 								<h1 className={`${ROOT_CLASS}__title`}>Oh no!</h1>
 								<div className={`${ROOT_CLASS}__message`}>{message}</div>
-							</Container>
+							</div>
 						</main>
 					</PrimaryLayout>
 				</Layout>
@@ -218,7 +217,7 @@ export function ErrorBoundary() {
 			<Layout>
 				<PrimaryLayout>
 					<main className={ROOT_CLASS}>
-						<Container>
+						<div>
 							<h1 className={`${ROOT_CLASS}__title`}>Oh no!</h1>
 							<div className={`${ROOT_CLASS}__message`}>
 								<p>
@@ -227,7 +226,7 @@ export function ErrorBoundary() {
 									you get back.
 								</p>
 							</div>
-						</Container>
+						</div>
 					</main>
 				</PrimaryLayout>
 			</Layout>

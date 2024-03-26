@@ -1,5 +1,5 @@
 import cx from "clsx";
-const ROOT_CLASS = "ui--card";
+import styles from "./card.module.css";
 
 export function Card({
 	children,
@@ -9,26 +9,35 @@ export function Card({
 	depth = "raised",
 	roundedCorners,
 }: CardProps) {
+	console.log(`uncard${capitalize(camelCase(uncard))}`);
 	return (
 		<div
-			className={cx(ROOT_CLASS, {
-				[`${ROOT_CLASS}--depth-${depth}`]: typeof depth === "string",
-				[`${ROOT_CLASS}--no-depth`]: depth === false,
-				[`${ROOT_CLASS}--no-bg`]: removeBackground === true,
-				[`${ROOT_CLASS}--no-bg:${removeBackground}`]:
+			className={cx(styles.card, {
+				[styles.depthRaised]: depth === "raised",
+				[styles.noDepth]: depth === false,
+				[styles.noBg]: removeBackground === true,
+				[styles[`noBg${capitalize(camelCase(removeBackground))}`]]:
 					typeof removeBackground === "string",
-				[`${ROOT_CLASS}--no-pad`]: removePadding === true,
-				[`${ROOT_CLASS}--no-pad:${removePadding}`]:
+				[styles.noPad]: removePadding === true,
+				[styles[`noPad${capitalize(camelCase(removePadding))}`]]:
 					typeof removePadding === "string",
-				[`${ROOT_CLASS}--uncard:${uncard}`]: uncard,
-				[`${ROOT_CLASS}--rounded-corners-${
-					roundedCorners === true ? "md" : roundedCorners
-				}`]: roundedCorners,
+				[styles[`uncard${capitalize(camelCase(uncard))}`]]: uncard,
+				[styles[`roundedCorners${capitalize(camelCase(roundedCorners))}`]]:
+					roundedCorners,
 			})}
 		>
-			<div className={`${ROOT_CLASS}__inner`}>{children}</div>
+			<div className={styles.inner}>{children}</div>
 		</div>
 	);
+}
+
+function capitalize(str: any) {
+	str = String(str);
+	return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function camelCase(str: any) {
+	return String(str).replace(/-([a-z])/g, (g) => g[1].toUpperCase());
 }
 
 interface CardProps {

@@ -6,7 +6,6 @@ import {
 	redirect,
 } from "@remix-run/node";
 import { Link, isRouteErrorResponse, useRouteError } from "@remix-run/react";
-import { Container } from "~/ui/container";
 import { getMarkdownBlogPost } from "~/lib/blog.server";
 import { Button } from "~/ui/primitives/button";
 import "./$.css";
@@ -78,7 +77,7 @@ export function ErrorBoundary() {
 
 	return (
 		<main>
-			<Container>
+			<div>
 				<div className="prose">
 					<h1>Oh no!</h1>
 					<div>{message}</div>
@@ -86,7 +85,7 @@ export function ErrorBoundary() {
 						<Link to="/">Go back home</Link>
 					</p>
 				</div>
-			</Container>
+			</div>
 		</main>
 	);
 }

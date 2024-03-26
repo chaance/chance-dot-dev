@@ -8,6 +8,12 @@
 	flex: 1 1 100%;
 }
 
+.auth-box-container {
+	width: 40rem;
+	max-width: calc(100% - 4rem);
+	margin: 0 auto;
+}
+
 .auth-box {
 	--color-shadow: hsl(0 0% 0% / 0.125);
 	@media (min-width: 601px) {

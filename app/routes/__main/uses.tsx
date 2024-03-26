@@ -1,4 +1,3 @@
-import { Container } from "~/ui/container";
 import { json, redirect, type MetaFunction } from "@remix-run/node";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
 import "./uses.css";
@@ -203,7 +202,7 @@ const ITEMS: UsesItem[] = [
 export default function UsesRoute() {
 	return (
 		<div>
-			<Container>
+			<div>
 				<main>
 					<h1>Things I Use</h1>
 					<div>
@@ -212,7 +211,7 @@ export default function UsesRoute() {
 						})}
 					</div>
 				</main>
-			</Container>
+			</div>
 		</div>
 	);
 }

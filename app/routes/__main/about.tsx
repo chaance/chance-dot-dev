@@ -1,12 +1,16 @@
 import * as React from "react";
-import { Container } from "~/ui/container";
 import { HeadingLevelProvider } from "~/ui/primitives/heading";
 import { bem } from "~/lib/utils";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
-import { useFetcher } from "@remix-run/react";
+import { redirect, useFetcher } from "@remix-run/react";
 import { useLayoutEffect } from "@chance/hooks/use-layout-effect";
 import type { action as signUpAction } from "~/routes/__main/sign-up";
 import { SignUpSection } from "~/ui/sign-up-section";
+
+export function loader() {
+	// TODO: Remove when this page is ready again
+	return redirect("/", 307);
+}
 
 export function meta() {
 	return getSeoMeta({
@@ -31,7 +35,7 @@ export default function AboutRoute() {
 		<main className={ROOT_CLASS}>
 			<h1 className="sr-only">About Chance</h1>
 			<HeadingLevelProvider>
-				<Container purpose="header">
+				<div>
 					<section className={bem(ROOT_CLASS, "intro")}>
 						<div className={bem(ROOT_CLASS, "intro-heading")}>
 							<h2 className="h1">
@@ -141,10 +145,10 @@ export default function AboutRoute() {
 							</div>
 						</HeadingLevelProvider>
 					</section>
-				</Container>
-				<Container purpose="header">
+				</div>
+				<div>
 					<SignUpSection />
-				</Container>
+				</div>
 			</HeadingLevelProvider>
 		</main>
 	);

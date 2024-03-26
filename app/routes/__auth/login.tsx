@@ -32,21 +32,21 @@ export async function action({ request }: ActionFunctionArgs) {
 	if (!isValidEmail(email)) {
 		return json(
 			{ errors: { email: "Email is invalid", password: null } },
-			{ status: 400 }
+			{ status: 400 },
 		);
 	}
 
 	if (typeof password !== "string" || password.length === 0) {
 		return json(
 			{ errors: { email: null, password: "Password is required" } },
-			{ status: 400 }
+			{ status: 400 },
 		);
 	}
 
 	if (password.length < 8) {
 		return json(
 			{ errors: { email: null, password: "Password is too short" } },
-			{ status: 400 }
+			{ status: 400 },
 		);
 	}
 
@@ -54,7 +54,7 @@ export async function action({ request }: ActionFunctionArgs) {
 	if (!user) {
 		return json(
 			{ errors: { email: "Invalid email or password", password: null } },
-			{ status: 400 }
+			{ status: 400 },
 		);
 	}
 
@@ -91,90 +91,98 @@ export default function LoginPage() {
 	return (
 		<div className="login-route">
 			<h1 className="sr-only">Log In</h1>
-			<Card uncard="sm-down">
-				<div className="auth-box">
-					<Form method="post" className="form">
-						<div className="text-field">
-							<label htmlFor="email" className="text-field-label">
-								Email address
-							</label>
-							<div className="text-field-input-wrap">
-								<InputText
-									ref={emailRef}
-									id="email"
-									required
-									autoFocus={true}
-									name="email"
-									type="email"
-									autoComplete="email"
-									aria-invalid={actionData?.errors?.email ? true : undefined}
-									aria-describedby="email-error"
-									className="text-field-input"
-								/>
-								{actionData?.errors?.email && (
-									<div className="text-field-messages">
-										<div className="text-field-error" id="email-error">
-											{actionData.errors.email}
+			<div className="auth-box-container">
+				<Card uncard="sm-down">
+					<div className="auth-box">
+						<Form method="post" className="form">
+							<div className="text-field">
+								<label htmlFor="email" className="text-field-label">
+									Email address
+								</label>
+								<div className="text-field-input-wrap">
+									<InputText
+										ref={emailRef}
+										id="email"
+										required
+										autoFocus={true}
+										name="email"
+										type="email"
+										autoComplete="email"
+										aria-invalid={actionData?.errors?.email ? true : undefined}
+										aria-describedby="email-error"
+										className="text-field-input"
+									/>
+									{actionData?.errors?.email && (
+										<div className="text-field-messages">
+											<div className="text-field-error" id="email-error">
+												{actionData.errors.email}
+											</div>
 										</div>
-									</div>
-								)}
+									)}
+								</div>
 							</div>
-						</div>
 
-						<div className="text-field">
-							<label htmlFor="password" className="text-field-label">
-								Password
-							</label>
-							<div className="text-field-input-wrap">
-								<InputText
-									id="password"
-									ref={passwordRef}
-									name="password"
-									type="password"
-									autoComplete="current-password"
-									aria-invalid={actionData?.errors?.password ? true : undefined}
-									aria-describedby="password-error"
-									className="text-field-input"
-								/>
-								{actionData?.errors?.password && (
-									<div className="text-field-messages">
-										<div className="text-field-error" id="password-error">
-											{actionData.errors.password}
+							<div className="text-field">
+								<label htmlFor="password" className="text-field-label">
+									Password
+								</label>
+								<div className="text-field-input-wrap">
+									<InputText
+										id="password"
+										ref={passwordRef}
+										name="password"
+										type="password"
+										autoComplete="current-password"
+										aria-invalid={
+											actionData?.errors?.password ? true : undefined
+										}
+										aria-describedby="password-error"
+										className="text-field-input"
+									/>
+									{actionData?.errors?.password && (
+										<div className="text-field-messages">
+											<div className="text-field-error" id="password-error">
+												{actionData.errors.password}
+											</div>
 										</div>
-									</div>
-								)}
+									)}
+								</div>
 							</div>
-						</div>
 
-						<div className="checkbox-field">
-							<InputCheckbox
-								id="remember"
-								name="remember"
-								className="checkbox-field-input"
-							/>
-							<label htmlFor="remember" className="checkbox-field-label">
-								Remember me
-							</label>
-						</div>
+							<div className="checkbox-field">
+								<InputCheckbox
+									id="remember"
+									name="remember"
+									className="checkbox-field-input"
+								/>
+								<label htmlFor="remember" className="checkbox-field-label">
+									Remember me
+								</label>
+							</div>
 
-						<input type="hidden" name="redirectTo" value={redirectTo} />
-						<button type="submit" className="button button-primary">
-							Log In
-						</button>
-						<div className="auth-postfix">
-							Don't have an account?{" "}
-							<Link
-								to={{
-									pathname: "/join",
-									search: searchParams.toString(),
-								}}
+							<input type="hidden" name="redirectTo" value={redirectTo} />
+							<button
+								type="submit"
+								// className="button button-primary"
+								className="login-button"
 							>
-								Sign up
-							</Link>
-						</div>
-					</Form>
-				</div>
-			</Card>
+								Log In
+							</button>
+							<div className="auth-postfix">
+								Don't have an account?{" "}
+								<Link
+									to={{
+										pathname: "/join",
+										search: searchParams.toString(),
+									}}
+								>
+									Sign up
+								</Link>
+							</div>
+						</Form>
+					</div>
+				</Card>
+			</div>
 		</div>
 	);
 }

@@ -7,5 +7,5 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export async function loader() {
-	return redirect("/");
+	return redirect("/login");
 }

@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Container } from "~/ui/container";
 import { HeadingLevelProvider } from "~/ui/primitives/heading";
 import { bem } from "~/lib/utils";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
@@ -24,7 +23,7 @@ export function meta() {
 export default function ContentRoute() {
 	return (
 		<main>
-			<Container purpose="header">
+			<div>
 				<div>
 					<div>
 						<h1>
@@ -86,11 +85,11 @@ export default function ContentRoute() {
 						</ul>
 					</HeadingLevelProvider>
 				</div>
-			</Container>
+			</div>
 
-			<Container purpose="header">
+			<div>
 				<SignUpSection />
-			</Container>
+			</div>
 		</main>
 	);
 }

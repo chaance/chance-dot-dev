@@ -1,19 +1,18 @@
-import type { ActionFunctionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useActionData, useSearchParams } from "@remix-run/react";
 import { getFormDataStringValue, isValidEmail } from "~/lib/utils";
 import { safeRedirect } from "~/lib/utils.server";
 // import type { EmailSubscriber } from "~/models/email-list.server";
 // import { createSubscriber } from "~/models/email-list.server";
-import { Container } from "~/ui/container";
 import { Button } from "~/ui/primitives/button";
 import { SignUpForm, SignUpFormField } from "~/ui/sign-up-form";
 import { addSubscriberToForm } from "~/lib/convertkit.server";
 
-// export async function loader({ request }: LoaderFunctionArgs) {
-// 	// TODO: Remove after implementing sign up logic
-// 	throw json(null, 404);
-// }
+export async function loader({ request }: LoaderFunctionArgs) {
+	// TODO: Remove after implementing sign up logic
+	throw json(null, 404);
+}
 
 export async function action({ request }: ActionFunctionArgs) {
 	let formData = await request.formData();
@@ -88,7 +87,7 @@ export async function action({ request }: ActionFunctionArgs) {
 				formError: null,
 				status: "field-errors" as const,
 			},
-			{ status: 400 }
+			{ status: 400 },
 		);
 	}
 
@@ -127,7 +126,7 @@ export async function action({ request }: ActionFunctionArgs) {
 					"There was an error subscribing to the newsletter. Please try again later.",
 				status: "error" as const,
 			},
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 
@@ -158,7 +157,7 @@ export default function SignUpRoute() {
 
 	return (
 		<div>
-			<Container>
+			<div>
 				<div style={{ maxWidth: "28rem", margin: "0 auto" }}>
 					<div>
 						<div className="prose" style={{ marginBottom: "2rem" }}>
@@ -243,7 +242,7 @@ export default function SignUpRoute() {
 						</div>
 					) : null}
 				</div>
-			</Container>
+			</div>
 		</div>
 	);
 }
