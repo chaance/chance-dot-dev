@@ -1,11 +1,7 @@
 import { Container } from "~/ui/container";
 import { json, redirect, type MetaFunction } from "@remix-run/node";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
-import stylesheetUrl from "./uses.css?url";
-
-export function links() {
-	return [{ rel: "stylesheet", href: stylesheetUrl }];
-}
+import "./uses.css";
 
 export function loader() {
 	// TODO: Remove when this page is ready again

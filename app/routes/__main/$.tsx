@@ -7,13 +7,9 @@ import {
 } from "@remix-run/node";
 import { Link, isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import { Container } from "~/ui/container";
-import stylesheetUrl from "./$.css?url";
 import { getMarkdownBlogPost } from "~/lib/blog.server";
 import { Button } from "~/ui/primitives/button";
-
-export function links() {
-	return [{ rel: "stylesheet", href: stylesheetUrl }];
-}
+import "./$.css";
 
 const ROOT_CLASS = "page--main-catchall";
 

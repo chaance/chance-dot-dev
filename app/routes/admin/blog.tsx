@@ -1,9 +1,5 @@
 import { Outlet } from "@remix-run/react";
-import stylesheetUrl from "./blog.css?url";
-
-export function links() {
-	return [{ rel: "stylesheet", href: stylesheetUrl }];
-}
+import "./blog.css";
 
 export default function AdminBlogLayout() {
 	return (

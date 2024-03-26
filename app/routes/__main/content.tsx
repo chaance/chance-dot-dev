@@ -6,12 +6,8 @@ import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
 import { SignUpSection } from "~/ui/sign-up-section";
 
 import { Card } from "~/ui/card";
-import stylesheetUrl from "./content.css?url";
+import "./content.css";
 import { redirect } from "@remix-run/node";
-
-export function links() {
-	return [{ rel: "stylesheet", href: stylesheetUrl }];
-}
 
 export function loader() {
 	// TODO: Remove when this page is ready again

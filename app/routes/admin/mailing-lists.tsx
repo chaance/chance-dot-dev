@@ -1,9 +1,5 @@
 import { Outlet } from "@remix-run/react";
-import stylesheetUrl from "./mailing-lists.css?url";
-
-export function links() {
-	return [{ rel: "stylesheet", href: stylesheetUrl }];
-}
+import "./mailing-lists.css";
 
 export default function AdminMailingListsLayout() {
 	return (

@@ -22,13 +22,13 @@ import NProgress from "nprogress";
 
 import { PrimaryLayout } from "~/ui/primary-layout.js";
 
-import fontsStylesUrl from "~/styles/fonts.css?url";
-import colorStylesUrl from "~/styles/color.css?url";
-import resetsStylesUrl from "~/styles/resets.css?url";
-import appStylesUrl from "~/styles/app.css?url";
-import uiStylesUrl from "~/styles/ui.css?url";
-import utilityStylesUrl from "~/styles/utility.css?url";
-import proseStylesUrl from "~/styles/prose.css?url";
+import "~/styles/fonts.css";
+import "~/styles/color.css";
+import "~/styles/resets.css";
+import "~/styles/app.css";
+import "~/styles/ui.css";
+import "~/styles/utility.css";
+import "~/styles/prose.css";
 
 const ROOT_CLASS = "layout--root";
 
@@ -89,14 +89,6 @@ export function links() {
 			type: "font/ttf",
 			crossOrigin: "",
 		},
-		// styles
-		{ rel: "stylesheet", href: fontsStylesUrl },
-		{ rel: "stylesheet", href: colorStylesUrl },
-		{ rel: "stylesheet", href: resetsStylesUrl },
-		{ rel: "stylesheet", href: appStylesUrl },
-		{ rel: "stylesheet", href: uiStylesUrl },
-		{ rel: "stylesheet", href: utilityStylesUrl },
-		{ rel: "stylesheet", href: proseStylesUrl },
 	];
 }
 
