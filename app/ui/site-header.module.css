@@ -63,7 +63,6 @@
 	width: var(--actual-size);
 	height: var(--actual-size);
 	margin-left: calc(var(--offset-size) * -1);
-	outline: 0;
 	border-radius: 9999px;
 	transition: color 250ms ease-out;
 
@@ -130,6 +129,7 @@
 
 	&:where([data-collapsible]) {
 		overflow: hidden;
+		overflow: clip;
 		&:where([data-safe-display]) {
 			display: flex;
 		}
