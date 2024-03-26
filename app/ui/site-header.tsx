@@ -36,7 +36,7 @@ export function SiteHeader() {
 
 	return (
 		<header className={styles.header}>
-			<div className={cx(styles.headerInner, "flex flex-col")}>
+			<div className={styles.headerInner}>
 				<CollapsibleProvider isOpen={navIsOpen} onOpenChange={setNavIsOpen}>
 					<div className="flex items-center gap-2">
 						<Trigger />

@@ -18,6 +18,8 @@
 
 .headerInner {
 	--p: 2rem;
+	display: flex;
+	flex-direction: column;
 	padding: var(--p);
 	@media (--md) {
 		--p: 3rem;
@@ -135,6 +137,7 @@
 		&:where([data-state="open"]) {
 			animation: slideDown 250ms ease-out;
 		}
+
 		&:where([data-state="collapsed"]) {
 			animation: slideUp 250ms ease-out;
 		}

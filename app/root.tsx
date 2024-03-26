@@ -111,8 +111,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function Root() {
+	let {
+		currentYear,
+		requestInfo = {
+			origin,
+		},
+	} = useLoaderData<typeof loader>();
 	return (
-		<Document>
+		<Document currentYear={currentYear} siteUrl={requestInfo.origin}>
 			<Layout>
 				<Outlet />
 			</Layout>
@@ -123,10 +129,15 @@ export default function Root() {
 function Document({
 	children,
 	meta,
-}: React.PropsWithChildren<{ meta?: React.ReactNode }>) {
+	currentYear,
+	siteUrl,
+}: React.PropsWithChildren<{
+	meta?: React.ReactNode;
+	currentYear?: string;
+	siteUrl?: string;
+}>) {
 	useProgressBar();
 	let hydrated = useIsHydrated();
-	let { currentYear = "2024" } = useLoaderData<typeof loader>() ?? {};
 
 	useDisableTransitionsOnColorSchemeChange();
 
@@ -140,7 +151,11 @@ function Document({
 				<Links />
 			</head>
 			<body data-hydrated={hydrated ? "" : undefined}>
-				<RootProvider hydrated={hydrated} currentYear={currentYear}>
+				<RootProvider
+					hydrated={hydrated}
+					currentYear={currentYear}
+					siteUrl={siteUrl}
+				>
 					{children}
 					<RouteChangeAnnouncement />
 					<ScrollRestoration />

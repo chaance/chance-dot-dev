@@ -1,24 +1,30 @@
 import * as React from "react";
 
-const RootContext = React.createContext<RootContextData>({
+const defaultContext: RootContextData = {
 	hydrated: false,
 	currentYear: "2024",
-});
+	siteUrl: "https://chance.dev",
+};
+
+const RootContext = React.createContext<RootContextData>(defaultContext);
 
 interface RootContextData {
 	hydrated: boolean;
 	currentYear: string;
+	siteUrl: string;
 }
 
-interface RootProviderProps extends React.PropsWithChildren<RootContextData> {}
+interface RootProviderProps
+	extends React.PropsWithChildren<Partial<RootContextData>> {}
 
 export function RootProvider({
 	children,
-	hydrated,
-	currentYear,
+	hydrated = defaultContext.hydrated,
+	currentYear = defaultContext.currentYear,
+	siteUrl = defaultContext.siteUrl,
 }: RootProviderProps) {
 	return (
-		<RootContext.Provider value={{ hydrated, currentYear }}>
+		<RootContext.Provider value={{ hydrated, currentYear, siteUrl }}>
 			{children}
 		</RootContext.Provider>
 	);
