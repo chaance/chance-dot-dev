@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import * as assert from "node:assert";
 import * as React from "react";
 import type {
 	LoaderFunctionArgs,
@@ -10,7 +10,6 @@ import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import { getBlogPost, updateBlogPost } from "~/models/blog-post.server";
 import { requireUserId } from "~/lib/session.server";
 import { getFormFieldStringValue } from "~/lib/utils";
-import invariant from "tiny-invariant";
 import { blogContentCache } from "~/lib/blog.server";
 import { InputTextarea, InputText } from "~/ui/input";
 import { PostEditorScreen } from "~/features/admin/post-editor-screen.js";
@@ -34,7 +33,7 @@ const formFields = new Map<FormFieldName, FormFieldDescriptor>([
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
 	let { postId } = params;
-	invariant(postId, "Post ID is required");
+	assert.ok(postId, "Post ID is required");
 	let userId = await requireUserId(request);
 	let post = await getBlogPost(postId, userId);
 	if (!post) {
@@ -86,7 +85,7 @@ export async function action({ request }: ActionFunctionArgs) {
 				},
 				errors,
 			},
-			{ status: 400 }
+			{ status: 400 },
 		);
 	}
 

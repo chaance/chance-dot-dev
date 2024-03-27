@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as assert from "node:assert";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { getMarkdownBlogPost, type MarkdownBlogPost } from "~/lib/blog.server";
@@ -9,7 +10,6 @@ import type {
 } from "@remix-run/node";
 import { isAbsoluteUrl, isLocalHost, unSlashIt } from "~/lib/utils";
 import cx from "clsx";
-import invariant from "tiny-invariant";
 import { getSessionUser } from "~/lib/session.server";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
 
@@ -21,7 +21,7 @@ interface PostData extends MarkdownBlogPost {
 }
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
-	invariant(params.slug, "Slug is required");
+	assert.ok(params.slug, "Slug is required");
 	let [user, post] = await Promise.all([
 		getSessionUser(request),
 		getMarkdownBlogPost(params.slug),

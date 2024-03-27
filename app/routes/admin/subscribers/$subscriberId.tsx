@@ -1,9 +1,13 @@
+import * as assert from "node:assert";
 import * as React from "react";
-import type { LoaderFunctionArgs, ActionFunctionArgs, SerializeFrom } from "@remix-run/node";
+import type {
+	LoaderFunctionArgs,
+	ActionFunctionArgs,
+	SerializeFrom,
+} from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { requireUserId } from "~/lib/session.server";
-import invariant from "tiny-invariant";
 import { InputText, InputCheckbox } from "~/ui/input";
 import { Card } from "~/ui/card";
 import {
@@ -27,7 +31,7 @@ const formFields = new Map<FormFieldName, FormFieldDescriptor>([
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
 	let { subscriberId } = params;
-	invariant(subscriberId, "Subscriber ID is required");
+	assert.ok(subscriberId, "Subscriber ID is required");
 	await requireUserId(request);
 	let [allLists, subscriber] = await Promise.all([
 		getAllEmailLists(),
@@ -81,7 +85,7 @@ export async function action({ request }: ActionFunctionArgs) {
 				},
 				errors,
 			},
-			{ status: 400 }
+			{ status: 400 },
 		);
 	}
 
@@ -188,7 +192,7 @@ export default function UpdateSubscriberPage() {
 								<div>
 									{allLists.map((list) => {
 										let isSubscribed = !!subscriber.lists.find(
-											(l) => l === list.id
+											(l) => l === list.id,
 										);
 										return (
 											<div key={list.id}>

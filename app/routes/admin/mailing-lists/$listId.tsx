@@ -1,11 +1,15 @@
 import * as React from "react";
-import type { LoaderFunctionArgs, ActionFunctionArgs, SerializeFrom } from "@remix-run/node";
+import type {
+	LoaderFunctionArgs,
+	ActionFunctionArgs,
+	SerializeFrom,
+} from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { requireUserId } from "~/lib/session.server";
-import invariant from "tiny-invariant";
 import { InputText } from "~/ui/input";
 import { getEmailList, updateEmailList } from "~/models/email-list.server";
+import * as assert from "node:assert";
 
 const formFields = new Map<FormFieldName, FormFieldDescriptor>([
 	["name", { label: "List Name", required: true, type: "text" }],
@@ -13,7 +17,7 @@ const formFields = new Map<FormFieldName, FormFieldDescriptor>([
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
 	let { listId } = params;
-	invariant(listId, "List ID is required");
+	assert.ok(listId, "List ID is required");
 	await requireUserId(request);
 	let list = await getEmailList(listId);
 	if (!list) {
@@ -51,7 +55,7 @@ export async function action({ request }: ActionFunctionArgs) {
 				list: { name: values.name },
 				errors,
 			},
-			{ status: 400 }
+			{ status: 400 },
 		);
 	}
 
