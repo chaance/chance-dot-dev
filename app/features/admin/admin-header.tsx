@@ -1,25 +1,20 @@
 import { Form } from "@remix-run/react";
-import cx from "clsx";
-
-const ROOT_CLASS = "admin-header";
 
 export function AdminHeader({
 	userInitials,
 	userEmail,
-	className,
 }: {
 	userInitials: string;
 	userEmail: string;
-	className?: string;
 }) {
 	return (
-		<header className={cx(ROOT_CLASS, className)}>
-			<Form action="/logout" method="post" className={`${ROOT_CLASS}__form`}>
-				<button type="submit" className={`${ROOT_CLASS}__logout-button`}>
+		<header className="AdminHeader">
+			<Form action="/logout" method="post" className="AdminHeader__form">
+				<button type="submit" className="AdminHeader__logout-button">
 					Log out
 				</button>
-				<div className={`${ROOT_CLASS}__user-avatar`}>
-					<span aria-hidden className={`${ROOT_CLASS}__user-initials`}>
+				<div className="AdminHeader__user-avatar">
+					<span aria-hidden className="AdminHeader__user-initials">
 						{userInitials}
 					</span>
 					<p className="sr-only">

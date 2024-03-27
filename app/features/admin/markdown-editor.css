@@ -55,6 +55,7 @@
 
 			font: inherit;
 			font-family: var(--ff-mono);
+			font-weight: 100;
 			position: relative;
 			overflow: hidden;
 			height: 500px;
