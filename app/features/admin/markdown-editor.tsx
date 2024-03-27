@@ -19,8 +19,6 @@ import type {
 import cx from "clsx";
 import { useComposedRefs } from "@chance/hooks/use-composed-refs";
 
-const ROOT_CLASS = "cs--markdown-editor";
-
 export type DOMEvent =
 	| "mousedown"
 	| "dblclick"
@@ -285,7 +283,7 @@ const MarkdownEditor = React.forwardRef<HTMLDivElement, MarkdownEditorProps>(
 				elementWrapperRef.current?.querySelector<HTMLDivElement>(
 					"[role=application]",
 				);
-			let editorClass = `${ROOT_CLASS}__editor`;
+			let editorClass = "MarkdownEditor__editor";
 			if (rootEditorNode && !rootEditorNode.classList.contains(editorClass)) {
 				rootEditorNode.classList.add(editorClass);
 			}
@@ -326,7 +324,7 @@ const MarkdownEditor = React.forwardRef<HTMLDivElement, MarkdownEditorProps>(
 		return (
 			<div
 				id={`${fieldId}-wrapper`}
-				className={ROOT_CLASS}
+				className="MarkdownEditor"
 				{...rest}
 				ref={useComposedRefs(elementWrapperRef, ref)}
 			>
@@ -359,8 +357,8 @@ const MarkdownEditorTextarea = React.forwardRef<
 			ref={ref}
 			value={value}
 			defaultValue={defaultValue}
-			className={cx(`${ROOT_CLASS}__textarea`, {
-				[`${ROOT_CLASS}__textarea--hidden`]: value || defaultValue,
+			className={cx("MarkdownEditor__textarea", {
+				"MarkdownEditor__textarea--hidden": value || defaultValue,
 			})}
 			// style={{ display: "none" }}
 		/>

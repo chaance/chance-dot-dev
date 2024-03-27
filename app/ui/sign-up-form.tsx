@@ -15,7 +15,7 @@ const SignUpForm = React.forwardRef<HTMLFormElement, SignUpFormProps>(
 		},
 		forwardedRef
 	) => {
-		const ROOT_CLASS = "cs--sign-up-form";
+		const ROOT_CLASS = "sign-up-form";
 		return (
 			<FormComp
 				ref={forwardedRef}
@@ -52,7 +52,7 @@ function SignUpFormField({
 	onBlur,
 	onFocus,
 }: SignUpFormFieldProps) {
-	const ROOT_CLASS = "cs--sign-up-form-field";
+	const ROOT_CLASS = "sign-up-form-field";
 	let errorMessageId = `${id}-error`;
 	let ariaInvalid = errorMessage ? true : undefined;
 	let ariaErrormessage = errorMessage ? errorMessageId : undefined;

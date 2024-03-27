@@ -1,7 +1,6 @@
 import * as React from "react";
 import { flushSync } from "react-dom";
 import { NavLink } from "@remix-run/react";
-import styles from "~/ui/site-header.module.css";
 import cx from "clsx";
 import { SocialNav } from "./social-nav";
 import { Button, type ButtonProps } from "./primitives/button.js";
@@ -36,8 +35,8 @@ export function SiteHeader() {
 	}, [canUseCollapsible]);
 
 	return (
-		<header className={styles.header}>
-			<div className={styles.headerInner}>
+		<header className="SiteHeader">
+			<div className="SiteHeader__inner">
 				<CollapsibleProvider isOpen={navIsOpen} onOpenChange={setNavIsOpen}>
 					<div className="flex items-center gap-2">
 						<Trigger />
@@ -108,7 +107,7 @@ function CollapsibleContent({ className }: CollapsibleContentProps) {
 		<HeaderNavArea
 			data-collapsible=""
 			data-animation-state={animationState}
-			className={cx(styles.collapsible, className)}
+			className={className}
 			contentRef={ref}
 			{...contentProps}
 			aria-hidden={hidden || undefined}
@@ -146,8 +145,12 @@ function HeaderNavArea({
 	...props
 }: HeaderNavAreaProps) {
 	return (
-		<div className={cx(styles.navArea, className)} {...props} ref={contentRef}>
-			<p className="text-weaker text-sm">
+		<div
+			className={cx("SiteHeader__nav-area", className)}
+			{...props}
+			ref={contentRef}
+		>
+			<p className="SiteHeader__desc text-weaker text-sm">
 				Developer and open source tinkerer. Surfing the web and the west coast.
 			</p>
 			<SocialNav />
@@ -157,7 +160,7 @@ function HeaderNavArea({
 
 function HeaderLogoLink() {
 	return (
-		<NavLink to="/" className={cx("flex", styles.headerTitle)}>
+		<NavLink to="/" className="SiteHeader__title-link">
 			<span className="text-h4 sm-down:mt-[4px]">
 				Chance <em>the Dev</em>
 			</span>
@@ -169,9 +172,9 @@ function HeaderNavButton(
 	props: Omit<ButtonProps, "className" | "type" | "children">,
 ) {
 	return (
-		<Button className={styles.navToggle} type="button" {...props}>
+		<Button className="SiteHeader__nav-toggle" type="button" {...props}>
 			<span className="sr-only">Open Menu</span>
-			<span className={styles.navToggleIcon} aria-hidden />
+			<span className="SiteHeader__nav-toggle-icon" aria-hidden />
 		</Button>
 	);
 }

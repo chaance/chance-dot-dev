@@ -1,121 +1,119 @@
-.cs--input {
-	--input-color-bg: var(--cs-color-white);
-	--input-color-bg-focus: var(--cs-color-gray-005);
-	--input-color-fg: var(--cs-color-text);
-	--input-color-placeholder: var(--cs-color-text-weakest);
-	--input-color-border: var(--cs-color-border);
-	--input-color-border-focus: var(--cs-color-focus-ring);
-	--input-color-error-border: var(--cs-color-text-error);
-	--input-color-outline: transparent;
-	--input-color-accent: var(--input-color-bg);
-	--input-color-marker: transparent;
-	--input-size-outline: 0;
-	--input-outline-offset: 0;
-	border: 1px solid var(--input-color-border);
-	border-radius: 0;
-	background: var(--input-color-bg);
-	color: var(--input-color-fg);
-	outline: var(--input-size-outline) solid var(--input-color-outline);
-	outline-offset: var(--input-outline-offset);
-	transition:
-		border-color 50ms ease-out,
-		outline 50ms ease-out;
-	-webkit-tap-highlight-color: transparent;
+@layer components.input {
+	.input {
+		--input-color-bg: var(--color-white);
+		--input-color-bg-focus: var(--color-gray-005);
+		--input-color-fg: var(--color-text);
+		--input-color-placeholder: var(--color-text-weakest);
+		--input-color-border: var(--color-border);
+		--input-color-border-focus: var(--color-focus-ring);
+		--input-color-error-border: var(--color-text-error);
+		--input-color-outline: transparent;
+		--input-color-accent: var(--input-color-bg);
+		--input-color-marker: transparent;
+		--input-size-outline: 0;
+		--input-outline-offset: 0;
+		border: 1px solid var(--input-color-border);
+		border-radius: 0;
+		background: var(--input-color-bg);
+		color: var(--input-color-fg);
+		outline: var(--input-size-outline) solid var(--input-color-outline);
+		outline-offset: var(--input-outline-offset);
+		transition:
+			border-color 50ms ease-out,
+			outline 50ms ease-out;
+		-webkit-tap-highlight-color: transparent;
 
-	@media (--dark) {
-		--input-color-bg: var(--cs-color-black);
-		--input-color-bg-focus: var(--cs-color-gray-18);
+		@media (--dark) {
+			--input-color-bg: var(--color-black);
+			--input-color-bg-focus: var(--color-gray-18);
+		}
 	}
-}
 
-.cs--input--text,
-.cs--input--email,
-.cs--input--url,
-.cs--input--password,
-.cs--input--search,
-.cs--input--tel,
-.cs--input--number,
-.cs--input--date,
-.cs--input--month,
-.cs--input--week,
-.cs--input--time,
-.cs--input--datetime,
-.cs--input--datetime-local,
-.cs--input--select,
-.cs--input--textarea {
-	appearance: none;
-	font: inherit;
-	font-size: 1rem;
-	width: 100%;
-	min-width: 0;
-	display: inline-flex;
-	padding: 0 0.75em;
-	height: 3em;
-	line-height: 1;
-}
+	.input--text,
+	.input--email,
+	.input--url,
+	.input--password,
+	.input--search,
+	.input--tel,
+	.input--number,
+	.input--date,
+	.input--month,
+	.input--week,
+	.input--time,
+	.input--datetime,
+	.input--datetime-local,
+	.input--select,
+	.input--textarea {
+		appearance: none;
+		font: inherit;
+		font-size: 1rem;
+		width: 100%;
+		min-width: 0;
+		display: inline-flex;
+		padding: 0 0.75em;
+		height: 3em;
+		line-height: 1;
+	}
 
-.cs--input--textarea {
-	min-height: 6em;
-	resize: vertical;
-	padding: 1em 0.75em;
-}
+	.input--textarea {
+		min-height: 6em;
+		resize: vertical;
+		padding: 1em 0.75em;
+	}
 
-.cs--input--checkbox,
-.cs--input--radio {
-	padding: 0;
-	width: 1rem;
-	height: 1rem;
-}
+	.input--checkbox,
+	.input--radio {
+		padding: 0;
+		width: 1rem;
+		height: 1rem;
+	}
 
-.cs--input--checked {
-	--input-color-accent: var(--cs-color-accent);
-	--input-color-marker: var(--cs-color-white);
-}
+	.input--checked {
+		--input-color-accent: var(--color-accent);
+		--input-color-marker: var(--color-white);
+	}
 
-.cs--input__accent {
-	fill: var(--input-color-accent);
-}
+	.input__accent {
+		fill: var(--input-color-accent);
+	}
 
-.cs--input__marker {
-	fill: var(--input-color-marker);
-	transform-origin: center;
-}
+	.input__marker {
+		fill: var(--input-color-marker);
+		transform-origin: center;
+	}
 
-.cs--input--radio {
-	border-radius: 9999px;
-}
+	.input--radio {
+		border-radius: 9999px;
+	}
 
-.cs--input:focus,
-.cs--input--focused {
-	--input-color-bg: var(--input-color-bg-focus);
-	--input-color-border: var(--input-color-border-focus);
-	--input-color-outline: var(--input-color-border-focus);
-	--input-size-outline: 1px;
-	--input-outline-offset: 0;
-}
+	.input:focus,
+	.input--focused {
+		--input-color-bg: var(--input-color-bg-focus);
+		--input-color-border: var(--input-color-border-focus);
+		--input-color-outline: var(--input-color-border-focus);
+		--input-size-outline: 1px;
+		--input-outline-offset: 0;
+	}
 
-.cs--input:active,
-.cs--input--active {
-	--input-color-bg: var(--cs-field-bg-active);
-	--input-color-border: var(--cs-field-border-active);
-	--input-color-outline: var(--cs-field-outline-active);
-	--input-color-border: var(--input-color-border-focus);
-	--input-size-outline: 0;
-	--input-outline-offset: 0;
-	--input-color-accent: var(--cs-field-bg-active);
-}
+	.input:active,
+	.input--active {
+		--input-color-border: var(--input-color-border-focus);
+		--input-size-outline: 0;
+		--input-outline-offset: 0;
+	}
 
-.cs--input:active:where(.cs--input--checked),
-.cs--input--active:where(.cs--input--checked) {
-	--input-color-accent: var(--cs-color-accent-deep);
-}
+	.input:active:where(.input--checked),
+	.input--active:where(.input--checked) {
+		--input-color-accent: var(--color-accent-deep);
+	}
 
-.cs--input:invalid:where([data-touched="true"]),
-.cs--input[aria-invalid="true"] {
-	--input-color-border: var(--input-color-error-border);
-	--input-color-outline: var(--input-color-error-border);
-}
+	.input:invalid:where([data-touched="true"]),
+	.input[aria-invalid="true"] {
+		--input-color-border: var(--input-color-error-border);
+		--input-color-outline: var(--input-color-error-border);
+	}
 
-.cs--input::placeholder {
-	color: var(--cs-field-placeholder);
+	.input::placeholder {
+		color: var(--input-color-placeholder);
+	}
 }

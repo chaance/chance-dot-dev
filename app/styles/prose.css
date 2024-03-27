@@ -1,183 +1,185 @@
-.prose {
-	font-size: 0.9375rem;
-	line-height: 1.6;
+@layer prose {
+	.prose {
+		font-size: 0.9375rem;
+		line-height: 1.6;
 
-	p {
-		margin-top: 1em;
-		margin-bottom: 1em;
-	}
-
-	h1,
-	h2,
-	h3,
-	h4 {
-		font-family: var(--cs-ff-heading);
-		font-weight: 300;
-		text-wrap: balance;
-	}
-
-	h1 {
-		font-size: 2.25rem;
-		line-height: 1.111;
-		margin-top: 1em;
-		margin-bottom: 0.125em;
-		@media (--sm) {
-			font-size: 3rem;
-			line-height: 1;
+		p {
+			margin-top: 1em;
+			margin-bottom: 1em;
 		}
-	}
 
-	h2 {
-		font-size: 1.5rem;
-		line-height: 1.333;
-		margin-top: 2em;
-		margin-bottom: 0.5em;
-		@media (--sm) {
+		h1,
+		h2,
+		h3,
+		h4 {
+			font-family: var(--ff-heading);
+			font-weight: 300;
+			text-wrap: balance;
+		}
+
+		h1 {
 			font-size: 2.25rem;
 			line-height: 1.111;
+			margin-top: 1em;
+			margin-bottom: 0.125em;
+			@media (--sm) {
+				font-size: 3rem;
+				line-height: 1;
+			}
 		}
-	}
 
-	h3 {
-		font-size: 1.25rem;
-		line-height: 1.4;
-		margin-top: 1.5em;
-		margin-bottom: 0;
-		@media (--sm) {
+		h2 {
 			font-size: 1.5rem;
 			line-height: 1.333;
+			margin-top: 2em;
+			margin-bottom: 0.5em;
+			@media (--sm) {
+				font-size: 2.25rem;
+				line-height: 1.111;
+			}
 		}
-	}
 
-	h4 {
-		font-size: 1.25rem;
-		line-height: 1.4;
-		margin-top: 1.25em;
-		margin-bottom: -0.5em;
-	}
-
-	a {
-		color: var(--cs-color-text-weak);
-		text-decoration: underline;
-		text-decoration-color: var(--cs-color-text-weaker);
-		&:hover {
-			color: var(--cs-color-accent);
-			text-decoration-color: var(--cs-color-accent);
+		h3 {
+			font-size: 1.25rem;
+			line-height: 1.4;
+			margin-top: 1.5em;
+			margin-bottom: 0;
+			@media (--sm) {
+				font-size: 1.5rem;
+				line-height: 1.333;
+			}
 		}
-	}
 
-	aside {
-		font-size: inherit;
-		font-weight: 400;
-		color: var(--cs-color-text-weaker);
-		padding: 1em 0;
-		border-top: 1px solid var(--cs-color-border-weak);
-		border-bottom: 1px solid var(--cs-color-border-weak);
-	}
+		h4 {
+			font-size: 1.25rem;
+			line-height: 1.4;
+			margin-top: 1.25em;
+			margin-bottom: -0.5em;
+		}
 
-	pre {
-		position: relative;
-		background-color: var(--base00);
-		border: 1px solid var(--cs-color-border-weak);
-		margin-top: 1em;
-		margin-bottom: 1em;
-		font-size: inherit;
-		padding: 1em;
-		font-weight: 100;
-		tab-size: 2;
-	}
+		a {
+			color: var(--color-text-weak);
+			text-decoration: underline;
+			text-decoration-color: var(--color-text-weaker);
+			&:hover {
+				color: var(--color-accent);
+				text-decoration-color: var(--color-accent);
+			}
+		}
 
-	pre[data-line-numbers="true"] {
-		padding-left: 3.5rem;
-	}
+		aside {
+			font-size: inherit;
+			font-weight: 400;
+			color: var(--color-text-weaker);
+			padding: 1em 0;
+			border-top: 1px solid var(--color-border-weak);
+			border-bottom: 1px solid var(--color-border-weak);
+		}
 
-	.codeblock-line {
-		position: relative;
-		display: block;
-		width: 100%;
-	}
+		pre {
+			position: relative;
+			background-color: var(--base00);
+			border: 1px solid var(--color-border-weak);
+			margin-top: 1em;
+			margin-bottom: 1em;
+			font-size: inherit;
+			padding: 1em;
+			font-weight: 100;
+			tab-size: 2;
+		}
 
-	.codeblock-line[data-line-number]::before {
-		content: attr(data-line-number);
-		display: block;
-		font: inherit;
-		line-height: inherit;
-		line-height: inherit;
-		opacity: 0.325;
-		position: absolute;
-		right: calc(100% + 1rem);
-		text-align: right;
-	}
+		pre[data-line-numbers="true"] {
+			padding-left: 3.5rem;
+		}
 
-	code {
-		font-size: 0.875em;
-		font-weight: 100;
-		display: inline-flex;
-		position: relative;
-		padding: 0 0.5em;
-		font-style: normal;
-	}
+		.codeblock-line {
+			position: relative;
+			display: block;
+			width: 100%;
+		}
 
-	pre code {
-		display: contents;
-	}
-
-	> p code {
-		position: relative;
-		display: inline;
-		white-space: nowrap;
-		padding: 0 0.5em;
-		&::before {
-			content: "";
+		.codeblock-line[data-line-number]::before {
+			content: attr(data-line-number);
+			display: block;
+			font: inherit;
+			line-height: inherit;
+			line-height: inherit;
+			opacity: 0.325;
 			position: absolute;
-			top: -0.125em;
-			bottom: -0.125em;
-			left: 0;
-			right: 0;
-			border: 1px solid var(--cs-color-border-weak);
-			border-radius: 2px;
+			right: calc(100% + 1rem);
+			text-align: right;
 		}
-	}
 
-	pre .copy-button {
-		position: absolute;
-		top: 0.5em;
-		right: 0.5em;
-		z-index: 1;
-		opacity: 0;
-		height: 2rem;
-		width: 2rem;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border: 1px solid var(--cs-color-border);
-		border-radius: 3px;
-		background-color: var(--cs-color-button);
-		color: var(--cs-color-button-text);
-	}
+		code {
+			font-size: 0.875em;
+			font-weight: 100;
+			display: inline-flex;
+			position: relative;
+			padding: 0 0.5em;
+			font-style: normal;
+		}
 
-	pre .copy-button:hover,
-	pre .copy-button:active {
-		background-color: var(--cs-color-button-hover);
-	}
+		pre code {
+			display: contents;
+		}
 
-	pre .copy-button:focus,
-	pre:focus .copy-button,
-	pre:focus-within .copy-button,
-	pre:hover .copy-button {
-		opacity: 1;
-	}
+		> p code {
+			position: relative;
+			display: inline;
+			white-space: nowrap;
+			padding: 0 0.5em;
+			&::before {
+				content: "";
+				position: absolute;
+				top: -0.125em;
+				bottom: -0.125em;
+				left: 0;
+				right: 0;
+				border: 1px solid var(--color-border-weak);
+				border-radius: 2px;
+			}
+		}
 
-	del {
-		text-decoration-thickness: clamp(2px, 0.125em, 6px);
-		text-decoration-color: var(--cs-color-text-danger);
-	}
+		pre .copy-button {
+			position: absolute;
+			top: 0.5em;
+			right: 0.5em;
+			z-index: 1;
+			opacity: 0;
+			height: 2rem;
+			width: 2rem;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border: 1px solid var(--color-border);
+			border-radius: 3px;
+			background-color: var(--color-button);
+			color: var(--color-button-text);
+		}
 
-	:first-child {
-		margin-top: 0;
-	}
+		pre .copy-button:hover,
+		pre .copy-button:active {
+			background-color: var(--color-button-hover);
+		}
 
-	:last-child {
-		margin-bottom: 0;
+		pre .copy-button:focus,
+		pre:focus .copy-button,
+		pre:focus-within .copy-button,
+		pre:hover .copy-button {
+			opacity: 1;
+		}
+
+		del {
+			text-decoration-thickness: clamp(2px, 0.125em, 6px);
+			text-decoration-color: var(--color-text-error);
+		}
+
+		:first-child {
+			margin-top: 0;
+		}
+
+		:last-child {
+			margin-bottom: 0;
+		}
 	}
 }

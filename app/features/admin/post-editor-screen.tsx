@@ -8,8 +8,6 @@ import {
 	MarkdownEditorTextarea,
 } from "~/features/admin/markdown-editor.js";
 
-const ROOT_CLASS = "cs--post-editor-screen";
-
 const formFields = new Map<FormFieldName, FormFieldDescriptor>([
 	["title", { label: "Title", required: true, type: "text" }],
 	["slug", { label: "Slug", required: false, type: "text" }],
@@ -84,15 +82,15 @@ export function PostEditorScreen({
 	}
 
 	return (
-		<div className={ROOT_CLASS}>
+		<div className="PostEditorScreen">
 			<Form
 				key={formKey}
 				ref={formRef}
 				action={formAction}
 				method="post"
-				className={`${ROOT_CLASS}__form`}
+				className="PostEditorScreen__form"
 			>
-				<div className={`${ROOT_CLASS}__title-bar`}>
+				<div className="PostEditorScreen__title-bar">
 					<FormField
 						id="form-field-title"
 						name="title"
@@ -108,23 +106,23 @@ export function PostEditorScreen({
 							}
 						}}
 					/>
-					<div className={`${ROOT_CLASS}__slug-wrapper`}>
+					<div className="PostEditorScreen__slug-wrapper">
 						{editingSlug ? (
 							<>
 								<label
 									htmlFor="form-field-slug"
-									className={`${ROOT_CLASS}__slug-label`}
+									className="PostEditorScreen__slug-label"
 								>
 									Slug:
 								</label>{" "}
-								<div className={`${ROOT_CLASS}__slug-input-wrapper`}>
-									<span className={`${ROOT_CLASS}__slug-input-prefix`}>/</span>
+								<div className="PostEditorScreen__slug-input-wrapper">
+									<span className="PostEditorScreen__slug-input-prefix">/</span>
 									<input
 										id="form-field-slug"
 										ref={slugFieldRef}
 										type="text"
 										value={slugValue}
-										className={`${ROOT_CLASS}__slug-input`}
+										className="PostEditorScreen__slug-input"
 										onChange={(evt) => {
 											setSlugValue(evt.target.value);
 										}}
@@ -155,14 +153,12 @@ export function PostEditorScreen({
 							</>
 						) : (
 							<>
-								<span className={`${ROOT_CLASS}__slug-label`}>Slug:</span>{" "}
-								<span
-									className={`${ROOT_CLASS}__slug-output`}
-								>{`/${slugValue}`}</span>{" "}
+								<span className="PostEditorScreen__slug-label">Slug:</span>{" "}
+								<span className="PostEditorScreen__slug-output">{`/${slugValue}`}</span>{" "}
 								<button
 									ref={slugEditButtonRef}
 									type="button"
-									className={`${ROOT_CLASS}__slug-edit-button`}
+									className="PostEditorScreen__slug-edit-button"
 									onClick={(evt) => {
 										setEditingSlug(true);
 									}}
@@ -174,7 +170,7 @@ export function PostEditorScreen({
 						)}
 					</div>
 				</div>
-				<div className={`${ROOT_CLASS}__main-content`}>
+				<div className="PostEditorScreen__main-content">
 					<Card removePadding="sm-down" removeBackground="sm-down">
 						{Array.from(formFields).map(([name, desc]) => {
 							if (name === "title" || name === "slug" || name === "createdAt")
@@ -198,8 +194,8 @@ export function PostEditorScreen({
 						})}
 					</Card>
 				</div>
-				<div className={`${ROOT_CLASS}__sidebar`}>
-					<div className={`${ROOT_CLASS}__sidebar-content`}>
+				<div className="PostEditorScreen__sidebar">
+					<div className="PostEditorScreen__sidebar-content">
 						<FormField
 							id="form-field-createdAt"
 							name="createdAt"
@@ -210,7 +206,7 @@ export function PostEditorScreen({
 							label="Created At"
 							type="datetime-local"
 						/>
-						<div className={`${ROOT_CLASS}__sidebar-buttons`}>
+						<div className="PostEditorScreen__sidebar-buttons">
 							<button type="submit" className="button">
 								Save
 							</button>

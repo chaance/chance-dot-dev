@@ -1,0 +1,68 @@
+@layer components.PrimaryLayout {
+	.PrimaryLayout {
+		--layout-gap: 1.5rem;
+		margin: 0 auto;
+		min-height: 100vh;
+		min-height: 100dvh;
+		display: grid;
+		grid-template:
+			"header" auto
+			"main" 1fr
+			"footer" auto / 1fr;
+
+		@media (--sm) {
+			--layout-gap: 2rem;
+		}
+
+		@media (--md) {
+			--layout-gap: 3rem;
+			width: 58rem;
+			max-width: calc(100% - var(--layout-gap) * 2);
+			display: grid;
+			grid-template:
+				"main header" 1fr
+				"footer header" auto / 1fr min(30vw, 16rem);
+		}
+
+		@media (--lg) {
+			--layout-gap: 4rem;
+		}
+	}
+
+	.PrimaryLayout__header {
+		grid-area: header;
+		border-color: var(--color-border-weak);
+		border-bottom-width: 1px;
+		@media (--md) {
+			border-bottom-width: 0;
+			border-left-width: 1px;
+		}
+	}
+
+	.PrimaryLayout__main {
+		min-width: 0;
+		grid-area: main;
+		width: 100%;
+	}
+
+	.PrimaryLayout__main-inner {
+		--p: 2rem;
+		padding: var(--p) var(--layout-gap);
+		@media (--md) {
+			padding-left: 0;
+			--p: 3rem;
+		}
+		@media (--lg) {
+			--p: 4.125rem;
+		}
+	}
+
+	.PrimaryLayout__footer {
+		min-width: 0;
+		grid-area: footer;
+		padding: 1rem var(--layout-gap);
+		@media (--md) {
+			padding: 2rem 0;
+		}
+	}
+}

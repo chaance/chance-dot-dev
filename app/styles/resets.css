@@ -1,232 +1,234 @@
-* {
-	box-sizing: border-box;
-}
-
-::before,
-::after {
-	box-sizing: inherit;
-}
-
-* {
-	overflow-wrap: break-word;
-	hyphens: auto;
-	@media (min-width: 640px) {
-		hyphens: initial;
+@layer resets {
+	* {
+		box-sizing: border-box;
 	}
-}
 
-html,
-:host {
-	line-height: 1.5;
-	-webkit-text-size-adjust: 100%;
-	-moz-tab-size: 4;
-	-o-tab-size: 4;
-	tab-size: 4;
-	font-feature-settings: normal;
-	font-variation-settings: normal;
-	-webkit-tap-highlight-color: transparent;
-	scrollbar-gutter: stable both-edges;
-}
+	::before,
+	::after {
+		box-sizing: inherit;
+	}
 
-body {
-	margin: 0;
-	line-height: inherit;
-	scrollbar-gutter: inherit;
-}
+	* {
+		overflow-wrap: break-word;
+		hyphens: auto;
+		@media (min-width: 640px) {
+			hyphens: initial;
+		}
+	}
 
-hr {
-	height: 0;
-	color: inherit;
-	border-top-width: 1px;
-}
+	html,
+	:host {
+		line-height: 1.5;
+		-webkit-text-size-adjust: 100%;
+		-moz-tab-size: 4;
+		-o-tab-size: 4;
+		tab-size: 4;
+		font-feature-settings: normal;
+		font-variation-settings: normal;
+		-webkit-tap-highlight-color: transparent;
+		scrollbar-gutter: stable both-edges;
+	}
 
-abbr:where([title]) {
-	-webkit-text-decoration: underline dotted;
-	text-decoration: underline dotted;
-}
+	body {
+		margin: 0;
+		line-height: inherit;
+		scrollbar-gutter: inherit;
+	}
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	font-size: inherit;
-	font-weight: inherit;
-}
+	hr {
+		height: 0;
+		color: inherit;
+		border-top-width: 1px;
+	}
 
-a {
-	color: inherit;
-	text-decoration: inherit;
-}
+	abbr:where([title]) {
+		-webkit-text-decoration: underline dotted;
+		text-decoration: underline dotted;
+	}
 
-b,
-strong {
-	font-weight: bolder;
-}
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-size: inherit;
+		font-weight: inherit;
+	}
 
-code,
-kbd,
-samp,
-pre {
-	font-feature-settings: normal;
-	font-variation-settings: normal;
-	font-size: 1em;
-}
+	a {
+		color: inherit;
+		text-decoration: inherit;
+	}
 
-small {
-	font-size: 80%;
-}
+	b,
+	strong {
+		font-weight: bolder;
+	}
 
-sub,
-sup {
-	font-size: 75%;
-	line-height: 0;
-	position: relative;
-	vertical-align: baseline;
-}
+	code,
+	kbd,
+	samp,
+	pre {
+		font-feature-settings: normal;
+		font-variation-settings: normal;
+		font-size: 1em;
+	}
 
-sub {
-	bottom: -0.25em;
-}
+	small {
+		font-size: 80%;
+	}
 
-sup {
-	top: -0.5em;
-}
+	sub,
+	sup {
+		font-size: 75%;
+		line-height: 0;
+		position: relative;
+		vertical-align: baseline;
+	}
 
-table {
-	text-indent: 0;
-	border-color: inherit;
-	border-collapse: collapse;
-}
+	sub {
+		bottom: -0.25em;
+	}
 
-button,
-input,
-optgroup,
-select,
-textarea {
-	font: inherit;
-	line-height: inherit;
-	color: inherit;
-	margin: 0;
-	padding: 0;
-}
+	sup {
+		top: -0.5em;
+	}
 
-button,
-select {
-	text-transform: inherit;
-}
+	table {
+		text-indent: 0;
+		border-color: inherit;
+		border-collapse: collapse;
+	}
 
-button,
-:where([type="button"]),
-:where([type="reset"]),
-:where([type="submit"]) {
-	-webkit-appearance: button;
-	background-color: transparent;
-	background-image: none;
-}
+	button,
+	input,
+	optgroup,
+	select,
+	textarea {
+		font: inherit;
+		line-height: inherit;
+		color: inherit;
+		margin: 0;
+		padding: 0;
+	}
 
-:-moz-focusring {
-	outline: auto;
-}
+	button,
+	select {
+		text-transform: inherit;
+	}
 
-:-moz-ui-invalid {
-	box-shadow: none;
-}
+	button,
+	:where([type="button"]),
+	:where([type="reset"]),
+	:where([type="submit"]) {
+		-webkit-appearance: button;
+		background-color: transparent;
+		background-image: none;
+	}
 
-progress {
-	vertical-align: baseline;
-}
+	:-moz-focusring {
+		outline: auto;
+	}
 
-::-webkit-inner-spin-button,
-::-webkit-outer-spin-button {
-	height: auto;
-}
+	:-moz-ui-invalid {
+		box-shadow: none;
+	}
 
-:where([type="search"]) {
-	-webkit-appearance: textfield;
-	outline-offset: -2px;
-}
+	progress {
+		vertical-align: baseline;
+	}
 
-::-webkit-search-decoration {
-	-webkit-appearance: none;
-}
+	::-webkit-inner-spin-button,
+	::-webkit-outer-spin-button {
+		height: auto;
+	}
 
-::-webkit-file-upload-button {
-	-webkit-appearance: button;
-	font: inherit;
-}
+	:where([type="search"]) {
+		-webkit-appearance: textfield;
+		outline-offset: -2px;
+	}
 
-summary {
-	display: list-item;
-}
+	::-webkit-search-decoration {
+		-webkit-appearance: none;
+	}
 
-blockquote,
-dl,
-dd,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-hr,
-figure,
-p,
-pre {
-	margin: 0;
-}
+	::-webkit-file-upload-button {
+		-webkit-appearance: button;
+		font: inherit;
+	}
 
-fieldset {
-	margin: 0;
-	padding: 0;
-}
+	summary {
+		display: list-item;
+	}
 
-legend {
-	padding: 0;
-}
+	blockquote,
+	dl,
+	dd,
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	hr,
+	figure,
+	p,
+	pre {
+		margin: 0;
+	}
 
-ol,
-ul,
-menu {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
+	fieldset {
+		margin: 0;
+		padding: 0;
+	}
 
-dialog {
-	padding: 0;
-}
+	legend {
+		padding: 0;
+	}
 
-textarea {
-	resize: vertical;
-}
+	ol,
+	ul,
+	menu {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
 
-:disabled {
-	cursor: default;
-}
+	dialog {
+		padding: 0;
+	}
 
-audio,
-canvas,
-embed,
-iframe,
-img,
-object,
-svg,
-video {
-	display: block;
-	vertical-align: middle;
-}
+	textarea {
+		resize: vertical;
+	}
 
-canvas,
-img,
-picture,
-svg,
-video {
-	max-width: 100%;
-	height: auto;
-}
+	:disabled {
+		cursor: default;
+	}
 
-[hidden] {
-	display: none !important;
+	audio,
+	canvas,
+	embed,
+	iframe,
+	img,
+	object,
+	svg,
+	video {
+		display: block;
+		vertical-align: middle;
+	}
+
+	canvas,
+	img,
+	picture,
+	svg,
+	video {
+		max-width: 100%;
+		height: auto;
+	}
+
+	[hidden] {
+		display: none !important;
+	}
 }

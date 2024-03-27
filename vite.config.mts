@@ -17,7 +17,8 @@ export default defineConfig({
 						"**/.*",
 						"**/*.css",
 						"**/*.scss",
-						"**/ui/**/*",
+						"**/__features/**/*",
+						"**/__features/**/*",
 						"**/*.test.{js,jsx,ts,tsx}",
 					],
 				});

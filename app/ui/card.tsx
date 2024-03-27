@@ -1,5 +1,4 @@
 import cx from "clsx";
-import styles from "./card.module.css";
 
 export function Card({
 	children,
@@ -9,24 +8,20 @@ export function Card({
 	depth = "raised",
 	roundedCorners,
 }: CardProps) {
-	console.log(`uncard${capitalize(camelCase(uncard))}`);
 	return (
 		<div
-			className={cx(styles.card, {
-				[styles.depthRaised]: depth === "raised",
-				[styles.noDepth]: depth === false,
-				[styles.noBg]: removeBackground === true,
-				[styles[`noBg${capitalize(camelCase(removeBackground))}`]]:
-					typeof removeBackground === "string",
-				[styles.noPad]: removePadding === true,
-				[styles[`noPad${capitalize(camelCase(removePadding))}`]]:
-					typeof removePadding === "string",
-				[styles[`uncard${capitalize(camelCase(uncard))}`]]: uncard,
-				[styles[`roundedCorners${capitalize(camelCase(roundedCorners))}`]]:
-					roundedCorners,
+			className={cx("card", {
+				"card--depth-raised": depth === "raised",
+				"card--no-depth": depth === false,
+				"card--no-bg": removeBackground === true,
+				[`${uncard}:card--no-bg`]: typeof removeBackground === "string",
+				"card--no-pad": removePadding === true,
+				[`${uncard}:card--no-pad`]: typeof removePadding === "string",
+				[`${uncard}:card--uncard`]: typeof uncard === "string",
+				[`card--rounded-corners-${roundedCorners}`]: roundedCorners,
 			})}
 		>
-			<div className={styles.inner}>{children}</div>
+			<div className="card__inner">{children}</div>
 		</div>
 	);
 }

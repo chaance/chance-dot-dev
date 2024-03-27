@@ -8,8 +8,6 @@ import {
 import { Link, isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import { getMarkdownBlogPost } from "~/lib/blog.server";
 
-const ROOT_CLASS = "page--main-catchall";
-
 export async function loader({ params }: LoaderFunctionArgs) {
 	const possibleSlug = params["*"];
 	if (possibleSlug) {

@@ -1,12 +1,10 @@
 import { GitHubIcon, LinkedInIcon, TwitterIcon } from "./icons";
 import { Link } from "@remix-run/react";
-import cx from "clsx";
-import styles from "./social-nav.module.css";
 
 export function SocialNav() {
 	return (
-		<nav aria-label="social" className={styles.nav}>
-			<ul className={styles.navList}>
+		<nav aria-label="social" className="SocialNav">
+			<ul className="SocialNav__nav-list">
 				{[
 					{
 						label: "Twitter",
@@ -25,14 +23,14 @@ export function SocialNav() {
 					},
 				].map(({ label, icon, href }) => {
 					return (
-						<li key={label} className={styles.navItem}>
+						<li key={label} className="SocialNav__nav-item">
 							<Link
 								to={href}
 								rel="noreferrer"
 								target="_blank"
-								className={styles.navLink}
+								className="SocialNav__nav-link"
 							>
-								<div className={styles.icon}>{icon}</div>
+								<div className="SocialNav__icon">{icon}</div>
 								<div className="sr-only">{label}</div>
 							</Link>
 						</li>

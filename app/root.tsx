@@ -21,15 +21,14 @@ import NProgress from "nprogress";
 
 import { PrimaryLayout } from "~/ui/primary-layout.js";
 
-import "~/styles/fonts.css";
-import "~/styles/color.css";
-import "~/styles/resets.css";
-import "~/styles/app.css";
-import "~/styles/ui.css";
-import "~/styles/utility.css";
-import "~/styles/prose.css";
-
-const ROOT_CLASS = "layout--root";
+import fontsStyles from "~/styles/fonts.css?url";
+import mediaStyles from "~/styles/media.css?url";
+import defsStyles from "~/styles/defs.css?url";
+import resetsStyles from "~/styles/resets.css?url";
+import appStyles from "~/styles/app.css?url";
+import utilsStyles from "~/styles/utils.css?url";
+import proseStyles from "~/styles/prose.css?url";
+import componentStyles from "~/styles/components.css?url";
 
 export function links() {
 	return [
@@ -88,6 +87,14 @@ export function links() {
 			type: "font/ttf",
 			crossOrigin: "",
 		},
+		{ rel: "stylesheet", href: fontsStyles },
+		{ rel: "stylesheet", href: mediaStyles },
+		{ rel: "stylesheet", href: defsStyles },
+		{ rel: "stylesheet", href: resetsStyles },
+		{ rel: "stylesheet", href: appStyles },
+		{ rel: "stylesheet", href: utilsStyles },
+		{ rel: "stylesheet", href: proseStyles },
+		{ rel: "stylesheet", href: componentStyles },
 	];
 }
 
@@ -200,10 +207,10 @@ export function ErrorBoundary() {
 			>
 				<Layout>
 					<PrimaryLayout>
-						<main className={ROOT_CLASS}>
+						<main>
 							<div>
-								<h1 className={`${ROOT_CLASS}__title`}>Oh no!</h1>
-								<div className={`${ROOT_CLASS}__message`}>{message}</div>
+								<h1>Oh no!</h1>
+								<div>{message}</div>
 							</div>
 						</main>
 					</PrimaryLayout>
@@ -216,10 +223,10 @@ export function ErrorBoundary() {
 		<Document meta={<title>Danger, Will Robinson! 500! | chance.dev</title>}>
 			<Layout>
 				<PrimaryLayout>
-					<main className={ROOT_CLASS}>
+					<main>
 						<div>
-							<h1 className={`${ROOT_CLASS}__title`}>Oh no!</h1>
-							<div className={`${ROOT_CLASS}__message`}>
+							<h1>Oh no!</h1>
+							<div>
 								<p>
 									Something went wrong and I'm not quite sure what! Maybe go
 									outside for a bit and hopefully I'll get it fixed by the time

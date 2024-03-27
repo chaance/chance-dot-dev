@@ -13,7 +13,7 @@ import { useComposedRefs } from "@chance/hooks/use-composed-refs";
 // an implementation detail instead of a package I want to depend on directly.
 type PressEventHandler = Parameters<typeof usePress>[0]["onPress"];
 
-const BASE_CLASS = "cs--input";
+const BASE_CLASS = "input";
 
 const InputBase = React.forwardRef<any, InputBaseProps>(
 	({ as: Comp, className, ...props }, forwardedRef) => {

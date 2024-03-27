@@ -79,10 +79,10 @@
 }
 
 :root {
-	--cs-ff-sans: untitled-sans, "Helvetica Neue", Helvetica, ui-sans-serif,
+	--ff-sans: untitled-sans, "Helvetica Neue", Helvetica, ui-sans-serif,
 		system-ui;
-	--cs-ff-serif: editorial-new, ui-serif, Garamond, "Times New Roman", serif;
-	--cs-ff-mono: berkeley-mono, ui-monospace, monospace;
-	--cs-ff-heading: var(--cs-ff-serif);
-	--cs-ff-body: var(--cs-ff-sans);
+	--ff-serif: editorial-new, ui-serif, Garamond, "Times New Roman", serif;
+	--ff-mono: berkeley-mono, ui-monospace, monospace;
+	--ff-heading: var(--ff-serif);
+	--ff-body: var(--ff-sans);
 }

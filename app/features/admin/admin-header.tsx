@@ -1,7 +1,7 @@
 import { Form } from "@remix-run/react";
 import cx from "clsx";
 
-const ROOT_CLASS = "cs--admin-header";
+const ROOT_CLASS = "admin-header";
 
 export function AdminHeader({
 	userInitials,

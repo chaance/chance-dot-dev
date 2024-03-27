@@ -1,5 +1,4 @@
 import { Outlet } from "@remix-run/react";
-import "./mailing-lists.css";
 
 export default function AdminMailingListsLayout() {
 	return (

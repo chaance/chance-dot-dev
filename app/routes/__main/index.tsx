@@ -1,13 +1,16 @@
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
 import { Link } from "~/ui/primitives/link";
-import styles from "./index.module.css";
 
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import cx from "clsx";
 import { useLoaderData } from "@remix-run/react";
 import { getMarkdownBlogPostListItems } from "~/lib/blog.server";
 import { isLocalHost } from "~/lib/utils";
+
+import routeStyles from "./index.css?url";
+export function links() {
+	return [{ rel: "stylesheet", href: routeStyles }];
+}
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	// TODO: Implement CDN caching
@@ -75,28 +78,28 @@ export function meta() {
 export default function HomeRoute() {
 	let { posts } = useLoaderData<typeof loader>();
 	return (
-		<main>
+		<main className="homepage">
 			<h1 className="sr-only">Chance the Dev</h1>
-			<h2 className={cx(styles.heading, "text-h3 mb-10")}>Latest Articles</h2>
-			<div className={styles.postsFeed}>
+			<h2 className="homepage__heading text-h3 mb-10">Latest Articles</h2>
+			<div className="Articles">
 				{posts.map((post) => {
 					let excerpt = post.excerptRaw || post.description;
 					if (excerpt && !excerpt.endsWith(".")) {
 						excerpt += ".";
 					}
 					return (
-						<article key={post.id} className={styles.post}>
-							<div className={styles.postHeader}>
-								<h3 className={cx(styles.postTitle, "text-h2")}>
+						<article key={post.id} className="Articles__post">
+							<div className="Articles__post-header">
+								<h3 className="Articles__post-title text-h2">
 									<Link className="flex" to={`/blog/${post.slug}`}>
 										{post.title}
 									</Link>
 								</h3>
-								<div className={cx(styles.postMeta, "text-sm text-weaker")}>
+								<div className="Articles__post-meta text-sm text-weaker">
 									<time dateTime={post.dateISO}>{post.dateFormatted}</time>
 								</div>
 							</div>
-							<div className={styles.postContent}>
+							<div className="Articles__post-content">
 								<div>{excerpt}</div>
 							</div>
 						</article>

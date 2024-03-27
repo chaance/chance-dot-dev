@@ -9,7 +9,11 @@ import {
 import { requireUser } from "~/lib/session.server";
 import cx from "clsx";
 import { AdminHeader } from "~/features/admin/admin-header";
-import "./admin.css";
+
+import routeStyles from "./admin.css?url";
+export function links() {
+	return [{ rel: "stylesheet", href: routeStyles }];
+}
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	let user = await requireUser(request, "/login");
@@ -87,7 +91,7 @@ const navItems: NavItem[] = [
 	},
 ];
 
-const ROOT_CLASS = "cs--admin";
+const ROOT_CLASS = "admin";
 
 export default function AdminLayout() {
 	let { user } = useLoaderData<typeof loader>();
