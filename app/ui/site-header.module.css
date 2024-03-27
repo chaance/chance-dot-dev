@@ -130,9 +130,6 @@
 	&:where([data-collapsible]) {
 		overflow: hidden;
 		overflow: clip;
-		&:where([data-safe-display]) {
-			display: flex;
-		}
 
 		&:where([data-state="open"]) {
 			animation: slideDown 250ms ease-out;
@@ -141,6 +138,10 @@
 		&:where([data-state="collapsed"]) {
 			animation: slideUp 250ms ease-out;
 		}
+	}
+
+	&:where([data-animation-state="open"]) {
+		overflow: visible;
 	}
 
 	&:where(:not([data-collapsible])) {

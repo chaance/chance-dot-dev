@@ -1,4 +1,5 @@
 import * as React from "react";
+import { flushSync } from "react-dom";
 import { NavLink } from "@remix-run/react";
 import styles from "~/ui/site-header.module.css";
 import cx from "clsx";
@@ -81,19 +82,22 @@ interface CollapsibleContentProps {
 
 function CollapsibleContent({ className }: CollapsibleContentProps) {
 	const { isOpen } = useCollapsibleContext();
-	const [isHidden, setIsHidden] = React.useState(!isOpen);
-	const [isAnimating, setIsAnimating] = React.useState(false);
+	const [animationState, setAnimationState] = React.useState(
+		isOpen ? "open" : "collapsed",
+	);
+
 	const ownRef = React.useRef<HTMLDivElement>(null);
 	const {
 		contentProps: { hidden, ...contentProps },
 		ref,
-	} = useCollapsibleContent<HTMLDivElement>(
-		{ style: isAnimating ? { height: 0 } : undefined },
-		ownRef,
-	);
+	} = useCollapsibleContent<HTMLDivElement>({}, ownRef);
 
-	let [safeDisplay, setSafeDisplay] = React.useState(false);
-
+	// NOTE (Chance 2024-03-27): This can't be derived because if the element is
+	// hidden when the user clicks the button, animation will not run and state
+	// doesn't get updated. It gets set to `false` in a layout effect to ensure
+	// the element is visible before paint, then set to `true` after the closing
+	// animation is complete.
+	const [isHidden, setIsHidden] = React.useState(!isOpen);
 	useLayoutEffect(() => {
 		if (isOpen) {
 			setIsHidden(false);
@@ -103,18 +107,17 @@ function CollapsibleContent({ className }: CollapsibleContentProps) {
 	return (
 		<HeaderNavArea
 			data-collapsible=""
-			data-safe-display={safeDisplay ? "" : undefined}
+			data-animation-state={animationState}
 			className={cx(styles.collapsible, className)}
 			contentRef={ref}
 			{...contentProps}
 			aria-hidden={hidden || undefined}
 			hidden={isHidden || undefined}
-			onAnimationStart={(e) => {
-				if (!safeDisplay) {
-					setSafeDisplay(true);
-				}
+			onAnimationStart={() => {
+				setAnimationState(isOpen ? "opening" : "collapsing");
 			}}
 			onAnimationEnd={(e) => {
+				setAnimationState(isOpen ? "open" : "collapsed");
 				if (!isOpen) {
 					let height = e.currentTarget.style.height;
 					e.currentTarget.style.height = "0";
