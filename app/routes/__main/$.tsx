@@ -7,8 +7,6 @@ import {
 } from "@remix-run/node";
 import { Link, isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import { getMarkdownBlogPost } from "~/lib/blog.server";
-import { Button } from "~/ui/primitives/button";
-import "./$.css";
 
 const ROOT_CLASS = "page--main-catchall";
 

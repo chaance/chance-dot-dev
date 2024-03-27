@@ -1,5 +1,4 @@
 import { Outlet } from "@remix-run/react";
-import "./subscribers.css";
 
 export default function AdminSubscribersLayout() {
 	return (

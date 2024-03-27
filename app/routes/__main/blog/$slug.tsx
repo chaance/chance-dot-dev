@@ -12,7 +12,6 @@ import cx from "clsx";
 import invariant from "tiny-invariant";
 import { getSessionUser } from "~/lib/session.server";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
-import styles from "./$slug.module.css";
 
 interface PostData extends MarkdownBlogPost {
 	createdAtFormatted: string;
@@ -191,8 +190,8 @@ export default function BlogPostRoute() {
 		}
 	}, []);
 	return (
-		<main className={styles.root}>
-			<article className={styles.article}>
+		<main>
+			<article>
 				<header className="mb-6">
 					<h1 className="text-h1 mb-10">{post.title}</h1>
 					<p className="text-sm text-weaker">
@@ -217,7 +216,7 @@ export default function BlogPostRoute() {
 				</header>
 				<div
 					ref={contentRef}
-					className={cx(styles.body, "prose")}
+					className="prose"
 					dangerouslySetInnerHTML={{
 						__html: post.bodyHTML,
 					}}
