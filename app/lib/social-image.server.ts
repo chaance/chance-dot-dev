@@ -2,11 +2,6 @@ import path from "node:path";
 import getEmojiRegex from "emoji-regex";
 import { getRequiredServerEnvVar } from "~/lib/utils";
 
-const CLOUDINARY_CLOUD_NAME = getRequiredServerEnvVar("CLOUDINARY_CLOUD_NAME");
-const CLOUDINARY_FOLDER_NAME = getRequiredServerEnvVar(
-	"CLOUDINARY_FOLDER_NAME",
-);
-
 function stripEmojis(string: string): string {
 	return string.replace(getEmojiRegex(), "").replace(/\s+/g, " ").trim();
 }
@@ -22,6 +17,13 @@ function getCloudinarySocialImageUrl({
 	authorName,
 	authorTitle,
 }: SocialImageArgs) {
+	const CLOUDINARY_CLOUD_NAME = getRequiredServerEnvVar(
+		"CLOUDINARY_CLOUD_NAME",
+	);
+	const CLOUDINARY_FOLDER_NAME = getRequiredServerEnvVar(
+		"CLOUDINARY_FOLDER_NAME",
+	);
+
 	// Important: no leading hash for hex values
 	let primaryTextColor = "ffffff";
 	let secondaryTextColor = "d0d0d0";

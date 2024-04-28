@@ -17,13 +17,16 @@
 		flex-direction: column;
 		flex: 1 0 100%;
 		--pad-x: 0.75rem;
-		--header-height: 2.5rem;
+		--header-height: 46px;
 
 		@media (--sm) {
 			--pad-x: 1rem;
-			--header-height: 3rem;
 			height: 100vh;
 			height: 100dvh;
+		}
+
+		@media (--md) {
+			--header-height: 32px;
 		}
 
 		@media (--lg) {

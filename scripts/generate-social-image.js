@@ -1,7 +1,6 @@
 import path from "node:path";
 import getEmojiRegex from "emoji-regex";
 import yargs from "yargs/yargs";
-import { hideBin } from "yargs/helpers";
 import dotenv from "dotenv";
 
 dotenv.config({ path: path.resolve(process.cwd(), ".env") });

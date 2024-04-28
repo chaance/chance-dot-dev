@@ -1,10 +1,5 @@
 import { getRequiredServerEnvVar } from "~/lib/utils";
 
-const CONVERT_KIT_API_SECRET = getRequiredServerEnvVar(
-	"CONVERT_KIT_API_SECRET"
-);
-const CONVERT_KIT_API_KEY = getRequiredServerEnvVar("CONVERT_KIT_API_KEY");
-
 export async function addSubscriberToForm({
 	email,
 	nameFirst,
@@ -16,6 +11,10 @@ export async function addSubscriberToForm({
 	nameLast: string | null;
 	convertKitFormId: string;
 }) {
+	const CONVERT_KIT_API_SECRET = getRequiredServerEnvVar(
+		"CONVERT_KIT_API_SECRET",
+	);
+	const CONVERT_KIT_API_KEY = getRequiredServerEnvVar("CONVERT_KIT_API_KEY");
 	let subscriberData = {
 		api_key: CONVERT_KIT_API_KEY,
 		api_secret: CONVERT_KIT_API_SECRET,
@@ -32,13 +31,11 @@ export async function addSubscriberToForm({
 			method: "post",
 			body: JSON.stringify(subscriberData),
 			headers: { "Content-Type": "application/json" },
-		}
+		},
 	);
-	console.log({ status: response.status });
 	let json = (await response.json()) as {
 		subscription: { subscriber: any };
 	};
-	console.log({ json });
 	let subscriber: ConvertKitSubscriber = {
 		id: json.subscription.subscriber.id,
 		nameFirst: json.subscription.subscriber.first_name,
