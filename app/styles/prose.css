@@ -67,6 +67,31 @@
 			}
 		}
 
+		ul,
+		ol {
+			list-style-type: none;
+			margin-top: 1em;
+			margin-bottom: 2em;
+			padding-left: 2em;
+
+			& > :where(li) {
+				padding-left: 0.5em;
+				position: relative;
+				&::marker {
+					color: var(--color-accent);
+					font-weight: bold;
+				}
+			}
+		}
+
+		ul :where(li) {
+			list-style-type: disc;
+		}
+
+		ol :where(li) {
+			list-style-type: decimal;
+		}
+
 		aside {
 			font-size: inherit;
 			font-weight: 400;
@@ -174,11 +199,11 @@
 			text-decoration-color: var(--color-text-error);
 		}
 
-		:first-child {
+		> :first-child {
 			margin-top: 0;
 		}
 
-		:last-child {
+		> :last-child {
 			margin-bottom: 0;
 		}
 	}
