@@ -97,6 +97,7 @@
 		"@types/source-map-support": "^0.5.10",
 		"@types/unist": "^3.0.2",
 		"@types/ws": "^8.5.10",
+		"@types/yargs": "^17.0.32",
 		"@vitejs/plugin-react": "^4.2.1",
 		"@vitest/coverage-v8": "^1.5.2",
 		"autoprefixer": "^10.4.19",
