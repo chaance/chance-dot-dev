@@ -31,29 +31,32 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 		return json(
 			{
-				posts: rawPosts.map((post) => {
-					const createdAt = new Date(post.createdAt);
-					const updatedAt = new Date(post.updatedAt);
-					let date = createdAt;
-					if (post.createdAt.getTime() !== post.updatedAt.getTime()) {
-						date = updatedAt;
-					}
+				posts: rawPosts
+					.map((post) => {
+						const createdAt = new Date(post.createdAt);
+						const updatedAt = new Date(post.updatedAt);
+						let date = createdAt;
+						if (post.createdAt.getTime() !== post.updatedAt.getTime()) {
+							date = updatedAt;
+						}
 
-					return {
-						id: post.id,
-						slug: post.slug,
-						title: post.title,
-						description: post.description,
-						excerptRaw: post.excerptRaw,
-						dateFormatted: date.toLocaleString("en-US", {
-							year: "numeric",
-							month: "long",
-							day: "numeric",
-							timeZone: "America/Los_Angeles",
-						}),
-						dateISO: date.toISOString(),
-					};
-				}),
+						return {
+							id: post.id,
+							slug: post.slug,
+							title: post.title,
+							description: post.description,
+							excerptRaw: post.excerptRaw,
+							date,
+							dateFormatted: date.toLocaleString("en-US", {
+								year: "numeric",
+								month: "long",
+								day: "numeric",
+								timeZone: "America/Los_Angeles",
+							}),
+							dateISO: date.toISOString(),
+						};
+					})
+					.sort((a, b) => b.date.getTime() - a.date.getTime()),
 			},
 			{ headers },
 		);
