@@ -1,0 +1,137 @@
+@layer components.tweetEmbed {
+	tweet-embed,
+	tweet-heading,
+	tweet-author,
+	tweet-authorname,
+	tweet-authorhandle,
+	tweet-body,
+	tweet-meta,
+	tweet-time,
+	tweet-date {
+		display: flex;
+	}
+
+	figure,
+	blockquote,
+	figcaption,
+	cite {
+		display: contents;
+	}
+
+	tweet-embed {
+		--avatar-size: 3.125rem;
+		--avatar-radius: calc(var(--avatar-size) / 2);
+		--padding: 18px;
+		overflow-x: auto;
+		flex-direction: column;
+		width: 100%;
+		padding: var(--padding);
+		border: 1px solid var(--color-border);
+		border-radius: 10px;
+		border-top-left-radius: calc(var(--avatar-radius) + var(--padding));
+		gap: 16px;
+
+		@media (--md) {
+			--padding: 22px;
+		}
+
+		:where(*) {
+			margin: 0;
+			font: inherit;
+			color: inherit;
+			text-decoration: inherit;
+			line-height: inherit;
+			letter-spacing: inherit;
+		}
+	}
+
+	tweet-heading {
+		flex-direction: row;
+		gap: 12px;
+		align-items: center;
+		flex: 1 0 100%;
+	}
+
+	tweet-followlink {
+		a {
+			font-weight: bold;
+			color: var(--color-link);
+			&:hover {
+				color: var(--color-link-hover);
+			}
+			&:visited {
+				color: var(--color-link-visited);
+			}
+		}
+
+		&::before {
+			content: "•";
+			margin: 0 0.375em;
+		}
+	}
+
+	tweet-avatar {
+		--size: var(--avatar-size);
+		display: block;
+		flex: 0 0 var(--size);
+		width: var(--size);
+		height: var(--size);
+		border-radius: var(--avatar-radius);
+		overflow: hidden;
+	}
+
+	tweet-author {
+		display: flex;
+		flex-direction: column;
+		line-height: 1.2;
+		flex-shrink: 0;
+	}
+
+	tweet-authorname {
+		font-weight: bold;
+		font-size: 1rem;
+
+		a {
+			&:hover {
+				color: var(--color-link-hover);
+			}
+		}
+	}
+
+	tweet-body {
+		font-size: 1.125rem;
+		line-height: 1.4;
+		min-width: 300px;
+
+		@media (--sm) {
+			font-size: 1.25rem;
+		}
+
+		br {
+			display: block;
+			content: "";
+			height: 0.5em;
+		}
+	}
+
+	tweet-meta {
+		a {
+			display: flex;
+			gap: 0 0.375em;
+			line-height: 1;
+			border-bottom: 1px solid transparent;
+		}
+
+		a:hover {
+			border-color: currentColor;
+		}
+	}
+
+	tweet-time {
+		gap: inherit;
+	}
+
+	tweet-time::after {
+		content: "•";
+	}
+}
