@@ -160,11 +160,11 @@ function HeaderNavArea({
 							About
 						</NavLink>
 					</li>
-					<li className="SiteHeader__nav-item text-sm">
+					{/* <li className="SiteHeader__nav-item text-sm">
 						<NavLink className="SiteHeader__nav-link" to="/code-recipes">
 							Code Recipes
 						</NavLink>
-					</li>
+					</li> */}
 				</ul>
 			</nav>
 			<SocialNav />
