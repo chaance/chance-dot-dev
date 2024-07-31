@@ -1,16 +1,10 @@
 import * as React from "react";
-import { HeadingLevelProvider } from "~/ui/primitives/heading";
-import { bem } from "~/lib/utils";
+import { Heading, HeadingLevelProvider } from "~/ui/primitives/heading";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
-import { redirect, useFetcher } from "@remix-run/react";
+import { useFetcher } from "@remix-run/react";
 import { useLayoutEffect } from "@chance/hooks/use-layout-effect";
 import type { action as signUpAction } from "~/routes/__main/sign-up";
 import { SignUpSection } from "~/ui/sign-up-section";
-
-export function loader() {
-	// TODO: Remove when this page is ready again
-	return redirect("/", 307);
-}
 
 export function meta() {
 	return getSeoMeta({
@@ -18,8 +12,6 @@ export function meta() {
 		title: "About Chance",
 	});
 }
-
-const ROOT_CLASS = "page--about";
 
 export default function AboutRoute() {
 	let signUpFetcher = useFetcher<typeof signUpAction>();
@@ -32,30 +24,36 @@ export default function AboutRoute() {
 	});
 
 	return (
-		<main className={ROOT_CLASS}>
-			<h1 className="sr-only">About Chance</h1>
+		<main>
+			<Heading className="sr-only">About Chance</Heading>
 			<HeadingLevelProvider>
 				<div>
-					<section className={bem(ROOT_CLASS, "intro")}>
-						<div className={bem(ROOT_CLASS, "intro-heading")}>
-							<h2 className="h1">
-								Who <span className="text-weaker">am I</span>?
-							</h2>
+					<section>
+						<div>
+							<div aria-hidden className="text-h1 mb-4 md:mb-6">
+								Who <em className="text-weaker">am I?</em>
+							</div>
 						</div>
-						<div className={bem(ROOT_CLASS, "intro-block")}>
+						<div className="prose text-pretty">
 							<div>
 								<p>
 									As you may have gathered, my name is Chance and I’m a
-									software-slinger based in San Diego, CA. I currently work on
-									Replo, a no-code page builder designed for Shopify store
-									owners.
+									software-slinger based in San Diego, CA. I currently work at{" "}
+									<a
+										href="https://workos.com/"
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										WorkOS
+									</a>
+									.
 								</p>
 								<p>
 									I’m also a big collector of hobbies, so what I do outside work
 									hours changes from time to time.
 								</p>
 							</div>
-							<ul className={bem(ROOT_CLASS, "intro-tags")}>
+							<ul>
 								{[
 									"Surfing",
 									"Drumming",
@@ -67,17 +65,13 @@ export default function AboutRoute() {
 									"Snorkeling",
 									"Backpacking",
 								].map((tag) => {
-									return (
-										<li key={tag} className={bem(ROOT_CLASS, "intro-tag")}>
-											{tag}
-										</li>
-									);
+									return <li key={tag}>{tag}</li>;
 								})}
 							</ul>
-						</div>
-						<HeadingLevelProvider>
-							<div className={bem(ROOT_CLASS, "intro-block")}>
-								<ul className={bem(ROOT_CLASS, "intro-facts-list")}>
+
+							<Heading>Random facts</Heading>
+							<div>
+								<ul>
 									<li>
 										I spent a few weeks hiking the Camino de Santiago in
 										Northern Spain a few years back
@@ -94,12 +88,32 @@ export default function AboutRoute() {
 									<li>I ran a marathon in Antarctica in 2022</li>
 									<li>I’m left-handed</li>
 									<li>
+										I helped build{" "}
+										<a
+											href="https://remix.run"
+											target="_blank"
+											rel="noopener noreferrer"
+										>
+											Remix
+										</a>{" "}
+										to help you build better websites
+									</li>
+									<li>
 										I worked full-time on both{" "}
 										<a
-											href="#intro-footnote-a11y"
-											aria-describedby="intro-footnotes-label"
+											href="https://reach.tech"
+											target="_blank"
+											rel="noopener noreferrer"
 										>
-											Reach UI and Radix UI
+											Reach UI
+										</a>{" "}
+										and{" "}
+										<a
+											href="https://www.radix-ui.com"
+											target="_blank"
+											rel="noopener noreferrer"
+										>
+											Radix UI
 										</a>
 									</li>
 									<li>
@@ -112,44 +126,25 @@ export default function AboutRoute() {
 										</a>
 									</li>
 								</ul>
-								<footer
-									className={bem(ROOT_CLASS, "intro-footnotes")}
-									aria-labelledby="intro-footnotes-label"
-								>
-									<div className="sr-only" id="intro-footnotes-label">
-										Footnotes
-									</div>
-									<ol className={bem(ROOT_CLASS, "intro-footnotes-list")}>
-										<li
-											id="intro-footnote-spelling-bee"
-											className={bem(ROOT_CLASS, "intro-footnotes-item")}
-										>
-											I ultimately lost at the county level by mispelling the
-											word <em>irksome</em>. This still irks me to this day.
-										</li>
-										<li
-											id="intro-footnote-a11y"
-											className={bem(ROOT_CLASS, "intro-footnotes-item")}
-										>
-											I really enjoy accessibility, UI components and API
-											design.
-										</li>
-										<li
-											id="intro-footnote-states"
-											className={bem(ROOT_CLASS, "intro-footnotes-item")}
-										>
-											Someone please give me a reason to visit Iowa.
-										</li>
-									</ol>
-								</footer>
 							</div>
-						</HeadingLevelProvider>
+							<footer aria-label="Footnotes">
+								<ol className="text-sm">
+									<li id="intro-footnote-spelling-bee">
+										I ultimately lost at the county level by mispelling the word{" "}
+										<em>irksome</em>. This still irks me to this day.
+									</li>
+									<li id="intro-footnote-states">
+										Someone please give me a reason to visit Iowa.
+									</li>
+								</ol>
+							</footer>
+						</div>
 					</section>
 				</div>
-				<div>
-					<SignUpSection />
-				</div>
 			</HeadingLevelProvider>
+			<div>
+				<SignUpSection />
+			</div>
 		</main>
 	);
 }
