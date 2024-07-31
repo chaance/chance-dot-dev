@@ -153,6 +153,20 @@ function HeaderNavArea({
 			<p className="SiteHeader__desc text-weaker text-sm">
 				Developer and open source tinkerer. Surfing the web and the west coast.
 			</p>
+			<nav className="SiteHeader__nav" aria-label="Main">
+				<ul className="SiteHeader__nav-list">
+					<li className="SiteHeader__nav-item text-sm">
+						<NavLink className="SiteHeader__nav-link" to="/about">
+							About
+						</NavLink>
+					</li>
+					<li className="SiteHeader__nav-item text-sm">
+						<NavLink className="SiteHeader__nav-link" to="/code-recipes">
+							Code Recipes
+						</NavLink>
+					</li>
+				</ul>
+			</nav>
 			<SocialNav />
 		</div>
 	);
