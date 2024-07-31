@@ -79,9 +79,17 @@
 				position: relative;
 				&::marker {
 					color: var(--color-accent);
-					font-weight: bold;
 				}
 			}
+		}
+
+		ul > :where(li)::marker {
+			content: "– ";
+			font-weight: 300;
+		}
+
+		ol > :where(li)::marker {
+			font-weight: 300;
 		}
 
 		ul :where(li) {
