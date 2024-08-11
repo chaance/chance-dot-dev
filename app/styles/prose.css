@@ -60,7 +60,7 @@
 		a {
 			color: var(--color-text-weak);
 			text-decoration: underline;
-			text-decoration-color: var(--color-text-weaker);
+			text-decoration-color: var(--color-border);
 			&:hover {
 				color: var(--color-accent);
 				text-decoration-color: var(--color-accent);
