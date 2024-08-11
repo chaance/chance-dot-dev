@@ -9,13 +9,14 @@ generator client {
 }
 
 model User {
-  id        String     @id @default(cuid())
-  email     String     @unique
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  password  Password?
-  profile   Profile?
-  blogPosts BlogPost[]
+  id         String       @id @default(cuid())
+  email      String       @unique
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  password   Password?
+  profile    Profile?
+  blogPosts  BlogPost[]
+  CodeRecipe CodeRecipe[]
 }
 
 model Profile {
@@ -76,6 +77,28 @@ model BlogPost {
   // ogVideoType      String?
   // ogVideoWidth     Int?
   // ogVideoHeight    Int?
+}
+
+model CodeRecipe {
+  id          String            @id @default(cuid())
+  title       String
+  slug        String
+  description String?
+  demoUrl     String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId      String
+  blocks      CodeRecipeBlock[]
+}
+
+model CodeRecipeBlock {
+  id       String     @id @default(cuid())
+  recipe   CodeRecipe @relation(fields: [recipeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  recipeId String
+  filename String?
+  language String?
+  code     String
 }
 
 model EmailSubscriber {
