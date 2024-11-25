@@ -1,5 +1,5 @@
 import { createRequestHandler, type RequestHandler } from "@remix-run/express";
-import { installGlobals, type ServerBuild } from "@remix-run/node";
+import type { ServerBuild } from "@remix-run/node";
 import { ip } from "address";
 import chalk from "chalk";
 import closeWithGrace from "close-with-grace";
@@ -21,7 +21,6 @@ if (!process.env.SESSION_SECRET) {
 }
 
 sourceMapSupport.install();
-installGlobals();
 
 const PRIMARY_HOST = "chance.dev";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
