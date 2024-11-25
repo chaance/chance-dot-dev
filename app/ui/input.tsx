@@ -94,19 +94,11 @@ function useCheckboxInput({
 
 	let state = useToggleState({
 		...props,
+		defaultSelected,
 		isDisabled,
 		isReadOnly,
-		isRequired,
 		isSelected,
-		defaultSelected,
-		validationState,
 		onChange: onToggle,
-		// TODO: deal with type and submit a PR to react-stately. Ideally
-		// useToggleState would be generic and accept the element types for
-		// target and relatedTarget.
-		// useToggleState<HTMLInputElement>(props);
-		onFocus: props.onFocus as any,
-		onBlur: props.onBlur as any,
 	});
 
 	let excludeFromTabOrder = props.tabIndex != null && props.tabIndex !== 0;

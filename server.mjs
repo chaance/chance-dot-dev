@@ -9,7 +9,6 @@ import rateLimit from "express-rate-limit";
 import sourceMapSupport from "source-map-support";
 import { installGlobals } from "@remix-run/node";
 import { createStream } from "rotating-file-stream";
-import { compile as compileRedirectPath, pathToRegexp } from "path-to-regexp";
 import { getRedirectsMiddleware } from "./server/redirects.js";
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));

@@ -345,12 +345,13 @@ const DialogOverlay = React.forwardRef<
 	DialogOverlayProps<"div">
 >((props, forwardedRef) => {
 	let { state, actions } = useDialogContext("DialogOverlay");
-	let { componentProps, focusLockProps, removeScrollProps } = useDialogOverlay({
-		actions,
-		props,
-		state,
-		ref: forwardedRef,
-	});
+	let { componentProps, focusLockProps, removeScrollProps } =
+		useDialogOverlay<"div">({
+			actions,
+			props,
+			state,
+			ref: forwardedRef,
+		});
 	const containerRef = React.useRef<HTMLDivElement>(null);
 	const ref = useComposedRefs(forwardedRef, containerRef);
 	return (

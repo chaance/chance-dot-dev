@@ -2,17 +2,12 @@
 // (c) Kent C. Dodds GPL v3
 import { compile as compileRedirectPath, pathToRegexp } from "path-to-regexp";
 
-/**
- * @typedef {import("path-to-regexp").Key} Key
- * @typedef {import("express").RequestHandler} RequestHandler
- */
+/** @typedef {import("express").RequestHandler} RequestHandler */
 
 /**
  * https://github.com/kentcdodds/kentcdodds.com/blob/main/server/redirects.ts
  * (c) Kent C. Dodds GPL v3
- * @param {{
- *   redirectsString: string
- * }} options
+ * @param {{ redirectsString: string }} options
  * @returns {RequestHandler}
  */
 export function getRedirectsMiddleware({ redirectsString }) {
@@ -54,16 +49,15 @@ export function getRedirectsMiddleware({ redirectsString }) {
 				console.error(`Invalid redirect on line ${lineNumber + 1}: "${line}"`);
 				return null;
 			}
-			/** @type {Array<Key>} */
-			const keys = [];
 
 			const toUrl = to.includes("//")
 				? new URL(to)
 				: new URL(`https://same_host${to}`);
 			try {
+				const { keys, regexp } = pathToRegexp(from);
 				return {
 					methods,
-					from: pathToRegexp(from, keys),
+					from: regexp,
 					keys,
 					toPathname: compileRedirectPath(toUrl.pathname, {
 						encode: encodeURIComponent,

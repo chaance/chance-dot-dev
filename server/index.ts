@@ -37,8 +37,8 @@ const viteDevServer =
 		: await import("vite").then((vite) =>
 				vite.createServer({
 					server: { middlewareMode: true },
-				})
-		  );
+				}),
+			);
 
 const app = express();
 
@@ -67,7 +67,7 @@ app.all(
 	"*",
 	getRedirectsMiddleware({
 		redirectsString: fs.readFileSync(here("./_redirects.txt"), "utf8"),
-	})
+	}),
 );
 
 app.use((req, res, next) => {
@@ -109,7 +109,7 @@ if (viteDevServer) {
 					res.setHeader("cache-control", "public, max-age=31536000, immutable");
 				}
 			},
-		})
+		}),
 	);
 }
 
@@ -135,7 +135,7 @@ app.use(
 				console.error(
 					`Error generating morgan log line`,
 					error,
-					req.originalUrl
+					req.originalUrl,
 				);
 				return "";
 			}
@@ -149,8 +149,8 @@ app.use(
 					req.method === "GET" && req.originalUrl === "/healthcheck";
 				return headToRoot || getToHealthCheck;
 			},
-		}
-	)
+		},
+	),
 );
 
 app.use((req, res, next) => {
@@ -227,7 +227,7 @@ app.use(
 				"upgrade-insecure-requests": null,
 			},
 		},
-	})
+	}),
 );
 
 async function getRequestHandler(): Promise<RequestHandler> {
@@ -262,14 +262,14 @@ const server = app.listen(portToUse, () => {
 		desiredPort === portToUse
 			? desiredPort
 			: addy && typeof addy === "object"
-			? addy.port
-			: 0;
+				? addy.port
+				: 0;
 
 	if (portUsed !== desiredPort) {
 		console.warn(
 			chalk.yellow(
-				`⚠️  Port ${desiredPort} is not available, using ${portUsed} instead.`
-			)
+				`⚠️  Port ${desiredPort} is not available, using ${portUsed} instead.`,
+			),
 		);
 	}
 	console.log(`\n🐨  let's get rolling!`);
@@ -291,7 +291,7 @@ const server = app.listen(portToUse, () => {
 ${chalk.bold("Local:")}            ${chalk.cyan(localUrl)}
 ${lanUrl ? `${chalk.bold("On Your Network:")}  ${chalk.cyan(lanUrl)}` : ""}
 ${chalk.bold("Press Ctrl+C to stop")}
-		`.trim()
+		`.trim(),
 	);
 });
 

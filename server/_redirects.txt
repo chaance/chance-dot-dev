@@ -2,31 +2,31 @@
 # (c) Kent C. Dodds GPL v3
 
 # not a single URL actually ends in .php... or .env
-/(.*).php                                                               https://www.youtube.com/watch?v=dQw4w9WgXcQ
-/(.*).env                                                               https://www.youtube.com/watch?v=dQw4w9WgXcQ
-/ads.txt                                                                https://www.youtube.com/watch?v=dQw4w9WgXcQ
-/boaform(.*)                                                            https://www.youtube.com/watch?v=dQw4w9WgXcQ
-/setup.cgi                                                              https://www.youtube.com/watch?v=dQw4w9WgXcQ
-/cgi-bin(.*)                                                            https://www.youtube.com/watch?v=dQw4w9WgXcQ
-/s3cmd.ini                                                              https://www.youtube.com/watch?v=dQw4w9WgXcQ
-/HNAP1(.*)                                                              https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/{*path}.php                                                               https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/{*path}.env                                                               https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/ads.txt                                                                   https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/boaform{/*path}                                                           https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/setup.cgi                                                                 https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/cgi-bin{/*path}                                                           https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/s3cmd.ini                                                                 https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/HNAP1{/*path}                                                             https://www.youtube.com/watch?v=dQw4w9WgXcQ
 # this is for phpmyadmin and php-my-admin stuff:
-/php(.*)                                                                https://www.youtube.com/watch?v=dQw4w9WgXcQ
-/db(.*)                                                                 https://www.youtube.com/watch?v=dQw4w9WgXcQ
-/sql(.*)                                                                https://www.youtube.com/watch?v=dQw4w9WgXcQ
-/.git(.*)                                                               https://www.youtube.com/watch?v=dQw4w9WgXcQ
-(.*)/wp-includes/(.*)                                                   https://www.youtube.com/watch?v=dQw4w9WgXcQ
-/api(.*)                                                                https://www.youtube.com/watch?v=dQw4w9WgXcQ
-/Autodiscover(.*)                                                       https://www.youtube.com/watch?v=dQw4w9WgXcQ
-/_ignition(.*)                                                          https://www.youtube.com/watch?v=dQw4w9WgXcQ
-/solr(.*)                                                               https://www.youtube.com/watch?v=dQw4w9WgXcQ
-/wp-content(.*)                                                         https://www.youtube.com/watch?v=dQw4w9WgXcQ
-/ReportServer(.*)                                                       https://www.youtube.com/watch?v=dQw4w9WgXcQ
-/currentsetting(.*)                                                     https://www.youtube.com/watch?v=dQw4w9WgXcQ
-POST,DELETE,PATCH,PUT  /                                                https://www.youtube.com/watch?v=dQw4w9WgXcQ
-/webfig(.*)                                                             https://www.youtube.com/watch?v=dQw4w9WgXcQ
-/config(.*)                                                             https://www.youtube.com/watch?v=dQw4w9WgXcQ
-/console(.*)                                                            https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/php{/*path}                                                               https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/db{/*path}                                                                https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/sql{/*path}                                                               https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/.git{/*path}                                                              https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/{*path}/wp-includes{/*path}                                               https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/api{/*path}                                                               https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/Autodiscover{/*path}                                                      https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/_ignition{*path}                                                          https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/solr{*path}                                                               https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/wp-admin{/*path}                                                          https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/wp-content{/*path}                                                        https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/ReportServer{/*path}                                                      https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/currentsetting{/*path}                                                    https://www.youtube.com/watch?v=dQw4w9WgXcQ
+POST,DELETE,PATCH,PUT  /                                                   https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/webfig{/*path}                                                            https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/config{/*path}                                                            https://www.youtube.com/watch?v=dQw4w9WgXcQ
+/console{/*path}                                                           https://www.youtube.com/watch?v=dQw4w9WgXcQ
 
-/jsworld                                                                /
-
+/jsworld                                                                  /
