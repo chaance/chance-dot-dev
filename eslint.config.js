@@ -2,6 +2,8 @@ import globals from "globals";
 import * as js from "@chance/eslint";
 import * as react from "@chance/eslint/react";
 import * as typescript from "@chance/eslint/typescript";
+// @ts-expect-error
+import reactRefresh from "eslint-plugin-react-refresh";
 
 /** @type {LinterConfig[]} */
 const configs = [
@@ -20,11 +22,16 @@ const configs = [
 	},
 	js.config,
 	typescript.config,
-	react.config,
+	{
+		...react.config,
+		plugins: {
+			...react.config.plugins,
+			"react-refresh": reactRefresh,
+		},
+	},
 	{
 		rules: {
 			"prefer-const": "off",
-			// "no-unused-vars": "off",
 			"@typescript-eslint/no-unused-vars": "off",
 		},
 	},
