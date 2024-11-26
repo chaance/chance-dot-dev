@@ -1,4 +1,4 @@
-import { json, type LoaderFunctionArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import {
 	Link,
 	Outlet,
@@ -17,7 +17,7 @@ export function links() {
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	let user = await requireUser(request, "/login");
-	return json({ user });
+	return { user };
 }
 
 interface NavItem {

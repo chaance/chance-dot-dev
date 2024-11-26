@@ -1,6 +1,6 @@
-import { json, type LoaderFunctionArgs } from "@remix-run/node";
+import { data, type LoaderFunctionArgs } from "@remix-run/node";
 
 export async function loader({ params }: LoaderFunctionArgs) {
 	// TODO
-	throw json(null, 404);
+	throw data(null, 404);
 }

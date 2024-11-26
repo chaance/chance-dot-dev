@@ -1,5 +1,4 @@
 import * as React from "react";
-import { json } from "@remix-run/node";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import {
 	Links,
@@ -100,12 +99,12 @@ export function links() {
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	const currentYear = String(new Date().getFullYear());
-	return json({
+	return {
 		currentYear,
 		requestInfo: {
 			origin: getDomainUrl(request),
 		},
-	});
+	};
 }
 
 export default function Root() {

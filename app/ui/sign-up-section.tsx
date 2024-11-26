@@ -136,10 +136,10 @@ function SignUpSection__WIP() {
 												borderRadius: "inherit",
 												top: `calc(100% + 1rem)`,
 												zIndex: 1,
-										  }
+											}
 										: {
 												marginTop: "1rem",
-										  }
+											}
 								}
 							>
 								<p className="text-success">

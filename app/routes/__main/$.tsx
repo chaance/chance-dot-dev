@@ -1,10 +1,5 @@
-import type { ErrorResponse } from "@remix-run/router";
-import {
-	LoaderFunctionArgs,
-	MetaFunction,
-	json,
-	redirect,
-} from "@remix-run/node";
+import { data, type ErrorResponse } from "@remix-run/router";
+import { LoaderFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
 import { Link, isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import { getMarkdownBlogPost } from "~/lib/blog.server";
 
@@ -16,7 +11,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 			return redirect(`/blog/${post.slug}`);
 		}
 	}
-	throw json(null, 404);
+	throw data(null, 404);
 }
 
 export const meta: MetaFunction<typeof loader> = ({ error }) => {

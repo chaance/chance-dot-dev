@@ -7,7 +7,6 @@ import morgan from "morgan";
 import { createRequestHandler } from "@remix-run/express";
 import rateLimit from "express-rate-limit";
 import sourceMapSupport from "source-map-support";
-import { installGlobals } from "@remix-run/node";
 import { createStream } from "rotating-file-stream";
 import { getRedirectsMiddleware } from "./server/redirects.js";
 
@@ -19,7 +18,6 @@ const IS_DEV = MODE === "development";
 const IS_PROD = MODE === "production" && !STAGING;
 
 sourceMapSupport.install();
-installGlobals();
 
 const viteDevServer = IS_DEV
 	? await import("vite").then((vite) =>

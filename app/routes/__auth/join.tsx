@@ -4,7 +4,7 @@ import type {
 	LoaderFunctionArgs,
 	MetaFunction,
 } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { data, redirect } from "@remix-run/node";
 import { createUserSession, getSessionUser } from "~/lib/session.server";
 import { createUser, getUserByEmail } from "~/models/user.server";
 import {
@@ -23,7 +23,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 	if (user) {
 		return redirect("/admin");
 	}
-	return json(null);
+	return null;
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -35,7 +35,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
 	// disallow sign-ups for now
 	if (email !== process.env.AUTHENTICATED_EMAIL) {
-		return json(
+		return data(
 			{
 				errors: {
 					email: "This email is not allowed to register",
@@ -48,7 +48,7 @@ export async function action({ request }: ActionFunctionArgs) {
 	}
 
 	if (!isValidEmail(email)) {
-		return json(
+		return data(
 			{
 				errors: {
 					email: "Email is invalid",
@@ -61,7 +61,7 @@ export async function action({ request }: ActionFunctionArgs) {
 	}
 
 	if (typeof password !== "string" || password.length === 0) {
-		return json(
+		return data(
 			{
 				errors: {
 					email: null,
@@ -74,7 +74,7 @@ export async function action({ request }: ActionFunctionArgs) {
 	}
 
 	if (typeof passwordConfirm !== "string" || passwordConfirm.length === 0) {
-		return json(
+		return data(
 			{
 				errors: {
 					email: null,
@@ -87,7 +87,7 @@ export async function action({ request }: ActionFunctionArgs) {
 	}
 
 	if (passwordConfirm !== password) {
-		return json(
+		return data(
 			{
 				errors: {
 					email: null,
@@ -101,7 +101,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
 	let errors = validatePassword(password);
 	if (errors.length > 0) {
-		return json(
+		return data(
 			{
 				errors: {
 					email: null,
@@ -117,7 +117,7 @@ export async function action({ request }: ActionFunctionArgs) {
 	// queries
 	let existingUser = await getUserByEmail(email);
 	if (existingUser) {
-		return json(
+		return data(
 			{
 				errors: {
 					email: "A user already exists with this email",
@@ -142,7 +142,7 @@ export async function action({ request }: ActionFunctionArgs) {
 			redirectTo,
 		});
 	} catch (err) {
-		return json(
+		return data(
 			{
 				errors: {
 					email: "An error occurred. Please try again later.",

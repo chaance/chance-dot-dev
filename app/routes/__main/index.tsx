@@ -2,7 +2,7 @@ import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
 import { Link } from "~/ui/primitives/link";
 
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { data } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { getMarkdownBlogPostListItems } from "~/lib/blog.server";
 import { isLocalHost } from "~/lib/utils";
@@ -29,7 +29,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 			});
 		}
 
-		return json(
+		return data(
 			{
 				posts: rawPosts
 					.map((post) => {
@@ -63,14 +63,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 	} catch (error) {
 		// TODO: handle query errors
 		throw error;
-	}
-
-	function toLocaleDateString(date: Date) {
-		return date.toLocaleDateString(undefined, {
-			year: "numeric",
-			month: "long",
-			day: "numeric",
-		});
 	}
 }
 

@@ -1,8 +1,5 @@
-import {
-	json,
-	type LoaderFunctionArgs,
-	type SerializeFrom,
-} from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
+import { json } from "~/lib/json";
 import {
 	getSocialImageUrl,
 	getImageContentType,
@@ -52,7 +49,3 @@ export async function loader({ request }: LoaderFunctionArgs) {
 		);
 	}
 }
-
-type LoaderData = SerializeFrom<typeof loader>;
-
-export type { LoaderData as SocialImageLoaderData };

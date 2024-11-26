@@ -1,12 +1,8 @@
 import * as assert from "node:assert";
 import * as React from "react";
-import type {
-	LoaderFunctionArgs,
-	ActionFunctionArgs,
-	SerializeFrom,
-} from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
+import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
+import { data } from "@remix-run/node";
+import { useActionData, useLoaderData } from "@remix-run/react";
 import { getBlogPost, updateBlogPost } from "~/models/blog-post.server";
 import { requireUserId } from "~/lib/session.server";
 import { getFormFieldStringValue } from "~/lib/utils";
@@ -37,9 +33,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 	let userId = await requireUserId(request);
 	let post = await getBlogPost(postId, userId);
 	if (!post) {
-		throw json(null, { status: 404 });
+		throw data(null, { status: 404 });
 	}
-	return json({ post });
+	return { post };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -47,7 +43,7 @@ export async function action({ request }: ActionFunctionArgs) {
 	let formData = await request.formData();
 	let postId = formData.get("id");
 	if (!postId || typeof postId !== "string") {
-		throw json("id is required", { status: 400 });
+		throw data("id is required", { status: 400 });
 	}
 
 	let errors = {} as FormFieldErrors;
@@ -75,7 +71,7 @@ export async function action({ request }: ActionFunctionArgs) {
 	}
 
 	if (hasFormErrors(errors)) {
-		return json(
+		return data(
 			{
 				post: {
 					...values,
@@ -112,11 +108,8 @@ export async function action({ request }: ActionFunctionArgs) {
 	blogContentCache.delete(post.slug);
 
 	// TODO: Clear CDN cache once implemented
-	return json({ post, errors });
+	return { post, errors };
 }
-
-export type LoaderData = SerializeFrom<typeof loader>;
-export type ActionData = SerializeFrom<typeof action>;
 
 export default function UpdateNotePage() {
 	let loaderData = useLoaderData<typeof loader>();
@@ -151,16 +144,12 @@ export default function UpdateNotePage() {
 					if (name === "twitterCard") {
 						return post.seo?.twitterCard;
 					} else if (name === "createdAt") {
-						let val = post[name];
 						try {
-							val =
-								typeof val === "string"
-									? toDateTimeInputValue(new Date(val))
-									: val;
+							let value = post[name] ? toDateTimeInputValue(post[name]) : null;
+							return value;
 						} catch (err) {
-							val = null;
+							return null;
 						}
-						return val;
 					} else {
 						return post[name];
 					}
@@ -172,7 +161,7 @@ export default function UpdateNotePage() {
 						<input
 							type="hidden"
 							name="_createdAt"
-							value={loaderData.post.createdAt}
+							value={String(loaderData.post.createdAt)}
 						/>
 					</>
 				}
@@ -309,7 +298,8 @@ function hasFormErrors(errors: FormFieldErrors) {
 	return values.length > 0 && values.some((error) => error != null);
 }
 
-function toDateTimeInputValue(date: Date) {
+function toDateTimeInputValue(date: string | Date) {
+	date = typeof date === "string" ? new Date(date) : date;
 	let year = String(date.getFullYear());
 	let month = String(date.getMonth() + 1).padStart(2, "0");
 	let day = String(date.getDate()).padStart(2, "0");

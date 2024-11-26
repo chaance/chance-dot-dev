@@ -5,11 +5,11 @@ import { useFetcher } from "@remix-run/react";
 import { useLayoutEffect } from "@chance/hooks/use-layout-effect";
 import type { action as signUpAction } from "~/routes/__main/sign-up";
 import { SignUpSection } from "~/ui/sign-up-section";
-import { json } from "@remix-run/node";
+import { data } from "@remix-run/node";
 
 export async function loader() {
 	// TODO
-	throw json(null, 404);
+	throw data(null, 404);
 }
 
 export function meta() {

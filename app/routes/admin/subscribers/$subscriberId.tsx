@@ -1,11 +1,7 @@
 import * as assert from "node:assert";
 import * as React from "react";
-import type {
-	LoaderFunctionArgs,
-	ActionFunctionArgs,
-	SerializeFrom,
-} from "@remix-run/node";
-import { json } from "@remix-run/node";
+import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
+import { data } from "@remix-run/node";
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { requireUserId } from "~/lib/session.server";
 import { InputText, InputCheckbox } from "~/ui/input";
@@ -38,15 +34,15 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 		getSubscriber(subscriberId, { lists: true }),
 	]);
 	if (!subscriber) {
-		throw json(null, { status: 404 });
+		throw data(null, { status: 404 });
 	}
-	return json({
+	return {
 		subscriber: {
 			...subscriber,
 			lists: subscriber.lists.map((list) => list.id),
 		},
 		allLists,
-	});
+	};
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -55,7 +51,7 @@ export async function action({ request }: ActionFunctionArgs) {
 	let formData = await request.formData();
 	let subscriberId = formData.get("id");
 	if (!subscriberId || typeof subscriberId !== "string") {
-		throw json("id is required", { status: 400 });
+		throw data("id is required", { status: 400 });
 	}
 
 	let errors = {} as FormFieldErrors;
@@ -75,7 +71,7 @@ export async function action({ request }: ActionFunctionArgs) {
 	}
 
 	if (hasFormErrors(errors)) {
-		return json(
+		return data(
 			{
 				subscriber: {
 					email: values.email,
@@ -96,17 +92,14 @@ export async function action({ request }: ActionFunctionArgs) {
 		lists: values.lists || [],
 	});
 
-	return json({
+	return {
 		subscriber: {
 			...subscriber,
 			lists: subscriber.lists.map((list) => list.id),
 		},
 		errors,
-	});
+	};
 }
-
-export type LoaderData = SerializeFrom<typeof loader>;
-export type ActionData = SerializeFrom<typeof action>;
 
 const ROOT_CLASS = "route--subscriber";
 

@@ -1,11 +1,7 @@
-// https://github.com/remix-run/v1-compat-utils/blob/main/packages/v1-route-convention/src/lib.ts
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
 import { minimatch } from "minimatch";
-
-const require = createRequire(import.meta.url);
-const { createRouteId } = require("@remix-run/dev/dist/config/routes");
 
 const paramPrefixChar = "$";
 const escapeStart = "[";
@@ -15,10 +11,7 @@ const optionalEnd = ")";
 
 const routeModuleExts = [".js", ".jsx", ".ts", ".tsx", ".md", ".mdx"];
 
-/**
- * @param {string} filename
- */
-function isRouteModuleFile(filename) {
+function isRouteModuleFile(filename: string) {
 	return routeModuleExts.includes(path.extname(filename));
 }
 
@@ -37,7 +30,10 @@ function isRouteModuleFile(filename) {
  * @param {CreateRoutesFromFoldersOptions} [options]
  * @returns {RouteManifest}
  */
-export function createRoutesFromFolders(defineRoutes, options = {}) {
+export function createRoutesFromFolders(
+	defineRoutes: DefineRoutesFunction,
+	options: CreateRoutesFromFoldersOptions = {},
+): RouteManifest {
 	let {
 		appDirectory = "app",
 		ignoredFilePatterns = [],
@@ -46,7 +42,7 @@ export function createRoutesFromFolders(defineRoutes, options = {}) {
 
 	let appRoutesDirectory = path.join(appDirectory, routesDirectory);
 	/** @type {{ [routeId: string]: string }} */
-	let files = {};
+	let files: { [routeId: string]: string } = {};
 
 	// First, find all route modules in app/routes
 	visitFiles(appRoutesDirectory, (file) => {
@@ -65,29 +61,28 @@ export function createRoutesFromFolders(defineRoutes, options = {}) {
 		}
 
 		throw new Error(
-			`Invalid route module file: ${path.join(appRoutesDirectory, file)}`
+			`Invalid route module file: ${path.join(appRoutesDirectory, file)}`,
 		);
 	});
 
 	let routeIds = Object.keys(files).sort(byLongestFirst);
 	let parentRouteIds = getParentRouteIds(routeIds);
 	/** @type {Map<string, string>} */
-	let uniqueRoutes = new Map();
+	let uniqueRoutes: Map<string, string> = new Map();
 
 	// Then, recurse through all routes using the public defineRoutes() API
-	/**
-	 * @param {DefineRouteFunction} defineRoute
-	 * @param {string} [parentId]
-	 */
-	function defineNestedRoutes(defineRoute, parentId) {
+	function defineNestedRoutes(
+		defineRoute: DefineRouteFunction,
+		parentId?: string,
+	) {
 		let childRouteIds = routeIds.filter((id) => {
 			return parentRouteIds[id] === parentId;
 		});
 
 		for (let routeId of childRouteIds) {
 			/** @type {string | undefined} */
-			let routePath = createRoutePath(
-				routeId.slice((parentId || routesDirectory).length + 1)
+			let routePath: string | undefined = createRoutePath(
+				routeId.slice((parentId || routesDirectory).length + 1),
 			);
 
 			let isIndexRoute = routeId.endsWith("/index");
@@ -138,7 +133,7 @@ export function createRoutesFromFolders(defineRoutes, options = {}) {
 					throw new Error(
 						`Path ${JSON.stringify(fullPath || "/")} defined by route ` +
 							`${JSON.stringify(routeId)} conflicts with route ` +
-							`${JSON.stringify(uniqueRoutes.get(uniqueRouteId))}`
+							`${JSON.stringify(uniqueRoutes.get(uniqueRouteId))}`,
 					);
 				} else {
 					uniqueRoutes.set(uniqueRouteId, routeId);
@@ -147,12 +142,12 @@ export function createRoutesFromFolders(defineRoutes, options = {}) {
 
 			if (isIndexRoute) {
 				let invalidChildRoutes = routeIds.filter(
-					(id) => parentRouteIds[id] === routeId
+					(id) => parentRouteIds[id] === routeId,
 				);
 
 				if (invalidChildRoutes.length > 0) {
 					throw new Error(
-						`Child routes are not allowed in index routes. Please remove child routes of ${routeId}`
+						`Child routes are not allowed in index routes. Please remove child routes of ${routeId}`,
 					);
 				}
 
@@ -172,7 +167,7 @@ export function createRoutesFromFolders(defineRoutes, options = {}) {
  * @param {string} partialRouteId
  * @returns {string | undefined}
  */
-export function createRoutePath(partialRouteId) {
+export function createRoutePath(partialRouteId: string): string | undefined {
 	let result = "";
 	let rawSegmentBuffer = "";
 
@@ -270,7 +265,7 @@ export function createRoutePath(partialRouteId) {
 		if (char === paramPrefixChar) {
 			if (nextChar === optionalEnd) {
 				throw new Error(
-					`Invalid route path: ${partialRouteId}. Splat route $ is already optional`
+					`Invalid route path: ${partialRouteId}. Splat route $ is already optional`,
 				);
 			}
 			result += typeof nextChar === "undefined" ? "*" : ":";
@@ -288,7 +283,7 @@ export function createRoutePath(partialRouteId) {
 
 	if (rawSegmentBuffer === "index" && result.endsWith("index?")) {
 		throw new Error(
-			`Invalid route path: ${partialRouteId}. Make index route optional by using (index)`
+			`Invalid route path: ${partialRouteId}. Make index route optional by using (index)`,
 		);
 	}
 
@@ -298,7 +293,7 @@ export function createRoutePath(partialRouteId) {
 	 * @param {string} char
 	 * @param {string | undefined} nextChar
 	 */
-	function isStartOfLayoutSegment(char, nextChar) {
+	function isStartOfLayoutSegment(char: string, nextChar: string | undefined) {
 		return char === "_" && nextChar === "_" && !rawSegmentBuffer;
 	}
 }
@@ -306,7 +301,7 @@ export function createRoutePath(partialRouteId) {
 /**
  * @param {string | undefined} checkChar
  */
-function isSegmentSeparator(checkChar) {
+function isSegmentSeparator(checkChar: string | undefined) {
 	if (!checkChar) return false;
 	return ["/", ".", path.win32.sep].includes(checkChar);
 }
@@ -316,13 +311,15 @@ function isSegmentSeparator(checkChar) {
  * @param {string[]} routeIds
  * @returns {Record<string, string | undefined>}
  */
-function getParentRouteIds(routeIds) {
+function getParentRouteIds(
+	routeIds: string[],
+): Record<string, string | undefined> {
 	return routeIds.reduce(
 		(parentRouteIds, childRouteId) => ({
 			...parentRouteIds,
 			[childRouteId]: routeIds.find((id) => childRouteId.startsWith(`${id}/`)),
 		}),
-		{}
+		{},
 	);
 }
 
@@ -330,7 +327,7 @@ function getParentRouteIds(routeIds) {
  * @param {string} a
  * @param {string} b
  */
-function byLongestFirst(a, b) {
+function byLongestFirst(a: string, b: string) {
 	return b.length - a.length;
 }
 
@@ -340,7 +337,11 @@ function byLongestFirst(a, b) {
  * @param {(file: string) => void} visitor
  * @param {string} [baseDir]
  */
-function visitFiles(dir, visitor, baseDir = dir) {
+function visitFiles(
+	dir: string,
+	visitor: (file: string) => void,
+	baseDir: string = dir,
+) {
 	for (let filename of fs.readdirSync(dir)) {
 		let file = path.resolve(dir, filename);
 		let stat = fs.lstatSync(file);
@@ -353,13 +354,28 @@ function visitFiles(dir, visitor, baseDir = dir) {
 	}
 }
 
-/**
- * @typedef {{
- *   appDirectory?: string;
- *   ignoredFilePatterns?: string[];
- *   routesDirectory?: string;
- * }} CreateRoutesFromFoldersOptions
- * @typedef {import("@remix-run/dev/dist/config/routes").RouteManifest} RouteManifest
- * @typedef {import("@remix-run/dev/dist/config/routes").DefineRouteFunction} DefineRouteFunction
- * @typedef {import("@remix-run/dev/dist/config/routes").DefineRoutesFunction} DefineRoutesFunction
- */
+type CreateRoutesFromFoldersOptions = {
+	appDirectory?: string;
+	ignoredFilePatterns?: string[];
+	routesDirectory?: string;
+};
+
+type RouteManifest = import("@remix-run/dev/dist/config/routes").RouteManifest;
+
+type DefineRouteFunction =
+	import("@remix-run/dev/dist/config/routes").DefineRouteFunction;
+
+type DefineRoutesFunction =
+	import("@remix-run/dev/dist/config/routes").DefineRoutesFunction;
+
+function createRouteId(file: string) {
+	return normalizeSlashes(stripFileExtension(file));
+}
+
+function normalizeSlashes(file: string) {
+	return file.split(path.win32.sep).join("/");
+}
+
+function stripFileExtension(file: string) {
+	return file.replace(/\.[a-z0-9]+$/i, "");
+}

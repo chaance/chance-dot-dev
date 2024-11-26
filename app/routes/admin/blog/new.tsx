@@ -1,6 +1,6 @@
 import * as React from "react";
-import type { ActionFunctionArgs, LoaderFunctionArgs, SerializeFrom } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import { data, redirect } from "@remix-run/node";
 import { useActionData, useLoaderData } from "@remix-run/react";
 import { createBlogPost } from "~/models/blog-post.server";
 import { requireUserId } from "~/lib/session.server";
@@ -11,9 +11,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 	let currentDate = new Date(
 		new Date().toLocaleString("en-US", {
 			timeZone: "America/Los_Angeles",
-		})
+		}),
 	);
-	return json({ currentDate });
+	return { currentDate };
 }
 
 const formFields = new Map<FormFieldName, FormFieldDescriptor>([
@@ -45,7 +45,7 @@ export async function action({ request }: ActionFunctionArgs) {
 	}
 
 	if (hasFormErrors(errors)) {
-		return json({ errors }, { status: 400 });
+		return data({ errors }, { status: 400 });
 	}
 
 	let createdAt = values.createdAt ? new Date(values.createdAt) : undefined;
@@ -66,9 +66,6 @@ export async function action({ request }: ActionFunctionArgs) {
 	});
 	return redirect(`/admin/blog/${post.id}`);
 }
-
-export type LoaderData = SerializeFrom<typeof loader>;
-export type ActionData = SerializeFrom<typeof action>;
 
 export default function NewNotePage() {
 	let { currentDate } = useLoaderData<typeof loader>();
