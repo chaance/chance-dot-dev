@@ -1,17 +1,17 @@
 import * as React from "react";
-import type { LoaderFunctionArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "react-router";
 import {
-	Links,
-	Meta,
-	Outlet,
-	ScrollRestoration,
-	Scripts,
-	useNavigation,
-	useFetchers,
-	isRouteErrorResponse,
-	useLoaderData,
-	useRouteError,
-} from "@remix-run/react";
+    Links,
+    Meta,
+    Outlet,
+    ScrollRestoration,
+    Scripts,
+    useNavigation,
+    useFetchers,
+    isRouteErrorResponse,
+    useLoaderData,
+    useRouteError,
+} from "react-router";
 // import { getSeo } from "~/lib/seo";
 import { RouteChangeAnnouncement } from "~/ui/primitives/route-change-announcement";
 import { RootProvider } from "~/lib/react/context";

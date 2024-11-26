@@ -1,5 +1,5 @@
-import { createRequestHandler, type RequestHandler } from "@remix-run/express";
-import type { ServerBuild } from "@remix-run/node";
+import { createRequestHandler, type RequestHandler } from "@react-router/express";
+import type { ServerBuild } from "react-router";
 import { ip } from "address";
 import chalk from "chalk";
 import closeWithGrace from "close-with-grace";
@@ -302,7 +302,7 @@ closeWithGrace(() => {
 
 async function getBuild(): Promise<ServerBuild> {
 	if (viteDevServer) {
-		return viteDevServer.ssrLoadModule("virtual:remix/server-build") as any;
+		return viteDevServer.ssrLoadModule("virtual:react-router/server-build") as any;
 	}
 	// @ts-ignore (this file may or may not exist yet)
 	return import("../build/server/index.js") as Promise<ServerBuild>;

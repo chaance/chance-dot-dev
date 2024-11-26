@@ -1,7 +1,7 @@
 import * as React from "react";
-import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
-import { data } from "@remix-run/node";
-import { Form, useActionData, useLoaderData } from "@remix-run/react";
+import type { LoaderFunctionArgs, ActionFunctionArgs } from "react-router";
+import { data } from "react-router";
+import { Form, useActionData, useLoaderData } from "react-router";
 import { requireUserId } from "~/lib/session.server";
 import { InputText } from "~/ui/input";
 import { getEmailList, updateEmailList } from "~/models/email-list.server";

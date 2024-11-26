@@ -1,8 +1,8 @@
 import * as React from "react";
 import cx from "clsx";
-import { Link, useLocation } from "@remix-run/react";
+import { Link, useLocation } from "react-router";
 import { useRootContext } from "~/lib/react/context";
-import type { LinkProps } from "@remix-run/react";
+import type { LinkProps } from "react-router";
 
 import routeStyles from "./links.css?url";
 export function links() {

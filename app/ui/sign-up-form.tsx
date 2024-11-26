@@ -1,4 +1,4 @@
-import { Form } from "@remix-run/react";
+import { Form } from "react-router";
 import * as React from "react";
 import { bem } from "~/lib/utils";
 import { InputText } from "~/ui/input";

@@ -1,6 +1,6 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { data } from "@remix-run/node";
-import { useActionData, useSearchParams } from "@remix-run/react";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
+import { data } from "react-router";
+import { useActionData, useSearchParams } from "react-router";
 import { getFormDataStringValue, isValidEmail } from "~/lib/utils";
 import { safeRedirect } from "~/lib/utils.server";
 // import type { EmailSubscriber } from "~/models/email-list.server";

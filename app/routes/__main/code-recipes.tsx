@@ -1,11 +1,11 @@
 import * as React from "react";
 import { Heading, HeadingLevelProvider } from "~/ui/primitives/heading";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
-import { useFetcher } from "@remix-run/react";
+import { useFetcher } from "react-router";
 import { useLayoutEffect } from "@chance/hooks/use-layout-effect";
 import type { action as signUpAction } from "~/routes/__main/sign-up";
 import { SignUpSection } from "~/ui/sign-up-section";
-import { data } from "@remix-run/node";
+import { data } from "react-router";
 
 export async function loader() {
 	// TODO

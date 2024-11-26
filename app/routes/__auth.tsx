@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Outlet } from "@remix-run/react";
+import { Outlet } from "react-router";
 
 import routeStyles from "./__auth.css?url";
 export function links() {

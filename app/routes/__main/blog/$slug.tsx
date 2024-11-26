@@ -1,13 +1,9 @@
 import * as React from "react";
 import * as assert from "node:assert";
-import { data } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { data } from "react-router";
+import { Link, useLoaderData } from "react-router";
 import { getMarkdownBlogPost, type MarkdownBlogPost } from "~/lib/blog.server";
-import type {
-	HeadersFunction,
-	MetaFunction,
-	LoaderFunctionArgs,
-} from "@remix-run/node";
+import type { HeadersFunction, MetaFunction, LoaderFunctionArgs } from "react-router";
 import { isAbsoluteUrl, isLocalHost, unSlashIt } from "~/lib/utils";
 import cx from "clsx";
 import { getSessionUser } from "~/lib/session.server";

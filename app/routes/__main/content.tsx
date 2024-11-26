@@ -6,7 +6,7 @@ import { SignUpSection } from "~/ui/sign-up-section";
 
 import { Card } from "~/ui/card";
 import "./content.css";
-import { redirect } from "@remix-run/node";
+import { redirect } from "react-router";
 
 export function loader() {
 	// TODO: Remove when this page is ready again

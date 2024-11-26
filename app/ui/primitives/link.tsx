@@ -1,13 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-has-content */
 import * as React from "react";
-import {
-	Link as ReactRouterLink,
-	NavLink as ReactRouterNavLink,
-} from "@remix-run/react";
-import type {
-	LinkProps as ReactRouterLinkProps,
-	NavLinkProps as ReactRouterNavLinkProps,
-} from "@remix-run/react";
+import { Link as ReactRouterLink, NavLink as ReactRouterNavLink } from "react-router";
+import type { LinkProps as ReactRouterLinkProps, NavLinkProps as ReactRouterNavLinkProps } from "react-router";
 import { isAbsoluteUrl, isFunction, isString } from "~/lib/utils";
 
 function makeLink(

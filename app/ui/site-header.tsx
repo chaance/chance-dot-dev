@@ -1,6 +1,6 @@
 import * as React from "react";
 import { flushSync } from "react-dom";
-import { NavLink } from "@remix-run/react";
+import { NavLink } from "react-router";
 import cx from "clsx";
 import { SocialNav } from "./social-nav";
 import { Button, type ButtonProps } from "./primitives/button.js";

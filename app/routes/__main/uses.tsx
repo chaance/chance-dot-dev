@@ -1,4 +1,4 @@
-import { redirect, type MetaFunction } from "@remix-run/node";
+import { redirect, type MetaFunction } from "react-router";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
 import "./uses.css";
 

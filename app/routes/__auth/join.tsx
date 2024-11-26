@@ -1,10 +1,6 @@
 import * as React from "react";
-import type {
-	ActionFunctionArgs,
-	LoaderFunctionArgs,
-	MetaFunction,
-} from "@remix-run/node";
-import { data, redirect } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "react-router";
+import { data, redirect } from "react-router";
 import { createUserSession, getSessionUser } from "~/lib/session.server";
 import { createUser, getUserByEmail } from "~/models/user.server";
 import {
@@ -13,7 +9,7 @@ import {
 	validatePassword,
 } from "~/lib/utils";
 import { getSafeRedirect } from "~/lib/utils.server";
-import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
+import { Form, Link, useActionData, useSearchParams } from "react-router";
 import { InputText } from "~/ui/input";
 import { Card } from "~/ui/card";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";

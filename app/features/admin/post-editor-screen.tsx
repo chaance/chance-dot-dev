@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Form, Link } from "@remix-run/react";
+import { Form, Link } from "react-router";
 import { InputTextarea, InputText } from "~/ui/input";
 import { Card } from "~/ui/card";
 import { slugify } from "~/lib/utils";

@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
-import { createRequire } from "node:module";
 import { minimatch } from "minimatch";
+import type { DefineRoutesFunction } from "@react-router/remix-routes-option-adapter";
 
 const paramPrefixChar = "$";
 const escapeStart = "[";
@@ -360,13 +360,8 @@ type CreateRoutesFromFoldersOptions = {
 	routesDirectory?: string;
 };
 
-type RouteManifest = import("@remix-run/dev/dist/config/routes").RouteManifest;
-
-type DefineRouteFunction =
-	import("@remix-run/dev/dist/config/routes").DefineRouteFunction;
-
-type DefineRoutesFunction =
-	import("@remix-run/dev/dist/config/routes").DefineRoutesFunction;
+type DefineRouteFunction = Parameters<Parameters<DefineRoutesFunction>[0]>[0];
+type RouteManifest = ReturnType<DefineRoutesFunction>;
 
 function createRouteId(file: string) {
 	return normalizeSlashes(stripFileExtension(file));
