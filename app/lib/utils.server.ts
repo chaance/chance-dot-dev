@@ -1,5 +1,5 @@
 import fsp from "fs/promises";
-import { redirect } from "@remix-run/node";
+import { redirect } from "react-router";
 
 export async function isDirectory(path: string) {
 	try {

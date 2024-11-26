@@ -1,11 +1,5 @@
-import type { LoaderFunctionArgs } from "@remix-run/node";
-import {
-	Link,
-	Outlet,
-	useLoaderData,
-	useMatches,
-	type UIMatch,
-} from "@remix-run/react";
+import type { LoaderFunctionArgs } from "react-router";
+import { Link, Outlet, useLoaderData, useMatches, type UIMatch } from "react-router";
 import { requireUser } from "~/lib/session.server";
 import cx from "clsx";
 import { AdminHeader } from "~/features/admin/admin-header";

@@ -1,4 +1,4 @@
-import type { LoaderFunctionArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "react-router";
 import { json } from "~/lib/json";
 import {
 	getSocialImageUrl,
@@ -44,8 +44,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
 		}
 		return resp;
 	} catch (err) {
-		throw Error(
-			"Error fetching the social image; this is likely an error in the img/social route loader",
-		);
+		if (import.meta.env.DEV) {
+			throw err;
+		} else {
+			throw Error(
+				"Error fetching the social image; this is likely an error in the img/social route loader",
+			);
+		}
 	}
 }

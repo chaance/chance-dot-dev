@@ -1,5 +1,5 @@
 import { GitHubIcon, LinkedInIcon, TwitterIcon } from "./icons";
-import { Link } from "@remix-run/react";
+import { Link } from "react-router";
 
 export function SocialNav() {
 	return (

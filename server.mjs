@@ -4,7 +4,7 @@ import * as url from "node:url";
 import express from "express";
 import compression from "compression";
 import morgan from "morgan";
-import { createRequestHandler } from "@remix-run/express";
+import { createRequestHandler } from "@react-router/express";
 import rateLimit from "express-rate-limit";
 import sourceMapSupport from "source-map-support";
 import { createStream } from "rotating-file-stream";
@@ -98,7 +98,7 @@ app.all(
 	"*",
 	createRequestHandler({
 		build: viteDevServer
-			? () => viteDevServer.ssrLoadModule("virtual:remix/server-build")
+			? () => viteDevServer.ssrLoadModule("virtual:react-router/server-build")
 			: // this may or may not exist depending on the state of the build
 				// @ts-ignore
 				await import("./build/server/index.js"),

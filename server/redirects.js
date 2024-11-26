@@ -64,7 +64,7 @@ export function getRedirectsMiddleware({ redirectsString }) {
 					}),
 					toUrl,
 				};
-			} catch (error) {
+			} catch (_error) {
 				// if parsing the redirect fails, we'll warn, but we won't crash
 				console.error(
 					`Failed to parse redirect on line ${lineNumber}: "${line}"`,
@@ -89,7 +89,7 @@ export function getRedirectsMiddleware({ redirectsString }) {
 		let reqUrl;
 		try {
 			reqUrl = new URL(`${protocol}://${host}${req.url}`);
-		} catch (error) {
+		} catch {
 			console.error(`Invalid URL: ${protocol}://${host}${req.url}`);
 			next();
 			return;

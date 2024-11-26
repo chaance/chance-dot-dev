@@ -1,8 +1,8 @@
 import * as assert from "node:assert";
 import * as React from "react";
-import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
-import { data } from "@remix-run/node";
-import { useActionData, useLoaderData } from "@remix-run/react";
+import type { LoaderFunctionArgs, ActionFunctionArgs } from "react-router";
+import { data } from "react-router";
+import { useActionData, useLoaderData } from "react-router";
 import { getBlogPost, updateBlogPost } from "~/models/blog-post.server";
 import { requireUserId } from "~/lib/session.server";
 import { getFormFieldStringValue } from "~/lib/utils";

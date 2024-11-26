@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { LoaderFunctionArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "react-router";
 import {
 	Links,
 	Meta,
@@ -11,7 +11,7 @@ import {
 	isRouteErrorResponse,
 	useLoaderData,
 	useRouteError,
-} from "@remix-run/react";
+} from "react-router";
 // import { getSeo } from "~/lib/seo";
 import { RouteChangeAnnouncement } from "~/ui/primitives/route-change-announcement";
 import { RootProvider } from "~/lib/react/context";
@@ -310,7 +310,6 @@ function useDisableTransitionsOnColorSchemeChange() {
 			document.head.appendChild(css);
 
 			// Calling getComputedStyle forces the browser to redraw
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			const _ = window.getComputedStyle(css).opacity;
 			document.head.removeChild(css);
 		}

@@ -1,9 +1,9 @@
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
 import { Link } from "~/ui/primitives/link";
 
-import type { LoaderFunctionArgs } from "@remix-run/node";
-import { data } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import type { LoaderFunctionArgs } from "react-router";
+import { data } from "react-router";
+import { useLoaderData } from "react-router";
 import { getMarkdownBlogPostListItems } from "~/lib/blog.server";
 import { isLocalHost } from "~/lib/utils";
 

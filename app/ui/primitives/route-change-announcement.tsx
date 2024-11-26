@@ -1,6 +1,6 @@
 import * as React from "react";
-import type { Navigation, Location } from "@remix-run/react";
-import { useLocation, useNavigation } from "@remix-run/react";
+import type { Navigation, Location } from "react-router";
+import { useLocation, useNavigation } from "react-router";
 import { useRootContext } from "~/lib/react/context";
 
 enum NavigationState {

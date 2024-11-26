@@ -1,5 +1,5 @@
-import type { LoaderFunctionArgs } from "@remix-run/node";
-import { Link, NavLink, useLoaderData } from "@remix-run/react";
+import type { LoaderFunctionArgs } from "react-router";
+import { Link, NavLink, useLoaderData } from "react-router";
 import cx from "clsx";
 import { requireUserId } from "~/lib/session.server";
 import { getAllSubscribers } from "~/models/email-list.server";

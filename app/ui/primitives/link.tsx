@@ -1,18 +1,17 @@
-/* eslint-disable jsx-a11y/anchor-has-content */
 import * as React from "react";
 import {
 	Link as ReactRouterLink,
 	NavLink as ReactRouterNavLink,
-} from "@remix-run/react";
+} from "react-router";
 import type {
 	LinkProps as ReactRouterLinkProps,
 	NavLinkProps as ReactRouterNavLinkProps,
-} from "@remix-run/react";
+} from "react-router";
 import { isAbsoluteUrl, isFunction, isString } from "~/lib/utils";
 
 function makeLink(
 	Component: typeof ReactRouterLink | typeof ReactRouterNavLink,
-	displayName: string
+	displayName: string,
 ) {
 	type P = typeof Component extends typeof ReactRouterNavLink
 		? NavLinkProps
@@ -30,14 +29,14 @@ function makeLink(
 						isActive: false,
 						isPending: false,
 						isTransitioning: false,
-				  })
+					})
 				: className;
 			children = isFunction(children)
 				? children({
 						isActive: false,
 						isPending: false,
 						isTransitioning: false,
-				  })
+					})
 				: children;
 
 			return (
