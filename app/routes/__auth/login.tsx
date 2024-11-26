@@ -4,7 +4,7 @@ import type {
 	LoaderFunctionArgs,
 	MetaFunction,
 } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { data, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
 import { createUserSession, getSessionUser } from "~/lib/session.server";
 import { verifyLogin } from "~/models/user.server";
@@ -19,7 +19,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 	if (user) {
 		return redirect("/admin");
 	}
-	return json(null);
+	return null;
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -30,21 +30,21 @@ export async function action({ request }: ActionFunctionArgs) {
 	let remember = formData.get("remember");
 
 	if (!isValidEmail(email)) {
-		return json(
+		return data(
 			{ errors: { email: "Email is invalid", password: null } },
 			{ status: 400 },
 		);
 	}
 
 	if (typeof password !== "string" || password.length === 0) {
-		return json(
+		return data(
 			{ errors: { email: null, password: "Password is required" } },
 			{ status: 400 },
 		);
 	}
 
 	if (password.length < 8) {
-		return json(
+		return data(
 			{ errors: { email: null, password: "Password is too short" } },
 			{ status: 400 },
 		);
@@ -52,7 +52,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
 	let user = await verifyLogin(email, password);
 	if (!user) {
-		return json(
+		return data(
 			{ errors: { email: "Invalid email or password", password: null } },
 			{ status: 400 },
 		);

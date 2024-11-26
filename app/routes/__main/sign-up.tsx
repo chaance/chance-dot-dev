@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { data } from "@remix-run/node";
 import { useActionData, useSearchParams } from "@remix-run/react";
 import { getFormDataStringValue, isValidEmail } from "~/lib/utils";
 import { safeRedirect } from "~/lib/utils.server";
@@ -11,7 +11,7 @@ import { addSubscriberToForm } from "~/lib/convertkit.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	// TODO: Remove after implementing sign up logic
-	throw json(null, 404);
+	throw data(null, 404);
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -40,16 +40,15 @@ export async function action({ request }: ActionFunctionArgs) {
 		console.log("FAILED HONEYPOT");
 		// Send a 200 response so the form doesn't show an error. Bots don't deserve
 		// to know they failed.
-		return json({
+		return {
 			status: "success" as const,
 			values: fields,
 			errors,
 			formError: null,
-		});
+		};
 	}
 
 	let preventRedirect = formData.get("preventRedirect") === "true";
-	console.log({ preventRedirect });
 
 	if (!fields.email) {
 		errors.email = "Missing email";
@@ -80,7 +79,7 @@ export async function action({ request }: ActionFunctionArgs) {
 	}
 
 	if (errors.email || errors.nameFirst || errors.nameLast) {
-		return json(
+		return data(
 			{
 				errors,
 				values: fields,
@@ -99,7 +98,7 @@ export async function action({ request }: ActionFunctionArgs) {
 	// 		nameLast: fields.nameLast,
 	// 	});
 	// } catch (error) {
-	// 	return json(
+	// 	return data(
 	// 		{
 	// 			values: fields,
 	// 			errors,
@@ -118,7 +117,7 @@ export async function action({ request }: ActionFunctionArgs) {
 			nameLast: fields.nameLast,
 		});
 	} catch (error: unknown) {
-		return json(
+		return data(
 			{
 				values: fields,
 				errors,
@@ -131,13 +130,13 @@ export async function action({ request }: ActionFunctionArgs) {
 	}
 
 	if (preventRedirect) {
-		return json({
+		return {
 			// subscriber,
 			values: fields,
 			errors,
 			formError: null,
 			status: "success" as const,
-		});
+		};
 	}
 
 	let params = new URLSearchParams();

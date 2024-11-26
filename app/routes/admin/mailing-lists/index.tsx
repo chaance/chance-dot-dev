@@ -1,5 +1,4 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { Link, NavLink, useLoaderData } from "@remix-run/react";
 import cx from "clsx";
 import { requireUserId } from "~/lib/session.server";
@@ -8,7 +7,7 @@ import { getAllEmailLists } from "~/models/email-list.server";
 export async function loader({ request }: LoaderFunctionArgs) {
 	await requireUserId(request);
 	let lists = await getAllEmailLists();
-	return json({ lists });
+	return { lists };
 }
 
 export default function AdminSubscribersIndex() {

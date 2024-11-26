@@ -1,10 +1,6 @@
 import * as React from "react";
-import type {
-	LoaderFunctionArgs,
-	ActionFunctionArgs,
-	SerializeFrom,
-} from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
+import { data, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { requireUserId } from "~/lib/session.server";
 import { getFormFieldStringValue } from "~/lib/utils";
@@ -15,7 +11,7 @@ import { Button } from "~/ui/primitives/button";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
 	await requireUserId(request);
-	return json(null);
+	return null;
 }
 
 const formFields = new Map<FormFieldName, FormFieldDescriptor>([
@@ -40,7 +36,7 @@ export async function action({ request }: ActionFunctionArgs) {
 	}
 
 	if (hasFormErrors(errors)) {
-		return json({ errors, values }, { status: 400 });
+		return data({ errors, values }, { status: 400 });
 	}
 
 	let subscriber = await createSubscriber({
@@ -50,8 +46,6 @@ export async function action({ request }: ActionFunctionArgs) {
 	});
 	return redirect(`/admin/subscribers/${subscriber.id}`);
 }
-
-export type ActionData = SerializeFrom<typeof action>;
 
 const ROOT_CLASS = "route--new-subscriber";
 

@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as assert from "node:assert";
-import { json } from "@remix-run/node";
+import { data } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { getMarkdownBlogPost, type MarkdownBlogPost } from "~/lib/blog.server";
 import type {
@@ -35,7 +35,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 			};
 
 	if (!post) {
-		throw json(null, { status: 404, headers });
+		throw data(null, { status: 404, headers });
 	}
 
 	const createdAt = new Date(post.createdAt);
@@ -71,7 +71,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	let requestUrl = new URL(request.url);
 	let siteUrl = requestUrl.protocol + "//" + requestUrl.host;
 
-	return json({ post: fullPost, user, siteUrl }, { headers });
+	return data({ post: fullPost, user, siteUrl }, { headers });
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
