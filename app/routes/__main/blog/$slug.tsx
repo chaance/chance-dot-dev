@@ -3,7 +3,11 @@ import * as assert from "node:assert";
 import { data } from "react-router";
 import { Link, useLoaderData } from "react-router";
 import { getMarkdownBlogPost, type MarkdownBlogPost } from "~/lib/blog.server";
-import type { HeadersFunction, MetaFunction, LoaderFunctionArgs } from "react-router";
+import type {
+	HeadersFunction,
+	MetaFunction,
+	LoaderFunctionArgs,
+} from "react-router";
 import { isAbsoluteUrl, isLocalHost, unSlashIt } from "~/lib/utils";
 import cx from "clsx";
 import { getSessionUser } from "~/lib/session.server";
@@ -130,8 +134,8 @@ export default function BlogPostRoute() {
 	let { post, user } = useLoaderData<typeof loader>();
 	const contentRef = React.useRef<HTMLDivElement>(null);
 	React.useEffect(() => {
-		let buttons: HTMLButtonElement[] = [];
-		let timeouts: number[] = [];
+		let abortController = new AbortController();
+		let timeouts = new Map<HTMLButtonElement, number>();
 		const contentElement = contentRef.current;
 		const preTags = contentElement?.querySelectorAll("pre");
 		if (!preTags || !preTags.length) {
@@ -158,15 +162,20 @@ export default function BlogPostRoute() {
 				copyButton.parentNode!.replaceChild(newButton, copyButton);
 				copyButton = newButton as HTMLButtonElement;
 			}
-			copyButton.addEventListener("click", handleCopyClick);
-			buttons.push(copyButton);
+			copyButton.addEventListener("click", handleCopyClick, {
+				signal: abortController.signal,
+			});
+			copyButton.addEventListener("blur", handleCopyBlur, {
+				signal: abortController.signal,
+			});
+			preTag.addEventListener("mouseleave", handleMouseLeave, {
+				signal: abortController.signal,
+			});
 		}
 
 		return () => {
-			for (const button of buttons) {
-				button.removeEventListener("click", handleCopyClick);
-			}
-			for (const timeout of timeouts) {
+			abortController.abort();
+			for (let [, timeout] of timeouts) {
 				window.clearTimeout(timeout);
 			}
 		};
@@ -177,12 +186,35 @@ export default function BlogPostRoute() {
 			if (preTag.textContent) {
 				navigator.clipboard.writeText(preTag.textContent);
 				button.innerHTML = icons.check;
-				timeouts.push(
+				timeouts.set(
+					button,
 					window.setTimeout(() => {
 						button.innerHTML = icons.copy;
+						timeouts.delete(button);
 					}, 1500),
 				);
 			}
+		}
+
+		function handleCopyBlur(event: FocusEvent) {
+			const button = event.currentTarget as HTMLButtonElement;
+			const preTag = button.parentElement as HTMLPreElement;
+			// if mouse is still over the pre tag, or if focus is still on an element
+			// inside the pre tag, don't remove the checkmark
+			if (preTag.matches(":hover") || preTag.contains(document.activeElement)) {
+				return;
+			}
+			button.innerHTML = icons.copy;
+		}
+
+		function handleMouseLeave(event: MouseEvent) {
+			const copyButton = (
+				event.currentTarget as HTMLPreElement
+			).querySelector<HTMLButtonElement>(".copy-button");
+			if (!copyButton || copyButton === document.activeElement) {
+				return;
+			}
+			copyButton.innerHTML = icons.copy;
 		}
 	}, []);
 	return (
