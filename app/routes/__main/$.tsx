@@ -1,5 +1,6 @@
 import { data, type ErrorResponse } from "react-router";
-import { LoaderFunctionArgs, MetaFunction, redirect } from "react-router";
+import type { LoaderFunctionArgs, MetaFunction } from "react-router";
+import { redirect } from "react-router";
 import { Link, isRouteErrorResponse, useRouteError } from "react-router";
 import { getMarkdownBlogPost } from "~/lib/blog.server";
 

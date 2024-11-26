@@ -213,7 +213,7 @@ function useCollapse(ref: React.RefObject<HTMLElement>) {
 				);
 			}
 		};
-	}, []);
+	}, [ref]);
 
 	const collapse = React.useCallback(() => {
 		const isCollapsed = stateRef.current;

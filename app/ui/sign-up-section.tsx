@@ -15,7 +15,6 @@ function SignUpSection() {
 	return null;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function SignUpSection__WIP() {
 	let signUpFetcher = useFetcher<typeof signUpAction>();
 	let { errors } = signUpFetcher.data || {};
@@ -182,7 +181,6 @@ function useFakeEventHandler(when: boolean, cb: () => void) {
 	}, [when]);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function hasFormErrors(errors: Record<string, any>) {
 	let values = Object.values(errors);
 	return values.length > 0 && values.some((error) => error != null);

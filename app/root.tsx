@@ -1,16 +1,16 @@
 import * as React from "react";
 import type { LoaderFunctionArgs } from "react-router";
 import {
-    Links,
-    Meta,
-    Outlet,
-    ScrollRestoration,
-    Scripts,
-    useNavigation,
-    useFetchers,
-    isRouteErrorResponse,
-    useLoaderData,
-    useRouteError,
+	Links,
+	Meta,
+	Outlet,
+	ScrollRestoration,
+	Scripts,
+	useNavigation,
+	useFetchers,
+	isRouteErrorResponse,
+	useLoaderData,
+	useRouteError,
 } from "react-router";
 // import { getSeo } from "~/lib/seo";
 import { RouteChangeAnnouncement } from "~/ui/primitives/route-change-announcement";
@@ -310,7 +310,6 @@ function useDisableTransitionsOnColorSchemeChange() {
 			document.head.appendChild(css);
 
 			// Calling getComputedStyle forces the browser to redraw
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			const _ = window.getComputedStyle(css).opacity;
 			document.head.removeChild(css);
 		}

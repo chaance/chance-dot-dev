@@ -19,7 +19,7 @@ export function useRequiredUser(routeId: string) {
 	let user = useOptionalUser(routeId);
 	if (!user) {
 		throw new Error(
-			`No user returned from the loader at \`${routeId}\`. If user is optional, try \`useOptionalUser\` instead.`
+			`No user returned from the loader at \`${routeId}\`. If user is optional, try \`useOptionalUser\` instead.`,
 		);
 	}
 	return user;
