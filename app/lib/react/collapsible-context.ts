@@ -5,18 +5,19 @@ import { flushSync } from "react-dom";
 import { useComposedEventHandlers } from "@chance/hooks/use-composed-event-handlers";
 import { useLayoutEffect } from "@chance/hooks/use-layout-effect";
 import { useComposedRefs } from "@chance/hooks/use-composed-refs";
+import { createContext } from "./create-context";
 
-type CollapsibleContextValue = {
+export interface CollapsibleContextValue {
 	contentId: string;
 	isDisabled: boolean | undefined;
 	isOpen: boolean;
 	onOpenChange: React.Dispatch<React.SetStateAction<boolean>>;
-};
+}
 
-const CollapsibleContext = React.createContext<CollapsibleContextValue | null>(
+export const CollapsibleContext = createContext<CollapsibleContextValue | null>(
+	"CollapsibleContext",
 	null,
 );
-CollapsibleContext.displayName = "CollapsibleContext";
 
 export function useCollapsibleContext() {
 	const context = React.useContext(CollapsibleContext);
@@ -26,42 +27,6 @@ export function useCollapsibleContext() {
 		);
 	}
 	return context;
-}
-
-interface CollapsibleProps {
-	isOpen: boolean;
-	onOpenChange: React.Dispatch<React.SetStateAction<boolean>>;
-	isDisabled?: boolean;
-	id?: string;
-	children?:
-		| React.ReactNode
-		| ((props: {
-				isOpen: boolean;
-				onOpenChange: React.Dispatch<React.SetStateAction<boolean>>;
-		  }) => React.ReactNode);
-}
-
-export function CollapsibleProvider(props: CollapsibleProps) {
-	const { isOpen, isDisabled, onOpenChange, id: idProp, children } = props;
-	let contentId = React.useId();
-	if (idProp) {
-		contentId = idProp;
-	}
-
-	return (
-		<CollapsibleContext.Provider
-			value={{
-				contentId,
-				isDisabled,
-				isOpen,
-				onOpenChange,
-			}}
-		>
-			{typeof children === "function"
-				? children({ isOpen, onOpenChange })
-				: children}
-		</CollapsibleContext.Provider>
-	);
 }
 
 interface CollapsibleTriggerProps<T extends HTMLElement> {

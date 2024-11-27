@@ -1,18 +1,6 @@
 import * as React from "react";
-
-const defaultContext: RootContextData = {
-	hydrated: false,
-	currentYear: "2024",
-	siteUrl: "https://chance.dev",
-};
-
-const RootContext = React.createContext<RootContextData>(defaultContext);
-
-interface RootContextData {
-	hydrated: boolean;
-	currentYear: string;
-	siteUrl: string;
-}
+import { RootContext, defaultContext } from "./root-context";
+import type { RootContextData } from "./root-context";
 
 interface RootProviderProps
 	extends React.PropsWithChildren<Partial<RootContextData>> {}
@@ -28,8 +16,4 @@ export function RootProvider({
 			{children}
 		</RootContext.Provider>
 	);
-}
-
-export function useRootContext() {
-	return React.useContext(RootContext);
 }

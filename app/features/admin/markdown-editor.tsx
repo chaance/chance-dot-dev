@@ -18,6 +18,7 @@ import type {
 } from "codemirror";
 import cx from "clsx";
 import { useComposedRefs } from "@chance/hooks/use-composed-refs";
+import { createContext } from "~/lib/react/create-context";
 
 export type DOMEvent =
 	| "mousedown"
@@ -94,9 +95,10 @@ interface MarkdownEditorTextareaProps
 		"id" | "value" | "defaultValue"
 	> {}
 
-const MarkdownEditorContext =
-	React.createContext<MarkdownEditorContextValue | null>(null);
-MarkdownEditorContext.displayName = "MarkdownEditorContext";
+const MarkdownEditorContext = createContext<MarkdownEditorContextValue | null>(
+	"MarkdownEditorContext",
+	null,
+);
 
 interface MarkdownEditorContextValue {
 	fieldId: string;

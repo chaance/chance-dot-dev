@@ -1,7 +1,7 @@
 import * as React from "react";
 import type { Navigation, Location } from "react-router";
 import { useLocation, useNavigation } from "react-router";
-import { useRootContext } from "~/lib/react/context";
+import { useRootContext } from "~/lib/react/root-context";
 
 enum NavigationState {
 	Idle = 0,
@@ -14,7 +14,7 @@ function getPageTitle(location: Location) {
 
 function getNavigatingState(
 	location: Location,
-	transition: Navigation
+	transition: Navigation,
 ): NavigationState {
 	return transition.state === "loading" &&
 		transition.location.pathname === location.pathname
@@ -47,7 +47,7 @@ const RouteChangeAnnouncement = React.memo(function RouteChangeAnnouncement() {
 		setInnerHtml(
 			getNavigatingState(location, navigation) === NavigationState.Navigating
 				? `Navigating` // ?? `Navigating to ${getPageTitle(transition.location!)}`
-				: `Navigated to ${getPageTitle(location)}`
+				: `Navigated to ${getPageTitle(location)}`,
 		);
 	}, [location, navigation]);
 

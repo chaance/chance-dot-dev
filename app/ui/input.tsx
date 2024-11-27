@@ -7,6 +7,7 @@ import { useFocusRing } from "@react-aria/focus";
 import { usePress } from "@react-aria/interactions";
 import cx from "clsx";
 import { useComposedRefs } from "@chance/hooks/use-composed-refs";
+import { createContext } from "~/lib/react/create-context";
 
 // annoying af but the type is exposed in a dependency of
 // @react-aria/interactions instead of that package itself, and that seems like
@@ -360,14 +361,13 @@ interface InputRadioGroupProps extends React.ComponentPropsWithRef<"div"> {
 	name: string;
 }
 
-const RadioGroupContext = React.createContext<{
+const RadioGroupContext = createContext<{
 	state: RadioGroupState;
 	labelProps: React.DOMAttributes<HTMLSpanElement>;
 	descriptionProps: React.DOMAttributes<HTMLDivElement>;
 	errorMessageProps: React.DOMAttributes<HTMLDivElement>;
 	validationState: "valid" | "invalid" | undefined;
-} | null>(null);
-RadioGroupContext.displayName = "RadioGroupContext";
+} | null>("RadioGroupContext", null);
 
 function useRadioGroupContext() {
 	let context = React.useContext(RadioGroupContext);

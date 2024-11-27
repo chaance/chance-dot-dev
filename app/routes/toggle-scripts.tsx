@@ -3,8 +3,8 @@ import type { ActionFunctionArgs } from "react-router";
 import { serverSessionStorage } from "~/lib/session.server";
 import { isString } from "~/lib/utils";
 
-const ENABLED = "enabled";
-const DISABLED = "disabled";
+const STATUS_ENABLED = "enabled";
+const STATUS_DISABLED = "disabled";
 const SESSION_KEY = "scripts";
 
 export async function loader() {
@@ -30,12 +30,12 @@ export async function action({ request }: ActionFunctionArgs) {
 	let scripts = formData.get("scripts");
 	let toggle = formData.get("toggle");
 	if (toggle === null) {
-		scripts = DISABLED;
+		scripts = STATUS_DISABLED;
 	} else if (toggle === "on") {
-		scripts = ENABLED;
+		scripts = STATUS_ENABLED;
 	}
 
-	if (scripts === ENABLED || scripts === DISABLED) {
+	if (scripts === STATUS_ENABLED || scripts === STATUS_DISABLED) {
 		session.set(SESSION_KEY, scripts);
 		return redirect(redirectTo, {
 			headers: {
