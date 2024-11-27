@@ -11,7 +11,7 @@ import { useComposedRefs } from "@chance/hooks/use-composed-refs";
 import FocusLock from "react-focus-lock";
 import { RemoveScroll } from "react-remove-scroll";
 import { createContext } from "~/lib/create-context";
-import { useRequiredContext } from "~/lib/react/use-required-context";
+import { useRequiredContext } from "~/lib/use-required-context";
 import { useComposedEventHandlers } from "@chance/hooks/use-composed-event-handlers";
 import type { ExtendPropsWithRef, ElementTagNameMap } from "~/types";
 

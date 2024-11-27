@@ -1,5 +1,5 @@
 import { isUser } from "~/lib/utils";
-import { useMatchesData } from "~/lib/react/use-matches-data";
+import { useMatchesData } from "~/lib/use-matches-data";
 
 /**
  * @param routeId The route ID from which the user is loaded.
