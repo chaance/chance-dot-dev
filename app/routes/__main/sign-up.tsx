@@ -7,7 +7,7 @@ import { safeRedirect } from "~/lib/utils.server";
 // import { createSubscriber } from "~/models/email-list.server";
 import { Button } from "~/ui/primitives/button";
 import { SignUpForm, SignUpFormField } from "~/ui/sign-up-form";
-import { addSubscriberToForm } from "~/lib/convertkit.server";
+import { addSubscriberToForm } from "~/features/convertkit.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	// TODO: Remove after implementing sign up logic
