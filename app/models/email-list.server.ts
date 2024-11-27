@@ -41,16 +41,16 @@ export async function getAllEmailLists(): Promise<EmailList[]> {
 
 export async function getEmailList(
 	id: string,
-	include?: { subscribers: false }
+	include?: { subscribers: false },
 ): Promise<EmailList | null>;
 export async function getEmailList(
 	id: string,
-	include: { subscribers: true }
+	include: { subscribers: true },
 ): Promise<EmailListWithSubscribers | null>;
 
 export async function getEmailList(
 	id: string,
-	include?: { subscribers: boolean }
+	include?: { subscribers: boolean },
 ): Promise<EmailList | EmailListWithSubscribers | null> {
 	let record = await prisma.emailList.findFirst({
 		where: { id },
@@ -65,16 +65,16 @@ export async function getEmailList(
 
 export async function getSubscriber(
 	id: string,
-	include?: { lists: false }
+	include?: { lists: false },
 ): Promise<EmailSubscriber | null>;
 export async function getSubscriber(
 	id: string,
-	include: { lists: true }
+	include: { lists: true },
 ): Promise<EmailSubscriberWithLists | null>;
 
 export async function getSubscriber(
 	id: string,
-	include?: { lists: boolean }
+	include?: { lists: boolean },
 ): Promise<EmailSubscriber | EmailSubscriberWithLists | null> {
 	let record = await prisma.emailSubscriber.findFirst({
 		where: { id },
@@ -133,7 +133,7 @@ export async function createEmailList({
 								where: { email: subscriber.email },
 							};
 						}),
-				  }
+					}
 				: undefined,
 		},
 		include: subscribers ? { subscribers: true } : undefined,
@@ -184,7 +184,7 @@ export async function createSubscriber({
 								where: { name: list.name },
 							};
 						}),
-				  }
+					}
 				: undefined,
 		},
 		include: lists ? { lists: true } : undefined,
@@ -196,7 +196,7 @@ export async function createSubscriber({
 
 export async function updateEmailList(
 	id: string,
-	{ name }: { name?: string }
+	{ name }: { name?: string },
 ): Promise<EmailList> {
 	let record = await prisma.emailList.update({
 		where: { id },
@@ -211,7 +211,7 @@ export async function updateSubscriber(
 		email?: string | null;
 		nameFirst?: string | null;
 		nameLast?: string | null;
-	}
+	},
 ): Promise<EmailSubscriber>;
 export async function updateSubscriber(
 	id: string,
@@ -220,7 +220,7 @@ export async function updateSubscriber(
 		nameFirst?: string | null;
 		nameLast?: string | null;
 		lists: string[];
-	}
+	},
 ): Promise<EmailSubscriberWithLists>;
 
 export async function updateSubscriber(
@@ -235,7 +235,7 @@ export async function updateSubscriber(
 		nameFirst?: string | null;
 		nameLast?: string | null;
 		lists?: string[];
-	}
+	},
 ): Promise<EmailSubscriber | EmailSubscriberWithLists> {
 	if (!isValidEmail(email)) {
 		throw new Error("Invalid email address");
@@ -257,7 +257,7 @@ export async function updateSubscriber(
 
 export async function setEmailListSubscribers(
 	id: string,
-	subscribers: string[]
+	subscribers: string[],
 ): Promise<EmailListWithSubscribers> {
 	let record = await prisma.emailList.update({
 		where: { id },
@@ -273,7 +273,7 @@ export async function setEmailListSubscribers(
 
 export async function removeEmailListSubscribers(
 	id: string,
-	subscribers: string[]
+	subscribers: string[],
 ): Promise<EmailListWithSubscribers> {
 	let record = await prisma.emailList.update({
 		where: { id },
@@ -289,7 +289,7 @@ export async function removeEmailListSubscribers(
 
 export async function addEmailListSubscribers(
 	id: string,
-	subscribers: string[]
+	subscribers: string[],
 ): Promise<EmailListWithSubscribers> {
 	let record = await prisma.emailList.update({
 		where: { id },
@@ -305,7 +305,7 @@ export async function addEmailListSubscribers(
 
 export async function addSubscriberToLists(
 	id: string,
-	lists: string[]
+	lists: string[],
 ): Promise<EmailSubscriberWithLists> {
 	let record = await prisma.emailSubscriber.update({
 		where: { id },
@@ -321,7 +321,7 @@ export async function addSubscriberToLists(
 
 export async function removeSubscriberFromLists(
 	id: string,
-	lists: string[]
+	lists: string[],
 ): Promise<EmailSubscriberWithLists> {
 	let record = await prisma.emailSubscriber.update({
 		where: { id },
@@ -337,7 +337,7 @@ export async function removeSubscriberFromLists(
 
 export async function setSubscriberLists(
 	id: string,
-	lists: string[]
+	lists: string[],
 ): Promise<EmailSubscriberWithLists> {
 	let record = await prisma.emailSubscriber.update({
 		where: { id },
@@ -366,7 +366,7 @@ export async function deleteSubscriber(id: string) {
 }
 
 export function modelEmailListWithSubscribers(
-	record: DBEmailList & { subscribers: DBEmailSubscriber[] }
+	record: DBEmailList & { subscribers: DBEmailSubscriber[] },
 ): EmailListWithSubscribers {
 	return {
 		...modelEmailList(record),
@@ -384,7 +384,7 @@ export function modelEmailList(record: DBEmailList): EmailList {
 }
 
 export function modelEmailSubscriberWithLists(
-	record: DBEmailSubscriber & { lists: DBEmailList[] }
+	record: DBEmailSubscriber & { lists: DBEmailList[] },
 ): EmailSubscriberWithLists {
 	return {
 		...modelEmailSubscriber(record),
@@ -393,7 +393,7 @@ export function modelEmailSubscriberWithLists(
 }
 
 export function modelEmailSubscriber(
-	record: DBEmailSubscriber
+	record: DBEmailSubscriber,
 ): EmailSubscriber {
 	return {
 		id: record.id,

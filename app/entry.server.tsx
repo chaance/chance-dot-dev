@@ -11,7 +11,7 @@ export default function handleRequest(
 	request: Request,
 	responseStatusCode: number,
 	responseHeaders: Headers,
-	reactRouterContext: EntryContext
+	reactRouterContext: EntryContext,
 ) {
 	const callbackName = isbot(request.headers.get("user-agent"))
 		? "onAllReady"
@@ -30,7 +30,7 @@ export default function handleRequest(
 						new Response(createReadableStreamFromReadable(body), {
 							headers: responseHeaders,
 							status: didError ? 500 : responseStatusCode,
-						})
+						}),
 					);
 
 					pipe(body);
@@ -42,7 +42,7 @@ export default function handleRequest(
 					didError = true;
 					console.error("RENDER ERROR: ", error);
 				},
-			}
+			},
 		);
 
 		setTimeout(abort, ABORT_DELAY);

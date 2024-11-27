@@ -116,14 +116,14 @@ export function getSeoMeta(metadata: SeoMetadata): MetaDescriptor[] {
 		if (hasTwitterImageMeta(twitter)) {
 			warnIfInvalidUrl(
 				twitter.image.url,
-				`The twitter:image tag must be a valid, absolute URL. Relative paths will not work as expected. Check the config's \`twitter.image.url\` value.`
+				`The twitter:image tag must be a valid, absolute URL. Relative paths will not work as expected. Check the config's \`twitter.image.url\` value.`,
 			);
 			meta.push({ name: "twitter:image", content: twitter.image.url });
 			if (twitter.image.alt) {
 				meta.push({ name: "twitter:image:alt", content: twitter.image.alt });
 			} else {
 				warn(
-					"A Twitter image should use alt text that describes the image. This is important for users who are visually impaired. Please add a text value to the `alt` key of the `twitter.image` config option to dismiss this warning."
+					"A Twitter image should use alt text that describes the image. This is important for users who are visually impaired. Please add a text value to the `alt` key of the `twitter.image` config option to dismiss this warning.",
 				);
 			}
 		}
@@ -132,7 +132,7 @@ export function getSeoMeta(metadata: SeoMetadata): MetaDescriptor[] {
 			if (twitter.player.url) {
 				warnIfInvalidUrl(
 					twitter.player.url,
-					`The twitter:player tag must be a valid, absolute URL. Relative paths will not work as expected. Check the config's \`twitter.player.url\` value.`
+					`The twitter:player tag must be a valid, absolute URL. Relative paths will not work as expected. Check the config's \`twitter.player.url\` value.`,
 				);
 				meta.push({ name: "twitter:player", content: twitter.player.url });
 			}
@@ -140,7 +140,7 @@ export function getSeoMeta(metadata: SeoMetadata): MetaDescriptor[] {
 			if (twitter.player.stream) {
 				warnIfInvalidUrl(
 					twitter.player.stream,
-					`The twitter:player:stream tag must be a valid, absolute URL. Relative paths will not work as expected. Check the config's \`twitter.player.stream\` value.`
+					`The twitter:player:stream tag must be a valid, absolute URL. Relative paths will not work as expected. Check the config's \`twitter.player.stream\` value.`,
 				);
 				meta.push({
 					name: "twitter:player:stream",
@@ -249,7 +249,7 @@ export function getSeoMeta(metadata: SeoMetadata): MetaDescriptor[] {
 	if (canonical) {
 		warnIfInvalidUrl(
 			canonical,
-			`The canonical link tag must have an \`href\` with a valid, absolute URL. Relative paths will not work as expected. Check the config's \`canonical\` value.`
+			`The canonical link tag must have an \`href\` with a valid, absolute URL. Relative paths will not work as expected. Check the config's \`canonical\` value.`,
 		);
 		meta.push({ tagName: "link", rel: "canonical", href: canonical });
 	}
@@ -268,7 +268,7 @@ export function getSeoMeta(metadata: SeoMetadata): MetaDescriptor[] {
 				"`mobileAlternate` requires both the `media` and `href` attributes for it to generate the correct link tags. This config setting currently has no effect. Either add the missing keys or remove `mobileAlternate` from your config to dismiss this warning." +
 					// TODO: See if we can find a better description of this tag w/o all
 					// the marketing junk. MDN is a bit scant here.
-					"\n\nSee https://www.contentkingapp.com/academy/link-rel/#mobile-lok for a description of the tag this option generates."
+					"\n\nSee https://www.contentkingapp.com/academy/link-rel/#mobile-lok for a description of the tag this option generates.",
 			);
 		} else {
 			links.push({
@@ -287,7 +287,7 @@ export function getSeoMeta(metadata: SeoMetadata): MetaDescriptor[] {
 					"Items in `languageAlternates` requires both the `hrefLang` and `href` attributes for it to generate the correct link tags. One of your items in this config setting is missing an attribute and was skipped. Either add the missing keys or remove the incomplete object from the `languageAlternate` key in your config to dismiss this warning." +
 						// TODO: See if we can find a better description of this tag w/o all
 						// the marketing junk. MDN is a bit scant here.
-						"\n\nSee https://www.contentkingapp.com/academy/link-rel/#hreflang-look-like for a description of the tag this option generates."
+						"\n\nSee https://www.contentkingapp.com/academy/link-rel/#hreflang-look-like for a description of the tag this option generates.",
 				);
 			} else {
 				links.push({
@@ -303,8 +303,8 @@ export function getSeoMeta(metadata: SeoMetadata): MetaDescriptor[] {
 	meta.push(
 		...uniqBy(
 			links,
-			(val) => val.rel + val.href + (val.hrefLang || "") + (val.media || "")
-		)
+			(val) => val.rel + val.href + (val.hrefLang || "") + (val.media || ""),
+		),
 	);
 
 	if (openGraph) {
@@ -312,13 +312,13 @@ export function getSeoMeta(metadata: SeoMetadata): MetaDescriptor[] {
 			if (openGraph.url) {
 				warnIfInvalidUrl(
 					openGraph.url,
-					`The og:url tag must be a valid, absolute URL. Relative paths will not work as expected. Check the config's \`openGraph.url\` value.`
+					`The og:url tag must be a valid, absolute URL. Relative paths will not work as expected. Check the config's \`openGraph.url\` value.`,
 				);
 			}
 			if (canonical) {
 				warnIfInvalidUrl(
 					canonical,
-					`The og:url tag must be a valid, absolute URL. Relative paths will not work as expected. Check the config's \`canonical\` value.`
+					`The og:url tag must be a valid, absolute URL. Relative paths will not work as expected. Check the config's \`canonical\` value.`,
 				);
 			}
 
@@ -495,21 +495,21 @@ export function getSeoMeta(metadata: SeoMetadata): MetaDescriptor[] {
 			for (let image of openGraph.images) {
 				warnIfInvalidUrl(
 					image.url,
-					`The og:image tag must be a valid, absolute URL. Relative paths will not work as expected. Check each \`url\` value in the config's \`openGraph.images\` array.`
+					`The og:image tag must be a valid, absolute URL. Relative paths will not work as expected. Check each \`url\` value in the config's \`openGraph.images\` array.`,
 				);
 				meta.push({ property: "og:image", content: image.url });
 				if (image.alt) {
 					meta.push({ property: "og:image:alt", content: image.alt });
 				} else {
 					warn(
-						"OpenGraph images should use alt text that describes the image. This is important for users who are visually impaired. Please add a text value to the `alt` key of all `openGraph.images` config options to dismiss this warning."
+						"OpenGraph images should use alt text that describes the image. This is important for users who are visually impaired. Please add a text value to the `alt` key of all `openGraph.images` config options to dismiss this warning.",
 					);
 				}
 
 				if (image.secureUrl) {
 					warnIfInvalidUrl(
 						image.secureUrl,
-						`The og:image:secure_url tag must be a valid, absolute URL. Relative paths will not work as expected. Check each \`secureUrl\` value in the config's \`openGraph.images\` array.`
+						`The og:image:secure_url tag must be a valid, absolute URL. Relative paths will not work as expected. Check each \`secureUrl\` value in the config's \`openGraph.images\` array.`,
 					);
 					meta.push({
 						property: "og:image:secure_url",
@@ -541,7 +541,7 @@ export function getSeoMeta(metadata: SeoMetadata): MetaDescriptor[] {
 			for (let video of openGraph.videos) {
 				warnIfInvalidUrl(
 					video.url,
-					`The og:video tag must be a valid, absolute URL. Relative paths will not work as expected. Check each \`url\` value in the config's \`openGraph.videos\` array.`
+					`The og:video tag must be a valid, absolute URL. Relative paths will not work as expected. Check each \`url\` value in the config's \`openGraph.videos\` array.`,
 				);
 				meta.push({ property: "og:video", content: video.url });
 				if (video.alt) {
@@ -551,7 +551,7 @@ export function getSeoMeta(metadata: SeoMetadata): MetaDescriptor[] {
 				if (video.secureUrl) {
 					warnIfInvalidUrl(
 						video.secureUrl,
-						`The og:video:secure_url tag must be a valid, absolute URL. Relative paths will not work as expected. Check each \`secureUrl\` value in the config's \`openGraph.videos\` array.`
+						`The og:video:secure_url tag must be a valid, absolute URL. Relative paths will not work as expected. Check each \`secureUrl\` value in the config's \`openGraph.videos\` array.`,
 					);
 					meta.push({
 						property: "og:video:secure_url",
@@ -634,7 +634,7 @@ function warnIfInvalidUrl(str: string, message: string) {
 }
 
 function validateTwitterCard(
-	twitter: TwitterMeta
+	twitter: TwitterMeta,
 ): TwitterCardType | undefined {
 	if (!twitter.card) {
 		return;
@@ -726,7 +726,7 @@ function hasTwitterImageMeta(twitter: TwitterMeta): twitter is TwitterMeta & {
 }
 
 function isTruthyOrZero<T>(
-	value: T
+	value: T,
 ): value is Exclude<T, "" | false | null | undefined> {
 	return !!value || value === 0;
 }

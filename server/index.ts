@@ -1,4 +1,7 @@
-import { createRequestHandler, type RequestHandler } from "@react-router/express";
+import {
+	createRequestHandler,
+	type RequestHandler,
+} from "@react-router/express";
 import type { ServerBuild } from "react-router";
 import { ip } from "address";
 import chalk from "chalk";
@@ -302,7 +305,9 @@ closeWithGrace(() => {
 
 async function getBuild(): Promise<ServerBuild> {
 	if (viteDevServer) {
-		return viteDevServer.ssrLoadModule("virtual:react-router/server-build") as any;
+		return viteDevServer.ssrLoadModule(
+			"virtual:react-router/server-build",
+		) as any;
 	}
 	// @ts-ignore (this file may or may not exist yet)
 	return import("../build/server/index.js") as Promise<ServerBuild>;

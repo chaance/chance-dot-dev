@@ -2,7 +2,7 @@ import { createContext as createReactContext } from "react";
 
 export function createContext<T>(
 	displayName: string,
-	defaultValue: NoChildren<T>
+	defaultValue: NoChildren<T>,
 ) {
 	let context = createReactContext<NoChildren<T>>(defaultValue);
 	context.displayName = displayName;

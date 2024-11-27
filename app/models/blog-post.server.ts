@@ -63,7 +63,7 @@ export interface OGVideo extends OGMedia {
 
 export async function getBlogPost(
 	id: string,
-	userId?: string
+	userId?: string,
 ): Promise<BlogPostWithSEO | null> {
 	let post = await prisma.blogPost.findFirst({
 		where: userId ? { userId, id } : { id },
@@ -74,7 +74,7 @@ export async function getBlogPost(
 
 export async function getBlogPostBySlug(
 	slug: string,
-	userId?: string
+	userId?: string,
 ): Promise<BlogPostWithSEO | null> {
 	let post = await prisma.blogPost.findFirst({
 		where: userId ? { userId, slug } : { slug },
@@ -84,7 +84,7 @@ export async function getBlogPostBySlug(
 }
 
 export async function getBlogPostListItems<
-	Selection extends ArrayOfKeys<BlogPost> | null = null
+	Selection extends ArrayOfKeys<BlogPost> | null = null,
 >({
 	limit = 10,
 	offset = 0,
@@ -220,7 +220,7 @@ export async function updateBlogPost(
 			twitterSite?: string | null;
 			twitterCreator?: string | null;
 		};
-	}
+	},
 ): Promise<BlogPostWithSEO> {
 	if (slug == "" && props.title) {
 		slug = slugify(props.title);
@@ -304,12 +304,12 @@ export function modelBlogPost(blogPost: BlogPost | DBBlogPost): BlogPost {
 export function modelBlogPostWithSEO(blogPost: DBBlogPost): BlogPostWithSEO;
 export function modelBlogPostWithSEO(
 	blogPost: BlogPost,
-	seo: Partial<SEO> | null
+	seo: Partial<SEO> | null,
 ): BlogPostWithSEO;
 
 export function modelBlogPostWithSEO(
 	blogPost: DBBlogPost | BlogPost,
-	seo?: Partial<SEO> | null
+	seo?: Partial<SEO> | null,
 ): BlogPostWithSEO {
 	return {
 		...modelBlogPost(blogPost),
@@ -319,7 +319,8 @@ export function modelBlogPostWithSEO(
 
 export type PostSelector<
 	Post extends BlogPost,
-	Selection extends ArrayOfKeys<Post> | null = null
-> = Selection extends ArrayOfKeys<Post>
-	? Array<Pick<Post, Selection[number]>>
-	: Array<Post>;
+	Selection extends ArrayOfKeys<Post> | null = null,
+> =
+	Selection extends ArrayOfKeys<Post>
+		? Array<Pick<Post, Selection[number]>>
+		: Array<Post>;

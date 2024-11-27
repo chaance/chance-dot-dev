@@ -76,7 +76,7 @@ export interface KeyboardEvents<T extends Element = Element> {
 
 export interface FocusEvents<
 	Target extends Element = Element,
-	RelatedTarget extends Element = Element
+	RelatedTarget extends Element = Element,
 > {
 	/** Handler that is called when the element receives focus. */
 	onFocus?(e: FocusEvent<Target, RelatedTarget>): void;
@@ -116,7 +116,7 @@ export interface PressEvents<Target extends Element = Element> {
 
 export interface FocusableProps<
 	Target extends Element = Element,
-	RelatedTarget extends Element = Element
+	RelatedTarget extends Element = Element,
 > extends FocusEvents<Target, RelatedTarget>,
 		KeyboardEvents<Target> {
 	/** Whether the element should receive focus on render. */

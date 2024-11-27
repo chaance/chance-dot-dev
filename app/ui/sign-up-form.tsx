@@ -13,7 +13,7 @@ const SignUpForm = React.forwardRef<HTMLFormElement, SignUpFormProps>(
 			formAction = "/sign-up",
 			...props
 		},
-		forwardedRef
+		forwardedRef,
 	) => {
 		const ROOT_CLASS = "sign-up-form";
 		return (
@@ -27,7 +27,7 @@ const SignUpForm = React.forwardRef<HTMLFormElement, SignUpFormProps>(
 				<div className={`${ROOT_CLASS}__submit`}>{submitButton}</div>
 			</FormComp>
 		);
-	}
+	},
 );
 SignUpForm.displayName = "SignUpForm";
 
@@ -105,7 +105,7 @@ interface SignUpFormFieldProps {
 	id: string;
 	defaultValue?: string | null;
 	onChange?(
-		evt: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+		evt: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 	): void;
 	onBlur?(evt: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>): void;
 	onFocus?(evt: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>): void;
@@ -120,7 +120,7 @@ const SignUpFormBasic = React.forwardRef<HTMLFormElement, SignUpFormBasicProps>(
 			emailError,
 			emailDefaultValue,
 		},
-		forwardedRef
+		forwardedRef,
 	) => {
 		return (
 			<SignUpForm
@@ -155,7 +155,7 @@ const SignUpFormBasic = React.forwardRef<HTMLFormElement, SignUpFormBasicProps>(
 				}
 			/>
 		);
-	}
+	},
 );
 
 SignUpFormBasic.displayName = "SignUpFormBasic";

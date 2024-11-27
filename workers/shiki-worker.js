@@ -10,8 +10,8 @@ import { getHighlighter } from "shiki";
 const base16Theme = JSON.parse(
 	await fs.readFile(
 		new URL("../data/shiki-base16.json", import.meta.url),
-		"utf-8"
-	)
+		"utf-8",
+	),
 );
 
 /**
@@ -37,7 +37,7 @@ async function getThemedTokens({ code, language }) {
 			lineTokens.map((t) => ({
 				content: t.content,
 				color: convertFakeHexToCustomProp(t.variants.light.color || ""),
-			}))
+			})),
 		),
 	};
 }

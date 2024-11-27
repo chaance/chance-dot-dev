@@ -213,7 +213,7 @@ export function vsprintf(format: string, argv?: any[]) {
 
 function sprintfFormat(
 	parseTree: (string | ParseTreeItem)[],
-	argv: IArguments
+	argv: IArguments,
 ) {
 	let cursor = 1;
 	let output: string = "";
@@ -240,8 +240,8 @@ function sprintfFormat(
 							sprintf(
 								'[sprintf] Cannot access property "%s" of undefined value "%s"',
 								ph.keys[k],
-								ph.keys[k - 1]
-							)
+								ph.keys[k - 1],
+							),
 						);
 					}
 					arg = arg[ph.keys[k]];
@@ -268,7 +268,7 @@ function sprintfFormat(
 				isNaN(arg)
 			) {
 				throw new TypeError(
-					sprintf("[sprintf] expecting number but found %T", arg)
+					sprintf("[sprintf] expecting number but found %T", arg),
 				);
 			}
 
@@ -357,8 +357,8 @@ function sprintfFormat(
 				output += ph.align
 					? sign + arg + pad
 					: padCharacter === "0"
-					? sign + pad + arg
-					: pad + sign + arg;
+						? sign + pad + arg
+						: pad + sign + arg;
 			}
 		}
 	}
@@ -391,7 +391,7 @@ function sprintfParse(format: string): (string | ParseTreeItem)[] {
 					fieldList.push(fieldMatch[1]);
 					while (
 						(replacementField = replacementField.substring(
-							fieldMatch[0].length
+							fieldMatch[0].length,
 						)) !== ""
 					) {
 						if ((fieldMatch = RE.keyAccess.exec(replacementField)) !== null) {
@@ -402,7 +402,7 @@ function sprintfParse(format: string): (string | ParseTreeItem)[] {
 							fieldList.push(fieldMatch[1]);
 						} else {
 							throw new SyntaxError(
-								"[sprintf] failed to parse named argument key"
+								"[sprintf] failed to parse named argument key",
 							);
 						}
 					}
@@ -415,7 +415,7 @@ function sprintfParse(format: string): (string | ParseTreeItem)[] {
 			}
 			if (argNames === 3) {
 				throw new Error(
-					"[sprintf] mixing positional and named placeholders is not (yet) supported"
+					"[sprintf] mixing positional and named placeholders is not (yet) supported",
 				);
 			}
 

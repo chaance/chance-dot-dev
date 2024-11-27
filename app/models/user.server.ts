@@ -40,7 +40,7 @@ export async function getUserByEmail(email: string): Promise<User | null> {
 export async function createUser(
 	email: string,
 	password: string,
-	profile: UserProfile
+	profile: UserProfile,
 ): Promise<User> {
 	let passwordErrors = validatePassword(password);
 	if (passwordErrors.length > 0) {
@@ -75,7 +75,7 @@ export async function deleteUser(id: string): Promise<User> {
 
 export async function updateUser(
 	id: string,
-	data: Partial<UserProfile> & { email?: string }
+	data: Partial<UserProfile> & { email?: string },
 ): Promise<User> {
 	let { email, ...profileData } = data;
 	let user = await prisma.user.update({
@@ -91,7 +91,7 @@ export async function updateUser(
 
 export async function updateUserPassword(
 	email: string,
-	password: string
+	password: string,
 ): Promise<User> {
 	let passwordErrors = validatePassword(password);
 	if (passwordErrors.length > 0) {
@@ -121,7 +121,7 @@ export async function updateUserPassword(
 
 export async function verifyLogin(
 	email: string,
-	password: string
+	password: string,
 ): Promise<User | null> {
 	let userWithPassword = await prisma.user.findUnique({
 		where: { email },
@@ -147,7 +147,7 @@ export async function verifyLogin(
 export function modelUser(
 	user: (DBUser | User) & {
 		profile: DBProfile | UserProfile | null;
-	}
+	},
 ): User {
 	if (!user.profile) {
 		throw Error("profile required to model User");

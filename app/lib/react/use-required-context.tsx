@@ -5,7 +5,7 @@ export function useRequiredContext<T>(
 		| Context<T | null>
 		| Context<T | undefined>
 		| Context<T | null | undefined>,
-	errorMessage: string
+	errorMessage: string,
 ): NonNullable<T> {
 	let context = useContext(ctx as Context<T | null | undefined>);
 	if (context == null) {

@@ -11,7 +11,7 @@ const prisma = new PrismaClient();
 
 const AUTHENTICATED_EMAIL = getRequiredServerEnvVar("AUTHENTICATED_EMAIL");
 const AUTHENTICATED_EMAIL_PASSWORD = getRequiredServerEnvVar(
-	"AUTHENTICATED_EMAIL_PASSWORD"
+	"AUTHENTICATED_EMAIL_PASSWORD",
 );
 
 async function seed() {
@@ -26,7 +26,7 @@ async function seed() {
 
 	if (passwordErrors.length > 0) {
 		throw Error(
-			"PASSWORD ERROR: " + passwordErrors.map((err) => err.type).join(", ")
+			"PASSWORD ERROR: " + passwordErrors.map((err) => err.type).join(", "),
 		);
 	}
 

@@ -8,7 +8,7 @@ function hydrate() {
 			document,
 			<React.StrictMode>
 				<HydratedRouter />
-			</React.StrictMode>
+			</React.StrictMode>,
 		);
 	});
 }
