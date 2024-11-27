@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs } from "react-router";
-import { json } from "~/lib/json";
+import { json } from "~/lib/utils";
 import {
 	getSocialImageUrl,
 	getImageContentType,
