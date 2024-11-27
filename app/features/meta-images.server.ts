@@ -1,22 +1,19 @@
-import path from "node:path";
 import getEmojiRegex from "emoji-regex";
-import { getRequiredServerEnvVar } from "~/lib/utils";
+import { getRequiredServerEnvVar, json } from "~/lib/utils";
 
-function stripEmojis(string: string): string {
-	return string.replace(getEmojiRegex(), "").replace(/\s+/g, " ").trim();
+interface CloudinaryImageArgs {
+	title: string;
+	displayDate: string;
+	authorName?: string | null;
+	authorTitle?: string | null;
 }
 
-// cloudinary needs double-encoding
-function doubleEncode(string: string) {
-	return encodeURIComponent(encodeURIComponent(string));
-}
-
-function getCloudinarySocialImageUrl({
+function getCloudinaryImageUrl({
 	title,
 	displayDate,
 	authorName,
 	authorTitle,
-}: SocialImageArgs) {
+}: CloudinaryImageArgs) {
 	const CLOUDINARY_CLOUD_NAME = getRequiredServerEnvVar(
 		"CLOUDINARY_CLOUD_NAME",
 	);
@@ -127,28 +124,25 @@ function getCloudinarySocialImageUrl({
 		.join("/");
 }
 
-export async function getSocialImageUrl({
-	slug,
-	siteUrl,
-	...socialImageArgs
-}: { slug: string; siteUrl: string } & SocialImageArgs) {
-	// let basePath = `blog-images/social/${slug}.jpg`;
-	// let filePath = path.join(__dirname, "..", "public", basePath);
-	// if (await fileExists(filePath)) {
-	// 	return `${siteUrl}/${basePath}`;
-	// }
-	return getCloudinarySocialImageUrl(socialImageArgs);
+interface MetaImageArgs extends CloudinaryImageArgs {
+	slug: string;
+	siteUrl: string;
 }
 
-export async function getImageContentType(imagePath: string) {
-	let ext = path.extname(imagePath).toLowerCase();
-	if (!ext) return null;
-	return `image/${ext.slice(1)}`;
+export async function getMetaImageUrl(args: MetaImageArgs) {
+	try {
+		return new URL(getCloudinaryImageUrl(args));
+	} catch (err) {
+		console.error("Error generating social image");
+		throw err;
+	}
 }
 
-interface SocialImageArgs {
-	title: string;
-	displayDate: string;
-	authorName?: string | null;
-	authorTitle?: string | null;
+function stripEmojis(string: string): string {
+	return string.replace(getEmojiRegex(), "").replace(/\s+/g, " ").trim();
+}
+
+// cloudinary needs double-encoding
+function doubleEncode(string: string) {
+	return encodeURIComponent(encodeURIComponent(string));
 }

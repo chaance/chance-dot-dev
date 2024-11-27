@@ -1,17 +1,17 @@
 // React Router generated types for route:
-// routes/img.social.ts
+// routes/img.meta.ts
 
 import type * as T from "react-router/route-module"
 
 import type { Info as Parent0 } from "../../+types/root"
 
-type Module = typeof import("../img.social")
+type Module = typeof import("../img.meta")
 
 export type Info = {
   parents: [Parent0],
-  id: "routes/img.social"
-  file: "routes/img.social.ts"
-  path: "img/social"
+  id: "routes/img.meta"
+  file: "routes/img.meta.ts"
+  path: "img/meta"
   params: {}
   module: Module
   loaderData: T.CreateLoaderData<Module>

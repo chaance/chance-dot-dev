@@ -83,7 +83,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 	let { title, description, seo, slug, createdAtFormatted } = post;
 
 	let url = `${siteUrl}/blog/${slug}`;
-	let socialImageUrl = `${siteUrl}/img/social?${new URLSearchParams({
+	let socialImageUrl = `${siteUrl}/img/meta?${new URLSearchParams({
 		slug,
 		siteUrl,
 		title,

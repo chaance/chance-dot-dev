@@ -1,9 +1,8 @@
 import type { LoaderFunctionArgs } from "react-router";
 import { json } from "~/lib/utils";
-import {
-	getSocialImageUrl,
-	getImageContentType,
-} from "~/lib/social-image.server";
+import { getMetaImageUrl } from "~/features/meta-images.server";
+
+const VALID_IMAGE_EXTENSIONS = new Set(["png", "jpg", "jpeg", "webp"]);
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	let requestUrl = new URL(request.url);
@@ -20,7 +19,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 		throw json({ error: "Missing required params" }, 400);
 	}
 
-	let socialImageUrl = await getSocialImageUrl({
+	let socialImageUrl = await getMetaImageUrl({
 		slug,
 		siteUrl,
 		title,
@@ -48,8 +47,21 @@ export async function loader({ request }: LoaderFunctionArgs) {
 			throw err;
 		} else {
 			throw Error(
-				"Error fetching the social image; this is likely an error in the img/social route loader",
+				"Error fetching the social image; this is likely an error in the img/meta route loader",
 			);
 		}
+	}
+}
+
+async function getImageContentType(url: URL) {
+	try {
+		let pathname = url.pathname;
+		let extention = pathname.split(".").pop()?.toLowerCase();
+		if (!extention || !VALID_IMAGE_EXTENSIONS.has(extention)) {
+			return null;
+		}
+		return `image/${extention}`;
+	} catch {
+		return null;
 	}
 }
