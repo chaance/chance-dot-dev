@@ -7,12 +7,12 @@ import { Button, type ButtonProps } from "./primitives/button";
 import { useMatchMedia } from "@chance/hooks/use-match-media";
 import { useIsHydrated } from "@chance/hooks/use-is-hydrated";
 import { useLayoutEffect } from "@chance/hooks/use-layout-effect";
-import { CollapsibleProvider } from "~/lib/react/collapsible-context-provider";
+import { CollapsibleProvider } from "~/ui/collapsible-context-provider";
 import {
 	useCollapsibleContext,
 	useCollapsibleContent,
 	useCollapsibleTrigger,
-} from "~/lib/react/collapsible-context";
+} from "~/ui/collapsible-context";
 
 export function SiteHeader() {
 	const isHydrated = useIsHydrated();

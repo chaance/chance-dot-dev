@@ -14,7 +14,7 @@ import {
 } from "react-router";
 // import { getSeo } from "~/lib/seo";
 import { RouteChangeAnnouncement } from "~/ui/primitives/route-change-announcement";
-import { RootProvider } from "~/lib/react/root-context-provider";
+import { RootProvider } from "~/ui/root-context-provider";
 import { useIsHydrated } from "@chance/hooks/use-is-hydrated";
 import NProgress from "nprogress";
 

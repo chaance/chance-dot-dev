@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createContext } from "~/lib/react/create-context";
+import { createContext } from "~/lib/create-context";
 
 export const HeadingLevelContext = createContext<HeadingLevel>(
 	"HeadingLevelContext",

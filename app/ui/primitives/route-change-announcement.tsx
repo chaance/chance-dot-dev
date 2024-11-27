@@ -1,7 +1,7 @@
 import * as React from "react";
 import type { Navigation, Location } from "react-router";
 import { useLocation, useNavigation } from "react-router";
-import { useRootContext } from "~/lib/react/root-context";
+import { useRootContext } from "~/ui/root-context";
 
 enum NavigationState {
 	Idle = 0,

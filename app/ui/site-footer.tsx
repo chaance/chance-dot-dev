@@ -1,6 +1,6 @@
 import * as React from "react";
 import { SocialNav } from "./social-nav";
-import { useRootContext } from "~/lib/react/root-context";
+import { useRootContext } from "~/ui/root-context";
 
 export function SiteFooter() {
 	const ctx = useRootContext();

@@ -9,11 +9,11 @@ export function useRequiredContext<T>(
 ): NonNullable<T> {
 	let context = useContext(ctx as Context<T | null | undefined>);
 	if (context == null) {
-		let err = new Error(errorMessage);
+		let error = new Error(errorMessage);
 		if (Error.captureStackTrace) {
-			Error.captureStackTrace(err, useRequiredContext);
+			Error.captureStackTrace(error, useRequiredContext);
 		}
-		throw err;
+		throw error;
 	}
 	return context;
 }

@@ -5,7 +5,7 @@ import { flushSync } from "react-dom";
 import { useComposedEventHandlers } from "@chance/hooks/use-composed-event-handlers";
 import { useLayoutEffect } from "@chance/hooks/use-layout-effect";
 import { useComposedRefs } from "@chance/hooks/use-composed-refs";
-import { createContext } from "./create-context";
+import { createContext } from "../lib/create-context";
 
 export interface CollapsibleContextValue {
 	contentId: string;

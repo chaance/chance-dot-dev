@@ -18,7 +18,7 @@ import type {
 } from "codemirror";
 import cx from "clsx";
 import { useComposedRefs } from "@chance/hooks/use-composed-refs";
-import { createContext } from "~/lib/react/create-context";
+import { createContext } from "~/lib/create-context";
 
 export type DOMEvent =
 	| "mousedown"

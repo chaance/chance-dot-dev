@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createContext } from "./create-context";
+import { createContext } from "../lib/create-context";
 
 export interface RootContextData {
 	hydrated: boolean;

@@ -1,7 +1,7 @@
 import * as React from "react";
 import cx from "clsx";
 import { Link, useLocation } from "react-router";
-import { useRootContext } from "~/lib/react/root-context";
+import { useRootContext } from "~/ui/root-context";
 import type { LinkProps } from "react-router";
 
 import routeStyles from "./links.css?url";

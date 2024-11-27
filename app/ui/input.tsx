@@ -7,7 +7,7 @@ import { useFocusRing } from "@react-aria/focus";
 import { usePress } from "@react-aria/interactions";
 import cx from "clsx";
 import { useComposedRefs } from "@chance/hooks/use-composed-refs";
-import { createContext } from "~/lib/react/create-context";
+import { createContext } from "~/lib/create-context";
 
 // annoying af but the type is exposed in a dependency of
 // @react-aria/interactions instead of that package itself, and that seems like
