@@ -11,13 +11,6 @@
 		display: flex;
 	}
 
-	figure,
-	blockquote,
-	figcaption,
-	cite {
-		display: contents;
-	}
-
 	tweet-embed {
 		--avatar-size: 3.125rem;
 		--avatar-radius: calc(var(--avatar-size) / 2);
@@ -42,6 +35,10 @@
 			text-decoration: inherit;
 			line-height: inherit;
 			letter-spacing: inherit;
+		}
+
+		:is(figure, blockquote, figcaption, cite) {
+			display: contents;
 		}
 	}
 
