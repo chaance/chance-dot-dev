@@ -1,4 +1,4 @@
-import { GitHubIcon, LinkedInIcon, TwitterIcon } from "./icons";
+import { GitHubIcon, LinkedInIcon, BlueskyIcon } from "./icons";
 import { Link } from "react-router";
 
 export function SocialNav() {
@@ -7,9 +7,9 @@ export function SocialNav() {
 			<ul className="SocialNav__nav-list">
 				{[
 					{
-						label: "Twitter",
-						href: "https://twitter.com/chancethedev/",
-						icon: <TwitterIcon titleId="footer-icon-twitter" aria-hidden />,
+						label: "Bluesky",
+						href: "https://bsky.app/profile/chance.dev",
+						icon: <BlueskyIcon titleId="footer-icon-bluesky" aria-hidden />,
 					},
 					{
 						label: "GitHub",

@@ -15,7 +15,7 @@ type To = LinkProps["to"];
 const LINKS = [
 	{ to: "https://fronttoback.dev", label: "Front to Back" },
 	{ to: "https://chance.dev", label: "Website" },
-	{ to: "https://twitter.com/chancethedev", label: "Twitter" },
+	{ to: "https://bsky.app/profile/chance.dev", label: "Bluesky" },
 	{ to: "https://www.linkedin.com/in/chaance", label: "LinkedIn" },
 	{ to: "https://www.polywork.com/chance", label: "Polywork" },
 	{ to: "https://www.instagram.com/chancethedev", label: "Instagram" },
