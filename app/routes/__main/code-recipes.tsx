@@ -125,7 +125,7 @@ export default function CodeRecipesRoute() {
 											href="#intro-footnote-states"
 											aria-describedby="intro-footnotes-label"
 										>
-											44/50 states in the US
+											45/50 states in the US
 										</a>
 									</li>
 								</ul>
