@@ -1,7 +1,12 @@
 @layer components.input {
 	.input {
 		--input-color-bg: var(--color-white);
+		--input-color-bg: light-dark(var(--color-white), var(--color-black));
 		--input-color-bg-focus: var(--color-gray-005);
+		--input-color-bg-focus: light-dark(
+			var(--color-gray-005),
+			var(--color-gray-18)
+		);
 		--input-color-fg: var(--color-text);
 		--input-color-placeholder: var(--color-text-weakest);
 		--input-color-border: var(--color-border);
@@ -22,11 +27,6 @@
 			border-color 50ms ease-out,
 			outline 50ms ease-out;
 		-webkit-tap-highlight-color: transparent;
-
-		@media (--dark) {
-			--input-color-bg: var(--color-black);
-			--input-color-bg-focus: var(--color-gray-18);
-		}
 	}
 
 	.input--text,

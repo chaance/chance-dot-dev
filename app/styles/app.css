@@ -1,10 +1,116 @@
 @layer base.theme {
 	:root {
+		--media-smallest: false;
+		--media-xs: false;
+		--media-xs-down: false;
+		--media-xs-only: false;
+		--media-sm: false;
+		--media-sm-down: false;
+		--media-sm-only: false;
+		--media-md: false;
+		--media-md-down: false;
+		--media-md-only: false;
+		--media-lg: false;
+		--media-lg-down: false;
+		--media-lg-only: false;
+		--media-xl: false;
+		--media-xl-down: false;
+		--media-xl-only: false;
+		--media-xxl: false;
+		--media-dark: false;
+		--media-motion: false;
+
+		--supports-light-dark: false;
+
+		@media (max-width: 479px) {
+			--media-smallest: true;
+		}
+		@media (min-width: 480px) {
+			--media-xs: true;
+		}
+		@media (max-width: 639px) {
+			--media-xs-down: true;
+		}
+		@media (min-width: 480px) and (max-width: 639px) {
+			--media-xs-only: true;
+		}
+		@media (min-width: 640px) {
+			--media-sm: true;
+		}
+		@media (max-width: 767px) {
+			--media-sm-down: true;
+		}
+		@media (min-width: 640px) and (max-width: 767px) {
+			--media-sm-only: true;
+		}
+		@media (min-width: 768px) {
+			--media-md: true;
+		}
+		@media (max-width: 1023px) {
+			--media-md-down: true;
+		}
+		@media (min-width: 768px) and (max-width: 1023px) {
+			--media-md-only: true;
+		}
+		@media (min-width: 1024px) {
+			--media-lg: true;
+		}
+		@media (max-width: 1279px) {
+			--media-lg-down: true;
+		}
+		@media (min-width: 1024px) and (max-width: 1279px) {
+			--media-lg-only: true;
+		}
+		@media (min-width: 1280px) {
+			--media-xl: true;
+		}
+		@media (max-width: 1535px) {
+			--media-xl-down: true;
+		}
+		@media (min-width: 1280px) and (max-width: 1535px) {
+			--media-xl-only: true;
+		}
+		@media (min-width: 1536px) {
+			--media-xxl: true;
+		}
+		@media (prefers-color-scheme: dark) {
+			--media-dark: true;
+		}
+		@media (prefers-reduced-motion: no-preference) {
+			--media-motion: true;
+		}
+	}
+
+	/* nested @supports query breaks highlighting in the block, so no nesting for now */
+	/* https://github.com/jacobcassidy/vscode-css-nesting-syntax-highlighting/issues/4 */
+	:root {
+		@supports (color: light-dark(white, black)) {
+			--supports-light-dark: true;
+		}
+	}
+
+	:root {
 		--body-bg-grain: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 400 310' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23a)'/%3E%3C/svg%3E");
 		--body-bg-gradient-stop-1: var(--color-gray-02);
+		--body-bg-gradient-stop-1: light-dark(
+			var(--color-gray-02),
+			var(--color-black)
+		);
 		--body-bg-gradient-stop-2: var(--color-gray-005);
+		--body-bg-gradient-stop-2: light-dark(
+			var(--color-gray-005),
+			var(--color-gray-19)
+		);
 		--body-bg-gradient-stop-3: var(--color-gray-00);
+		--body-bg-gradient-stop-3: light-dark(
+			var(--color-gray-00),
+			var(--color-gray-19)
+		);
 		--body-bg-gradient-stop-4: var(--color-white);
+		--body-bg-gradient-stop-4: light-dark(
+			var(--color-white),
+			var(--color-gray-18)
+		);
 		--body-bg-gradient: linear-gradient(
 			45deg,
 			var(--body-bg-gradient-stop-1),
@@ -22,49 +128,54 @@
 		--bg-body-img: no-repeat 100% var(--body-bg-gradient),
 			repeat center/300px var(--body-bg-grain);
 
-		@media (--dark) {
-			--body-bg-gradient-stop-1: var(--color-black);
-			--body-bg-gradient-stop-2: var(--color-gray-19);
-			--body-bg-gradient-stop-3: var(--color-gray-19);
-			--body-bg-gradient-stop-4: var(--color-gray-18);
-		}
-
 		/* syntax highlighting junk */
 		--base00: var(--color-gray-01);
-		--base01: var(--color-gray-04);
-		--base02: var(--color-gray-06);
-		--base03: var(--color-gray-08);
-		--base04: var(--color-gray-10);
-		--base05: var(--color-gray-16);
-		--base06: var(--color-gray-14);
-		--base07: var(--color-gray-17);
-		--base08: var(--color-mint-17);
-		--base09: var(--color-green-13);
-		--base0A: var(--color-green-14);
-		--base0B: var(--color-mint-14);
-		--base0C: var(--color-mint-12);
-		--base0D: var(--color-green-16);
-		--base0E: var(--color-green-18);
-		--base0F: var(--color-gray-13);
+		--base00: light-dark(var(--color-gray-01), var(--color-gray-18));
 
-		@media (--dark) {
-			--base00: var(--color-gray-18);
-			--base01: var(--color-gray-14);
-			--base02: var(--color-gray-12);
-			--base03: var(--color-gray-11);
-			--base04: var(--color-gray-08);
-			--base05: var(--color-gray-06);
-			--base06: var(--color-gray-04);
-			--base07: var(--color-gray-02);
-			--base08: var(--color-mint-06);
-			--base09: var(--color-green-08);
-			--base0A: var(--color-green-06);
-			--base0B: var(--color-mint-04);
-			--base0C: var(--color-mint-02);
-			--base0D: var(--color-green-04);
-			--base0E: var(--color-green-02);
-			--base0F: var(--color-gray-07);
-		}
+		--base01: var(--color-gray-04);
+		--base01: light-dark(var(--color-gray-04), var(--color-gray-14));
+
+		--base02: var(--color-gray-06);
+		--base02: light-dark(var(--color-gray-06), var(--color-gray-12));
+
+		--base03: var(--color-gray-08);
+		--base03: light-dark(var(--color-gray-08), var(--color-gray-11));
+
+		--base04: var(--color-gray-10);
+		--base04: light-dark(var(--color-gray-10), var(--color-gray-08));
+
+		--base05: var(--color-gray-16);
+		--base05: light-dark(var(--color-gray-16), var(--color-gray-06));
+
+		--base06: var(--color-gray-14);
+		--base06: light-dark(var(--color-gray-14), var(--color-gray-04));
+
+		--base07: var(--color-gray-17);
+		--base07: light-dark(var(--color-gray-17), var(--color-gray-02));
+
+		--base08: var(--color-mint-17);
+		--base08: light-dark(var(--color-mint-17), var(--color-mint-06));
+
+		--base09: var(--color-green-13);
+		--base09: light-dark(var(--color-green-13), var(--color-green-08));
+
+		--base0A: var(--color-green-14);
+		--base0A: light-dark(var(--color-green-14), var(--color-green-06));
+
+		--base0B: var(--color-mint-14);
+		--base0B: light-dark(var(--color-mint-14), var(--color-mint-04));
+
+		--base0C: var(--color-mint-12);
+		--base0C: light-dark(var(--color-mint-12), var(--color-mint-02));
+
+		--base0D: var(--color-green-16);
+		--base0D: light-dark(var(--color-green-16), var(--color-green-04));
+
+		--base0E: var(--color-green-18);
+		--base0E: light-dark(var(--color-green-18), var(--color-green-02));
+
+		--base0F: var(--color-gray-13);
+		--base0F: light-dark(var(--color-gray-13), var(--color-gray-07));
 	}
 
 	:where(:not(:focus-visible):focus) {
@@ -87,7 +198,11 @@
 	html,
 	body,
 	.chance-dot-dev {
+		color-scheme: light;
 		height: 100%;
+		@supports (color: light-dark(white, black)) {
+			color-scheme: light dark;
+		}
 	}
 
 	html {

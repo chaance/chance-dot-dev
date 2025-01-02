@@ -7,9 +7,7 @@
 	body {
 		background-image: none;
 		background-color: var(--color-white);
-		@media (--dark) {
-			background-color: var(--color-gray-18);
-		}
+		background-color: light-dark(var(--color-white), var(--color-gray-18));
 	}
 
 	.admin {
@@ -95,9 +93,7 @@
 	.admin__outlet {
 		max-height: 100%;
 		background-color: var(--color-gray-005);
-		@media (--dark) {
-			background-color: var(--color-gray-19);
-		}
+		background-color: light-dark(var(--color-gray-005), var(--color-gray-19));
 		/* overflow: auto; */
 	}
 
@@ -117,9 +113,6 @@
 		overflow-y: auto;
 		background-color: var(--color-green-17);
 		color: var(--color-white);
-		@media (--dark) {
-			background-color: var(--color-green-17);
-		}
 	}
 
 	.admin__nav-inner {

@@ -197,18 +197,17 @@
 	}
 
 	.SiteHeader__nav-dialog-overlay-inner {
-		--hsl: 0 0% 100%;
-		--overlay-bg-color: hsl(var(--hsl) / var(--dialog-overlay-bg-opacity));
+		--overlay-bg-color: hsl(0 0% 100% / var(--dialog-overlay-bg-opacity));
+		--overlay-bg-color: light-dark(
+			hsl(0 0% 100% / var(--dialog-overlay-bg-opacity)),
+			hsl(0 0% 0% / var(--dialog-overlay-bg-opacity))
+		);
 		position: relative;
 		height: 100%;
 		width: 100%;
 		background-color: transparent;
 		animation: overlayFadeIn 0.3s ease-in-out;
 		animation-fill-mode: forwards;
-
-		@media (--dark) {
-			--hsl: 0 0% 0%;
-		}
 
 		@media (--md) {
 			animation: none;

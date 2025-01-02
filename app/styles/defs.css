@@ -87,127 +87,92 @@
 
 		/* #region SEMANTICS */
 		--color-accent: var(--color-green-10);
+		--color-accent: light-dark(var(--color-green-10), var(--color-green-10));
 		--color-accent-deep: var(--color-green-12);
+		--color-accent-deep: light-dark(
+			var(--color-green-12),
+			var(--color-green-12)
+		);
 
 		--color-text: var(--color-gray-18);
+		--color-text: light-dark(var(--color-gray-18), var(--color-gray-005));
 		--color-text-weak: var(--color-gray-15);
+		--color-text-weak: light-dark(var(--color-gray-15), var(--color-gray-04));
 		--color-text-weaker: var(--color-gray-12);
+		--color-text-weaker: light-dark(var(--color-gray-12), var(--color-gray-07));
 		--color-text-weakest: var(--color-gray-10);
+		--color-text-weakest: light-dark(
+			var(--color-gray-10),
+			var(--color-gray-10)
+		);
 		--color-text-inverted: var(--color-gray-005);
+		--color-text-inverted: light-dark(
+			var(--color-gray-005),
+			var(--color-gray-18)
+		);
 		--color-text-inverted-weak: var(--color-gray-04);
+		--color-text-inverted-weak: light-dark(
+			var(--color-gray-04),
+			var(--color-gray-15)
+		);
 		--color-text-inverted-weaker: var(--color-gray-07);
+		--color-text-inverted-weaker: light-dark(
+			var(--color-gray-07),
+			var(--color-gray-12)
+		);
 		--color-text-inverted-weakest: var(--color-gray-10);
+		--color-text-inverted-weakest: light-dark(
+			var(--color-gray-10),
+			var(--color-gray-10)
+		);
 		--color-text-error: var(--color-red-14);
+		--color-text-error: light-dark(var(--color-red-14), var(--color-red-06));
 
 		--color-link: var(--color-green-12);
+		--color-link: light-dark(var(--color-green-12), var(--color-green-05));
 		--color-link-visited: var(--color-green-14);
+		--color-link-visited: light-dark(
+			var(--color-green-14),
+			var(--color-green-06)
+		);
 		--color-link-hover: var(--color-green-11);
+		--color-link-hover: light-dark(
+			var(--color-green-11),
+			var(--color-green-06)
+		);
 
 		--color-background: var(--color-gray-005);
-		--color-background-raised: var(--color-white);
+		--color-background: light-dark(var(--color-white), var(--color-gray-19));
+		--color-background-raised: var(--color-gray-005);
+		--color-background-raised: light-dark(
+			var(--color-white),
+			var(--color-gray-18)
+		);
 
 		--color-border: var(--color-gray-05);
+		--color-border: light-dark(var(--color-gray-05), var(--color-gray-15));
 		--color-border-weak: var(--color-gray-03);
+		--color-border-weak: light-dark(var(--color-gray-03), var(--color-gray-17));
 		--color-border-strong: var(--color-gray-12);
+		--color-border-strong: light-dark(
+			var(--color-gray-12),
+			var(--color-gray-08)
+		);
 
 		--color-button: var(--color-white);
+		--color-button: light-dark(var(--color-white), var(--color-gray-18));
 		--color-button-hover: var(--color-gray-02);
+		--color-button-hover: light-dark(
+			var(--color-gray-02),
+			var(--color-gray-16)
+		);
 		--color-button-text: var(--color-gray-18);
+		--color-button-text: light-dark(
+			var(--color-gray-18),
+			var(--color-gray-005)
+		);
 
 		--color-focus-ring: var(--color-accent);
-
-		@media (--dark) {
-			--color-accent: var(--color-green-10);
-			--color-accent-deep: var(--color-green-12);
-
-			--color-text: var(--color-gray-005);
-			--color-text-weak: var(--color-gray-04);
-			--color-text-weaker: var(--color-gray-07);
-			--color-text-weakest: var(--color-gray-10);
-			--color-text-inverted: var(--color-gray-18);
-			--color-text-inverted-weak: var(--color-gray-15);
-			--color-text-inverted-weaker: var(--color-gray-12);
-			--color-text-inverted-weakest: var(--color-gray-10);
-			--color-text-error: var(--color-red-06);
-
-			--color-link: var(--color-green-05);
-			--color-link-visited: var(--color-green-06);
-			--color-link-hover: var(--color-green-06);
-
-			--color-background: var(--color-gray-19);
-			--color-background-raised: var(--color-gray-18);
-
-			--color-border: var(--color-gray-15);
-			--color-border-weak: var(--color-gray-17);
-			--color-border-strong: var(--color-gray-08);
-
-			--color-button: var(--color-gray-18);
-			--color-button-hover: var(--color-gray-16);
-			--color-button-text: var(--color-gray-005);
-		}
-
-		.theme-light {
-			--color-accent: var(--color-green-10);
-			--color-accent-deep: var(--color-green-12);
-
-			--color-text: var(--color-gray-18);
-			--color-text-weak: var(--color-gray-15);
-			--color-text-weaker: var(--color-gray-12);
-			--color-text-weakest: var(--color-gray-10);
-			--color-text-inverted: var(--color-gray-005);
-			--color-text-inverted-weak: var(--color-gray-04);
-			--color-text-inverted-weaker: var(--color-gray-07);
-			--color-text-inverted-weakest: var(--color-gray-10);
-			--color-text-error: var(--color-red-14);
-			--color-text-danger: var(--color-text-error);
-
-			--color-link: var(--color-green-12);
-			--color-link-visited: var(--color-green-14);
-			--color-link-hover: var(--color-green-11);
-
-			--color-background: var(--color-gray-005);
-			--color-background-raised: var(--color-white);
-
-			--color-border: var(--color-gray-05);
-			--color-border-weak: var(--color-gray-03);
-			--color-border-strong: var(--color-gray-12);
-
-			--color-button: var(--color-white);
-			--color-button-hover: var(--color-gray-02);
-			--color-button-text: var(--color-gray-18);
-
-			--color-focus-ring: var(--color-accent);
-		}
-
-		.theme-dark {
-			--color-accent: var(--color-green-10);
-			--color-accent-deep: var(--color-green-12);
-
-			--color-text: var(--color-gray-005);
-			--color-text-weak: var(--color-gray-04);
-			--color-text-weaker: var(--color-gray-07);
-			--color-text-weakest: var(--color-gray-10);
-			--color-text-inverted: var(--color-gray-18);
-			--color-text-inverted-weak: var(--color-gray-15);
-			--color-text-inverted-weaker: var(--color-gray-12);
-			--color-text-inverted-weakest: var(--color-gray-10);
-			--color-text-error: var(--color-red-06);
-
-			--color-link: var(--color-green-05);
-			--color-link-visited: var(--color-green-06);
-			--color-link-hover: var(--color-green-06);
-
-			--color-background: var(--color-gray-19);
-			--color-background-raised: var(--color-gray-18);
-
-			--color-border: var(--color-gray-15);
-			--color-border-weak: var(--color-gray-17);
-			--color-border-strong: var(--color-gray-08);
-
-			--color-button: var(--color-gray-18);
-			--color-button-hover: var(--color-gray-16);
-			--color-button-text: var(--color-gray-005);
-		}
 		/* #endregion */
 	}
 }

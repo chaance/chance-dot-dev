@@ -6,10 +6,8 @@
 		height: var(--header-height);
 		padding: 0 var(--pad-x);
 		background-color: var(--color-white);
+		background-color: light-dark(var(--color-white), var(--color-gray-18));
 		font-size: 0.875rem;
-		@media (--dark) {
-			background-color: var(--color-gray-18);
-		}
 	}
 
 	.AdminHeader__form {

@@ -634,10 +634,8 @@
 		.editor-toolbar button.active,
 		.editor-toolbar button:hover {
 			background: var(--color-gray-02);
+			background: light-dark(var(--color-gray-16), var(--color-gray-02));
 			border-color: var(--color-border);
-			@media (--dark) {
-				background: var(--color-gray-16);
-			}
 		}
 
 		.editor-toolbar i.separator {

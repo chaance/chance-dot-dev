@@ -15,5 +15,4 @@
 @custom-media --xl-down (max-width: 1535px);
 @custom-media --xl-only (min-width: 1280px) and (max-width: 1535px);
 @custom-media --xxl (min-width: 1536px);
-@custom-media --dark (prefers-color-scheme: dark);
 @custom-media --motion (prefers-reduced-motion: no-preference);
