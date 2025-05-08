@@ -1,3 +1,4 @@
+// @ts-check
 // Strategy and code adapted from
 // https://unpkg.com/browse/@kentcdodds/md-temp@3.2.1/dist/index.js
 // See https://kentcdodds.com/blog/fixing-a-memory-leak-in-a-production-node-js-app
@@ -5,7 +6,7 @@
 // This is intended to work around a memory leak in shiki so that the site
 // doesn't crash when it hits memory limits
 import fs from "node:fs/promises";
-import { getHighlighter } from "shiki";
+import { createHighlighter } from "shiki";
 
 const base16Theme = JSON.parse(
 	await fs.readFile(
@@ -19,7 +20,7 @@ const base16Theme = JSON.parse(
  */
 async function getThemedTokens({ code, language }) {
 	const themeName = base16Theme.name;
-	const highlighter = await getHighlighter({
+	const highlighter = await createHighlighter({
 		langs: [language],
 		themes: [base16Theme],
 	});
