@@ -82,7 +82,6 @@ function useCheckboxInput({
 	onToggle,
 	indeterminate: isIndeterminate,
 	wrapperProps: {
-		onClick,
 		onPress,
 		onPressStart,
 		onPressEnd,
@@ -124,7 +123,6 @@ function useCheckboxInput({
 			}
 			onPress?.(evt);
 		},
-		onClick: onClick as any,
 		onPressStart,
 		onPressEnd,
 		onPressUp,
@@ -187,7 +185,6 @@ function useRadioInput({
 	required: isRequired,
 	onToggle,
 	wrapperProps: {
-		onClick,
 		onPress,
 		onPressStart,
 		onPressEnd,
@@ -216,7 +213,6 @@ function useRadioInput({
 			}
 			onPress?.(evt);
 		},
-		onClick: onClick as any,
 		onPressStart,
 		onPressEnd,
 		onPressUp,
