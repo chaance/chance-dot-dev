@@ -1,10 +1,13 @@
 import * as React from "react";
 import { useToggleState } from "@react-stately/toggle";
-import { useCheckbox } from "@react-aria/checkbox";
-import { useRadio, useRadioGroup } from "@react-aria/radio";
+import {
+	useCheckbox,
+	useFocusRing,
+	usePress,
+	useRadio,
+	useRadioGroup,
+} from "react-aria";
 import { useRadioGroupState, type RadioGroupState } from "@react-stately/radio";
-import { useFocusRing } from "@react-aria/focus";
-import { usePress } from "@react-aria/interactions";
 import cx from "clsx";
 import { useComposedRefs } from "@chance/hooks/use-composed-refs";
 import { createContext } from "~/lib/create-context";
@@ -79,6 +82,7 @@ function useCheckboxInput({
 	onToggle,
 	indeterminate: isIndeterminate,
 	wrapperProps: {
+		onClick,
 		onPress,
 		onPressStart,
 		onPressEnd,
@@ -120,6 +124,7 @@ function useCheckboxInput({
 			}
 			onPress?.(evt);
 		},
+		onClick: onClick as any,
 		onPressStart,
 		onPressEnd,
 		onPressUp,
@@ -182,6 +187,7 @@ function useRadioInput({
 	required: isRequired,
 	onToggle,
 	wrapperProps: {
+		onClick,
 		onPress,
 		onPressStart,
 		onPressEnd,
@@ -210,6 +216,7 @@ function useRadioInput({
 			}
 			onPress?.(evt);
 		},
+		onClick: onClick as any,
 		onPressStart,
 		onPressEnd,
 		onPressUp,

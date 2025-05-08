@@ -3,7 +3,7 @@ import type { PressEvents, FocusableProps } from "~/types/react-aria";
 import {
 	type AriaButtonProps,
 	useButton as useReactAriaButton,
-} from "@react-aria/button";
+} from "react-aria";
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 	({ children, ...props }, forwardedRef) => {
