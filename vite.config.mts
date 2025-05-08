@@ -18,7 +18,7 @@ const shouldLoadReactRouter = !process.env.VITEST;
 
 export default defineConfig(({ isSsrBuild }) => ({
 	build: {
-		rollupOptions: isSsrBuild ? { input: "./server/app.ts" } : undefined,
+		rollupOptions: isSsrBuild ? { input: "./server/index.ts" } : undefined,
 	},
 	server: shouldLoadReactRouter
 		? // This should fix a bug in React Router that causes the dev server to crash
