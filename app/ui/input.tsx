@@ -79,9 +79,10 @@ function useCheckboxInput({
 	required: isRequired,
 	checked: isSelected,
 	defaultChecked: defaultSelected,
-	onToggle,
+	onCheckedChange,
 	indeterminate: isIndeterminate,
 	wrapperProps: {
+		onClick,
 		onPress,
 		onPressStart,
 		onPressEnd,
@@ -102,7 +103,7 @@ function useCheckboxInput({
 		isDisabled,
 		isReadOnly,
 		isSelected,
-		onChange: onToggle,
+		onChange: onCheckedChange,
 	});
 
 	let excludeFromTabOrder = props.tabIndex != null && props.tabIndex !== 0;
@@ -113,6 +114,7 @@ function useCheckboxInput({
 		...wrapperProps,
 		isDisabled,
 		preventFocusOnPress: true,
+		onClick: onClick as any,
 		onPress(evt) {
 			let target = evt.target;
 			let label = target.closest("label");
@@ -147,7 +149,7 @@ function useCheckboxInput({
 				// Annoying react aria warning. Throw away.
 				"hi",
 			validationState,
-			onChange: onToggle,
+			onChange: onCheckedChange,
 		},
 		state,
 		inputRef,
@@ -183,8 +185,8 @@ function useRadioInput({
 	disabled: isDisabled,
 	readOnly: isReadOnly,
 	required: isRequired,
-	onToggle,
 	wrapperProps: {
+		onClick,
 		onPress,
 		onPressStart,
 		onPressEnd,
@@ -203,6 +205,7 @@ function useRadioInput({
 		...wrapperProps,
 		isDisabled,
 		preventFocusOnPress: true,
+		onClick: onClick as any,
 		onPress(evt) {
 			let target = evt.target;
 			let label = target.closest("label");
@@ -329,7 +332,7 @@ interface InputToggleProps
 		React.ComponentPropsWithRef<"input">,
 		"type" | "value" | "defaultValue"
 	> {
-	onToggle?(isSelected: boolean): void;
+	onCheckedChange?(checked: boolean): void;
 	value?: string;
 }
 
@@ -527,7 +530,6 @@ interface InputRadioProps
 	value: string;
 	wrapperProps?: InputToggleWrapperProps<"svg">;
 	wrapperRef?: React.Ref<SVGSVGElement>;
-	onToggle?(isSelected: boolean): void;
 }
 
 const InputSelect = React.forwardRef<HTMLSelectElement, InputSelectProps>(

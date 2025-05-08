@@ -77,7 +77,7 @@ export function useCollapsibleContent<T extends HTMLElement>(
 	// when closing we delay `present` to retrieve dimensions before closing
 	const isOpen = context.isOpen || isPresent;
 	const isMountAnimationPreventedRef = React.useRef(isOpen);
-	const originalStylesRef = React.useRef<Record<string, string>>();
+	const originalStylesRef = React.useRef<Record<string, string>>(null);
 
 	React.useEffect(() => {
 		const rAF = requestAnimationFrame(

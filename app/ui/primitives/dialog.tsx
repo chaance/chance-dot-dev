@@ -231,7 +231,7 @@ interface DialogProps extends UseDialogOptions {
 	portalMountRef?: React.RefObject<Node>;
 }
 
-function useDialogOverlay<E extends keyof JSX.IntrinsicElements>({
+function useDialogOverlay<E extends keyof React.JSX.IntrinsicElements>({
 	props: {
 		allowPinchZoom,
 		dangerouslyBypassFocusLock,
@@ -352,7 +352,7 @@ const DialogOverlay = React.forwardRef<
 			state,
 			ref: forwardedRef,
 		});
-	const containerRef = React.useRef<HTMLDivElement>(null);
+	const containerRef = React.useRef<HTMLDivElement | null>(null);
 	const ref = useComposedRefs(forwardedRef, containerRef);
 	return (
 		<DisableEventsMaybe
@@ -442,10 +442,10 @@ interface DialogOverlayOwnProps {
 	dangerouslyBypassScrollLock?: boolean;
 }
 
-type DialogOverlayProps<Elem extends keyof JSX.IntrinsicElements> =
+type DialogOverlayProps<Elem extends keyof React.JSX.IntrinsicElements> =
 	ExtendPropsWithRef<Elem, DialogOverlayOwnProps>;
 
-function useDialogContent<E extends keyof JSX.IntrinsicElements>({
+function useDialogContent<E extends keyof React.JSX.IntrinsicElements>({
 	props,
 	state,
 	actions,
@@ -514,7 +514,7 @@ interface DialogContentOwnProps {
 	children?: React.ReactNode;
 }
 
-type DialogContentProps<E extends keyof JSX.IntrinsicElements = "div"> =
+type DialogContentProps<E extends keyof React.JSX.IntrinsicElements = "div"> =
 	ExtendPropsWithRef<E, DialogContentOwnProps>;
 
 DialogContent.displayName = "DialogContent";
@@ -573,7 +573,7 @@ function DisableEventsMaybe({
 		"children"
 	>;
 	isDialogOpen: boolean;
-	containerRef: React.RefObject<Element>;
+	containerRef: React.RefObject<Element | null>;
 	children: React.ReactElement;
 }) {
 	React.useEffect(() => {

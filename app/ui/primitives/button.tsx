@@ -14,7 +14,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 				excludeFromTabOrder: props.tabIndex != null && props.tabIndex !== 0,
 				isDisabled: props.disabled,
 			},
-			ref,
+			ref as React.RefObject<HTMLButtonElement | HTMLDivElement>,
 		);
 		return (
 			<button ref={forwardedRef} {...buttonProps}>
@@ -27,7 +27,7 @@ Button.displayName = "Button";
 
 const ButtonDiv = React.forwardRef<HTMLDivElement, ButtonDivProps>(
 	({ children, ...props }, forwardedRef) => {
-		let ref = React.useRef<HTMLDivElement>(null);
+		let ref = React.useRef<HTMLDivElement | null>(null);
 		let { buttonProps } = useButton(
 			{
 				...(props as any),
@@ -35,7 +35,7 @@ const ButtonDiv = React.forwardRef<HTMLDivElement, ButtonDivProps>(
 				excludeFromTabOrder: props.tabIndex != null && props.tabIndex !== 0,
 				isDisabled: props.disabled,
 			},
-			ref,
+			ref as React.RefObject<HTMLButtonElement | HTMLDivElement>,
 		);
 		return (
 			<div ref={forwardedRef} {...buttonProps}>
