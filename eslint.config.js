@@ -2,7 +2,6 @@ import globals from "globals";
 import * as js from "@chance/eslint";
 import * as react from "@chance/eslint/react";
 import * as typescript from "@chance/eslint/typescript";
-// @ts-expect-error
 import reactRefresh from "eslint-plugin-react-refresh";
 
 /** @type {LinterConfig[]} */
