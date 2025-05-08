@@ -1,13 +1,12 @@
-node_modules
 .DS_Store
-
+node_modules
+/.react-router
 /build
 .env
 
 /coverage
 /prisma/data.db
 /prisma/data.db-journal
-
 /app/dist
 /app/lib/prisma/client
 
