@@ -13,7 +13,7 @@
 		"lint": "eslint .",
 		"start": "cross-env NODE_ENV=production node server.mjs",
 		"test": "echo yolo",
-		"typecheck": "tsc -b",
+		"typecheck": "react-router typegen && tsc",
 		"setup:prisma": "prisma generate && prisma migrate deploy && prisma db seed",
 		"setup": "concurrently \"npm:setup:*\""
 	},

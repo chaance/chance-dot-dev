@@ -57,7 +57,7 @@ jobs:
         run: npm run build
 
       - name: 🔎 Type check
-        run: npm run typecheck --if-present
+        run: npm run typecheck
 
   vitest:
     name: ⚡ Vitest
