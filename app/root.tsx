@@ -79,13 +79,18 @@ export function links() {
 			type: "font/woff",
 			crossOrigin: "",
 		},
-		{
+		...[
+			"editorial-new",
+			"editorial-new-italic",
+			"berkeley-mono",
+			"berkeley-mono-italic",
+		].map((fontFile) => ({
 			rel: "preload",
 			as: "font",
-			href: "/fonts/editorial-new.ttf",
-			type: "font/ttf",
+			href: `/fonts/${fontFile}.woff2`,
+			type: "font/woff2",
 			crossOrigin: "",
-		},
+		})),
 		{ rel: "stylesheet", href: fontsStyles },
 		{ rel: "stylesheet", href: mediaStyles },
 		{ rel: "stylesheet", href: defsStyles },

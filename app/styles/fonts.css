@@ -48,7 +48,7 @@
 
 @font-face {
 	font-family: editorial-new;
-	src: url("/fonts/editorial-new.ttf");
+	src: url("/fonts/editorial-new.woff2");
 	font-weight: 100 900;
 	font-display: swap;
 	font-style: normal;
@@ -56,7 +56,7 @@
 
 @font-face {
 	font-family: editorial-new;
-	src: url("/fonts/editorial-new-italic.ttf");
+	src: url("/fonts/editorial-new-italic.woff2");
 	font-weight: 100 900;
 	font-display: swap;
 	font-style: italic;
@@ -72,15 +72,15 @@
 
 @font-face {
 	font-family: berkeley-mono;
-	src: url("/fonts/berkeley-mono-italic.ttf");
+	src: url("/fonts/berkeley-mono-italic.woff2");
 	font-weight: 100 900;
 	font-display: swap;
 	font-style: italic;
 }
 
 :root {
-	--ff-sans: untitled-sans, "Helvetica Neue", Helvetica, ui-sans-serif,
-		system-ui;
+	--ff-sans:
+		untitled-sans, "Helvetica Neue", Helvetica, ui-sans-serif, system-ui;
 	--ff-serif: editorial-new, ui-serif, Garamond, "Times New Roman", serif;
 	--ff-mono: berkeley-mono, ui-monospace, monospace;
 	--ff-heading: var(--ff-serif);
