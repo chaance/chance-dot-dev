@@ -15,6 +15,16 @@ const AUTHENTICATED_EMAIL_PASSWORD = getRequiredServerEnvVar(
 );
 
 async function seed() {
+	// check if database is already seeded
+	if (
+		await prisma.user.findFirst({
+			where: { email: AUTHENTICATED_EMAIL },
+		})
+	) {
+		console.log("Database already seeded. 🌱");
+		return;
+	}
+
 	let email = AUTHENTICATED_EMAIL;
 	let password = AUTHENTICATED_EMAIL_PASSWORD;
 
