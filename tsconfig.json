@@ -27,7 +27,6 @@
 		"skipLibCheck": true,
 		"strict": true,
 		"allowJs": true,
-		"checkJs": true,
 		"allowImportingTsExtensions": true,
 		"typeRoots": ["./types", "./node_modules/@types"]
 	}
