@@ -38,4 +38,7 @@ export default defineConfig(({ isSsrBuild }) => ({
 		setupFiles: ["./test/setup-test-env.ts"],
 		env: testEnv,
 	},
+	optimizeDeps: {
+		exclude: ["virtual:react-router/server-build"],
+	},
 }));
