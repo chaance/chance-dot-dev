@@ -1,7 +1,7 @@
 import type {
 	EmailSubscriber as DBEmailSubscriber,
 	EmailList as DBEmailList,
-} from "@prisma/client";
+} from "~/lib/prisma.server";
 import { prisma } from "~/lib/db.server";
 import { isValidEmail } from "~/lib/utils";
 
