@@ -1,4 +1,4 @@
-import { PrismaClient } from "../app/lib/prisma.server";
+import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import {
 	slugify,
