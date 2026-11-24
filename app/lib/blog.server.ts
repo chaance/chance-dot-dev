@@ -109,8 +109,10 @@ export interface ProcessedMarkdown<Frontmatter = unknown> {
 	html: string;
 }
 
-export interface MarkdownBlogPostWithExcerpt
-	extends Omit<BlogPost, "body" | "excerpt"> {
+export interface MarkdownBlogPostWithExcerpt extends Omit<
+	BlogPost,
+	"body" | "excerpt"
+> {
 	excerptRaw: string;
 	excerptMarkdown: string;
 	excerptHTML: string;

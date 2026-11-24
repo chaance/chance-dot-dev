@@ -52,8 +52,10 @@ export interface PressEvent<T extends Element = Element> {
 	altKey: boolean;
 }
 
-export interface LongPressEvent<T extends Element = Element>
-	extends Omit<PressEvent<T>, "type"> {
+export interface LongPressEvent<T extends Element = Element> extends Omit<
+	PressEvent<T>,
+	"type"
+> {
 	/** The type of long press event being fired. */
 	type: "longpressstart" | "longpressend" | "longpress";
 }
@@ -117,8 +119,8 @@ export interface PressEvents<Target extends Element = Element> {
 export interface FocusableProps<
 	Target extends Element = Element,
 	RelatedTarget extends Element = Element,
-> extends FocusEvents<Target, RelatedTarget>,
-		KeyboardEvents<Target> {
+>
+	extends FocusEvents<Target, RelatedTarget>, KeyboardEvents<Target> {
 	/** Whether the element should receive focus on render. */
 	autoFocus?: boolean;
 }

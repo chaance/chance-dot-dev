@@ -31,7 +31,8 @@ interface HeadingOwnProps {
 }
 
 interface HeadingProps
-	extends HeadingOwnProps,
+	extends
+		HeadingOwnProps,
 		Omit<React.ComponentPropsWithRef<"h2">, keyof HeadingOwnProps> {}
 
 /* eslint-disable react-refresh/only-export-components */

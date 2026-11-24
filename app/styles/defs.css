@@ -2,8 +2,8 @@
 
 @layer base.props {
 	:root {
-		--ff-sans: untitled-sans, "Helvetica Neue", Helvetica, ui-sans-serif,
-			system-ui;
+		--ff-sans:
+			untitled-sans, "Helvetica Neue", Helvetica, ui-sans-serif, system-ui;
 		--ff-serif: editorial-new, ui-serif, Garamond, "Times New Roman", serif;
 		--ff-mono: berkeley-mono, ui-monospace, monospace;
 		--ff-heading: var(--ff-serif);

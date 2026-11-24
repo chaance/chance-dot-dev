@@ -125,7 +125,8 @@
 			var(--body-bg-gradient-stop-3) 70%,
 			var(--body-bg-gradient-stop-4)
 		);
-		--bg-body-img: no-repeat 100% var(--body-bg-gradient),
+		--bg-body-img:
+			no-repeat 100% var(--body-bg-gradient),
 			repeat center/300px var(--body-bg-grain);
 
 		/* syntax highlighting junk */

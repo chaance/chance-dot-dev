@@ -1,13 +1,18 @@
 import * as React from "react";
 import type { PressEvents, FocusableProps } from "~/types/react-aria";
-import { type AriaButtonProps, useButton as useReactAriaButton } from "react-aria";
+import {
+	type AriaButtonProps,
+	useButton as useReactAriaButton,
+} from "react-aria";
 
 function Button({ children, ref: forwardedRef, ...props }: ButtonProps) {
 	let ref = React.useRef<HTMLButtonElement>(null);
 	let { buttonProps } = useButton(
 		{
 			...props,
-			onClick: props.onClick as (event: React.MouseEvent<any, MouseEvent>) => void,
+			onClick: props.onClick as (
+				event: React.MouseEvent<any, MouseEvent>,
+			) => void,
 			excludeFromTabOrder: props.tabIndex != null && props.tabIndex !== 0,
 			isDisabled: props.disabled,
 		},
@@ -25,7 +30,9 @@ function ButtonDiv({ children, ref: forwardedRef, ...props }: ButtonDivProps) {
 	let { buttonProps } = useButton(
 		{
 			...props,
-			onClick: props.onClick as (event: React.MouseEvent<any, MouseEvent>) => void,
+			onClick: props.onClick as (
+				event: React.MouseEvent<any, MouseEvent>,
+			) => void,
 			elementType: "div",
 			excludeFromTabOrder: props.tabIndex != null && props.tabIndex !== 0,
 			isDisabled: props.disabled,
@@ -73,19 +80,25 @@ function useButton<Elem extends HTMLDivElement | HTMLButtonElement>(
 	};
 }
 
-interface ButtonOwnProps extends PressEvents<HTMLButtonElement>, FocusableProps<HTMLButtonElement> {
+interface ButtonOwnProps
+	extends PressEvents<HTMLButtonElement>, FocusableProps<HTMLButtonElement> {
 	value?: string | undefined;
 }
 
 interface ButtonProps
-	extends ButtonOwnProps, Omit<React.ComponentPropsWithRef<"button">, keyof ButtonOwnProps> {}
+	extends
+		ButtonOwnProps,
+		Omit<React.ComponentPropsWithRef<"button">, keyof ButtonOwnProps> {}
 
-interface ButtonDivOwnProps extends PressEvents<HTMLDivElement>, FocusableProps<HTMLDivElement> {
+interface ButtonDivOwnProps
+	extends PressEvents<HTMLDivElement>, FocusableProps<HTMLDivElement> {
 	disabled?: boolean;
 }
 
 interface ButtonDivProps
-	extends ButtonDivOwnProps, Omit<React.ComponentPropsWithRef<"div">, keyof ButtonDivOwnProps> {}
+	extends
+		ButtonDivOwnProps,
+		Omit<React.ComponentPropsWithRef<"div">, keyof ButtonDivOwnProps> {}
 
 export type { ButtonProps, ButtonDivProps };
 export { Button, ButtonDiv };

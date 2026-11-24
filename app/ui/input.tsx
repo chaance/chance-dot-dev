@@ -19,13 +19,14 @@ type PressEventHandler = Parameters<typeof usePress>[0]["onPress"];
 
 const BASE_CLASS = "input";
 
-function InputBase({ as: Comp, className, ref: forwardedRef, ...props }: InputBaseProps) {
+function InputBase({
+	as: Comp,
+	className,
+	ref: forwardedRef,
+	...props
+}: InputBaseProps) {
 	return (
-		<Comp
-			ref={forwardedRef}
-			className={cx(BASE_CLASS, className)}
-			{...props}
-		/>
+		<Comp ref={forwardedRef} className={cx(BASE_CLASS, className)} {...props} />
 	);
 }
 
@@ -34,7 +35,11 @@ interface InputBaseProps {
 	[key: string]: any;
 }
 
-function InputText({ type = "text", ref: forwardedRef, ...props }: InputTextProps) {
+function InputText({
+	type = "text",
+	ref: forwardedRef,
+	...props
+}: InputTextProps) {
 	return (
 		<InputBase
 			as="input"
@@ -46,11 +51,10 @@ function InputText({ type = "text", ref: forwardedRef, ...props }: InputTextProp
 	);
 }
 
-interface InputTextProps
-	extends Omit<
-		React.ComponentPropsWithRef<"input">,
-		"checked" | "defaultChecked" | "type"
-	> {
+interface InputTextProps extends Omit<
+	React.ComponentPropsWithRef<"input">,
+	"checked" | "defaultChecked" | "type"
+> {
 	type?:
 		| "text"
 		| "email"
@@ -273,35 +277,35 @@ function InputCheckbox({ ref: forwardedRef, ...props }: InputCheckboxProps) {
 	} = useCheckboxInput({ ...props, id });
 	let ref = useComposedRefs(forwardedRef, inputRef);
 
-		return (
-			<>
-				<InputBase
-					as="svg"
-					ref={wrapperRef}
-					{...wrapperProps}
-					className={cx(`${BASE_CLASS}--checkbox`, {
-						[`${BASE_CLASS}--checked`]: isVisuallySelected,
-						[`${BASE_CLASS}--disabled`]: isDisabled,
-						[`${BASE_CLASS}--focused`]: isFocused,
-						[`${BASE_CLASS}--active`]: isPressed,
-					})}
-					aria-hidden
-					viewBox="0 0 24 24"
-				>
-					<rect width={24} height={24} className={`${BASE_CLASS}__accent`} />
-					{isVisuallySelected && (
-						<path
-							transform="translate(9 9) scale(1.3)"
-							className={`${BASE_CLASS}__marker`}
-							d={`M3.788 9A.999.999 0 0 1 3 8.615l-2.288-3a1 1 0 1 1
+	return (
+		<>
+			<InputBase
+				as="svg"
+				ref={wrapperRef}
+				{...wrapperProps}
+				className={cx(`${BASE_CLASS}--checkbox`, {
+					[`${BASE_CLASS}--checked`]: isVisuallySelected,
+					[`${BASE_CLASS}--disabled`]: isDisabled,
+					[`${BASE_CLASS}--focused`]: isFocused,
+					[`${BASE_CLASS}--active`]: isPressed,
+				})}
+				aria-hidden
+				viewBox="0 0 24 24"
+			>
+				<rect width={24} height={24} className={`${BASE_CLASS}__accent`} />
+				{isVisuallySelected && (
+					<path
+						transform="translate(9 9) scale(1.3)"
+						className={`${BASE_CLASS}__marker`}
+						d={`M3.788 9A.999.999 0 0 1 3 8.615l-2.288-3a1 1 0 1 1
             1.576-1.23l1.5 1.991 3.924-4.991a1 1 0 1 1 1.576 1.23l-4.712
             6A.999.999 0 0 1 3.788 9z`}
-						/>
-					)}
-					{isIndeterminate && (
-						<rect x={7} y={11} width={10} height={2} fill="gray" />
-					)}
-					{/* {isFocusVisible && (
+					/>
+				)}
+				{isIndeterminate && (
+					<rect x={7} y={11} width={10} height={2} fill="gray" />
+				)}
+				{/* {isFocusVisible && (
 						<rect
 							x={1}
 							y={1}
@@ -312,20 +316,19 @@ function InputCheckbox({ ref: forwardedRef, ...props }: InputCheckboxProps) {
 							strokeWidth={2}
 						/>
 					)} */}
-				</InputBase>
-				<div className="sr-only">
-					<input {...inputProps} aria-label={props["aria-label"]} ref={ref} />
-				</div>
-			</>
-		);
+			</InputBase>
+			<div className="sr-only">
+				<input {...inputProps} aria-label={props["aria-label"]} ref={ref} />
+			</div>
+		</>
+	);
 }
 InputCheckbox.displayName = "InputCheckbox";
 
-interface InputToggleProps
-	extends Omit<
-		React.ComponentPropsWithRef<"input">,
-		"type" | "value" | "defaultValue"
-	> {
+interface InputToggleProps extends Omit<
+	React.ComponentPropsWithRef<"input">,
+	"type" | "value" | "defaultValue"
+> {
 	onCheckedChange?(checked: boolean): void;
 	value?: string;
 }
@@ -385,64 +388,70 @@ function InputRadioGroup({
 	ref,
 	...props
 }: InputRadioGroupProps) {
-		let generatedId = React.useId();
-		let id = props.id || `radio-group:${generatedId}`;
+	let generatedId = React.useId();
+	let id = props.id || `radio-group:${generatedId}`;
 
-		let { children, validationState } = props;
-		let state = useRadioGroupState({
-			...props,
-			// @ts-ignore
-			id,
-			onChange: onValueChange,
-			isDisabled,
-			isReadOnly,
-			isRequired,
-		});
-		let { radioGroupProps, labelProps, descriptionProps, errorMessageProps } =
-			useRadioGroup(
-				{
-					...props,
-					onFocus: props.onFocus as any,
-					onBlur: props.onBlur as any,
-					id,
-					onChange: onValueChange,
-					isDisabled,
-					isReadOnly,
-					isRequired,
-					"aria-label":
-						// Annoying react aria warning. Throw away.
-						"hi",
-				},
-				state,
-			);
-
-		radioGroupProps["aria-label"] = props["aria-label"];
-
-		return (
-			<div {...radioGroupProps} ref={ref}>
-				<RadioGroupContext.Provider
-					value={{
-						state,
-						labelProps,
-						descriptionProps,
-						errorMessageProps,
-						validationState,
-					}}
-				>
-					{children}
-				</RadioGroupContext.Provider>
-			</div>
+	let { children, validationState } = props;
+	let state = useRadioGroupState({
+		...props,
+		// @ts-ignore
+		id,
+		onChange: onValueChange,
+		isDisabled,
+		isReadOnly,
+		isRequired,
+	});
+	let { radioGroupProps, labelProps, descriptionProps, errorMessageProps } =
+		useRadioGroup(
+			{
+				...props,
+				onFocus: props.onFocus as any,
+				onBlur: props.onBlur as any,
+				id,
+				onChange: onValueChange,
+				isDisabled,
+				isReadOnly,
+				isRequired,
+				"aria-label":
+					// Annoying react aria warning. Throw away.
+					"hi",
+			},
+			state,
 		);
+
+	radioGroupProps["aria-label"] = props["aria-label"];
+
+	return (
+		<div {...radioGroupProps} ref={ref}>
+			<RadioGroupContext.Provider
+				value={{
+					state,
+					labelProps,
+					descriptionProps,
+					errorMessageProps,
+					validationState,
+				}}
+			>
+				{children}
+			</RadioGroupContext.Provider>
+		</div>
+	);
 }
 InputRadioGroup.displayName = "InputRadioGroup";
 
-function InputRadioGroupLabel({ ref, ...props }: React.ComponentPropsWithRef<"span">) {
+function InputRadioGroupLabel({
+	ref,
+	...props
+}: React.ComponentPropsWithRef<"span">) {
 	let { labelProps } = useRadioGroupContext();
 	return <span ref={ref} {...labelProps} {...props} />;
 }
 InputRadioGroupLabel.displayName = "InputRadioGroupLabel";
 
-function InputRadioGroupDescription({ ref, ...props }: React.ComponentPropsWithRef<"div">) {
+function InputRadioGroupDescription({
+	ref,
+	...props
+}: React.ComponentPropsWithRef<"div">) {
 	let { descriptionProps } = useRadioGroupContext();
 	return <div ref={ref} {...descriptionProps} {...props} />;
 }
@@ -475,39 +484,38 @@ function InputRadio({ ref: forwardedRef, ...props }: InputRadioProps) {
 	} = useRadioInput({ ...props, id });
 	let ref = useComposedRefs(forwardedRef, inputRef);
 
-		return (
-			<>
-				<InputBase
-					as="svg"
-					ref={wrapperRef}
-					{...wrapperProps}
-					className={cx(`${BASE_CLASS}--radio`, {
-						[`${BASE_CLASS}--checked`]: isSelected,
-						[`${BASE_CLASS}--disabled`]: isDisabled,
-						[`${BASE_CLASS}--focused`]: isFocused,
-						[`${BASE_CLASS}--active`]: isPressed,
-					})}
-					aria-hidden
-					viewBox="0 0 24 24"
-				>
-					<circle cx="12" cy="12" r="12" className={`${BASE_CLASS}__accent`} />
-					{isSelected && (
-						<circle className={`${BASE_CLASS}__marker`} cx="12" cy="12" r="6" />
-					)}
-				</InputBase>
-				<div className="sr-only">
-					<input {...inputProps} aria-label={props["aria-label"]} ref={ref} />
-				</div>
-			</>
-		);
+	return (
+		<>
+			<InputBase
+				as="svg"
+				ref={wrapperRef}
+				{...wrapperProps}
+				className={cx(`${BASE_CLASS}--radio`, {
+					[`${BASE_CLASS}--checked`]: isSelected,
+					[`${BASE_CLASS}--disabled`]: isDisabled,
+					[`${BASE_CLASS}--focused`]: isFocused,
+					[`${BASE_CLASS}--active`]: isPressed,
+				})}
+				aria-hidden
+				viewBox="0 0 24 24"
+			>
+				<circle cx="12" cy="12" r="12" className={`${BASE_CLASS}__accent`} />
+				{isSelected && (
+					<circle className={`${BASE_CLASS}__marker`} cx="12" cy="12" r="6" />
+				)}
+			</InputBase>
+			<div className="sr-only">
+				<input {...inputProps} aria-label={props["aria-label"]} ref={ref} />
+			</div>
+		</>
+	);
 }
 InputRadio.displayName = "InputRadio";
 
-interface InputRadioProps
-	extends Omit<
-		React.ComponentPropsWithRef<"input">,
-		"type" | "value" | "defaultValue" | "checked" | "defaultChecked"
-	> {
+interface InputRadioProps extends Omit<
+	React.ComponentPropsWithRef<"input">,
+	"type" | "value" | "defaultValue" | "checked" | "defaultChecked"
+> {
 	value: string;
 	wrapperProps?: InputToggleWrapperProps<"svg">;
 	wrapperRef?: React.Ref<SVGSVGElement>;

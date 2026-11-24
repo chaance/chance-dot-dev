@@ -86,9 +86,7 @@ export default function HomeRoute() {
 						<article key={post.id} className="Articles__post">
 							<div className="Articles__post-header">
 								<h3 className="Articles__post-title text-h2">
-									<Link to={`/blog/${post.slug}`}>
-										{post.title}
-									</Link>
+									<Link to={`/blog/${post.slug}`}>{post.title}</Link>
 								</h3>
 								<div className="Articles__post-meta text-sm text-weaker">
 									<time dateTime={post.dateISO}>{post.dateFormatted}</time>

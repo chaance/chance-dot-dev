@@ -134,8 +134,10 @@ function CollapsibleContentNoop(props: CollapsibleContentProps) {
 	return <HeaderNavArea className="SiteHeader__nav-area--static" />;
 }
 
-interface HeaderNavAreaProps
-	extends Omit<React.ComponentPropsWithoutRef<"div">, "children"> {
+interface HeaderNavAreaProps extends Omit<
+	React.ComponentPropsWithoutRef<"div">,
+	"children"
+> {
 	contentRef?: React.Ref<HTMLDivElement>;
 }
 

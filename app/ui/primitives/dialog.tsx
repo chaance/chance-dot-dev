@@ -195,13 +195,11 @@ type PortalElementType = CustomElementType | "div";
 
 interface DialogProviderProps extends UseDialogOptions {
 	children:
-		| React.ReactNode
-		| ((context: DialogContextValue) => React.ReactNode);
+		React.ReactNode | ((context: DialogContextValue) => React.ReactNode);
 }
 
 interface DialogStatefulProviderProps
-	extends DialogProviderProps,
-		DialogContextValue {}
+	extends DialogProviderProps, DialogContextValue {}
 
 interface DialogPortalProps {
 	children: React.ReactNode;
@@ -340,7 +338,10 @@ function useDialogOverlay<E extends keyof React.JSX.IntrinsicElements>({
  *
  * Note: Must be rendered inside of a `DialogWrapper`.
  */
-function DialogOverlay({ ref: forwardedRef, ...props }: DialogOverlayProps<"div">) {
+function DialogOverlay({
+	ref: forwardedRef,
+	...props
+}: DialogOverlayProps<"div">) {
 	let { state, actions } = useDialogContext("DialogOverlay");
 	let { componentProps, focusLockProps, removeScrollProps } =
 		useDialogOverlay<"div">({
@@ -485,7 +486,11 @@ function useDialogContent<E extends keyof React.JSX.IntrinsicElements>({
  * to it. Any props passed to `Dialog` component (besides `isOpen` and
  * `onDismiss`) will be spread onto `DialogContent`.
  */
-function DialogContent({ children, ref: forwardedRef, ...props }: DialogContentProps<"div">) {
+function DialogContent({
+	children,
+	ref: forwardedRef,
+	...props
+}: DialogContentProps<"div">) {
 	let { state, actions } = useDialogContext("DialogContent");
 	let { componentProps } = useDialogContent<"div">({
 		actions,

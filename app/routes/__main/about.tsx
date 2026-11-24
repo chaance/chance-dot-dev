@@ -41,8 +41,9 @@ export default function AboutRoute() {
 						<div className="prose">
 							<p>
 								As you may have gathered, my name is Chance and I’m a software
-								engineer based in <span style={{ whiteSpace: "nowrap" }}>San Diego</span>
-								, CA. I work with some really smart people at{" "}
+								engineer based in{" "}
+								<span style={{ whiteSpace: "nowrap" }}>San Diego</span>, CA. I
+								work with some really smart people at{" "}
 								<a
 									href="https://workos.com/"
 									target="_blank"
