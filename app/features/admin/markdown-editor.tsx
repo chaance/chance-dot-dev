@@ -117,22 +117,22 @@ function useMarkdownEditorContext() {
 	return context;
 }
 
-const MarkdownEditor = React.forwardRef<HTMLDivElement, MarkdownEditorProps>(
-	(props, ref) => {
-		let {
-			events,
-			defaultValue,
-			value,
-			options = {},
-			children,
-			extraKeys,
-			getLineAndCursor,
-			getMdeInstance,
-			getCodemirrorInstance,
-			onChange,
-			fieldId: _fieldId,
-			...rest
-		} = props;
+function MarkdownEditor(props: MarkdownEditorProps) {
+	let {
+		ref,
+		events,
+		defaultValue,
+		value,
+		options = {},
+		children,
+		extraKeys,
+		getLineAndCursor,
+		getMdeInstance,
+		getCodemirrorInstance,
+		onChange,
+		fieldId: _fieldId,
+		...rest
+	} = props;
 
 		let generatedFieldId = React.useId();
 		let fieldId = _fieldId != null ? _fieldId : generatedFieldId;
@@ -342,14 +342,9 @@ const MarkdownEditor = React.forwardRef<HTMLDivElement, MarkdownEditorProps>(
 				</MarkdownEditorContext.Provider>
 			</div>
 		);
-	},
-);
-MarkdownEditor.displayName = "MarkdownEditor";
+}
 
-const MarkdownEditorTextarea = React.forwardRef<
-	HTMLTextAreaElement,
-	MarkdownEditorTextareaProps
->(({ ...props }, forwardedRef) => {
+function MarkdownEditorTextarea({ ref: forwardedRef, ...props }: MarkdownEditorTextareaProps) {
 	let { fieldId, setTextRef, value, defaultValue } = useMarkdownEditorContext();
 	let ref = useComposedRefs(forwardedRef, setTextRef);
 	return (
@@ -365,8 +360,7 @@ const MarkdownEditorTextarea = React.forwardRef<
 			// style={{ display: "none" }}
 		/>
 	);
-});
-MarkdownEditorTextarea.displayName = "MarkdownEditorTextarea";
+}
 
 export { MarkdownEditor, MarkdownEditorTextarea };
 export type { MarkdownEditorProps, MarkdownEditorTextareaProps };

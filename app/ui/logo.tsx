@@ -1,10 +1,11 @@
 import * as React from "react";
 import { Svg } from "~/ui/icons";
 
-const LogoSmall = React.forwardRef<
-	SVGSVGElement,
-	Omit<React.ComponentProps<typeof Svg>, "viewBox">
->(({ title = "Chance the Dev", ...props }, ref) => {
+function LogoSmall({
+	title = "Chance the Dev",
+	ref,
+	...props
+}: Omit<React.ComponentProps<typeof Svg>, "viewBox">) {
 	return (
 		<Svg title={title} ref={ref} {...props} viewBox="0 0 593.6767 265.9412">
 			<g>
@@ -20,12 +21,13 @@ const LogoSmall = React.forwardRef<
 			</g>
 		</Svg>
 	);
-});
+}
 
-const LogoLarge = React.forwardRef<
-	SVGSVGElement,
-	Omit<React.ComponentProps<typeof Svg>, "viewBox">
->(({ title = "Chance the Developer", ...props }, ref) => {
+function LogoLarge({
+	title = "Chance the Developer",
+	ref,
+	...props
+}: Omit<React.ComponentProps<typeof Svg>, "viewBox">) {
 	return (
 		<Svg title={title} ref={ref} {...props} viewBox="0 0 593.6767 245.9412">
 			<g>
@@ -47,9 +49,6 @@ const LogoLarge = React.forwardRef<
 			</g>
 		</Svg>
 	);
-});
-
-LogoSmall.displayName = "LogoSmall";
-LogoLarge.displayName = "LogoLarge";
+}
 
 export { LogoSmall, LogoLarge };

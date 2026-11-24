@@ -75,7 +75,7 @@ export default function HomeRoute() {
 	return (
 		<main className="homepage">
 			<h1 className="sr-only">Chance the Dev</h1>
-			<h2 className="homepage__heading text-h3 mb-10">Latest Articles</h2>
+			<h2 className="homepage__heading text-h3">Latest Articles</h2>
 			<div className="Articles">
 				{posts.map((post) => {
 					let excerpt = post.excerptRaw || post.description;
@@ -86,7 +86,7 @@ export default function HomeRoute() {
 						<article key={post.id} className="Articles__post">
 							<div className="Articles__post-header">
 								<h3 className="Articles__post-title text-h2">
-									<Link className="flex" to={`/blog/${post.slug}`}>
+									<Link to={`/blog/${post.slug}`}>
 										{post.title}
 									</Link>
 								</h3>

@@ -1,6 +1,11 @@
 import * as React from "react";
 import { Heading, HeadingLevelProvider } from "~/ui/primitives/heading";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
+
+import aboutStyles from "./about.css?url";
+export function links() {
+	return [{ rel: "stylesheet", href: aboutStyles }];
+}
 // import { useFetcher } from "@remix-run/react";
 // import { useLayoutEffect } from "@chance/hooks/use-layout-effect";
 // import type { action as signUpAction } from "~/routes/__main/sign-up";
@@ -29,14 +34,14 @@ export default function AboutRoute() {
 			<HeadingLevelProvider>
 				<div>
 					<section>
-						<div aria-hidden className="text-h1 mb-4 md:mb-6">
+						<div aria-hidden className="text-h1 about__decorative-heading">
 							Who <em className="text-weaker">am I?</em>
 						</div>
 
-						<div className="prose text-pretty">
+						<div className="prose">
 							<p>
 								As you may have gathered, my name is Chance and I’m a software
-								engineer based in <span className="text-nowrap">San Diego</span>
+								engineer based in <span style={{ whiteSpace: "nowrap" }}>San Diego</span>
 								, CA. I work with some really smart people at{" "}
 								<a
 									href="https://workos.com/"
@@ -66,7 +71,7 @@ export default function AboutRoute() {
 
 							<Heading>Random facts</Heading>
 
-							<ul className="text-pretty">
+							<ul>
 								<li>
 									I spent a few weeks hiking the{" "}
 									<a
@@ -140,7 +145,7 @@ export default function AboutRoute() {
 							</ul>
 
 							<footer aria-label="Footnotes">
-								<ol className="text-sm text-pretty">
+								<ol className="text-sm">
 									<li id="intro-footnote-spelling-bee">
 										I ultimately lost at the county level by mispelling the word{" "}
 										<em>irksome</em>, a fact which irks me to this very day.

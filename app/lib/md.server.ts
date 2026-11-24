@@ -262,7 +262,7 @@ async function getPlugins() {
 									type: "element",
 									tagName: "span",
 									properties: {
-										className: "codeblock-line",
+										className: ["codeblock-line"],
 										dataHighlight: highlightLine ? "true" : undefined,
 										dataLineNumber: usesLineNumbers ? lineNumber : undefined,
 										dataAdd: isDiff ? addLine : undefined,

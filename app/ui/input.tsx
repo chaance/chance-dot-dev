@@ -19,38 +19,32 @@ type PressEventHandler = Parameters<typeof usePress>[0]["onPress"];
 
 const BASE_CLASS = "input";
 
-const InputBase = React.forwardRef<any, InputBaseProps>(
-	({ as: Comp, className, ...props }, forwardedRef) => {
-		return (
-			<Comp
-				ref={forwardedRef}
-				className={cx(BASE_CLASS, className)}
-				{...props}
-			/>
-		);
-	},
-);
-InputBase.displayName = "InputBase";
+function InputBase({ as: Comp, className, ref: forwardedRef, ...props }: InputBaseProps) {
+	return (
+		<Comp
+			ref={forwardedRef}
+			className={cx(BASE_CLASS, className)}
+			{...props}
+		/>
+	);
+}
 
 interface InputBaseProps {
-	as: "input" | "textarea" | "select";
+	as: React.ElementType;
 	[key: string]: any;
 }
 
-const InputText = React.forwardRef<HTMLInputElement, InputTextProps>(
-	({ type = "text", ...props }, forwardedRef) => {
-		return (
-			<InputBase
-				as="input"
-				ref={forwardedRef}
-				{...props}
-				type={type}
-				className={cx(`${BASE_CLASS}--${type}`)}
-			/>
-		);
-	},
-);
-InputText.displayName = "InputText";
+function InputText({ type = "text", ref: forwardedRef, ...props }: InputTextProps) {
+	return (
+		<InputBase
+			as="input"
+			ref={forwardedRef}
+			{...props}
+			type={type}
+			className={cx(`${BASE_CLASS}--${type}`)}
+		/>
+	);
+}
 
 interface InputTextProps
 	extends Omit<
@@ -144,6 +138,7 @@ function useCheckboxInput({
 			// TODO: deal with type and submit a PR to react-aria
 			onFocus: props.onFocus as any,
 			onBlur: props.onBlur as any,
+			onClick: props.onClick as any,
 			excludeFromTabOrder,
 			"aria-label":
 				// Annoying react aria warning. Throw away.
@@ -230,6 +225,7 @@ function useRadioInput({
 			// TODO: deal with type and submit a PR to react-aria
 			onFocus: props.onFocus as any,
 			onBlur: props.onBlur as any,
+			onClick: props.onClick as any,
 			"aria-label":
 				// Annoying react aria warning. Throw away.
 				"hi",
@@ -261,22 +257,21 @@ function useRadioInput({
 	};
 }
 
-const InputCheckbox = React.forwardRef<HTMLInputElement, InputCheckboxProps>(
-	(props, forwardedRef) => {
-		let generatedId = React.useId();
-		let id = props.id || `checkbox:${generatedId}`;
-		let {
-			inputProps,
-			inputRef,
-			isDisabled,
-			isFocused,
-			isIndeterminate,
-			isPressed,
-			isVisuallySelected,
-			wrapperProps,
-			wrapperRef,
-		} = useCheckboxInput({ ...props, id });
-		let ref = useComposedRefs(forwardedRef, inputRef);
+function InputCheckbox({ ref: forwardedRef, ...props }: InputCheckboxProps) {
+	let generatedId = React.useId();
+	let id = props.id || `checkbox:${generatedId}`;
+	let {
+		inputProps,
+		inputRef,
+		isDisabled,
+		isFocused,
+		isIndeterminate,
+		isPressed,
+		isVisuallySelected,
+		wrapperProps,
+		wrapperRef,
+	} = useCheckboxInput({ ...props, id });
+	let ref = useComposedRefs(forwardedRef, inputRef);
 
 		return (
 			<>
@@ -323,8 +318,7 @@ const InputCheckbox = React.forwardRef<HTMLInputElement, InputCheckboxProps>(
 				</div>
 			</>
 		);
-	},
-);
+}
 InputCheckbox.displayName = "InputCheckbox";
 
 interface InputToggleProps
@@ -383,17 +377,14 @@ function useRadioGroupContext() {
 	return context;
 }
 
-const InputRadioGroup = React.forwardRef<HTMLDivElement, InputRadioGroupProps>(
-	(
-		{
-			onValueChange,
-			disabled: isDisabled,
-			readOnly: isReadOnly,
-			required: isRequired,
-			...props
-		},
-		ref,
-	) => {
+function InputRadioGroup({
+	onValueChange,
+	disabled: isDisabled,
+	readOnly: isReadOnly,
+	required: isRequired,
+	ref,
+	...props
+}: InputRadioGroupProps) {
 		let generatedId = React.useId();
 		let id = props.id || `radio-group:${generatedId}`;
 
@@ -442,56 +433,47 @@ const InputRadioGroup = React.forwardRef<HTMLDivElement, InputRadioGroupProps>(
 				</RadioGroupContext.Provider>
 			</div>
 		);
-	},
-);
+}
 InputRadioGroup.displayName = "InputRadioGroup";
 
-const InputRadioGroupLabel = React.forwardRef<
-	HTMLSpanElement,
-	React.ComponentPropsWithRef<"span">
->((props, ref) => {
+function InputRadioGroupLabel({ ref, ...props }: React.ComponentPropsWithRef<"span">) {
 	let { labelProps } = useRadioGroupContext();
 	return <span ref={ref} {...labelProps} {...props} />;
-});
+}
 InputRadioGroupLabel.displayName = "InputRadioGroupLabel";
 
-const InputRadioGroupDescription = React.forwardRef<
-	HTMLDivElement,
-	React.ComponentPropsWithRef<"div">
->((props, ref) => {
+function InputRadioGroupDescription({ ref, ...props }: React.ComponentPropsWithRef<"div">) {
 	let { descriptionProps } = useRadioGroupContext();
 	return <div ref={ref} {...descriptionProps} {...props} />;
-});
+}
 InputRadioGroupDescription.displayName = "InputRadioGroupDescription";
 
-const InputRadioGroupErrorMessage = React.forwardRef<
-	HTMLDivElement,
-	React.ComponentPropsWithRef<"div"> & {
-		renderWhenValid?: boolean;
-	}
->(({ renderWhenValid, ...props }, ref) => {
+function InputRadioGroupErrorMessage({
+	renderWhenValid,
+	ref,
+	...props
+}: React.ComponentPropsWithRef<"div"> & { renderWhenValid?: boolean }) {
 	let { errorMessageProps, validationState } = useRadioGroupContext();
 	return renderWhenValid || validationState === "invalid" ? (
 		<div ref={ref} {...errorMessageProps} {...props} />
 	) : null;
-});
+}
 InputRadioGroupErrorMessage.displayName = "InputRadioGroupErrorMessage";
 
-const InputRadio = React.forwardRef<HTMLInputElement, InputRadioProps>(
-	(props, forwardedRef) => {
-		let generatedId = React.useId();
-		let id = props.id || `radio:${generatedId}`;
-		let {
-			inputProps,
-			inputRef,
-			isDisabled,
-			isFocused,
-			isPressed,
-			isSelected,
-			wrapperProps,
-			wrapperRef,
-		} = useRadioInput({ ...props, id });
-		let ref = useComposedRefs(forwardedRef, inputRef);
+function InputRadio({ ref: forwardedRef, ...props }: InputRadioProps) {
+	let generatedId = React.useId();
+	let id = props.id || `radio:${generatedId}`;
+	let {
+		inputProps,
+		inputRef,
+		isDisabled,
+		isFocused,
+		isPressed,
+		isSelected,
+		wrapperProps,
+		wrapperRef,
+	} = useRadioInput({ ...props, id });
+	let ref = useComposedRefs(forwardedRef, inputRef);
 
 		return (
 			<>
@@ -518,8 +500,7 @@ const InputRadio = React.forwardRef<HTMLInputElement, InputRadioProps>(
 				</div>
 			</>
 		);
-	},
-);
+}
 InputRadio.displayName = "InputRadio";
 
 interface InputRadioProps
@@ -532,34 +513,30 @@ interface InputRadioProps
 	wrapperRef?: React.Ref<SVGSVGElement>;
 }
 
-const InputSelect = React.forwardRef<HTMLSelectElement, InputSelectProps>(
-	({ ...props }, forwardedRef) => {
-		return (
-			<InputBase
-				as="select"
-				ref={forwardedRef}
-				{...props}
-				className={cx(`${BASE_CLASS}--select`)}
-			/>
-		);
-	},
-);
+function InputSelect({ ref: forwardedRef, ...props }: InputSelectProps) {
+	return (
+		<InputBase
+			as="select"
+			ref={forwardedRef}
+			{...props}
+			className={cx(`${BASE_CLASS}--select`)}
+		/>
+	);
+}
 InputSelect.displayName = "InputSelect";
 
 interface InputSelectProps extends React.ComponentPropsWithRef<"select"> {}
 
-const InputTextarea = React.forwardRef<HTMLTextAreaElement, InputTextareaProps>(
-	({ ...props }, forwardedRef) => {
-		return (
-			<InputBase
-				as="textarea"
-				ref={forwardedRef}
-				{...props}
-				className={cx(`${BASE_CLASS}--textarea`)}
-			/>
-		);
-	},
-);
+function InputTextarea({ ref: forwardedRef, ...props }: InputTextareaProps) {
+	return (
+		<InputBase
+			as="textarea"
+			ref={forwardedRef}
+			{...props}
+			className={cx(`${BASE_CLASS}--textarea`)}
+		/>
+	);
+}
 InputTextarea.displayName = "InputTextarea";
 
 interface InputTextareaProps extends React.ComponentPropsWithRef<"textarea"> {}

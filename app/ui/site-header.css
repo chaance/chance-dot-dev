@@ -6,6 +6,24 @@
 		}
 	}
 
+	.SiteHeader__header-group {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+	}
+
+	.SiteHeader__nav-area--static {
+		@media (--sm-down) {
+			display: none;
+		}
+	}
+
+	.SiteHeader__title-text {
+		@media (--sm-down) {
+			margin-top: 4px;
+		}
+	}
+
 	.SiteHeader__inner {
 		--p: 2rem;
 		display: flex;

@@ -17,7 +17,7 @@ function makeLink(
 		? NavLinkProps
 		: LinkProps;
 
-	const Link = React.forwardRef<HTMLAnchorElement, P>((props, ref) => {
+	function Link({ ref, ...props }: P & { ref?: React.Ref<HTMLAnchorElement> }) {
 		if (isString(props.to) && isAbsoluteUrl(props.to)) {
 			let { caseSensitive, className, end, style, children, ...domProps } =
 				props as NavLinkProps;
@@ -57,7 +57,7 @@ function makeLink(
 		return (
 			<Component {...props} data-type={displayName.toLowerCase()} ref={ref} />
 		);
-	});
+	}
 	Link.displayName = displayName;
 	return Link;
 }

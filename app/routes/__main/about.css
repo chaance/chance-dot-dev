@@ -1,0 +1,8 @@
+@layer routes.about {
+	.about__decorative-heading {
+		margin-bottom: var(--space-4);
+		@media (--md) {
+			margin-bottom: var(--space-6);
+		}
+	}
+}

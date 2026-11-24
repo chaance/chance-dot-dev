@@ -1,6 +1,11 @@
 import * as React from "react";
 import { Heading, HeadingLevelProvider } from "~/ui/primitives/heading";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
+
+import codeRecipesStyles from "./code-recipes.css?url";
+export function links() {
+	return [{ rel: "stylesheet", href: codeRecipesStyles }];
+}
 import { useFetcher } from "react-router";
 import { useLayoutEffect } from "@chance/hooks/use-layout-effect";
 import type { action as signUpAction } from "~/routes/__main/sign-up";
@@ -31,13 +36,13 @@ export default function CodeRecipesRoute() {
 
 	return (
 		<main>
-			<Heading className="text-h1 mb-4 md:mb-6">
+			<Heading className="text-h1 code-recipes__heading">
 				Code <em className="text-weaker">Recipes</em>
 			</Heading>
 			<div>
 				<HeadingLevelProvider>
 					<section>
-						<div className="prose text-pretty">
+						<div className="prose">
 							<div>
 								<p>
 									As you may have gathered, my name is Chance and I’m a

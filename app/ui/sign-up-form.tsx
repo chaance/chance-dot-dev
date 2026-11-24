@@ -4,32 +4,27 @@ import { bem } from "~/lib/utils";
 import { InputText } from "~/ui/input";
 import { Button } from "~/ui/primitives/button";
 
-const SignUpForm = React.forwardRef<HTMLFormElement, SignUpFormProps>(
-	(
-		{
-			formComponent: FormComp = Form,
-			fields,
-			submitButton,
-			formAction = "/sign-up",
-			...props
-		},
-		forwardedRef,
-	) => {
-		const ROOT_CLASS = "sign-up-form";
-		return (
-			<FormComp
-				ref={forwardedRef}
-				action={formAction}
-				method="post"
-				className={ROOT_CLASS}
-			>
-				<div className={`${ROOT_CLASS}__fields`}>{fields}</div>
-				<div className={`${ROOT_CLASS}__submit`}>{submitButton}</div>
-			</FormComp>
-		);
-	},
-);
-SignUpForm.displayName = "SignUpForm";
+function SignUpForm({
+	formComponent: FormComp = Form,
+	fields,
+	submitButton,
+	formAction = "/sign-up",
+	ref: forwardedRef,
+	...props
+}: SignUpFormProps) {
+	const ROOT_CLASS = "sign-up-form";
+	return (
+		<FormComp
+			ref={forwardedRef}
+			action={formAction}
+			method="post"
+			className={ROOT_CLASS}
+		>
+			<div className={`${ROOT_CLASS}__fields`}>{fields}</div>
+			<div className={`${ROOT_CLASS}__submit`}>{submitButton}</div>
+		</FormComp>
+	);
+}
 
 interface SignUpFormProps {
 	fields: React.ReactNode;
@@ -111,54 +106,48 @@ interface SignUpFormFieldProps {
 	onFocus?(evt: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>): void;
 }
 
-const SignUpFormBasic = React.forwardRef<HTMLFormElement, SignUpFormBasicProps>(
-	(
-		{
-			formComponent = Form,
-			nameError,
-			nameDefaultValue,
-			emailError,
-			emailDefaultValue,
-		},
-		forwardedRef,
-	) => {
-		return (
-			<SignUpForm
-				ref={forwardedRef}
-				formComponent={formComponent}
-				fields={
-					<>
-						<SignUpFormField
-							id="form-field-name"
-							name="name"
-							errorMessage={nameError}
-							defaultValue={nameDefaultValue || undefined}
-							label="Your name"
-							required
-							type="text"
-						/>
-						<SignUpFormField
-							id="form-field-email"
-							name="email"
-							errorMessage={emailError}
-							defaultValue={emailDefaultValue || undefined}
-							label="Email"
-							required
-							type="email"
-						/>
-					</>
-				}
-				submitButton={
-					<Button type="submit" className="button button-primary button-block">
-						Sign Up
-					</Button>
-				}
-			/>
-		);
-	},
-);
-
-SignUpFormBasic.displayName = "SignUpFormBasic";
+function SignUpFormBasic({
+	formComponent = Form,
+	nameError,
+	nameDefaultValue,
+	emailError,
+	emailDefaultValue,
+	ref: forwardedRef,
+}: SignUpFormBasicProps) {
+	return (
+		<SignUpForm
+			ref={forwardedRef}
+			formComponent={formComponent}
+			fields={
+				<>
+					<SignUpFormField
+						id="form-field-name"
+						name="name"
+						errorMessage={nameError}
+						defaultValue={nameDefaultValue || undefined}
+						label="Your name"
+						required
+						type="text"
+					/>
+					<SignUpFormField
+						id="form-field-email"
+						name="email"
+						errorMessage={emailError}
+						defaultValue={emailDefaultValue || undefined}
+						label="Email"
+						required
+						type="email"
+					/>
+				</>
+			}
+			submitButton={
+				<Button type="submit" className="button button-primary button-block">
+					Sign Up
+				</Button>
+			}
+		/>
+	);
+}
 
 interface SignUpFormBasicProps {
 	ref?: React.Ref<HTMLFormElement>;

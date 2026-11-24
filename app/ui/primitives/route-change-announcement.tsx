@@ -14,7 +14,7 @@ function getPageTitle(location: Location) {
 
 function getNavigatingState(
 	location: Location,
-	transition: Navigation,
+	transition: ReturnType<typeof useNavigation>,
 ): NavigationState {
 	return transition.state === "loading" &&
 		transition.location.pathname === location.pathname

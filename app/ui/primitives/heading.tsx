@@ -16,14 +16,12 @@ export const HeadingLevelProvider: React.FC<React.PropsWithChildren<{}>> = ({
 function makeHeading(
 	which: "heading" | "ht" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6",
 ) {
-	const H = React.forwardRef<HTMLHeadingElement, HeadingProps>(
-		({ element, ...props }, ref) => {
-			let level = useHeadingLevelContext();
-			let Comp = element || (`h${level}` as "h1");
+	function H({ element, ref, ...props }: HeadingProps) {
+		let level = useHeadingLevelContext();
+		let Comp = element || (`h${level}` as "h1");
 
-			return <Comp {...props} ref={ref} data-level={level} />;
-		},
-	);
+		return <Comp {...props} ref={ref} data-level={level} />;
+	}
 	H.displayName = which == "heading" ? "Heading" : which.toUpperCase();
 	return H;
 }

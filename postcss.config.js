@@ -2,11 +2,10 @@ import path from "node:path";
 import url from "node:url";
 import postcssGlobalData from "@csstools/postcss-global-data";
 import postcssImport from "postcss-import";
+import postcssNesting from "postcss-nesting";
 import postcssCustomMedia from "postcss-custom-media";
 import autoprefixer from "autoprefixer";
 import cssnano from "cssnano";
-import tailwindcss from "tailwindcss";
-import tailwindcssNesting from "tailwindcss/nesting/index.js";
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
@@ -31,8 +30,7 @@ function config(ctx) {
 			postcssGlobalData({
 				files: ["app/styles/media.css"],
 			}),
-			tailwindcssNesting(),
-			tailwindcss(),
+			postcssNesting(),
 			postcssCustomMedia(),
 			autoprefixer({ flexbox: false, grid: false }),
 			isProd && cssnano({ preset: "default" }),

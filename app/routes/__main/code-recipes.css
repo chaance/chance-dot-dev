@@ -1,0 +1,8 @@
+@layer routes.codeRecipes {
+	.code-recipes__heading {
+		margin-bottom: var(--space-4);
+		@media (--md) {
+			margin-bottom: var(--space-6);
+		}
+	}
+}

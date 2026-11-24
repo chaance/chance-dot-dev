@@ -6,7 +6,7 @@ export function SiteFooter() {
 	const ctx = useRootContext();
 	return (
 		<footer className="SiteFooter">
-			<div className="md:hidden">
+			<div className="SiteFooter__social">
 				<SocialNav />
 			</div>
 			<p className="SiteFooter__copyright text-sm text-weaker">

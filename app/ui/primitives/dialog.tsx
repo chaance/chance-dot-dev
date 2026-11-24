@@ -340,10 +340,7 @@ function useDialogOverlay<E extends keyof React.JSX.IntrinsicElements>({
  *
  * Note: Must be rendered inside of a `DialogWrapper`.
  */
-const DialogOverlay = React.forwardRef<
-	HTMLDivElement,
-	DialogOverlayProps<"div">
->((props, forwardedRef) => {
+function DialogOverlay({ ref: forwardedRef, ...props }: DialogOverlayProps<"div">) {
 	let { state, actions } = useDialogContext("DialogOverlay");
 	let { componentProps, focusLockProps, removeScrollProps } =
 		useDialogOverlay<"div">({
@@ -369,7 +366,7 @@ const DialogOverlay = React.forwardRef<
 			/>
 		</DisableEventsMaybe>
 	);
-});
+}
 DialogOverlay.displayName = "DialogOverlay";
 
 interface DialogOverlayOwnProps {
@@ -488,10 +485,7 @@ function useDialogContent<E extends keyof React.JSX.IntrinsicElements>({
  * to it. Any props passed to `Dialog` component (besides `isOpen` and
  * `onDismiss`) will be spread onto `DialogContent`.
  */
-const DialogContent = React.forwardRef<
-	HTMLDivElement,
-	DialogContentProps<"div">
->(({ children, ...props }, forwardedRef) => {
+function DialogContent({ children, ref: forwardedRef, ...props }: DialogContentProps<"div">) {
 	let { state, actions } = useDialogContext("DialogContent");
 	let { componentProps } = useDialogContent<"div">({
 		actions,
@@ -508,7 +502,7 @@ const DialogContent = React.forwardRef<
 			{children}
 		</div>
 	);
-});
+}
 
 interface DialogContentOwnProps {
 	children?: React.ReactNode;

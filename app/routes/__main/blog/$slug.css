@@ -1,0 +1,9 @@
+@layer routes.blogPost {
+	.blog-post__header {
+		margin-bottom: var(--space-6);
+	}
+
+	.blog-post__title {
+		margin-bottom: var(--space-10);
+	}
+}

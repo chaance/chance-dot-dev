@@ -1,4 +1,8 @@
 @layer components.Articles {
+	.homepage__heading {
+		margin-bottom: var(--space-10);
+	}
+
 	.Articles {
 		display: flex;
 		flex-direction: column;
@@ -51,6 +55,7 @@
 		text-wrap: balance;
 
 		a {
+			display: flex;
 			transition: color 250ms ease-out;
 		}
 

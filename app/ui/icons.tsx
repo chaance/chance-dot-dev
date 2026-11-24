@@ -1,15 +1,13 @@
 import * as React from "react";
 
-export const Svg = React.forwardRef<SVGSVGElement, SVGProps>(function Svg(
-	{
-		children,
-		title,
-		titleId: titleIdProp,
-		"aria-hidden": ariaHidden,
-		...props
-	},
+export function Svg({
+	children,
+	title,
+	titleId: titleIdProp,
+	"aria-hidden": ariaHidden,
 	ref,
-) {
+	...props
+}: SVGProps) {
 	let titleId = titleIdProp; /* || `svg-${_titleId}`; */
 
 	ariaHidden = ariaHidden === true || ariaHidden === "true";
@@ -30,7 +28,7 @@ export const Svg = React.forwardRef<SVGSVGElement, SVGProps>(function Svg(
 			{children}
 		</svg>
 	);
-});
+}
 
 type SVGDOMProps = React.ComponentPropsWithRef<"svg">;
 type SVGOwnProps = {
@@ -207,24 +205,22 @@ function makeIconComponent(
 	} & React.ComponentPropsWithoutRef<"svg">,
 	children: React.ReactElement,
 ) {
-	const Comp = React.forwardRef<SVGSVGElement, SVGProps>(
-		({ title: titleProp, ...props }, ref) => {
-			return (
-				<Svg
-					ref={ref}
-					width={size}
-					height={size}
-					viewBox={viewBox}
-					title={titleProp === null ? undefined : titleProp || title}
-					fill={fill}
-					{...otherProps}
-					{...props}
-				>
-					{children}
-				</Svg>
-			);
-		},
-	);
+	function Comp({ title: titleProp, ref, ...props }: SVGProps) {
+		return (
+			<Svg
+				ref={ref}
+				width={size}
+				height={size}
+				viewBox={viewBox}
+				title={titleProp === null ? undefined : titleProp || title}
+				fill={fill}
+				{...otherProps}
+				{...props}
+			>
+				{children}
+			</Svg>
+		);
+	}
 	Comp.displayName = displayName;
 	return Comp;
 }

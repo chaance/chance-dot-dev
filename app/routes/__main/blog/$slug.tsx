@@ -13,6 +13,11 @@ import cx from "clsx";
 import { getSessionUser } from "~/lib/session.server";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
 
+import blogPostStyles from "./$slug.css?url";
+export function links() {
+	return [{ rel: "stylesheet", href: blogPostStyles }];
+}
+
 interface PostData extends MarkdownBlogPost {
 	createdAtFormatted: string;
 	createdAtISO: string;
@@ -220,8 +225,8 @@ export default function BlogPostRoute() {
 	return (
 		<main>
 			<article>
-				<header className="mb-6">
-					<h1 className="text-h1 mb-10">{post.title}</h1>
+				<header className="blog-post__header">
+					<h1 className="text-h1 blog-post__title">{post.title}</h1>
 					<p className="text-sm text-weaker">
 						<span>Posted on </span>
 						<time dateTime={post.createdAtISO}>{post.createdAtFormatted}</time>

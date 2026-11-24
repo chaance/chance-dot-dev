@@ -38,7 +38,7 @@ export function SiteHeader() {
 		<header className="SiteHeader">
 			<div className="SiteHeader__inner">
 				<CollapsibleProvider isOpen={navIsOpen} onOpenChange={setNavIsOpen}>
-					<div className="flex items-center gap-2">
+					<div className="SiteHeader__header-group">
 						<Trigger />
 					</div>
 					<Content />
@@ -131,7 +131,7 @@ function CollapsibleContent({ className }: CollapsibleContentProps) {
 }
 
 function CollapsibleContentNoop(props: CollapsibleContentProps) {
-	return <HeaderNavArea className="sm-down:hidden" />;
+	return <HeaderNavArea className="SiteHeader__nav-area--static" />;
 }
 
 interface HeaderNavAreaProps
@@ -175,7 +175,7 @@ function HeaderNavArea({
 function HeaderLogoLink() {
 	return (
 		<NavLink to="/" className="SiteHeader__title-link">
-			<span className="text-h4 sm-down:mt-[4px]">
+			<span className="SiteHeader__title-text text-h4">
 				Chance <em>the Dev</em>
 			</span>
 		</NavLink>
