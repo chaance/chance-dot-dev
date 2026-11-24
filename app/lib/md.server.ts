@@ -1,3 +1,4 @@
+import * as path from "node:path";
 import parseFrontMatter from "front-matter";
 import rangeParser from "parse-numeric-range";
 import { isString } from "~/lib/utils";
@@ -184,9 +185,10 @@ async function getPlugins() {
 			tokenizePool =
 				tokenizePool ||
 				new Tinypool({
-					// worker directory is relative to the build output
-					filename: new URL("../../workers/shiki-worker.js", import.meta.url)
-						.pathname,
+					// Resolve from the app root rather than `import.meta.url`,
+					// since the bundled server code's location within `build/`
+					// can change between builds.
+					filename: path.join(process.cwd(), "workers/shiki-worker.js"),
 					minThreads: 0,
 					idleTimeout: 60,
 				});
@@ -281,9 +283,7 @@ async function getPlugins() {
 								...nodeProperties,
 								dataLineNumbers: usesLineNumbers ? "true" : "false",
 								dataLang: htmlEscape(language),
-								style: `color: ${htmlEscape(
-									fgColor,
-								)};background-color: ${htmlEscape(bgColor)}`,
+								style: `color: ${htmlEscape(fgColor)};background-color: ${htmlEscape(bgColor)}`,
 							},
 							children: [
 								{

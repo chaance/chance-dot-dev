@@ -198,7 +198,12 @@ export function ErrorBoundary() {
 				break;
 
 			default:
-				throw new Error(error.data || error.statusText);
+				message = (
+					<p>
+						Something went wrong and I'm not quite sure what! Maybe go outside
+						for a bit and hopefully I'll get it fixed by the time you get back.
+					</p>
+				);
 		}
 
 		return (
