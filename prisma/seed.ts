@@ -1,4 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaClient } from "../app/lib/prisma/client/client";
 import bcrypt from "bcryptjs";
 import {
 	slugify,
@@ -7,7 +8,13 @@ import {
 	getRequiredServerEnvVar,
 } from "../app/lib/utils";
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+	adapter: new PrismaBetterSqlite3(
+		{ url: getRequiredServerEnvVar("DATABASE_URL") },
+		// Match the Prisma 6 storage format; see `app/lib/db.server.ts`
+		{ timestampFormat: "unixepoch-ms" },
+	),
+});
 
 const AUTHENTICATED_EMAIL = getRequiredServerEnvVar("AUTHENTICATED_EMAIL");
 const AUTHENTICATED_EMAIL_PASSWORD = getRequiredServerEnvVar(

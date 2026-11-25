@@ -1,4 +1,7 @@
-import type { User as DBUser, Profile as DBProfile } from "@prisma/client";
+import type {
+	User as DBUser,
+	Profile as DBProfile,
+} from "~/lib/prisma/client/client";
 import bcrypt from "bcryptjs";
 import { prisma } from "~/lib/db.server";
 import { validatePassword } from "~/lib/utils";
