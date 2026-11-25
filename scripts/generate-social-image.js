@@ -1,3 +1,4 @@
+// @ts-check
 import path from "node:path";
 import getEmojiRegex from "emoji-regex";
 import yargs from "yargs/yargs";
@@ -66,12 +67,7 @@ function doubleEncode(string) {
  * Cloudinary needs double-encoding
  * @param {SocialImageArgs} args
  */
-function getCloudinarySocialImageUrl({
-	title,
-	displayDate,
-	authorName,
-	authorTitle,
-}) {
+function getCloudinarySocialImageUrl({ title, displayDate, authorName, authorTitle }) {
 	// Important: no leading hash for hex values
 	let primaryTextColor = "ffffff";
 	let secondaryTextColor = "d0d0d0";
