@@ -6,6 +6,12 @@
  */
 
 @layer components.MarkdownEditor {
+	@keyframes blink {
+		50% {
+			background-color: transparent;
+		}
+	}
+
 	.MarkdownEditor {
 		--editor-toolbar-button-height: 30px;
 		--editor-toolbar-padding: 10px;
@@ -133,24 +139,6 @@
 
 		.cm-fat-cursor {
 			caret-color: transparent;
-		}
-
-		@-moz-keyframes blink {
-			50% {
-				background-color: transparent;
-			}
-		}
-
-		@-webkit-keyframes blink {
-			50% {
-				background-color: transparent;
-			}
-		}
-
-		@keyframes blink {
-			50% {
-				background-color: transparent;
-			}
 		}
 
 		.cm-tab {

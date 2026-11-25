@@ -79,12 +79,12 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	return data({ post: fullPost, user, siteUrl }, { headers });
 }
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
-	if (!data) {
+export const meta: MetaFunction<typeof loader> = ({ loaderData }) => {
+	if (!loaderData) {
 		return getSeoMeta(DEFAULT_METADATA);
 	}
 
-	const { siteUrl, post } = data;
+	const { siteUrl, post } = loaderData;
 	let { title, description, seo, slug, createdAtFormatted } = post;
 
 	let url = `${siteUrl}/blog/${slug}`;
