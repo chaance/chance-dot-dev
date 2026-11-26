@@ -1,78 +1,42 @@
 @layer components.PostEditorScreen {
-	.PostEditorScreen {
-		display: grid;
-		gap: 1rem;
-		grid-template:
-			"title-bar" auto
-			"sidebar" auto
-			"main-content" 1fr / 1fr;
-
-		@media (--xl) {
-			gap: 2rem;
-			grid-template:
-				"title-bar title-bar" auto
-				"main-content sidebar" 1fr / 1fr 18rem;
-		}
-
-		@media (--xxl) {
-			padding: 3rem;
-		}
-	}
-
-	.PostEditorScreen__title-bar {
-		grid-area: title-bar;
-		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
-	}
-
-	.PostEditorScreen__main-content {
-		grid-area: main-content;
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-	}
-
-	.PostEditorScreen__sidebar {
-		grid-area: sidebar;
-		position: relative;
-	}
-
-	.PostEditorScreen__sidebar-content {
-		position: relative;
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-
-		@media (--xl) {
-			gap: 2rem;
-		}
-	}
-
 	.PostEditorScreen__form {
 		display: contents;
 	}
 
+	.PostEditorScreen__title-bar {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+
+		.input {
+			min-height: 3rem;
+			padding: 0.375rem 0.75rem;
+			font-size: 1.5rem;
+			line-height: 1.3;
+		}
+	}
+
 	.PostEditorScreen__slug-wrapper {
 		display: flex;
-		gap: 0.5rem;
-		line-height: 1;
-		font-size: 0.875rem;
+		flex-wrap: wrap;
 		align-items: center;
-		height: 1rem;
+		gap: 0.375rem;
+		min-height: 1.875rem;
+		color: var(--color-text-weak);
+		font-size: 0.8125rem;
 	}
 
 	.PostEditorScreen__slug-label {
-		font-weight: bold;
+		color: var(--color-text);
+		font-weight: 600;
 	}
 
 	.PostEditorScreen__slug-output {
-		flex: 1 1 none;
+		overflow-wrap: anywhere;
 	}
 
 	.PostEditorScreen__slug-input-wrapper {
-		flex: 1 1 100%;
+		flex: 1 1 16rem;
 		display: flex;
 		align-items: center;
 	}
@@ -83,30 +47,14 @@
 
 	.PostEditorScreen__slug-input {
 		flex: 1 1 100%;
-		appearance: none;
-		height: inherit;
-		line-height: inherit;
-		padding: 0;
-		background-color: transparent;
-		border: 0;
-		padding: 0;
+		min-width: 0;
+		padding: 0.125rem 0.25rem;
+		border: 1px solid var(--color-focus-ring);
+		background-color: var(--color-background-raised);
+		color: var(--color-text);
 
 		&:focus {
 			outline: none;
 		}
-	}
-
-	.PostEditorScreen__slug-edit-button {
-		border: 1px solid var(--color-border);
-		background-color: var(--color-background);
-		font-size: 0.875em;
-		padding: 0.25em 0.375em;
-		display: flex;
-		align-items: center;
-	}
-
-	.PostEditorScreen__sidebar-buttons {
-		display: flex;
-		gap: 1rem;
 	}
 }

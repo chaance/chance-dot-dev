@@ -1,36 +1,68 @@
 @layer components.AdminHeader {
+	/* The admin bar stays dark in both color schemes, like the sidebar */
 	.AdminHeader {
 		display: flex;
-		justify-content: flex-end;
-		align-items: center;
-		height: var(--header-height);
-		padding: 0 var(--pad-x);
-		background-color: var(--color-white);
-		background-color: light-dark(var(--color-white), var(--color-gray-18));
-		font-size: 0.875rem;
+		justify-content: space-between;
+		align-items: stretch;
+		height: var(--admin-bar-height);
+		padding: 0 0.5rem;
+		border-bottom: 1px solid var(--color-gray-17);
+		background-color: var(--color-gray-19);
+		color: var(--color-gray-02);
+		font-size: 0.8125rem;
+		line-height: 1;
+	}
+
+	.AdminHeader__group {
+		display: flex;
+		align-items: stretch;
+		min-width: 0;
 	}
 
 	.AdminHeader__form {
 		display: flex;
-		gap: 1rem;
+	}
+
+	.AdminHeader__item {
+		display: flex;
+		align-items: center;
+		gap: 0.375rem;
+		padding: 0 0.625rem;
+		color: inherit;
+		white-space: nowrap;
+		cursor: pointer;
+
+		&:where(a, button):hover {
+			background-color: var(--color-gray-17);
+			color: var(--color-green-05);
+		}
+	}
+
+	.AdminHeader__site {
+		font-weight: 600;
+	}
+
+	.AdminHeader__user {
+		cursor: default;
+	}
+
+	.AdminHeader__greeting {
+		@media (--xs-down) {
+			display: none;
+		}
 	}
 
 	.AdminHeader__user-avatar {
-		--size: 28px;
-		width: var(--size);
-		height: var(--size);
-		border: 1px solid;
-		text-transform: uppercase;
-		font-weight: bold;
-		font-size: 0.75rem;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		line-height: 1;
+		width: 1.25rem;
+		height: 1.25rem;
+		background-color: var(--color-accent);
+		color: var(--color-white);
+		font-size: 0.625rem;
+		font-weight: 700;
+		text-transform: uppercase;
 		user-select: none;
-
-		@media (--md) {
-			--size: 18px;
-		}
 	}
 }

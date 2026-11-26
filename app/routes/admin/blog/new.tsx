@@ -89,6 +89,7 @@ export default function NewNotePage() {
 
 	return (
 		<PostEditorScreen
+			mode="new"
 			formRef={formRef}
 			defaultValues={{
 				createdAt: toDateTimeInputValue(new Date(currentDate)),

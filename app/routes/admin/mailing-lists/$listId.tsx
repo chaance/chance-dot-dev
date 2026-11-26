@@ -1,11 +1,17 @@
 import * as React from "react";
 import type { LoaderFunctionArgs, ActionFunctionArgs } from "react-router";
 import { data } from "react-router";
-import { Form, useActionData, useLoaderData } from "react-router";
+import { Form, Link, useActionData, useLoaderData } from "react-router";
 import { requireUserId } from "~/lib/session.server";
-import { InputText } from "~/ui/input";
 import { getEmailList, updateEmailList } from "~/models/email-list.server";
 import * as assert from "node:assert";
+import {
+	AdminEditLayout,
+	AdminPageHeader,
+	AdminPostbox,
+	AdminTextField,
+} from "~/features/admin/admin-ui";
+import { formatAdminDate } from "~/features/admin/admin-utils";
 
 const formFields = new Map<FormFieldName, FormFieldDescriptor>([
 	["name", { label: "List Name", required: true, type: "text" }],
@@ -15,7 +21,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 	let { listId } = params;
 	assert.ok(listId, "List ID is required");
 	await requireUserId(request);
-	let list = await getEmailList(listId);
+	let list = await getEmailList(listId, { subscribers: true });
 	if (!list) {
 		throw data(null, { status: 404 });
 	}
@@ -59,12 +65,11 @@ export async function action({ request }: ActionFunctionArgs) {
 	return { list, errors };
 }
 
-const ROOT_CLASS = "route--subscriber";
-
 export default function UpdateSubscriberPage() {
 	let loaderData = useLoaderData<typeof loader>();
 	let actionData = useActionData<typeof action>();
 	let list = (actionData || loaderData).list;
+	let subscribers = loaderData.list.subscribers;
 	let formRef = React.useRef<HTMLFormElement>(null);
 
 	let { errors } = actionData || {};
@@ -89,27 +94,68 @@ export default function UpdateSubscriberPage() {
 
 	return (
 		<div>
-			<Form
-				key={formKey}
-				ref={formRef}
-				method="post"
-				className={`${ROOT_CLASS}__form`}
-			>
-				<div className={`${ROOT_CLASS}__title-bar`}>
-					<FormField
-						id="form-field-name"
-						name="name"
-						errorMessage={errors?.name}
-						defaultValue={list.name}
-						label="List Name"
-						required
-						type="text"
-					/>
-				</div>
+			<AdminPageHeader
+				title="Edit Mailing List"
+				action={{ to: "/admin/mailing-lists/new", label: "Add New List" }}
+			/>
+			<Form key={formKey} ref={formRef} method="post">
 				<input type="hidden" name="id" value={loaderData.list.id} />
-				<button type="submit" className="button">
-					Save
-				</button>
+				<AdminEditLayout
+					main={
+						<>
+							<AdminPostbox title="Details">
+								<AdminTextField
+									id="form-field-name"
+									name="name"
+									errorMessage={errors?.name}
+									defaultValue={list.name}
+									label="List Name"
+									required
+								/>
+							</AdminPostbox>
+							<AdminPostbox title="Subscribers">
+								{subscribers.length < 1 ? (
+									<p>No one has subscribed to this list yet.</p>
+								) : (
+									<ul className="AdminSimpleList">
+										{subscribers.map((subscriber) => (
+											<li key={subscriber.id}>
+												<Link
+													to={`/admin/subscribers/${subscriber.id}`}
+													className="AdminTable__primary-link"
+												>
+													{subscriber.email}
+												</Link>
+											</li>
+										))}
+									</ul>
+								)}
+							</AdminPostbox>
+						</>
+					}
+					sidebar={
+						<AdminPostbox
+							title="Save"
+							footer={
+								<button
+									type="submit"
+									className="AdminButton AdminButton--primary"
+								>
+									Update List
+								</button>
+							}
+						>
+							<p>
+								Created on{" "}
+								<strong>{formatAdminDate(loaderData.list.createdAt)}</strong>
+							</p>
+							<p>
+								<strong>{subscribers.length}</strong>{" "}
+								{subscribers.length === 1 ? "subscriber" : "subscribers"}
+							</p>
+						</AdminPostbox>
+					}
+				/>
 			</Form>
 		</div>
 	);
@@ -126,59 +172,6 @@ type FormFieldDescriptor = { required?: boolean; label: string } & {
 
 type FormFieldErrors = Record<FormFieldName, string | null>;
 type FormFieldValues = Record<Exclude<FormFieldName, "lists">, string | null>;
-
-interface FormFieldProps {
-	name: FormFieldName;
-	label: string;
-	type?: InputType;
-	required?: boolean;
-	placeholder?: string;
-	errorMessage?: string | null;
-	rows?: number;
-	id: string;
-	defaultValue?: string | null;
-	min?: string | number;
-	max?: string | number;
-}
-
-function FormField({
-	name,
-	type = "text",
-	required,
-	label,
-	id,
-	placeholder,
-	errorMessage,
-	rows,
-	defaultValue,
-	min,
-	max,
-}: FormFieldProps) {
-	let errorMessageId = `${id}-error`;
-	let ariaInvalid = errorMessage ? true : undefined;
-	let ariaErrormessage = errorMessage ? errorMessageId : undefined;
-
-	return (
-		<div>
-			<div>
-				<label htmlFor={id}>{label}</label>
-				<InputText
-					name={name}
-					id={id}
-					type={type}
-					required={required || undefined}
-					placeholder={placeholder}
-					aria-invalid={ariaInvalid}
-					aria-errormessage={ariaErrormessage}
-					defaultValue={defaultValue || undefined}
-					min={min}
-					max={max}
-				/>
-			</div>
-			{errorMessage ? <div id={errorMessageId}>{errorMessage}</div> : null}
-		</div>
-	);
-}
 
 function hasFormErrors(errors: FormFieldErrors) {
 	let values = Object.values(errors);

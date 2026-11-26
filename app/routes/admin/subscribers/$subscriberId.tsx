@@ -4,13 +4,19 @@ import type { LoaderFunctionArgs, ActionFunctionArgs } from "react-router";
 import { data } from "react-router";
 import { Form, useActionData, useLoaderData } from "react-router";
 import { requireUserId } from "~/lib/session.server";
-import { InputText, InputCheckbox } from "~/ui/input";
-import { Card } from "~/ui/card";
+import { InputCheckbox } from "~/ui/input";
 import {
 	getAllEmailLists,
 	getSubscriber,
 	updateSubscriber,
 } from "~/models/email-list.server";
+import {
+	AdminEditLayout,
+	AdminPageHeader,
+	AdminPostbox,
+	AdminTextField,
+} from "~/features/admin/admin-ui";
+import { formatAdminDate } from "~/features/admin/admin-utils";
 
 const formFields = new Map<FormFieldName, FormFieldDescriptor>([
 	["email", { label: "Email", required: true, type: "email" }],
@@ -101,8 +107,6 @@ export async function action({ request }: ActionFunctionArgs) {
 	};
 }
 
-const ROOT_CLASS = "route--subscriber";
-
 export default function UpdateSubscriberPage() {
 	let loaderData = useLoaderData<typeof loader>();
 	let actionData = useActionData<typeof action>();
@@ -132,63 +136,76 @@ export default function UpdateSubscriberPage() {
 
 	return (
 		<div>
-			<Form
-				key={formKey}
-				ref={formRef}
-				method="post"
-				className={`${ROOT_CLASS}__form`}
-			>
-				<div className={`${ROOT_CLASS}__title-bar`}>
-					<FormField
-						id="form-field-email"
-						name="email"
-						errorMessage={errors?.email}
-						defaultValue={subscriber.email}
-						label="Email"
-						required
-						type="email"
-					/>
-				</div>
-				<div className={`${ROOT_CLASS}__main-content`}>
-					<Card removePadding="sm-down" removeBackground="sm-down">
-						<FormField
-							id="form-field-name-first"
-							name="nameFirst"
-							errorMessage={errors?.nameFirst}
-							defaultValue={subscriber.nameFirst}
-							label="First Name"
-							type="text"
-						/>
-						<FormField
-							id="form-field-name-last"
-							name="nameLast"
-							errorMessage={errors?.nameLast}
-							defaultValue={subscriber.nameLast}
-							label="Last Name"
-							type="text"
-						/>
-						{/* LISTS */}
-						<div>
-							<div
-								role="group"
-								aria-labelledby="form-field-lists-group-label"
-								aria-describedby={
-									errors?.lists ? "form-field-lists-error" : undefined
+			<AdminPageHeader
+				title="Edit Subscriber"
+				action={{ to: "/admin/subscribers/new", label: "Add New Subscriber" }}
+			/>
+			<Form key={formKey} ref={formRef} method="post">
+				<input type="hidden" name="id" value={loaderData.subscriber.id} />
+				<AdminEditLayout
+					main={
+						<AdminPostbox title="Details">
+							<AdminTextField
+								id="form-field-email"
+								name="email"
+								errorMessage={errors?.email}
+								defaultValue={subscriber.email}
+								label="Email"
+								required
+								type="email"
+							/>
+							<AdminTextField
+								id="form-field-name-first"
+								name="nameFirst"
+								errorMessage={errors?.nameFirst}
+								defaultValue={subscriber.nameFirst}
+								label="First Name"
+							/>
+							<AdminTextField
+								id="form-field-name-last"
+								name="nameLast"
+								errorMessage={errors?.nameLast}
+								defaultValue={subscriber.nameLast}
+								label="Last Name"
+							/>
+						</AdminPostbox>
+					}
+					sidebar={
+						<>
+							<AdminPostbox
+								title="Save"
+								footer={
+									<button
+										type="submit"
+										className="AdminButton AdminButton--primary"
+									>
+										Update Subscriber
+									</button>
 								}
 							>
-								<div>
-									<div id="form-field-lists">Lists</div>
-									{errors?.lists ? (
-										<div id="form-field-lists-error">{errors.lists}</div>
-									) : null}
-								</div>
-								<div>
+								<p>
+									Subscribed on{" "}
+									<strong>
+										{formatAdminDate(loaderData.subscriber.createdAt)}
+									</strong>
+								</p>
+							</AdminPostbox>
+							<AdminPostbox title="Mailing Lists">
+								<div
+									role="group"
+									aria-label="Mailing lists"
+									aria-describedby={
+										errors?.lists ? "form-field-lists-error" : undefined
+									}
+									className="AdminCheckboxList"
+								>
+									{allLists.length < 1 ? <p>No mailing lists yet.</p> : null}
 									{allLists.map((list) => {
 										let isSubscribed = !!subscriber.lists.find(
 											(l) => l === list.id,
 										);
 										return (
-											<div key={list.id}>
+											<div key={list.id} className="AdminCheckboxList__item">
 												<InputCheckbox
 													name="lists"
 													value={list.id}
@@ -202,14 +219,18 @@ export default function UpdateSubscriberPage() {
 										);
 									})}
 								</div>
-							</div>
-						</div>
-					</Card>
-				</div>
-				<input type="hidden" name="id" value={loaderData.subscriber.id} />
-				<button type="submit" className="button">
-					Save
-				</button>
+								{errors?.lists ? (
+									<div
+										id="form-field-lists-error"
+										className="AdminField__error"
+									>
+										{errors.lists}
+									</div>
+								) : null}
+							</AdminPostbox>
+						</>
+					}
+				/>
 			</Form>
 		</div>
 	);
@@ -233,59 +254,6 @@ type FormFieldDescriptor = { required?: boolean; label: string } & (
 type FormFieldErrors = Record<FormFieldName, string | null>;
 type FormFieldValues = Record<Exclude<FormFieldName, "lists">, string | null> &
 	Record<"lists", string[]>;
-
-interface FormFieldProps {
-	name: FormFieldName;
-	label: string;
-	type?: InputType;
-	required?: boolean;
-	placeholder?: string;
-	errorMessage?: string | null;
-	rows?: number;
-	id: string;
-	defaultValue?: string | null;
-	min?: string | number;
-	max?: string | number;
-}
-
-function FormField({
-	name,
-	type = "text",
-	required,
-	label,
-	id,
-	placeholder,
-	errorMessage,
-	rows,
-	defaultValue,
-	min,
-	max,
-}: FormFieldProps) {
-	let errorMessageId = `${id}-error`;
-	let ariaInvalid = errorMessage ? true : undefined;
-	let ariaErrormessage = errorMessage ? errorMessageId : undefined;
-
-	return (
-		<div>
-			<div>
-				<label htmlFor={id}>{label}</label>
-				<InputText
-					name={name}
-					id={id}
-					type={type}
-					required={required || undefined}
-					placeholder={placeholder}
-					aria-invalid={ariaInvalid}
-					aria-errormessage={ariaErrormessage}
-					defaultValue={defaultValue || undefined}
-					min={min}
-					max={max}
-				/>
-			</div>
-			{errorMessage ? <div id={errorMessageId}>{errorMessage}</div> : null}
-		</div>
-	);
-}
 
 function hasFormErrors(errors: FormFieldErrors) {
 	let values = Object.values(errors);

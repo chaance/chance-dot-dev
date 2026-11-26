@@ -39,6 +39,19 @@ export async function getAllEmailLists(): Promise<EmailList[]> {
 	return records.map(modelEmailList);
 }
 
+export async function getAllEmailListsWithSubscriberCounts(): Promise<
+	(EmailList & { subscriberCount: number })[]
+> {
+	let records = await prisma.emailList.findMany({
+		include: { _count: { select: { subscribers: true } } },
+		orderBy: { name: "asc" },
+	});
+	return records.map((record) => ({
+		...modelEmailList(record),
+		subscriberCount: record._count.subscribers,
+	}));
+}
+
 export async function getEmailList(
 	id: string,
 	include?: { subscribers: false },

@@ -138,6 +138,7 @@ export default function UpdateNotePage() {
 	return (
 		<div>
 			<PostEditorScreen
+				mode="edit"
 				formRef={formRef}
 				key={formKey}
 				getDefaultValue={(name) => {

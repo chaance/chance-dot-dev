@@ -5,9 +5,12 @@ import { Form, useActionData } from "react-router";
 import { requireUserId } from "~/lib/session.server";
 import { getFormFieldStringValue } from "~/lib/utils";
 import { createSubscriber } from "~/models/email-list.server";
-import { InputText } from "~/ui/input";
-import { Card } from "~/ui/card";
-import { Button } from "~/ui/primitives/button";
+import {
+	AdminEditLayout,
+	AdminPageHeader,
+	AdminPostbox,
+	AdminTextField,
+} from "~/features/admin/admin-ui";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
 	await requireUserId(request);
@@ -15,9 +18,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 }
 
 const formFields = new Map<FormFieldName, FormFieldDescriptor>([
-	["email", { label: "Title", required: true, type: "email" }],
-	["nameFirst", { label: "Slug", type: "text" }],
-	["nameLast", { label: "Slug", type: "text" }],
+	["email", { label: "Email", required: true, type: "email" }],
+	["nameFirst", { label: "First Name", type: "text" }],
+	["nameLast", { label: "Last Name", type: "text" }],
 ]);
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -47,8 +50,6 @@ export async function action({ request }: ActionFunctionArgs) {
 	return redirect(`/admin/subscribers/${subscriber.id}`);
 }
 
-const ROOT_CLASS = "route--new-subscriber";
-
 export default function NewSubscriberPage() {
 	let actionData = useActionData<typeof action>();
 	let formRef = React.useRef<HTMLFormElement>(null);
@@ -71,40 +72,50 @@ export default function NewSubscriberPage() {
 
 	return (
 		<div>
-			<Form ref={formRef} method="post" className={`${ROOT_CLASS}__form`}>
-				<div className={`${ROOT_CLASS}__title-bar`}>
-					<FormField
-						id="form-field-email"
-						name="email"
-						errorMessage={errors?.email}
-						defaultValue={fieldValues?.email}
-						label="Email"
-						required
-						type="email"
-					/>
-				</div>
-				<div className={`${ROOT_CLASS}__main-content`}>
-					<Card removePadding="sm-down" removeBackground="sm-down">
-						<FormField
-							id="form-field-name-first"
-							name="nameFirst"
-							errorMessage={errors?.nameFirst}
-							defaultValue={fieldValues?.nameFirst}
-							label="First Name"
-							type="text"
+			<AdminPageHeader title="Add New Subscriber" />
+			<Form ref={formRef} method="post">
+				<AdminEditLayout
+					main={
+						<AdminPostbox title="Details">
+							<AdminTextField
+								id="form-field-email"
+								name="email"
+								errorMessage={errors?.email}
+								defaultValue={fieldValues?.email}
+								label="Email"
+								required
+								type="email"
+							/>
+							<AdminTextField
+								id="form-field-name-first"
+								name="nameFirst"
+								errorMessage={errors?.nameFirst}
+								defaultValue={fieldValues?.nameFirst}
+								label="First Name"
+							/>
+							<AdminTextField
+								id="form-field-name-last"
+								name="nameLast"
+								errorMessage={errors?.nameLast}
+								defaultValue={fieldValues?.nameLast}
+								label="Last Name"
+							/>
+						</AdminPostbox>
+					}
+					sidebar={
+						<AdminPostbox
+							title="Save"
+							footer={
+								<button
+									type="submit"
+									className="AdminButton AdminButton--primary"
+								>
+									Add Subscriber
+								</button>
+							}
 						/>
-						<FormField
-							id="form-field-name-last"
-							name="nameLast"
-							errorMessage={errors?.nameLast}
-							defaultValue={fieldValues?.nameLast}
-							label="Last Name"
-							type="text"
-						/>
-					</Card>
-				</div>
-
-				<Button type="submit">Save</Button>
+					}
+				/>
 			</Form>
 		</div>
 	);
@@ -121,59 +132,6 @@ type FormFieldDescriptor = { required?: boolean; label: string } & {
 
 type FormFieldErrors = Record<FormFieldName, string | null>;
 type FormFieldValues = Record<FormFieldName, string | null>;
-
-interface FormFieldProps {
-	name: FormFieldName;
-	label: string;
-	type?: InputType;
-	required?: boolean;
-	placeholder?: string;
-	errorMessage?: string | null;
-	rows?: number;
-	id: string;
-	defaultValue?: string | null;
-	min?: string | number;
-	max?: string | number;
-}
-
-function FormField({
-	name,
-	type = "text",
-	required,
-	label,
-	id,
-	placeholder,
-	errorMessage,
-	rows,
-	defaultValue,
-	min,
-	max,
-}: FormFieldProps) {
-	let errorMessageId = `${id}-error`;
-	let ariaInvalid = errorMessage ? true : undefined;
-	let ariaErrormessage = errorMessage ? errorMessageId : undefined;
-
-	return (
-		<div>
-			<div>
-				<label htmlFor={id}>{label}</label>
-				<InputText
-					name={name}
-					id={id}
-					type={type}
-					required={required || undefined}
-					placeholder={placeholder}
-					aria-invalid={ariaInvalid}
-					aria-errormessage={ariaErrormessage}
-					defaultValue={defaultValue || undefined}
-					min={min}
-					max={max}
-				/>
-			</div>
-			{errorMessage ? <div id={errorMessageId}>{errorMessage}</div> : null}
-		</div>
-	);
-}
 
 function hasFormErrors(errors: FormFieldErrors) {
 	let values = Object.values(errors);
