@@ -148,6 +148,7 @@ function Document({
 			<head>
 				<meta charSet="utf-8" />
 				<meta name="viewport" content="width=device-width,initial-scale=1" />
+				<meta name="color-scheme" content="light dark" />
 				{meta}
 				<Meta />
 				<Links />
@@ -209,9 +210,7 @@ export function ErrorBoundary() {
 		return (
 			<Document
 				meta={
-					<title>
-						{`Error ${error.status}: ${error.statusText} | chance.dev`}
-					</title>
+					<title>{`Error ${error.status}: ${error.statusText} | chance.dev`}</title>
 				}
 			>
 				<Layout>
