@@ -67,7 +67,9 @@
 			height: 500px;
 			direction: ltr;
 			word-break: break-word;
-			padding: 0.75em;
+			/* No padding here: CodeMirror sizes its scroller to the full height of
+			   this element, so padding would push the last lines out of view. The
+			   inset is on the lines below instead. */
 			/* TODO: Resize screws around with the component's scrollbar. Fix this. */
 			/* resize: vertical; */
 			z-index: 0;
@@ -80,6 +82,14 @@
 				--input-size-outline: 1px;
 				--input-outline-offset: -2px;
 			}
+
+			@supports (color: light-dark(white, black)) {
+				--input-color-bg: light-dark(var(--color-white), var(--color-black));
+				--input-color-bg-focus: light-dark(
+					var(--color-gray-005),
+					var(--color-gray-18)
+				);
+			}
 		}
 
 		.CodeMirror--invalid {
@@ -87,13 +97,13 @@
 			--input-color-outline: var(--input-color-error-border);
 		}
 
-		.Codemirror-lines {
-			padding: 4px 0;
+		.CodeMirror-lines {
+			padding: 0.75em 0;
 		}
 
-		.Codemirror-line,
-		.Codemirror-line-like {
-			padding: 0 4px;
+		.CodeMirror pre.CodeMirror-line,
+		.CodeMirror pre.CodeMirror-line-like {
+			padding: 0 0.75em;
 		}
 
 		.Codemirror-gutters {
@@ -622,7 +632,7 @@
 		.editor-toolbar button.active,
 		.editor-toolbar button:hover {
 			background: var(--color-gray-02);
-			background: light-dark(var(--color-gray-16), var(--color-gray-02));
+			background: light-dark(var(--color-gray-02), var(--color-gray-16));
 			border-color: var(--color-border);
 		}
 
