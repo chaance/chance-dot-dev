@@ -28,6 +28,7 @@ import appStyles from "~/styles/app.css?url";
 import utilsStyles from "~/styles/utils.css?url";
 import proseStyles from "~/styles/prose.css?url";
 import componentStyles from "~/styles/components.css?url";
+import { RouteErrorLogger } from "./lib/route-error-logger";
 
 export function links() {
 	return [
@@ -175,76 +176,81 @@ function Layout({ children }: React.PropsWithChildren) {
 
 export function ErrorBoundary() {
 	const error = useRouteError();
-	if (process.env.NODE_ENV === "development") {
-		console.error("ROOT ERROR BOUNDARY: ", error);
-	}
+	const isRouteError = isRouteErrorResponse(error);
 
-	if (isRouteErrorResponse(error)) {
-		let message;
-		switch (error.status) {
-			case 401:
-				message = (
-					<p>
-						Oops! It looks like you tried to visit a page that you do not have
-						access to.
-					</p>
-				);
-				break;
-			case 404:
-				message = (
-					<p>
-						Oops! It looks like you tried to visit a page that does not exist.
-					</p>
-				);
-				break;
+	const meta = (
+		<title>
+			{isRouteError
+				? `Error ${error.status}: ${error.statusText} | chance.dev`
+				: "Danger, Will Robinson! 500!"}
+		</title>
+	);
 
-			default:
-				message = (
-					<p>
-						Something went wrong and I'm not quite sure what! Maybe go outside
-						for a bit and hopefully I'll get it fixed by the time you get back.
-					</p>
-				);
-		}
+	const { message, heading }: { message: React.ReactNode; heading: string } =
+		(() => {
+			if (isRouteError) {
+				switch (error.status) {
+					case 401:
+						return {
+							heading: "Unauthorized",
+							message: (
+								<p>
+									Oops! It looks like you tried to visit a page that you do not
+									have access to.
+								</p>
+							),
+						};
 
-		return (
-			<Document
-				meta={
-					<title>{`Error ${error.status}: ${error.statusText} | chance.dev`}</title>
-				}
-			>
-				<Layout>
-					<PrimaryLayout>
-						<main>
-							<div>
-								<h1>Oh no!</h1>
-								<div>{message}</div>
-							</div>
-						</main>
-					</PrimaryLayout>
-				</Layout>
-			</Document>
-		);
-	}
+					case 404:
+						return {
+							heading: "Not Found",
+							message: (
+								<p>
+									Oops! It looks like you tried to visit a page that does not
+									exist.
+								</p>
+							),
+						};
 
-	return (
-		<Document meta={<title>Danger, Will Robinson! 500! | chance.dev</title>}>
-			<Layout>
-				<PrimaryLayout>
-					<main>
-						<div>
-							<h1>Oh no!</h1>
-							<div>
+					default:
+						return {
+							heading: "Something went wrong",
+							message: (
 								<p>
 									Something went wrong and I'm not quite sure what! Maybe go
 									outside for a bit and hopefully I'll get it fixed by the time
 									you get back.
 								</p>
-							</div>
+							),
+						};
+				}
+			} else {
+				return {
+					heading: "Something went wrong",
+					message: (
+						<p>
+							Something went wrong and I'm not quite sure what! Maybe go outside
+							for a bit and hopefully I'll get it fixed by the time you get
+							back.
+						</p>
+					),
+				};
+			}
+		})();
+
+	return (
+		<Document meta={meta}>
+			<Layout>
+				<PrimaryLayout>
+					<main>
+						<div>
+							<h1>{heading}</h1>
+							<div>{message}</div>
 						</div>
 					</main>
 				</PrimaryLayout>
 			</Layout>
+			<RouteErrorLogger error={error} boundaryName="root" />
 		</Document>
 	);
 }

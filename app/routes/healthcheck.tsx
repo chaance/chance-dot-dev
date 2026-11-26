@@ -12,7 +12,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
 		// and make a HEAD request to ourselves, then we're good.
 		await Promise.all([
 			prisma.blogPost.count(),
-			fetch(url.toString(), { method: "HEAD" }).then((r) => {
+			fetch(url.toString(), {
+				method: "HEAD",
+				// Lets the server leave this out of access logs and rate limiting
+				headers: { "X-Healthcheck": "true" },
+			}).then((r) => {
 				if (!r.ok) return Promise.reject(r);
 			}),
 		]);

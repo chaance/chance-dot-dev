@@ -5,29 +5,83 @@ import * as util from "node:util";
 import express from "express";
 import compression from "compression";
 import morgan from "morgan";
-import rateLimit from "express-rate-limit";
+import { rateLimit, ipKeyGenerator } from "express-rate-limit";
 import sourceMapSupport from "source-map-support";
-import { createStream } from "rotating-file-stream";
 import { getRedirectsMiddleware } from "./server/redirects.js";
 import getPort from "get-port";
 
-const IS_STAGING = process.env.IS_STAGING === "true";
 const IS_DEV = process.env.NODE_ENV === "development";
-const IS_PROD = process.env.NODE_ENV === "production" && !IS_STAGING;
 
 sourceMapSupport.install();
 
+// Log crashes before the process exits so they show up in `fly logs`
+process.on("unhandledRejection", (reason) => {
+	console.error("[server] Unhandled promise rejection:", reason);
+});
+process.on("uncaughtException", (error, origin) => {
+	console.error(`[server] Uncaught exception (${origin}):`, error);
+	process.exit(1);
+});
+
 const app = express();
 
+/**
+ * Get the visitor's IP address. Requests reach us through Fly's proxy, so
+ * `req.ip` is the proxy's address and is shared by every visitor. Fly puts the
+ * real client address in the `Fly-Client-IP` header.
+ * https://fly.io/docs/networking/request-headers/#fly-client-ip
+ */
+function getClientIp(/** @type {express.Request} */ req) {
+	return req.get("fly-client-ip") || req.ip || "unknown";
+}
+
+/** The health check route requests the home page to make sure it renders */
+function isHealthcheckRequest(/** @type {express.Request} */ req) {
+	return req.get("x-healthcheck") === "true";
+}
+
+// Only applied to requests handled by React Router (documents, `.data` and
+// `/__manifest` requests). Static assets and the health check don't count.
 const limiter = rateLimit({
 	windowMs: 2 * 60 * 1000, // 2 minutes
 	limit: 1000,
 	standardHeaders: true,
 	legacyHeaders: false,
+	keyGenerator: (req) => ipKeyGenerator(getClientIp(req)),
+	skip: (req) => req.path === "/healthcheck" || isHealthcheckRequest(req),
+	handler: (req, res, _next, options) => {
+		console.warn(
+			`[rate-limit] ${getClientIp(req)} exceeded ${options.limit} requests per ${options.windowMs / 1000}s: ${req.method} ${req.originalUrl}`,
+		);
+		res.status(options.statusCode).send(options.message);
+	},
 });
 
-// app.set("trust proxy", true);
-app.use(limiter);
+// Access log to stdout. This runs before any routes so every request is logged.
+morgan.token("client-ip", (req) => getClientIp(/** @type {any} */ (req)));
+app.use(
+	morgan(
+		IS_DEV
+			? "dev"
+			: ":client-ip :method :url :status :res[content-length] - :response-time ms",
+		{
+			skip: (req, res) => {
+				// `req.url` is rewritten inside mounted middleware like `/assets`
+				let url = /** @type {express.Request} */ (req).originalUrl || "";
+				return (
+					url === "/healthcheck" ||
+					isHealthcheckRequest(/** @type {express.Request} */ (req)) ||
+					// Only log errors for static files (and Vite's dev modules) to keep
+					// the noise down
+					(/^\/(assets|fonts|img|images|app-icons|favicon|@|app\/|node_modules\/)/.test(
+						url,
+					) &&
+						res.statusCode < 400)
+				);
+			},
+		},
+	),
+);
 
 app.all(
 	"*splat",
@@ -64,6 +118,7 @@ if (IS_DEV) {
 		}),
 	);
 	app.use(viteDevServer.middlewares);
+	app.use(limiter);
 	app.use(async (req, res, next) => {
 		try {
 			const source = await viteDevServer.ssrLoadModule("./server/index.ts");
@@ -97,6 +152,7 @@ if (IS_DEV) {
 		}),
 	);
 
+	app.use(limiter);
 	app.use(
 		// this may or may not exist depending on the state of the build
 		// @ts-ignore
@@ -104,19 +160,23 @@ if (IS_DEV) {
 	);
 }
 
-let accessLogStream;
-if (IS_PROD) {
-	accessLogStream = createStream("access.log", {
-		interval: "1d",
-		path: path.join(import.meta.dirname, "log"),
-	});
-}
-
+// Errors that escape the request handlers
 app.use(
-	morgan("tiny", {
-		skip: (req) => req.url === "/healthcheck",
-		stream: accessLogStream,
-	}),
+	(
+		/** @type {unknown} */ error,
+		/** @type {express.Request} */ req,
+		/** @type {express.Response} */ res,
+		/** @type {express.NextFunction} */ next,
+	) => {
+		console.error(
+			`[server] Unhandled error for ${req.method} ${req.originalUrl}:`,
+			error,
+		);
+		if (res.headersSent) {
+			return next(error);
+		}
+		res.status(500).send("Internal Server Error");
+	},
 );
 
 let port;

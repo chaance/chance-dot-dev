@@ -1,8 +1,9 @@
-import { data, type ErrorResponse } from "react-router";
+import { data } from "react-router";
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import { redirect } from "react-router";
 import { Link, isRouteErrorResponse, useRouteError } from "react-router";
 import { getMarkdownBlogPost } from "~/lib/blog.server";
+import { RouteErrorLogger } from "~/lib/route-error-logger";
 
 export async function loader({ params }: LoaderFunctionArgs) {
 	const possibleSlug = params["*"];
@@ -32,52 +33,63 @@ export default function CatchAll() {
 
 export function ErrorBoundary() {
 	const error = useRouteError();
-	if (process.env.NODE_ENV === "development") {
-		console.error("MAIN LAYOUT ERROR BOUNDARY: ", error);
-	}
+	const isRouteError = isRouteErrorResponse(error);
 
-	let message;
-	if (isRouteErrorResponse(error)) {
-		switch (error.status) {
-			case 401:
-				message = (
-					<p>
-						It looks like you tried to visit a page that you do not have access
-						to.
-					</p>
-				);
-				break;
-			case 404:
-				message = (
-					<p>
-						Oops! It looks like you tried to visit a page that does not exist.
-					</p>
-				);
-				break;
+	const { message, heading }: { message: React.ReactNode; heading: string } =
+		(() => {
+			if (isRouteError) {
+				switch (error.status) {
+					case 401:
+						return {
+							heading: "Unauthorized",
+							message: (
+								<p>
+									It looks like you tried to visit a page that you do not have
+									access to.
+								</p>
+							),
+						};
 
-			default:
-				throw new Error(error.data || error.statusText);
-		}
-	} else {
-		message = (
-			<p>
-				Something went wrong and I'm not quite sure what! Maybe go outside for a
-				bit and hopefully I'll get it fixed by the time you get back.
-			</p>
-		);
-	}
+					case 404:
+						return {
+							heading: "Not Found",
+							message: (
+								<p>
+									Oops! It looks like you tried to visit a page that does not
+									exist.
+								</p>
+							),
+						};
+
+					default:
+						throw new Error(error.data || error.statusText);
+				}
+			} else {
+				return {
+					heading: "Something went wrong",
+					message: (
+						<p>
+							Something went wrong and I'm not quite sure what! Maybe go outside
+							for a bit and hopefully I'll get it fixed by the time you get
+							back.
+						</p>
+					),
+				};
+			}
+		})();
 
 	return (
 		<main>
 			<div>
 				<div className="prose">
-					<h1>Oh no!</h1>
+					<h1>{heading}</h1>
 					<div>{message}</div>
 					<p>
 						<Link to="/">Go back home</Link>
 					</p>
 				</div>
 			</div>
+			<RouteErrorLogger error={error} boundaryName="root" />
 		</main>
 	);
 }
