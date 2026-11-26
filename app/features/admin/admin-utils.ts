@@ -14,3 +14,13 @@ export function formatAdminDate(date: string | Date | null | undefined) {
 	}
 	return dateFormatter.format(typeof date === "string" ? new Date(date) : date);
 }
+
+export function getUserInitials(user: {
+	email: string;
+	nameFirst?: string | null;
+	nameLast?: string | null;
+}) {
+	return user.nameFirst
+		? user.nameFirst[0] + (user.nameLast?.[0] || user.nameFirst[1] || "")
+		: user.email.slice(0, 2);
+}

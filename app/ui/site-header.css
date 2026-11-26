@@ -2,7 +2,7 @@
 	.SiteHeader {
 		@media (--md) {
 			position: sticky;
-			top: 0;
+			top: var(--admin-bar-offset, 0px);
 		}
 	}
 
@@ -187,7 +187,7 @@
 			display: initial;
 			width: 100%;
 			position: sticky;
-			top: 0;
+			top: var(--admin-bar-offset, 0px);
 		}
 	}
 

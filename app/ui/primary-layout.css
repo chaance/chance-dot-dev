@@ -2,8 +2,9 @@
 	.PrimaryLayout {
 		--layout-gap: 1.5rem;
 		margin: 0 auto;
-		min-height: 100vh;
-		min-height: 100dvh;
+		/* Leave room for the admin bar when logged in */
+		min-height: calc(100vh - var(--admin-bar-offset, 0px));
+		min-height: calc(100dvh - var(--admin-bar-offset, 0px));
 		display: grid;
 		grid-template:
 			"header" auto

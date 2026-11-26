@@ -35,7 +35,14 @@ const configs = [
 				"warn",
 				{
 					allowConstantExport: true,
-					allowExportNames: ["meta", "links", "headers", "loader", "action"],
+					allowExportNames: [
+						"meta",
+						"links",
+						"headers",
+						"loader",
+						"action",
+						"handle",
+					],
 				},
 			],
 		},

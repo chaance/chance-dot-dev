@@ -1,6 +1,11 @@
 import { PassThrough } from "stream";
 import { createReadableStreamFromReadable } from "@react-router/node";
-import type { EntryContext, HandleErrorFunction } from "react-router";
+import type {
+	EntryContext,
+	HandleDataRequestFunction,
+	HandleErrorFunction,
+} from "react-router";
+import { getUserId } from "~/lib/session.server";
 import { ServerRouter } from "react-router";
 import { isbot } from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
@@ -23,12 +28,36 @@ export const handleError: HandleErrorFunction = (error, { request }) => {
 	);
 };
 
-export default function handleRequest(
+/**
+ * Pages render differently for a logged-in user (the admin bar, edit links), so
+ * they must never be cached and served to anyone else, and a page cached while
+ * logged out shouldn't be reused after logging in.
+ */
+async function setPersonalizedCacheHeaders(request: Request, headers: Headers) {
+	if (!/\bcookie\b/i.test(headers.get("Vary") ?? "")) {
+		headers.append("Vary", "Cookie");
+	}
+	if (await getUserId(request)) {
+		headers.set("Cache-Control", "private, no-store");
+	}
+}
+
+export const handleDataRequest: HandleDataRequestFunction = async (
+	response,
+	{ request },
+) => {
+	await setPersonalizedCacheHeaders(request, response.headers);
+	return response;
+};
+
+export default async function handleRequest(
 	request: Request,
 	responseStatusCode: number,
 	responseHeaders: Headers,
 	reactRouterContext: EntryContext,
 ) {
+	await setPersonalizedCacheHeaders(request, responseHeaders);
+
 	const callbackName = isbot(request.headers.get("user-agent"))
 		? "onAllReady"
 		: "onShellReady";

@@ -1,5 +1,4 @@
 @import "../features/admin/markdown-editor.css";
-@import "../features/admin/admin-header.css";
 @import "../features/admin/admin-ui.css";
 @import "../features/admin/post-editor-screen.css";
 
@@ -14,7 +13,6 @@
 	}
 
 	.admin {
-		--admin-bar-height: 2.875rem;
 		--admin-menu-width: 11rem;
 		--admin-content-bg: var(--color-gray-01);
 		@supports (color: light-dark(white, black)) {
@@ -35,7 +33,6 @@
 		font-size: 0.875rem;
 
 		@media (--md) {
-			--admin-bar-height: 2rem;
 			grid-template:
 				"header header" var(--admin-bar-height)
 				"nav main" 1fr / var(--admin-menu-width) minmax(0, 1fr);

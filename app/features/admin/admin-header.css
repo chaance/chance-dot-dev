@@ -1,3 +1,24 @@
+:root {
+	--admin-bar-height: 2.875rem;
+	@media (--md) {
+		--admin-bar-height: 2rem;
+	}
+}
+
+/* When the admin bar is on the public site, anything that sticks to the top of
+   the viewport needs to sit below it. */
+:root:has(.AdminHeader--site) {
+	--admin-bar-offset: var(--admin-bar-height);
+	scroll-padding-top: var(--admin-bar-offset);
+}
+
+/* The bar is fixed rather than sticky because the app's root container is
+   `height: 100%`, which would stop a sticky bar after one screen of scrolling.
+   Make room for it at the top of the page instead. */
+.chance-dot-dev:has(> .AdminHeader--site) {
+	padding-top: var(--admin-bar-height);
+}
+
 @layer components.AdminHeader {
 	/* The admin bar stays dark in both color schemes, like the sidebar */
 	.AdminHeader {
@@ -11,6 +32,18 @@
 		color: var(--color-gray-02);
 		font-size: 0.8125rem;
 		line-height: 1;
+	}
+
+	.AdminHeader--site {
+		position: fixed;
+		inset: 0 0 auto;
+		z-index: 100;
+		font-family: var(--ff-body);
+		font-weight: 400;
+
+		@media print {
+			display: none;
+		}
 	}
 
 	.AdminHeader__group {
@@ -32,7 +65,8 @@
 		white-space: nowrap;
 		cursor: pointer;
 
-		&:where(a, button):hover {
+		&:where(a, button):hover,
+		&:where(a, button):focus-visible {
 			background-color: var(--color-gray-17);
 			color: var(--color-green-05);
 		}
@@ -46,7 +80,7 @@
 		cursor: default;
 	}
 
-	.AdminHeader__greeting {
+	.AdminHeader__hide-sm {
 		@media (--xs-down) {
 			display: none;
 		}

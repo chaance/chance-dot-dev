@@ -10,6 +10,7 @@ import {
 	useFetchers,
 	isRouteErrorResponse,
 	useLoaderData,
+	useMatches,
 	useRouteError,
 } from "react-router";
 // import { getSeo } from "~/lib/seo";
@@ -29,6 +30,13 @@ import utilsStyles from "~/styles/utils.css?url";
 import proseStyles from "~/styles/prose.css?url";
 import componentStyles from "~/styles/components.css?url";
 import { RouteErrorLogger } from "./lib/route-error-logger";
+import { getSessionUser } from "~/lib/session.server";
+import {
+	AdminHeader,
+	type AdminBarHandle,
+} from "~/features/admin/admin-header";
+import { getUserInitials } from "~/features/admin/admin-utils";
+import adminHeaderStyles from "~/features/admin/admin-header.css?url";
 
 export function links() {
 	return [
@@ -100,13 +108,23 @@ export function links() {
 		{ rel: "stylesheet", href: utilsStyles },
 		{ rel: "stylesheet", href: proseStyles },
 		{ rel: "stylesheet", href: componentStyles },
+		{ rel: "stylesheet", href: adminHeaderStyles },
 	];
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	const currentYear = String(new Date().getFullYear());
+	let user = await getSessionUser(request);
 	return {
 		currentYear,
+		// Only what the admin bar needs
+		adminUser: user
+			? {
+					name: user.nameFirst || user.email,
+					email: user.email,
+					initials: getUserInitials(user),
+				}
+			: null,
 		requestInfo: {
 			origin: getDomainUrl(request),
 		},
@@ -116,6 +134,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function Root() {
 	let {
 		currentYear,
+		adminUser,
 		requestInfo = {
 			origin,
 		},
@@ -123,9 +142,41 @@ export default function Root() {
 	return (
 		<Document currentYear={currentYear} siteUrl={requestInfo.origin}>
 			<Layout>
+				{adminUser ? <SiteAdminBar user={adminUser} /> : null}
 				<Outlet />
 			</Layout>
 		</Document>
+	);
+}
+
+/**
+ * The admin bar shown on the public site while logged in. The admin screens
+ * render their own.
+ */
+function SiteAdminBar({
+	user,
+}: {
+	user: { name: string; email: string; initials: string };
+}) {
+	let matches = useMatches();
+	if (matches.some((match) => match.id === "routes/admin")) {
+		return null;
+	}
+
+	let editLink = null;
+	for (let match of matches) {
+		let handle = match.handle as AdminBarHandle | undefined;
+		editLink = handle?.adminBar?.editLink(match.loaderData) ?? editLink;
+	}
+
+	return (
+		<AdminHeader
+			context="site"
+			editLink={editLink}
+			userInitials={user.initials}
+			userName={user.name}
+			userEmail={user.email}
+		/>
 	);
 }
 

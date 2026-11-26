@@ -10,6 +10,7 @@ import {
 import { requireUser } from "~/lib/session.server";
 import cx from "clsx";
 import { AdminHeader } from "~/features/admin/admin-header";
+import { getUserInitials } from "~/features/admin/admin-utils";
 
 import routeStyles from "./admin.css?url";
 export function links() {
@@ -102,15 +103,11 @@ export default function AdminLayout() {
 	let { user } = useLoaderData<typeof loader>();
 	let matches = useMatches();
 
-	let userInitials = user.nameFirst
-		? user.nameFirst[0] + (user.nameLast?.[0] || user.nameFirst[1])
-		: user.email.slice(0, 2);
-
 	return (
 		<div className={ROOT_CLASS}>
 			<div className={`${ROOT_CLASS}__header`}>
 				<AdminHeader
-					userInitials={userInitials}
+					userInitials={getUserInitials(user)}
 					userName={user.nameFirst || user.email}
 					userEmail={user.email}
 				/>

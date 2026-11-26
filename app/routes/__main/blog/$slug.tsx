@@ -14,6 +14,7 @@ import { getSessionUser } from "~/lib/session.server";
 import { DEFAULT_METADATA, getSeoMeta } from "~/lib/seo";
 
 import blogPostStyles from "./$slug.css?url";
+import type { AdminBarHandle } from "~/features/admin/admin-header";
 export function links() {
 	return [{ rel: "stylesheet", href: blogPostStyles }];
 }
@@ -133,6 +134,17 @@ export let headers: HeadersFunction = ({ loaderHeaders }) => {
 		"Cache-Control": loaderHeaders.get("Cache-Control")!,
 		Vary: "Cookie",
 	};
+};
+
+export const handle: AdminBarHandle = {
+	adminBar: {
+		editLink(loaderData) {
+			let id = (
+				loaderData as Awaited<ReturnType<typeof loader>>["data"] | undefined
+			)?.post.id;
+			return id ? { to: `/admin/blog/${id}`, label: "Edit Post" } : null;
+		},
+	},
 };
 
 export default function BlogPostRoute() {
