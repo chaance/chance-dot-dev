@@ -92,25 +92,9 @@
 	:root {
 		--body-bg-grain: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 400 310' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23a)'/%3E%3C/svg%3E");
 		--body-bg-gradient-stop-1: var(--color-gray-02);
-		--body-bg-gradient-stop-1: light-dark(
-			var(--color-gray-02),
-			var(--color-black)
-		);
 		--body-bg-gradient-stop-2: var(--color-gray-005);
-		--body-bg-gradient-stop-2: light-dark(
-			var(--color-gray-005),
-			var(--color-gray-19)
-		);
 		--body-bg-gradient-stop-3: var(--color-gray-00);
-		--body-bg-gradient-stop-3: light-dark(
-			var(--color-gray-00),
-			var(--color-gray-19)
-		);
 		--body-bg-gradient-stop-4: var(--color-white);
-		--body-bg-gradient-stop-4: light-dark(
-			var(--color-white),
-			var(--color-gray-18)
-		);
 		--body-bg-gradient: linear-gradient(
 			45deg,
 			var(--body-bg-gradient-stop-1),
@@ -131,52 +115,71 @@
 
 		/* syntax highlighting junk */
 		--base00: var(--color-gray-01);
-		--base00: light-dark(var(--color-gray-01), var(--color-gray-18));
 
 		--base01: var(--color-gray-04);
-		--base01: light-dark(var(--color-gray-04), var(--color-gray-14));
 
 		--base02: var(--color-gray-06);
-		--base02: light-dark(var(--color-gray-06), var(--color-gray-12));
 
 		--base03: var(--color-gray-08);
-		--base03: light-dark(var(--color-gray-08), var(--color-gray-11));
 
 		--base04: var(--color-gray-10);
-		--base04: light-dark(var(--color-gray-10), var(--color-gray-08));
 
 		--base05: var(--color-gray-16);
-		--base05: light-dark(var(--color-gray-16), var(--color-gray-06));
 
 		--base06: var(--color-gray-14);
-		--base06: light-dark(var(--color-gray-14), var(--color-gray-04));
 
 		--base07: var(--color-gray-17);
-		--base07: light-dark(var(--color-gray-17), var(--color-gray-02));
 
 		--base08: var(--color-mint-17);
-		--base08: light-dark(var(--color-mint-17), var(--color-mint-06));
 
 		--base09: var(--color-green-13);
-		--base09: light-dark(var(--color-green-13), var(--color-green-08));
 
 		--base0A: var(--color-green-14);
-		--base0A: light-dark(var(--color-green-14), var(--color-green-06));
 
 		--base0B: var(--color-mint-14);
-		--base0B: light-dark(var(--color-mint-14), var(--color-mint-04));
 
 		--base0C: var(--color-mint-12);
-		--base0C: light-dark(var(--color-mint-12), var(--color-mint-02));
 
 		--base0D: var(--color-green-16);
-		--base0D: light-dark(var(--color-green-16), var(--color-green-04));
 
 		--base0E: var(--color-green-18);
-		--base0E: light-dark(var(--color-green-18), var(--color-green-02));
 
 		--base0F: var(--color-gray-13);
-		--base0F: light-dark(var(--color-gray-13), var(--color-gray-07));
+
+		@supports (color: light-dark(white, black)) {
+			--body-bg-gradient-stop-1: light-dark(
+				var(--color-gray-02),
+				var(--color-black)
+			);
+			--body-bg-gradient-stop-2: light-dark(
+				var(--color-gray-005),
+				var(--color-gray-19)
+			);
+			--body-bg-gradient-stop-3: light-dark(
+				var(--color-gray-00),
+				var(--color-gray-19)
+			);
+			--body-bg-gradient-stop-4: light-dark(
+				var(--color-white),
+				var(--color-gray-18)
+			);
+			--base00: light-dark(var(--color-gray-01), var(--color-gray-18));
+			--base01: light-dark(var(--color-gray-04), var(--color-gray-14));
+			--base02: light-dark(var(--color-gray-06), var(--color-gray-12));
+			--base03: light-dark(var(--color-gray-08), var(--color-gray-11));
+			--base04: light-dark(var(--color-gray-10), var(--color-gray-08));
+			--base05: light-dark(var(--color-gray-16), var(--color-gray-06));
+			--base06: light-dark(var(--color-gray-14), var(--color-gray-04));
+			--base07: light-dark(var(--color-gray-17), var(--color-gray-02));
+			--base08: light-dark(var(--color-mint-17), var(--color-mint-06));
+			--base09: light-dark(var(--color-green-13), var(--color-green-08));
+			--base0A: light-dark(var(--color-green-14), var(--color-green-06));
+			--base0B: light-dark(var(--color-mint-14), var(--color-mint-04));
+			--base0C: light-dark(var(--color-mint-12), var(--color-mint-02));
+			--base0D: light-dark(var(--color-green-16), var(--color-green-04));
+			--base0E: light-dark(var(--color-green-18), var(--color-green-02));
+			--base0F: light-dark(var(--color-gray-13), var(--color-gray-07));
+		}
 	}
 
 	:where(:not(:focus-visible):focus) {

@@ -216,10 +216,6 @@
 
 	.SiteHeader__nav-dialog-overlay-inner {
 		--overlay-bg-color: hsl(0 0% 100% / var(--dialog-overlay-bg-opacity));
-		--overlay-bg-color: light-dark(
-			hsl(0 0% 100% / var(--dialog-overlay-bg-opacity)),
-			hsl(0 0% 0% / var(--dialog-overlay-bg-opacity))
-		);
 		position: relative;
 		height: 100%;
 		width: 100%;
@@ -229,6 +225,13 @@
 
 		@media (--md) {
 			animation: none;
+		}
+
+		@supports (color: light-dark(white, black)) {
+			--overlay-bg-color: light-dark(
+				hsl(0 0% 100% / var(--dialog-overlay-bg-opacity)),
+				hsl(0 0% 0% / var(--dialog-overlay-bg-opacity))
+			);
 		}
 	}
 

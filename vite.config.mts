@@ -5,6 +5,7 @@ import react from "@vitejs/plugin-react";
 import { reactRouter } from "@react-router/dev/vite";
 import arraybuffer from "vite-plugin-arraybuffer";
 import dotenv from "dotenv";
+import { Features } from "lightningcss";
 
 const testEnv = dotenv.parse(
 	fs.readFileSync(path.resolve(import.meta.dirname, ".env.example")),
@@ -15,6 +16,11 @@ const testEnv = dotenv.parse(
 const shouldLoadReactRouter = !process.env.VITEST;
 
 export default defineConfig({
+	css: {
+		lightningcss: {
+			exclude: Features.LightDark,
+		},
+	},
 	environments: {
 		ssr: {
 			build: {

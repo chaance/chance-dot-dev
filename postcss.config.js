@@ -5,7 +5,6 @@ import postcssImport from "postcss-import";
 import postcssNesting from "postcss-nesting";
 import postcssCustomMedia from "postcss-custom-media";
 import autoprefixer from "autoprefixer";
-import cssnano from "cssnano";
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
@@ -13,8 +12,7 @@ const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
  * @param {import('postcss-load-config').ConfigContext} ctx
  * @returns {import('postcss-load-config').Config}
  */
-function config(ctx) {
-	const isProd = ctx.env === "production";
+function config(_ctx) {
 	return {
 		plugins: [
 			postcssImport({
@@ -33,7 +31,6 @@ function config(ctx) {
 			postcssNesting(),
 			postcssCustomMedia(),
 			autoprefixer({ flexbox: false, grid: false }),
-			isProd && cssnano({ preset: "default" }),
 		].filter(isTruthy),
 	};
 }
