@@ -123,11 +123,10 @@ jobs:
         uses: actions/checkout@v7
 
       - name: 👀 Read app name
-        uses: SebRollen/toml-action@v1.2.0
         id: app_name
-        with:
-          file: "fly.toml"
-          field: "app"
+        run: |
+          app=$(python3 -c 'import tomllib; print(tomllib.load(open("fly.toml", "rb"))["app"])')
+          echo "value=$app" >> "$GITHUB_OUTPUT"
 
       - name: 🐳 Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
@@ -182,11 +181,10 @@ jobs:
         uses: actions/checkout@v7
 
       - name: 👀 Read app name
-        uses: SebRollen/toml-action@v1.2.0
         id: app_name
-        with:
-          file: "fly.toml"
-          field: "app"
+        run: |
+          app=$(python3 -c 'import tomllib; print(tomllib.load(open("fly.toml", "rb"))["app"])')
+          echo "value=$app" >> "$GITHUB_OUTPUT"
 
       - name: 🚀 Deploy Staging
         if: ${{ github.ref == 'refs/heads/dev' }}
